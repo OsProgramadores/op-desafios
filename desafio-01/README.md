@@ -1,12 +1,12 @@
 #### **Adicione o seu nome a lista de participantes do grupo OsProgramadores no GitHub.**
 
-1. Leia o tutorial sobre Git.
+1. Leia o tutorial sobre [Git].(https://tableless.com.br/tudo-que-voce-queria-saber-sobre-git-e-github-mas-tinha-vergonha-de-perguntar/)
 
-2. Crie sua conta no GitHub.
+2. Crie sua conta no [GitHub].(https://github.com/)
 
-3. Acesse o projeto do site do grupo OsProgramadores e faça o fork do projeto para a sua conta no GitHub.
+3. Acesse o [projeto do site do grupo]https://github.com/OsProgramadores/OsProgramadores-ProjetodoSite OsProgramadores e faça o fork do projeto para a sua conta no GitHub.
 
-4. Instale o git na sua máquina.
+4. [Instale o git](https://git-scm.com/downloads) na sua máquina.
 
 5. Acesse a linha de comando (Windows) ou abra um terminal (Linux ou OSX).
 
@@ -18,8 +18,8 @@
 
 1. Adicione os seus dados ao arquivo PARTICIPANTES.md e grave o arquivo.
 
-2. Confirme suas modificações com o git commit -a.
+2. Confirme suas modificações com o >git commit -a.
 
-3. Envie suas modificações de volta pro github usando o comando git push origin.
+3. Envie suas modificações de volta pro github usando o comando >git push origin.
 
 4. Acesse a cópia do repositório OsProgramadores-ProjetodoSite na sua conta do GitHub e solicite um Pull request para o repositório OsProgramadores-ProjetodoSite
