@@ -1,4 +1,4 @@
-#### **Adicione o seu nome a lista de participantes do grupo OsProgramadores no GitHub.**
+### **Adicione o seu nome a lista de participantes do grupo OsProgramadores no GitHub.**
 
 1. Leia o tutorial sobre [Git](https://tableless.com.br/tudo-que-voce-queria-saber-sobre-git-e-github-mas-tinha-vergonha-de-perguntar/).
 

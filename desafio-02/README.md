@@ -1,4 +1,4 @@
-#### **Programa para listar números primos.**
+### **Programa para listar números primos.**
 
 1. Crie uma conta no [repl.it](https://repl.it/).
 
