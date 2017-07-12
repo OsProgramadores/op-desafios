@@ -1,4 +1,4 @@
-####**Adicione o seu nome a lista de participantes do grupo OsProgramadores no GitHub.**
+#### **Adicione o seu nome a lista de participantes do grupo OsProgramadores no GitHub.**
 
 1. Leia o tutorial sobre Git.
 
@@ -14,7 +14,7 @@
 
 7. Crie um clone do seu repositório no github na sua máquina:
 
-    >git clone --recursive https://github.com/OsProgramadores/OsProgramadores-ProjetodoSite.git`
+    >git clone --recursive https://github.com/OsProgramadores/OsProgramadores-ProjetodoSite.git
 
 1. Adicione os seus dados ao arquivo PARTICIPANTES.md e grave o arquivo.
 
