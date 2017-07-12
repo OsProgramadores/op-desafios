@@ -1,10 +1,10 @@
 #### **Adicione o seu nome a lista de participantes do grupo OsProgramadores no GitHub.**
 
-1. Leia o tutorial sobre [Git].(https://tableless.com.br/tudo-que-voce-queria-saber-sobre-git-e-github-mas-tinha-vergonha-de-perguntar/)
+1. Leia o tutorial sobre [Git](https://tableless.com.br/tudo-que-voce-queria-saber-sobre-git-e-github-mas-tinha-vergonha-de-perguntar/).
 
-2. Crie sua conta no [GitHub].(https://github.com/)
+2. Crie sua conta no [GitHub](https://github.com/).
 
-3. Acesse o [projeto do site do grupo]https://github.com/OsProgramadores/OsProgramadores-ProjetodoSite OsProgramadores e faça o fork do projeto para a sua conta no GitHub.
+3. Acesse o [projeto do site do grupo](https://github.com/OsProgramadores/OsProgramadores-ProjetodoSite) OsProgramadores e faça o fork do projeto para a sua conta no GitHub.
 
 4. [Instale o git](https://git-scm.com/downloads) na sua máquina.
 
