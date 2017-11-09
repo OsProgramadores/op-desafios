@@ -8,16 +8,15 @@ import (
 	"log"
 	"os"
 	"runtime/pprof"
-	"sort"
 )
 
 type funArea struct {
 	Funcionarios []struct {
-		ID        int    `json:"id"`
-		Nome      string `json:"nome"`
-		Sobrenome string `json:"sobrenome"`
-		Salario   int    `json:"salario"`
-		Area      string `json:"area"`
+		ID        int     `json:"id"`
+		Nome      string  `json:"nome"`
+		Sobrenome string  `json:"sobrenome"`
+		Salario   float64 `json:"salario"`
+		Area      string  `json:"area"`
 	} `json:"funcionarios"`
 	Areas []struct {
 		Codigo string `json:"codigo"`
@@ -26,16 +25,16 @@ type funArea struct {
 }
 
 type baseStatsItem struct {
-	min      int
-	max      int
+	min      float64
+	max      float64
 	minNomes []string
 	maxNomes []string
-	sum      int
+	sum      float64
 	count    int
 }
 
 type nameStatsItem struct {
-	max   int
+	max   float64
 	nomes []string
 	count int
 }
@@ -66,8 +65,8 @@ func main() {
 	var (
 		minAreaCount  int
 		maxAreaCount  int
-		minAreaName   string
-		maxAreaName   string
+		minAreaNames  []string
+		maxAreaNames  []string
 		optCPUProfile string
 	)
 
@@ -115,18 +114,23 @@ func main() {
 			gstats.minNomes = []string{}
 			gstats.maxNomes = []string{}
 		}
-		switch {
-		case f.Salario == gstats.min:
-			gstats.minNomes = append(gstats.minNomes, f.Nome)
-		case f.Salario < gstats.min:
+
+		//fullName := f.Nome + " " + f.Sobrenome
+
+		if f.Salario == gstats.min {
+			gstats.minNomes = append(gstats.minNomes, f.Nome+" "+f.Sobrenome)
+		} else if f.Salario < gstats.min {
 			gstats.min = f.Salario
-			gstats.minNomes = []string{f.Nome}
-		case f.Salario == gstats.max:
-			gstats.maxNomes = append(gstats.maxNomes, f.Nome)
-		case f.Salario > gstats.max:
-			gstats.max = f.Salario
-			gstats.maxNomes = []string{f.Nome}
+			gstats.minNomes = []string{f.Nome + " " + f.Sobrenome}
 		}
+
+		if f.Salario == gstats.max {
+			gstats.maxNomes = append(gstats.maxNomes, f.Nome+" "+f.Sobrenome)
+		} else if f.Salario > gstats.max {
+			gstats.max = f.Salario
+			gstats.maxNomes = []string{f.Nome + " " + f.Sobrenome}
+		}
+
 		gstats.sum += f.Salario
 		gstats.count++
 
@@ -141,17 +145,18 @@ func main() {
 			}
 			astats[f.Area] = as
 		}
-		switch {
-		case f.Salario == as.min:
-			as.minNomes = append(as.minNomes, f.Nome)
-		case f.Salario < as.min:
+		if f.Salario == as.min {
+			as.minNomes = append(as.minNomes, f.Nome+" "+f.Sobrenome)
+		} else if f.Salario < as.min {
 			as.min = f.Salario
-			as.minNomes = []string{f.Nome}
-		case f.Salario == as.max:
-			as.maxNomes = append(as.maxNomes, f.Nome)
-		case f.Salario > as.max:
+			as.minNomes = []string{f.Nome + " " + f.Sobrenome}
+		}
+
+		if f.Salario == as.max {
+			as.maxNomes = append(as.maxNomes, f.Nome+" "+f.Sobrenome)
+		} else if f.Salario > as.max {
 			as.max = f.Salario
-			as.maxNomes = []string{f.Nome}
+			as.maxNomes = []string{f.Nome + " " + f.Sobrenome}
 		}
 		as.sum += f.Salario
 		as.count++
@@ -168,24 +173,22 @@ func main() {
 			nstats[f.Sobrenome] = ns
 		}
 		if f.Salario == ns.max {
-			ns.nomes = append(ns.nomes, f.Nome)
+			ns.nomes = append(ns.nomes, f.Nome+" "+f.Sobrenome)
 		} else if f.Salario > ns.max {
 			ns.max = f.Salario
-			ns.nomes = []string{f.Nome}
+			ns.nomes = []string{f.Nome + " " + f.Sobrenome}
 		}
 		ns.count++
 	}
 
-	out := []string{}
-
 	// Estatísticas globais.
 	for _, n := range gstats.minNomes {
-		out = append(out, fmt.Sprintf("global_min %s %d\n", n, gstats.min))
+		fmt.Printf("global_min|%s|%.2f\n", n, gstats.min)
 	}
 	for _, n := range gstats.maxNomes {
-		out = append(out, fmt.Sprintf("global_max %s %d\n", n, gstats.max))
+		fmt.Printf("global_max|%s|%.2f\n", n, gstats.max)
 	}
-	out = append(out, fmt.Sprintf("global_avg %d\n", gstats.sum/gstats.count))
+	fmt.Printf("global_avg|%.2f\n", gstats.sum/float64(gstats.count))
 
 	// Salários por área
 	aname := loadAreaNames(fa)
@@ -195,26 +198,41 @@ func main() {
 		area := areaCodeToName(aname, k)
 
 		for _, n := range as.minNomes {
-			out = append(out, fmt.Sprintf("area_min %s %s %d\n", area, n, as.min))
+			fmt.Printf("area_min|%s|%s|%.2f\n", area, n, as.min)
 		}
 		for _, n := range as.maxNomes {
-			out = append(out, fmt.Sprintf("area_max %s %s %d\n", area, n, as.max))
+			fmt.Printf("area_max|%s|%s|%.2f\n", area, n, as.max)
 		}
-		out = append(out, fmt.Sprintf("area_avg %s %d\n", area, as.sum/as.count))
+		fmt.Printf("area_avg|%s|%.2f\n", area, as.sum/float64(as.count))
 
-		if as.count < minAreaCount || ix == 0 {
+		if ix == 0 {
 			minAreaCount = as.count
-			minAreaName = k
-		}
-		if as.count > maxAreaCount || ix == 0 {
 			maxAreaCount = as.count
-			maxAreaName = k
+			minAreaNames = []string{}
+			maxAreaNames = []string{}
+		}
+		if as.count == minAreaCount {
+			minAreaNames = append(minAreaNames, area)
+		} else if as.count < minAreaCount {
+			minAreaCount = as.count
+			minAreaNames = []string{area}
+		}
+
+		if as.count == maxAreaCount {
+			maxAreaNames = append(maxAreaNames, area)
+		} else if as.count > maxAreaCount {
+			maxAreaCount = as.count
+			maxAreaNames = []string{area}
 		}
 		ix++
 	}
 
-	out = append(out, fmt.Sprintf("area_min_func %s %d\n", areaCodeToName(aname, minAreaName), minAreaCount))
-	out = append(out, fmt.Sprintf("area_max_func %s %d\n", areaCodeToName(aname, maxAreaName), maxAreaCount))
+	for _, a := range minAreaNames {
+		fmt.Printf("least_employees|%s|%d\n", a, minAreaCount)
+	}
+	for _, a := range maxAreaNames {
+		fmt.Printf("most_employees|%s|%d\n", a, maxAreaCount)
+	}
 
 	// Maiores salários por último nome.
 	ix = 0
@@ -222,13 +240,9 @@ func main() {
 		// Apenas sobrenomes com mais de um nome.
 		if ns.count > 1 {
 			for _, n := range ns.nomes {
-				out = append(out, fmt.Sprintf("last_name_max %s %s %d\n", k, n, ns.max))
+				fmt.Printf("last_name_max|%s|%s|%.2f\n", k, n, ns.max)
 			}
 		}
 		ix++
-	}
-	sort.Strings(out)
-	for ix := range out {
-		fmt.Print(out[ix])
 	}
 }
