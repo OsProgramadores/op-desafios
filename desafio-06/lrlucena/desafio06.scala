@@ -1,38 +1,39 @@
-object Desafio06 extends App {
-  type MapCI = Map[Char, Int]
+object Desafio6 extends App {
 
-  def letras(s: String) =
-    (s.groupBy(c => c) map { case (a, b) => (a, b.length) }) withDefaultValue 0
+  implicit class Texto(s: String) {
+    def clean: String = s.toUpperCase.filter(c => c >= 'A' && c <= 'Z')
 
-  def subtrair(a: MapCI, b: MapCI) = a ++ 
-    (b map {
-      case (c, i) => c -> (a(c) - i)}) filter {
-      case (_, i) => i != 0} withDefaultValue 0
+    def bag: Map[Char, Int] =
+      s.groupBy(c => c).map { case (a, b) => (a, b.length) } withDefaultValue 0
 
-  def contem(a: MapCI, b: MapCI) = subtrair(a, b).values.forall(_ > 0)
-
-  val palavras = io.Source
-    .fromURL("https://osprogramadores.com/desafios/d06/words.txt")
-    //.fromFile("words.txt")
-    .getLines
-    .toList
-    .map { case p => (p, letras(p)) }
-
-  def anagramas(lista: List[String], s: MapCI, palavras: List[(String, MapCI)]): List[List[String]] = {
-    if (s == Map()) List(lista)
-    else {
-      palavras filter {
-        case p => contem(s, p._2)
-      } map {
-        case p =>
-          anagramas(p._1 :: lista, subtrair(s, p._2), palavras.dropWhile(a => a._1 < p._1))
-      } flatten()
+    def subtr(b: String): Map[Char, Int] = {
+      val (sb, bb) = (s.bag, b.bag)
+      sb ++ (bb map { case (c, i) => c -> (sb(c) - i) })
     }
+
+    def holds(b: String): Boolean = s.subtr(b).values.forall(_ >= 0)
+
+    def -(b: String): String = if (s holds b)
+      s.subtr(b).map { case (c, i) => c.toString * i }.mkString
+    else ""
   }
 
-  val entrada = letras("VERMELHO".toUpperCase().filter(c => c >= 'A' && c <= 'Z'))
-  val ana = anagramas(Nil, entrada, palavras.filter(p => contem(entrada, p._2)))
-    .map(_.reverse.mkString(" "))
-    .mkString("\n")
-  println(ana)
+  val input = args.headOption.getOrElse("oi gente").clean
+
+  val words = io.Source.fromFile("words.txt").getLines.toList.filter(input.holds)
+  //.fromURL("https://osprogramadores.com/desafios/d06/words.txt")
+
+  def anagrams(input: String, words: List[String], list: List[String] = Nil): List[String] = {
+    var wrds = words
+    if (input.nonEmpty)
+      words.flatMap { word =>
+        wrds = wrds.dropWhile(_ != word)
+        val w = input - word
+        anagrams(w, wrds.filter(w.holds), word :: list)
+      }
+    else List(list.reverse.mkString(" "))
+  }
+
+  val a = anagrams(input, words).mkString("\n")
+  println(a)
 }
