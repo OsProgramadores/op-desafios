@@ -6,7 +6,7 @@ O código está disponível para execução online: https://scastie.scala-lang.o
 
 Para executar localmente faça
 ````
-scalac Desafio06.scala -d desafio6.jar
+scalac desafio06.scala -d desafio6.jar
 scala desafio6.jar "oi teste"
 ````
 ## Problemas
