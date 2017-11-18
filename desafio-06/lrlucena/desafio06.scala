@@ -18,21 +18,21 @@ object Desafio6 extends App {
     else ""
   }
 
-  val input = args.headOption.getOrElse("oi gente").clean
-
-  val words = io.Source.fromFile("words.txt").getLines.toList.filter(input.holds)
-  //.fromURL("https://osprogramadores.com/desafios/d06/words.txt")
-
   def anagrams(input: String, words: List[String], list: List[String] = Nil): List[String] = {
     var wrds = words
     if (input.nonEmpty)
       words.flatMap { word =>
-        wrds = wrds.dropWhile(_ != word)
+        wrds = wrds.dropWhile(_ <= word)
         val w = input - word
         anagrams(w, wrds.filter(w.holds), word :: list)
       }
     else List(list.reverse.mkString(" "))
   }
+
+  val input = args.headOption.getOrElse("oi gente").clean
+
+  val words = io.Source.fromFile("words.txt").getLines.toList.filter(input.holds).sorted
+  //.fromURL("https://osprogramadores.com/desafios/d06/words.txt")
 
   val a = anagrams(input, words).mkString("\n")
   println(a)
