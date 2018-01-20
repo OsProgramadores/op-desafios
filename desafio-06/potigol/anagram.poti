@@ -1,6 +1,4 @@
-# Desafio 06 - potigol.github.io
-clean(s: Texto) = s.maiúsculo.selecione(c => c >= 'A' e c <= 'Z')
-
+# Desafio 06 - potigol.github.io versão 0.9.15
 anagrams(input: Texto, words, list: Lista[Texto]): Lista[Texto] =
   se input <> "" então
     para word em words,
@@ -13,7 +11,6 @@ anagrams(input: Texto, words, list: Lista[Texto]): Lista[Texto] =
   fim
 
 imprima "Digite uma palavra: "
-input = clean(leia_texto)
+input = leia_texto.maiúsculo.selecione(c => c >= 'A' e c <= 'Z')
 words = Arquivo.leia("words.txt").selecione(s => s - input == "").ordene
-a = anagrams(input, words, []).junte("\n")
-escreva a
+escreva anagrams(input, words, []).junte("\n")
