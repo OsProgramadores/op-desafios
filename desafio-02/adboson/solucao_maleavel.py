@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 def is_prime(x):
   # cria uma lista somente com o número 2
   prime_list = [2]
