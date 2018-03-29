@@ -1,5 +1,3 @@
-
-
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -9,8 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
-import models.Area;
-import models.Funcionario;
+import models.*;
 
 /**
  *
@@ -29,7 +26,7 @@ public class Main {
         if (args.length > 0) {
             JSON_FILE = new FileReader(args[0]);
         } else {
-            JSON_FILE = new FileReader("funcionarios.json");
+            JSON_FILE = new FileReader("..\\funcionarios.json");
         }
         
         Gson gson = new Gson();
