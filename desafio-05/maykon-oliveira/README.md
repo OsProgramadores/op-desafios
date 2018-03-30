@@ -1,3 +1,10 @@
+# Desafio 05 - Java
+
+Solução feita em Java usando a biblioteca Gson e programação funcional.
+
+- Desafio: https://osprogramadores.com/desafios/d05/
+- Arquivos e gráficos de desempenho: http://www.bcampos.com/Graphs.php
+
 #### Compilação:
 
 Execute o seguinte comando dentro da pasta maykon-oliveira.
@@ -15,8 +22,6 @@ cd bin
 java -cp .;..\lib\gson-2.8.2.jar Main
 ```
 
-##### Ps.
+##### Execução
 
-O caminho para um arquivo json diferente pode ser passado como parâmetro.
-
-`java -cp .;..\lib\gson-2.8.2.jar Main 'CAMINHO'`
+`java -cp .;..\lib\gson-2.8.2.jar Main <nome-arquivo>`
