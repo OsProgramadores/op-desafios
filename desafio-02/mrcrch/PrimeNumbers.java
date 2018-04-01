@@ -47,7 +47,7 @@ public class PrimeNumbers {
 
             // Verifica se possui algum divisor que não seja 1 e ele mesmo
             boolean isPrime = true;
-            for (long i = 2; i < numberToCheck / 2; i++) {
+            for (long i = 3; i < numberToCheck / 2; i++) {
 
                 if (numberToCheck % i == 0) {
                     isPrime = false;
