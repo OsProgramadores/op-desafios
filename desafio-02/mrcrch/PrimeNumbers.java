@@ -31,21 +31,18 @@ public class PrimeNumbers {
         // Sempre incrementa de dois em dois pois números pares (exceto o 2) não são primos
         for (long numberToCheck = start; numberToCheck <= max; numberToCheck += 2) {
 
-            // Um múltiplo do número atual nunca será primo
-            // A multiplicação é por 3 por toda multiplicação por 2 é par e números pares não são checados
+            // Verificação básica: caso seja um número maior que 10 e com dígito final igual a 5, não é primo
+            if (numberToCheck > 10 && numberToCheck % 10 == 5) {
+                continue;
+            }
+
+            // Armazena um número composto conhecido, já que um múltiplo do número atual nunca será primo
+            // A multiplicação é por 3 pois toda multiplicação por 2 é par e números pares não são primos
             compositeNumbers.add(numberToCheck * 3);
 
             // Verifica se é um número composto conhecido
             if (compositeNumbers.contains(numberToCheck)) {
                 continue;
-            }
-
-            // Verificação básica: caso seja um número maior que 10 e divisível por 2 ou com final 5/0, não será primo
-            if (numberToCheck > 10) {
-                final long remainder = numberToCheck % 10;
-                if (remainder % 2 == 0 || remainder == 0 || remainder == 5) {
-                    continue;
-                }
             }
 
             // Verifica se possui algum divisor que não seja 1 e ele mesmo
@@ -110,6 +107,7 @@ public class PrimeNumbers {
         }
 
         final Collection<Long> primes = generate(min, max);
+        System.out.println(primes.size());
         System.out.println(primes.stream()
             .map(String::valueOf)
             .collect(Collectors.joining(", ")));
