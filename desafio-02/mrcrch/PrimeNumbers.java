@@ -107,7 +107,6 @@ public class PrimeNumbers {
         }
 
         final Collection<Long> primes = generate(min, max);
-        System.out.println(primes.size());
         System.out.println(primes.stream()
             .map(String::valueOf)
             .collect(Collectors.joining(", ")));
