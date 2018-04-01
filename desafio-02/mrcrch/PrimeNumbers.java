@@ -32,7 +32,8 @@ public class PrimeNumbers {
         for (long numberToCheck = start; numberToCheck <= max; numberToCheck += 2) {
 
             // Um múltiplo do número atual nunca será primo
-            compositeNumbers.add(numberToCheck * 2);
+            // A multiplicação é por 3 por toda multiplicação por 2 é par e números pares não são checados
+            compositeNumbers.add(numberToCheck * 3);
 
             // Verifica se é um número composto conhecido
             if (compositeNumbers.contains(numberToCheck)) {
