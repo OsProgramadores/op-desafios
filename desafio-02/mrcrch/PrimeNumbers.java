@@ -42,7 +42,7 @@ public class PrimeNumbers {
 
             // Verificação básica: caso seja um número maior que 10 e divisível por 2 ou com final 5/0, não será primo
             if (numberToCheck > 10) {
-                long remainder = numberToCheck % 10;
+                final long remainder = numberToCheck % 10;
                 if (remainder % 2 == 0 || remainder == 0 || remainder == 5) {
                     continue;
                 }
@@ -70,27 +70,31 @@ public class PrimeNumbers {
 
     public static void main(final String[] args) {
 
-        if (args == null || args.length != 2) {
-            throw new IllegalArgumentException(
-                "Quantidade de parâmetros inválida. São esperados 2 parâmetro (min/max)");
-        }
-
-        String paramMin = args[0];
-        String paramMax = args[1];
-
         long min = 0;
-        long max = 0;
+        long max = 1000;
 
-        try {
-            min = Long.valueOf(paramMin);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Parâmetro mínimo não é um número válido: " + paramMin);
-        }
+        if (args.length > 0) {
 
-        try {
-            max = Long.valueOf(paramMax);
-        } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("Parâmetro máximo não é um número válido: " + paramMax);
+            if (args.length != 2) {
+                throw new IllegalArgumentException(
+                    "Quantidade de parâmetros inválida. São esperados 2 parâmetro (min/max)");
+            }
+
+            final String paramMin = args[0];
+            final String paramMax = args[1];
+
+            try {
+                min = Long.valueOf(paramMin);
+            } catch (final NumberFormatException e) {
+                throw new IllegalArgumentException("Parâmetro mínimo não é um número válido: " + paramMin);
+            }
+
+            try {
+                max = Long.valueOf(paramMax);
+            } catch (final NumberFormatException e) {
+                throw new IllegalArgumentException("Parâmetro máximo não é um número válido: " + paramMax);
+            }
+
         }
 
         if (min < 0) {
@@ -105,7 +109,7 @@ public class PrimeNumbers {
             throw new IllegalArgumentException("Valor máximo deve ser maior que o valor mínimo: " + min + "/" + max);
         }
 
-        Collection<Long> primes = generate(min, max);
+        final Collection<Long> primes = generate(min, max);
         System.out.println(primes.stream()
             .map(String::valueOf)
             .collect(Collectors.joining(", ")));
