@@ -8,6 +8,7 @@ import (
 	"os"
 	"strconv"
 	"sync"
+	"unsafe"
 )
 
 // area represents an area with its name and code.
@@ -73,8 +74,13 @@ type d05 struct {
 const (
 	// numberOfBlocksDefault is the default number of concurrent blocks the JSON
 	// input file will be broken into for processing.
-	numberOfBlocksDefault = 32
+	numberOfBlocksDefault = 16
 )
+
+// WARNING: DO NOT DO THIS AT HOME.
+func unsafeString(b []byte) string {
+	return *(*string)(unsafe.Pointer(&b))
+}
 
 // newD05 creates a new `d05' value to be used as either a partial or global
 // solution for the problem.
@@ -161,11 +167,11 @@ func (d *d05) updateSalaries(s *salaryStats, e *employee) {
 
 // calculateSalaries updates a groupSalaryStats map after processing the info of
 // a single employee.
-func (d *d05) calculateSalaries(s map[string]*groupSalaryStats, key string, e *employee) {
-	gs, ok := s[key]
+func (d *d05) calculateSalaries(s map[string]*groupSalaryStats, key *string, e *employee) {
+	gs, ok := s[*key]
 	if !ok {
 		gs = &groupSalaryStats{}
-		s[key] = gs
+		s[*key] = gs
 	}
 
 	d.updateSalaries(&gs.salaries, e)
@@ -173,12 +179,12 @@ func (d *d05) calculateSalaries(s map[string]*groupSalaryStats, key string, e *e
 
 // processEmployees receive an employee and updates the associated stats.
 func (d *d05) processEmployee(e *employee) {
-	area := string(e.areaCode)
-	surname := string(e.surname)
+	area := unsafeString(e.areaCode)
+	surname := unsafeString(e.surname)
 
 	d.updateSalaries(&d.salaries, e)
-	d.calculateSalaries(d.salaryBySurname, surname, e)
-	d.calculateSalaries(d.salaryByArea, area, e)
+	d.calculateSalaries(d.salaryBySurname, &surname, e)
+	d.calculateSalaries(d.salaryByArea, &area, e)
 
 	_, ok := d.employeesByArea[area]
 	if !ok {
@@ -189,19 +195,23 @@ func (d *d05) processEmployee(e *employee) {
 }
 
 // parseArea parses an area from the input JSON file.
-func (d *d05) parseArea(data []byte, start, end uint32) {
+func (d *d05) parseArea(data []byte) {
 	totalQuotes := 0
 	var current uint32
 	var previous uint32
 	a := area{}
-
-	for i := start; i < end; i++ {
-		if data[i] != '"' {
-			continue
+	doublequote := byte('"')
+	i := uint32(0)
+	var idx int
+	for {
+		if idx = bytes.IndexByte(data[i:], doublequote); idx == -1 {
+			break
 		}
+
 		totalQuotes++
 		previous = current
-		current = i
+		current = i + uint32(idx)
+		i = current + 1
 
 		switch totalQuotes {
 		// {"codigo":"SM", "nome":"Gerenciamento de Software"}
@@ -211,7 +221,7 @@ func (d *d05) parseArea(data []byte, start, end uint32) {
 		case 8:
 			a.name = make([]byte, current-previous-1)
 			copy(a.name, data[previous+1:current])
-			d.areas[string(a.code)] = a
+			d.areas[unsafeString(a.code)] = a
 			return
 		}
 	}
@@ -239,7 +249,7 @@ func (d *d05) parseEmployee(data []byte, start, end uint32) {
 		case 2:
 			// Checking if it is an employee.
 			if !bytes.Equal([]byte("id"), data[previous+1:current]) {
-				d.parseArea(data, start, end)
+				d.parseArea(data[start : end+1])
 				return
 			}
 		case 6:
@@ -255,7 +265,7 @@ func (d *d05) parseEmployee(data []byte, start, end uint32) {
 					break
 				}
 			}
-			salary, err := strconv.ParseFloat(string(data[previous+2:j+1]), 64)
+			salary, err := strconv.ParseFloat(unsafeString(data[previous+2:j+1]), 64)
 			if err != nil {
 				log.Printf("oops: error converting %q to float: %v\n", data[previous+2:j+1], err)
 			}
@@ -272,18 +282,31 @@ func (d *d05) parseEmployee(data []byte, start, end uint32) {
 // parseJSONBlock parses a block of JSON data from the input file. This method
 // will be run concurrently and generate a partial solution from the data it
 // processes, then send the result via the `block' channel.
-func (d *d05) parseJSONBlock(data []byte, beginning, end uint32, block chan *d05) {
+func (d *d05) parseJSONBlock(data []byte, block chan *d05) {
 	var start uint32
+
 	partialSolution := newD05()
 
-	for i := beginning; i < end; i++ {
-		switch data[i] {
-		case '{':
-			start = i
-		case '}':
-			partialSolution.parseEmployee(data, start, i+1)
+	openbracket := byte('{')
+	closedbracket := byte('}')
+	i := uint32(0)
+	var idx int
+	for {
+		if idx = bytes.IndexByte(data[i:], openbracket); idx == -1 {
+			break
 		}
+		start = i + uint32(idx)
+		i = start
+
+		if idx = bytes.IndexByte(data[i:], closedbracket); idx == -1 {
+			break
+		}
+		i += uint32(idx)
+		partialSolution.parseEmployee(data, start, i)
+		i++
+
 	}
+
 	block <- partialSolution
 }
 
@@ -303,23 +326,26 @@ func parseJSON(data []byte, blocksToUse uint32) *d05 {
 
 	size := uint32(len(data))
 	i := step
-	start := uint32(0)
+	start := uint32(1)
+	bracket := byte('{')
+	var idx int
 	for p := uint32(0); p < blocksToUse-1; p++ {
 		for i < size {
-			// We are going to start the blocks with the '{'.
-			if data[i] == '{' {
-				wg.Add(1)
-				go solution.parseJSONBlock(data, start, i-1, block)
-				start = i
-				i += step
+			if idx = bytes.IndexByte(data[i:], bracket); idx == -1 {
 				break
 			}
-			i++
+
+			wg.Add(1)
+			i += uint32(idx)
+			go solution.parseJSONBlock(data[start:i-1], block)
+			start = i
+			i += step
+			break
 		}
 	}
 	// Last block.
 	wg.Add(1)
-	go solution.parseJSONBlock(data, start, uint32(len(data))-1, block)
+	go solution.parseJSONBlock(data[start:], block)
 	wg.Wait()
 	return solution
 }
