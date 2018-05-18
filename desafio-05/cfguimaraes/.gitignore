@@ -1,0 +1,8 @@
+.vscode
+*/bin
+csharp/[Ff]uncionarios-*.json*
+csharp/funcionarios.json.*
+csharp/completo
+csharp/readlines
+csharp/obj
+fsharp
