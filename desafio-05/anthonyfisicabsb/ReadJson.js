@@ -34,11 +34,17 @@ function getMaiorMenorSalario() {
         }
     }
     for (i = 0; i < max.length; i++) {
-        console.log("global_max|" + max[i].nome + " " + max[i].sobrenome + "|" + max[i].salario.toFixed(2));
+        var d = document.createElement("P");
+        var t = document.createTextNode("global_max|" + max[i].nome + " " + max[i].sobrenome + "|" + max[i].salario.toFixed(2));
+        d.appendChild(t);
+        document.body.appendChild(d);
     }
 
     for (i = 0; i < min.length; i++) {
-        console.log("global_min|" + min[i].nome + " " + min[i].sobrenome + "|" + min[i].salario.toFixed(2));
+        var d = document.createElement("P");
+        var t = document.createTextNode("global_min|" + min[i].nome + " " + min[i].sobrenome + "|" + min[i].salario.toFixed(2));
+        d.appendChild(t);
+        document.body.appendChild(d);
     }
 }
 
@@ -49,8 +55,11 @@ function getMedia() {
     }
 
     tot /= obj.length;
-
-    console.log("global_avg|" + tot.toFixed(2));
+    
+    var d = document.createElement("P");
+    var t = document.createTextNode("global_avg|" + tot.toFixed(2));
+    d.appendChild(t);
+    document.text.body.appendChild(d);
 }
 
 function getMediaMaxArea() {
@@ -92,14 +101,23 @@ function getMediaMaxArea() {
         tot /= count;
 
         for (j = 0; j < max.length; j++) {
-            console.log("area_max|" + areas[i].nome + "|" + max[j].nome + " " + max[j].sobrenome + "|" + max[j].salario.toFixed(2));
+            var d = document.createElement("P");
+            var t = document.createTextNode("area_max|" + areas[i].nome + "|" + max[j].nome + " " + max[j].sobrenome + "|" + max[j].salario.toFixed(2));
+            d.appendChild(t);
+            document.body.appendChild(d);
         }
 
         for (j = 0; j < min.length; j++) {
-            console.log("area_min|" + areas[i].nome + "|" + min[j].nome + " " + min[j].sobrenome + "|" + min[j].salario.toFixed(2));
+            var d = document.createElement("P");
+            var t = document.createTextNode("area_min|" + areas[i].nome + "|" + min[j].nome + " " + min[j].sobrenome + "|" + min[j].salario.toFixed(2));
+            d.appendChild(t);
+            document.body.appendChild(d);
         }
 
-        console.log("area_avg|" + areas[i].nome + "|" + tot.toFixed(2));
+        var d = document.createElement("P");
+        var t = document.createTextNode("area_avg|" + areas[i].nome + "|" + tot.toFixed(2));
+        d.appendChild(t);
+        document.body.appendChils(t);
     }
 }
 
@@ -136,10 +154,16 @@ function getAreas() {
     }
 
     for (i = 0; i < max.length; i++) {
-        console.log("most_employees|" + max[i].nome + "|" + countMax);
+        var d = document.createElement("P");
+        var t = document.createTextNode("most_employees|" + max[i].nome + "|" + countMax);
+        d.appendChild(t);
+        document.body.appendChild(d);
     }
     for (i = 0; i < min.length; i++) {
-        console.log("least_employees|" + min[i].nome + "|" + countMin);
+        var d = document.createElement("P");
+        var t = document.createTextNode("least_employees|" + min[i].nome + "|" + countMin);
+        d.appendChild(t);
+        document.body.appendChild(d);
     }
 }
 
@@ -179,7 +203,10 @@ function salariosSobrenome() {
 
         if(count > 1){
             for(j=0; j<max.length; j++){
-                console.log("last_name_max|"+listaSobrenome[i]+"|"+max[j].nome + " " + max[j].sobrenome + "|" + max[j].salario.toFixed(2));
+                var d = document.createElement("P");
+                var t = document.createTextNode("last_name_max|"+listaSobrenome[i]+"|"+max[j].nome + " " + max[j].sobrenome + "|" + max[j].salario.toFixed(2));
+                d.appendChild(t);
+                document.body.appendChild(d);
             }
         }
     }
