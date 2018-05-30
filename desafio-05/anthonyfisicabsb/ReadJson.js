@@ -59,7 +59,7 @@ function getMedia() {
     var d = document.createElement("P");
     var t = document.createTextNode("global_avg|" + tot.toFixed(2));
     d.appendChild(t);
-    document.text.body.appendChild(d);
+    document.body.appendChild(d);
 }
 
 function getMediaMaxArea() {
@@ -117,7 +117,7 @@ function getMediaMaxArea() {
         var d = document.createElement("P");
         var t = document.createTextNode("area_avg|" + areas[i].nome + "|" + tot.toFixed(2));
         d.appendChild(t);
-        document.body.appendChils(t);
+        document.body.appendChild(t);
     }
 }
 
