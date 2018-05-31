@@ -1,21 +1,32 @@
 <html>
+
 <head>
     <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
-<body>
-<script>
-    funcionarios = '[{"id":0,"nome":"Marcelo","sobrenome":"Silva","salario":3200.00,"area":"SM"},{"id":1,"nome":"Washington","sobrenome":"Ramos","salario":2700.00,"area":"UD"},{"id":2,"nome":"Sergio","sobrenome":"Pinheiro","salario":2450.00,"area":"SD"},{"id":3,"nome":"Bernardo","sobrenome":"Costa","salario":3700.00,"area":"SM"},{"id":4,"nome":"Cleverton","sobrenome":"Farias","salario":2750.00,"area":"SD"},{"id":5,"nome":"Abraão","sobrenome":"Campos","salario":2550.00,"area":"SD"},{"id":6,"nome":"Letícia","sobrenome":"Farias","salario":2450.00,"area":"UD"},{"id":7,"nome":"Fernando","sobrenome":"Ramos","salario":2450.00,"area":"SD"},{"id":8,"nome":"Marcelo","sobrenome":"Farias","salario":2550.00,"area":"UD"},{"id":9,"nome":"Fabio","sobrenome":"Souza","salario":2750.00,"area":"SD"},{"id":10,"nome":"Clederson","sobrenome":"Oliveira","salario":2500.00,"area":"SD"}]'; 
-    areas = '[{"codigo":"SD","nome":"Desenvolvimento de Software"},{"codigo":"SM","nome":"Gerenciamento de Software"},{"codigo":"UD","nome":"Designer de UI/UX"}]';
-</script>
 
-<script type="text/javascript" src="ReadJson.js"></script>
-
-<script>
-    getMaiorMenorSalario();
-    getMedia();
-    getMediaMaxArea();
-    getAreas();
-    salariosSobrenome();
-</script>
 <body>
+    <script type="text/javascript" src="ReadJson.js"></script>
+    <script>
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var my = JSON.parse(this.responseText);
+                var funcionarios = my["funcionarios"];
+                var areas = my["areas"];
+                var a = new obj(funcionarios, areas);
+                a.getMaiorMenorSalario();
+                a.getMedia();
+                a.getMediaMaxArea();
+                a.getAreas();
+                a.salariosSobrenome();
+            }
+        }
+        xmlhttp.open("GET", "funcionarios.json", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send();
+    </script>
+
+    <body>
+
 </html>
