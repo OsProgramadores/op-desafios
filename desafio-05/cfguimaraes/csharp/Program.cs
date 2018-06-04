@@ -99,7 +99,7 @@ namespace desafio5
                 var value = employeWithSameLastNameWhoIncomesMore.Value;
                 foreach (var employe in value.employees)
                 {
-                    if (value.employees.Count > 1)
+                    if (value.numberOfEmployees > 1)
                     {
                         WriteLine("last_name_max|{0}|{1}|{2:f2}", employeWithSameLastNameWhoIncomesMore.Key, employe.FullName, value.salary);
                     }
@@ -238,7 +238,7 @@ namespace desafio5
         (int employess, double total) averageSalary = (0, 0);
         Dictionary<string, (int employesOfArea, float totalSalaryOfArea)> averageSalaryPerArea = new Dictionary<string, (int, float)>();
         Dictionary<string, (float minSalary, float maxSalary, List<Funcionario> incomeLess, List<Funcionario> incomeMore)> salaryPerArea = new Dictionary<string, (float minSalary, float maxSalary, List<Funcionario> incomeLess, List<Funcionario> incomeMore)>();
-        Dictionary<string, (float salary, List<Funcionario> employees)> employeesWithSameLastNameWhoIncomesMore = new Dictionary<string, (float salary, List<Funcionario> employees)>();
+        Dictionary<string, (int numberOfEmployees, float salary, List<Funcionario> employees)> employeesWithSameLastNameWhoIncomesMore = new Dictionary<string, (int, float, List<Funcionario>)>();
         Dictionary<string, string> areas = new Dictionary<string, string>();
         private void funcionariosHandler(Funcionario employe)
         {
@@ -323,21 +323,27 @@ namespace desafio5
             {
                 employeesWithSameLastNameWhoIncomesMore.Add(
                     employe.sobrenome,
-                    employeWithSameLastNameWhoIncomesMore = (0, new List<Funcionario>())
+                    employeWithSameLastNameWhoIncomesMore = (0, 0, new List<Funcionario>())
                 );
             }
+
+
             if (employe.salario > employeWithSameLastNameWhoIncomesMore.salary)
             {
                 employeWithSameLastNameWhoIncomesMore.salary = employe.salario;
                 employeWithSameLastNameWhoIncomesMore.employees.Clear();
                 employeWithSameLastNameWhoIncomesMore.employees.Add(employe);
-                employeesWithSameLastNameWhoIncomesMore[employe.sobrenome] = employeWithSameLastNameWhoIncomesMore;
             }
             else
             if (employe.salario == employeWithSameLastNameWhoIncomesMore.salary)
             {
                 employeWithSameLastNameWhoIncomesMore.employees.Add(employe);
             }
+
+            employeWithSameLastNameWhoIncomesMore.numberOfEmployees++;
+            employeesWithSameLastNameWhoIncomesMore[employe.sobrenome] = employeWithSameLastNameWhoIncomesMore;
+
+
             #endregion
         }
 
