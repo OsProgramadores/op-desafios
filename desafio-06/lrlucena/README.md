@@ -13,3 +13,4 @@ scala desafio6.jar "oi teste"
 ## Problemas
 
  - Um dos piores casos é para a entrada "abcdefghijlmnop". O resultado são 69815 anagramas distintos e o tempo de resposta supera os 60 segundos.
+
