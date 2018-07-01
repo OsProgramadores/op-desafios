@@ -1,0 +1,1 @@
+Pasta de códigos binarios
