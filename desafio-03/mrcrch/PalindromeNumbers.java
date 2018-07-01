@@ -5,6 +5,10 @@ import java.util.stream.Collectors;
 
 public class PalindromeNumbers {
 
+    private static final int countDigits(long number) {
+        return number == 0 ? 1 : (int) (Math.log10(number) + 1);
+    }
+
     public static void main(final String[] args) {
 
         long min = 0;
@@ -46,7 +50,8 @@ public class PalindromeNumbers {
             throw new IllegalArgumentException("Valor máximo deve ser maior que o valor mínimo: " + min + "/" + max);
         }
 
-        // TODO: Run
+        System.out.println(countDigits(min));
+        System.out.println(countDigits(max));
 
     }
 
