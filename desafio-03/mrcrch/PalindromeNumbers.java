@@ -27,7 +27,6 @@ public class PalindromeNumbers {
                 .collect(Collectors.toList());
         }
 
-
         // Identifica os máximos e mínimos de acordo com a quantidade de dígitos
         // Exempĺo: O intervalo para um palíndromo de 4 dígitos será [10,100)
         long max = (long) Math.pow(10, digits / 2);
@@ -56,6 +55,39 @@ public class PalindromeNumbers {
         }
 
         return result;
+    }
+
+    private static final Collection<Long> generate(final long min, final long max) {
+
+        int digitsMin = countDigits(min);
+        int digitsMax = countDigits(max);
+
+        Collection<Long> result = new ArrayList<>();
+        for (int i = digitsMin; i <= digitsMax; i++) {
+
+            // Gera todos os palíndromos com a quantidade de dígitos
+            Collection<Long> temp = generate(i);
+
+            // Remove valores menores que o mínimo
+            if (i == digitsMin) {
+                temp = temp.stream()
+                    .filter(number -> number >= min)
+                    .collect(Collectors.toList());
+            }
+
+            // Remove valores maiores que o máximo
+            if (i == digitsMax) {
+                temp = temp.stream()
+                    .filter(number -> number <= max)
+                    .collect(Collectors.toList());
+            }
+
+            result.addAll(temp);
+
+        }
+
+        return result;
+
     }
 
     public static void main(final String[] args) {
@@ -98,6 +130,8 @@ public class PalindromeNumbers {
         if (max <= min) {
             throw new IllegalArgumentException("Valor máximo deve ser maior que o valor mínimo: " + min + "/" + max);
         }
+
+        System.out.println(generate(min, max));
 
     }
 
