@@ -1,0 +1,32 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript" src="ReadJson.js"></script>
+    <script>
+        xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var my = JSON.parse(this.responseText);
+                var funcionarios = my["funcionarios"];
+                var areas = my["areas"];
+                var a = new obj(funcionarios, areas);
+                a.getMaiorMenorSalario();
+                a.getMedia();
+                a.getMediaMaxArea();
+                a.getAreas();
+                a.salariosSobrenome();
+            }
+        }
+        xmlhttp.open("GET", "funcionarios.json", true);
+        xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xmlhttp.send();
+    </script>
+
+    <body>
+
+</html>
