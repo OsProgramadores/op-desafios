@@ -12,10 +12,7 @@ fn main() {
     for idx in (3..=MAX).step_by(2) {
         if !list[idx] {
             print!(", {}", idx);
-            (idx..=MAX)
-                .step_by(idx)
-                .skip(1)
-                .for_each(|i| list[i] = true);
+            (idx..=MAX).step_by(idx).for_each(|i| list[i] = true);
         }
     }
     println!(".");
