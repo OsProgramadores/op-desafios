@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from time import time
 
 for a in range(1, 10000):
