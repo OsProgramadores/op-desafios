@@ -8,20 +8,25 @@ import (
 )
 
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Println("É preciso informar um número a ser testado")
+	if len(os.Args) < 3 {
+		fmt.Println("É preciso informar um número inicial e um número final. e.g.: palindrome 100 5000")
 		os.Exit(2)
 	}
-	num, err := strconv.Atoi(os.Args[1])
+	min, err := strconv.Atoi(os.Args[1])
 	if err != nil {
-		fmt.Println("Um número é necessário para iniciar o programa")
+		fmt.Println("O primeiro input não é um número")
 		os.Exit(2)
 	}
-	if palindrome(num) {
-		fmt.Printf("%d é um palíndromo", num)
-		os.Exit(0)
+	max, err := strconv.Atoi(os.Args[2])
+	if err != nil {
+		fmt.Println("O segundo input não é um número")
+		os.Exit(2)
 	}
-	fmt.Printf("%d não é um palíndromo", num)
+	for i := min; i < max; i++ {
+		if palindrome(i) {
+			fmt.Printf("%d é um palindromo\n", i)
+		}
+	}
 }
 
 func palindrome(num int) bool {
