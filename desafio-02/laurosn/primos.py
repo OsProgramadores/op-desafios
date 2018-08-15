@@ -8,7 +8,7 @@ def erastotenes(n):
         if i not in multiples:
             # imprime os numeros primos
             print (i)
-            # adiciona os multiplos na
+            # adiciona os multiplos na lista de "nao" primos
             for j in range(i*i, n+1, i):
                 multiples.append(j)
 start_time = time.time()
