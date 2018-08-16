@@ -1,3 +1,4 @@
+#!/usr/bin/python
 import time
 def erastotenes(n):
     # cria uma lista onde ficarao os multiplos do numero primo
@@ -11,7 +12,11 @@ def erastotenes(n):
             # adiciona os multiplos na lista de "nao" primos
             for j in range(i*i, n+1, i):
                 multiples.append(j)
-start_time = time.time()
-erastotenes(10000)
-print(" Tempo de execucao --- %s segundos ---" % (time.time() - start_time))
+def main():
+  start_time = time.time()
+  erastotenes(10000)
+￼  print(" Tempo de execucao --- %s segundos ---" % (time.time() - start_time))
+￼
+if __name__ == "__main__":
+  main()
 
