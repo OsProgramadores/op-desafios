@@ -16,7 +16,6 @@ def main():
   start_time = time.time()
   erastotenes(10000)
   print(" Tempo de execucao --- %s segundos ---" % (time.time() - start_time))
-￼
 if __name__ == "__main__":
   main()
 
