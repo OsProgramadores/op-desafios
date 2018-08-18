@@ -20,7 +20,7 @@ def checa_palindromos(min, max):
 def main():
     start_time = time.time()
     checa_palindromos(1, 101)
-    print(" Tempo de execucao  --- %s segundos ---" % (time.time() - start_time))
+    print("Tempo de execucao  --- %s segundos ---" % (time.time() - start_time))
 
 
 if __name__ == "__main__":
