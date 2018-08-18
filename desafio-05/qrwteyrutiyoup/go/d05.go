@@ -2,10 +2,12 @@ package main
 
 import (
 	"bytes"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
+	"runtime/pprof"
 	"strconv"
 	"sync"
 	"unsafe"
@@ -428,18 +430,33 @@ func (d *d05) solve() {
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatalf("Usage: %s <input file> [number of concurrent blocks]\n", os.Args[0])
+	var optCPUProfile string
+
+	flag.StringVar(&optCPUProfile, "cpuprofile", "", "write cpu profile to file")
+	flag.Parse()
+
+	if len(flag.Args()) < 2 {
+		log.Fatalf("Usage: %s [-cpuprofile=<profile>] <input file> [number of concurrent blocks]\n", os.Args[0])
 	}
 
-	content, err := ioutil.ReadFile(os.Args[1])
+	// Profiling
+	if optCPUProfile != "" {
+		f, err := os.Create(optCPUProfile)
+		if err != nil {
+			log.Fatal(err)
+		}
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
+
+	content, err := ioutil.ReadFile(flag.Args()[0])
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	numberOfBlocks := uint32(numberOfBlocksDefault)
 	if len(os.Args) >= 3 {
-		n, err := strconv.ParseUint(os.Args[2], 10, 32)
+		n, err := strconv.ParseUint(flag.Args()[1], 10, 32)
 		if err != nil {
 			log.Fatal(err)
 		}
