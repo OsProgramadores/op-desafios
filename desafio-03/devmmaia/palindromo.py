@@ -24,9 +24,7 @@ def main():
     
     inicio = int(sys.argv[1])
     fim = int(sys.argv[2])
-    max_buffer = fim // 100
-    if max_buffer < 10000: 
-        max_buffer = 10000
+    max_buffer = 10000
     finalizar = False
     faixas = ((i, (i+max_buffer)) for i in range(1,fim, max_buffer))
    
