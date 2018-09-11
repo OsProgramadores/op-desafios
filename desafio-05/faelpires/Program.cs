@@ -1,4 +1,4 @@
-﻿using MoreLinq;
+using MoreLinq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -19,7 +19,7 @@ namespace Desafio5
         private static Funcionario _currentFuncionario;
         private static StringBuilder _stringBuilderHashCode = new StringBuilder(27);
         private static readonly Dictionary<int, AreaStats> AreaStatsDict = new Dictionary<int, AreaStats>();
-        private static readonly Dictionary<string, SobrenomeStats> SobrenomeStatsDict = new Dictionary<string, SobrenomeStats>(/*new MyComparer()*/);
+        private static readonly Dictionary<string, SobrenomeStats> SobrenomeStatsDict = new Dictionary<string, SobrenomeStats>();
         private static readonly Dictionary<int, byte[]> AreasDict = new Dictionary<int, byte[]>();
 
         #endregion Fields
@@ -29,9 +29,6 @@ namespace Desafio5
             if (args.Length == 0)
                 throw new ArgumentException("File path is missing", "args");
 
-            var stopWatchTotal = new Stopwatch();
-            stopWatchTotal.Start();
-
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
             LoadAndProcessJson(args[0]);
@@ -40,10 +37,6 @@ namespace Desafio5
             PrintQuestao2();
             PrintQuestao3();
             PrintQuestao4();
-
-            stopWatchTotal.Stop();
-
-            Console.WriteLine($"\nProcessing time: {stopWatchTotal.ElapsedMilliseconds}");
         }
 
         #region Questoes
@@ -71,7 +64,7 @@ namespace Desafio5
 
         private static void PrintQuestao2()
         {
-            foreach (var areaStats in AreaStatsDict.OrderBy(p => p.Key))
+            foreach (var areaStats in AreaStatsDict)
             {
                 foreach (var funcionario in areaStats.Value.Max)
                 {
@@ -102,7 +95,7 @@ namespace Desafio5
 
         private static void PrintQuestao4()
         {
-            foreach (var sobrenomeStats in SobrenomeStatsDict.Where(p => p.Value.TotalFuncionarios > 1 && !string.IsNullOrWhiteSpace(p.Key)))
+            foreach (var sobrenomeStats in SobrenomeStatsDict.Where(p => p.Value.TotalFuncionarios > 1))
             {
                 foreach (var nome in sobrenomeStats.Value.Nomes)
                 {
@@ -115,6 +108,7 @@ namespace Desafio5
         #endregion Questoes
 
         #region Utils
+
 
         private static string GetUTF8String(byte[] bytes) => Encoding.UTF8.GetString(bytes).Replace("\0", string.Empty);
 
@@ -145,7 +139,7 @@ namespace Desafio5
                 var end = (pstr + len);
                 var pc = pstr;
                 char c = *pc;
-                
+
                 if (c == '-')
                 {
                     sign = -1;
@@ -153,7 +147,7 @@ namespace Desafio5
                     if (pc >= end) return Double.NaN;
                 }
 
-                while (true) // breaks inside on pos >= len or non-digit character
+                while (true)
                 {
                     if (pc >= end) return sign * result;
                     c = *pc++;
