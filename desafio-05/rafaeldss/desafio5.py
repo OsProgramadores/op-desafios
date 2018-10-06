@@ -26,8 +26,7 @@ def processar(file_name):
     last_name_max = {}
     last_name = {}
 
-    areas = {area['codigo']: [area['nome'], 9999999, 0, 0, 0] for area 
-in dados['areas']}
+    areas = {area['codigo']: [area['nome'], 9999999, 0, 0, 0] for area in dados['areas']}
 
     for funcionario in dados['funcionarios']:
         salario = funcionario['salario']
@@ -58,22 +57,18 @@ in dados['areas']}
         # Menores salários - áreas
         if salario < areas[codigo_area][1]:
             areas[codigo_area][1] = salario
-            area_min = [[areas[codigo_area][0], nome, sobrenome, 
-salario]]
+            area_min = [[areas[codigo_area][0], nome, sobrenome, salario]]
 
         elif salario == areas[codigo_area][1]:
-            area_min += [[areas[codigo_area][0], nome, sobrenome, 
-salario]]
+            area_min += [[areas[codigo_area][0], nome, sobrenome, salario]]
 
         # Maiores salários - áreas
         if salario > areas[codigo_area][2]:
             areas[codigo_area][2] = salario
-            area_max = [[areas[codigo_area][0], nome, sobrenome, 
-salario]]
+            area_max = [[areas[codigo_area][0], nome, sobrenome, salario]]
 
         elif salario == areas[codigo_area][2]:
-            area_max += [[areas[codigo_area][0], nome, sobrenome, 
-salario]]
+            area_max += [[areas[codigo_area][0], nome, sobrenome, salario]]
 
         # Cada area vai receber seus respectivos salários
         areas[codigo_area][3] += salario
@@ -151,8 +146,7 @@ salario]]
     for valor, key in zip(last_name_max.values(), last_name_max.keys()):
         if valor[1] > 1:
             for name in last_name[key]:
-                saida += f'\nlast_name_max|{key}|{name[0]} 
-{key}|{name[1]}'
+                saida += f'\nlast_name_max|{key}|{name[0]} {key}|{name[1]}'
 
     print(saida)
 
