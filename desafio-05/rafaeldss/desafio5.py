@@ -3,7 +3,6 @@ import sys
 
 FILE_NAME = sys.argv[1]
 
-
 def processar(file_name):
     with open(file_name, 'r', encoding="utf8") as file:
         dados = json.loads(file.read())
