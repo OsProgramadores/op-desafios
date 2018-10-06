@@ -2,7 +2,6 @@ import json
 import sys
 
 FILE_NAME = sys.argv[1]
-print(FILE_NAME)
 
 
 def processar(file_name):
