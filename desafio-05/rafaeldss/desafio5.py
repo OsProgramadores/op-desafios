@@ -1,14 +1,15 @@
 """Solução para o desafio 05 - RafaelDSS."""
 
 import sys
-import time
+import json
 
 FILE_NAME = sys.argv[1]
 
 
 def processar(file_name):
+
     """Processa arquivo JSON e gera saida em formato padronizado."""
-    
+
     with open(file_name, 'r', encoding="utf8") as file:
         dados = json.loads(file.read())
 
@@ -128,15 +129,15 @@ def processar(file_name):
 
     # Questão 2
 
-    for key in area_max.keys():
-        for f in area_max[key]:
-            if f[2] > 0:
-                saida += f'area_max|{key}|{f[0]} {f[1]}|{f[2]:.2f}\n'
+    for key_max in area_max:
+        for func_max in area_max[key_max]:
+            if func_max[2] > 0:
+                saida += f'area_max|{key_max}|{func_max[0]} {func_max[1]}|{func_max[2]:.2f}\n'
 
-    for key in area_min.keys():
-        for f in area_min[key]:
-            if f[2] > 0:
-                saida += f'area_min|{key}|{f[0]} {f[1]}|{f[2]:.2f}\n'
+    for key_min in area_min:
+        for func_min in area_min[key_min]:
+            if func_min[2] > 0:
+                saida += f'area_min|{key_min}|{func_min[0]} {func_min[1]}|{func_min[2]:.2f}\n'
 
     for area in areas.values():
         if area[4] > 1:
@@ -152,7 +153,7 @@ def processar(file_name):
 
     # Questão 4
 
-    for valor, key in zip(last_name_max.values(), last_name_max.keys()):
+    for key in last_name_max:
         for name in last_name[key]:
             saida += f'last_name_max|{key}|{name[0]} {key}|{name[1]:.2f}\n'
 
