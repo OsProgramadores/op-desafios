@@ -1,4 +1,5 @@
-import json
+"""Solução para o desafio 05 - RafaelDSS."""
+
 import sys
 import time
 
@@ -6,6 +7,8 @@ FILE_NAME = sys.argv[1]
 
 
 def processar(file_name):
+    """Processa arquivo JSON e gera saida em formato padronizado."""
+    
     with open(file_name, 'r', encoding="utf8") as file:
         dados = json.loads(file.read())
 
