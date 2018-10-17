@@ -1,5 +1,5 @@
-import java.util.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class Desafio7
 {
@@ -14,33 +14,31 @@ public class Desafio7
 
         try {
             in = new BufferedReader(new FileReader(args[0]));
-            String primeiraLinha = in.readLine();
+
             String ultimaLinha = "";
+            int numUltimaLinha = 0;
             String aux = "";
 
             while((aux = in.readLine()) != null){
                 ultimaLinha = new String(aux);
+                numUltimaLinha++;
             }
 
             System.out.println(ultimaLinha);
 
             in.close();
 
-            if(primeiraLinha == null)
-                System.exit(0);
-
-            while(!ultimaLinha.equals(primeiraLinha)) {
+            while(numUltimaLinha != 1) {
                 in = new BufferedReader(new FileReader(args[0]));
+                int count = 1;
 
-                String aux2 = "";
-
-                while(!(aux = in.readLine()).equals(ultimaLinha)){
-                    aux2 = new String(aux);
+                while(count < numUltimaLinha){
+                    count++;
+                    ultimaLinha = in.readLine();
                 }
 
-                System.out.println(aux2);
-
-                ultimaLinha = new String(aux2);
+                System.out.println(ultimaLinha);
+                numUltimaLinha--;
                 in.close();
             }
         }catch(Exception e) {
