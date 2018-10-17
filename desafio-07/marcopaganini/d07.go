@@ -21,6 +21,9 @@ const (
 	// Read chunk size in bytes. This must be larger than the largest text
 	// line in the file, or the program will fail.
 	chunkSize = 256 * 1024
+
+	// Output buffer size (in bytes).
+	writeBufSize = 16 * 1024
 )
 
 func main() {
@@ -60,7 +63,7 @@ func main() {
 	defer f.Close()
 
 	// Use bufio.NewWriter instead of fmt.Printf for performance reasons.
-	out := bufio.NewWriter(os.Stdout)
+	out := bufio.NewWriterSize(os.Stdout, writeBufSize)
 	defer out.Flush()
 
 	if err := reverse(f, out, size); err != nil {
