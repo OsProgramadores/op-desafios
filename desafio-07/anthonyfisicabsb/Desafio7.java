@@ -6,7 +6,7 @@ public class Desafio7
     public static void main(String[] args)
     {
         if(args.length != 1) {
-            System.out.println("Digite java -jar Desafio07.jar <nome-arquivo>");
+            System.out.println("Digite java Desafio07 <nome-arquivo>");
             return;
         }
 
