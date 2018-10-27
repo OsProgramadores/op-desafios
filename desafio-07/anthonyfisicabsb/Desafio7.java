@@ -1,48 +1,54 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.RandomAccessFile;
+import java.io.IOException;
 
 public class Desafio7
 {
-    public static void main(String[] args)
+    public static void main(String[] args) throws IOException
     {
         if(args.length != 1) {
-            System.out.println("Digite java Desafio07 <nome-arquivo>");
+            System.out.println("Digite java -jar Desafio07.jar <nome-arquivo>");
             return;
         }
 
-        BufferedReader in;
+        RandomAccessFile ptr = null;
+        long posPtr = 0;
+        long posAtual = 0;
+        String impressao = "";
+        byte[] caracteres = null;
+        char test = 'a';
 
         try {
-            in = new BufferedReader(new FileReader(args[0]));
+            ptr = new RandomAccessFile(args[0], "r");
 
-            String ultimaLinha = "";
-            int numUltimaLinha = 0;
-            String aux = "";
+            posPtr = ptr.length() -1;
+            posAtual = posPtr - 1;
 
-            while((aux = in.readLine()) != null){
-                ultimaLinha = new String(aux);
-                numUltimaLinha++;
-            }
+            do{
+                posAtual--;
 
-            System.out.println(ultimaLinha);
+                    ptr.seek(posAtual);
+                    if((test = (char)ptr.read()) == '\n'){
+                        ptr.seek(posAtual + 1);
 
-            in.close();
+                        caracteres = new byte[(int)posPtr - (int)posAtual];
+                        ptr.readFully(caracteres);
+                        impressao = new String(caracteres, "UTF-8");
+                        posPtr = posAtual;
 
-            while(numUltimaLinha != 1) {
-                in = new BufferedReader(new FileReader(args[0]));
-                int count = 1;
+                        System.out.print(impressao);
+                    }
+            }while(posAtual > 0);
 
-                while(count < numUltimaLinha){
-                    count++;
-                    ultimaLinha = in.readLine();
-                }
-
-                System.out.println(ultimaLinha);
-                numUltimaLinha--;
-                in.close();
-            }
         }catch(Exception e) {
-            e.printStackTrace();
+        }finally {
+            ptr.seek(0);
+
+            caracteres = new byte[(int)posPtr + 1];
+            ptr.readFully(caracteres);
+
+            impressao = new String(caracteres, "UTF-8");
+
+            System.out.print(impressao);
         }
     }
 }
