@@ -11,36 +11,36 @@ site: https://osprogramadores.com/
 def eratosthenes():
     """Gera números primos."""
     # dicionario para armazenar os futuros primos
-    D = {}
+    d_dict = {}
     # primeiro inteiro a testar
-    q = 2
+    q_marca = 2
     while True:
-        if q not in D:
+        if q_marca not in d_dict:
             # nao esta marcado entao eh primo
-            yield q
+            yield q_marca
             # armazena somente o primeiro multiplo
             # que ainda nao esta armazenado
-            D[q*q] = [q]
+            d_dict[q_marca*q_marca] = [q_marca]
         else:
             # todos os nao-primos armazenados aqui precisam andar
-            for p in D[q]:
-                D.setdefault(p+q, []).append(p)
+            for p_calc in d_dict[q_marca]:
+                d_dict.setdefault(p_calc + q_marca, []).append(p_calc)
             # libera memoria do que ja passou
-            del D[q]
-        q += 1
+            del d_dict[q_marca]
+        q_marca += 1
 
 
-def primos(limite):
+def primos(limite_primo):
     """Calcula cada primo.
 
     param: None
-    return: p (primo)
+    return: p_calc (primo)
     """
-    for p in eratosthenes():
-        if p > limite:
+    for p_calc in eratosthenes():
+        if p_calc > limite_primo:
             break
-        print(p)
+        print(p_calc)
 
 
-limite = 10000
-primos(limite)
+
+primos(10000)
