@@ -1,13 +1,13 @@
 #!/usr/bin/python3
 '''
-Escreva um programa para listar todos os números primos entre 1 e 10000.
+Escreva um programa para listar todos os números np_primos entre 1 e 10000.
 '''
 
 from math import sqrt
 
-limite, primos = 10000, []
+num_primos = []
 
-def ehPrimo(numero):
+def np_primo(numero):
     '''
     Verificação de primalidade
     '''
@@ -18,8 +18,8 @@ def ehPrimo(numero):
             return False
     return True
 
-for p in range(2, limite + 1):
-    if ehPrimo(p):
-        primos.append(p)
+for num in range(2, 10000 + 1):
+    if np_primo(num):
+        num_primos.append(num)
 
-print(primos)
+print(num_primos)
