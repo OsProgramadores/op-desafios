@@ -1,6 +1,2 @@
 *.class
-<<<<<<< HEAD
 .vscode
-=======
-.vscode/
->>>>>>> c352f66... Atualização do .gitignore
