@@ -30,9 +30,9 @@ public class Desafio7
             ptr = new RandomAccessFile(args[0], "r");
 
             posPtr = ptr.length();
-            posAtual = (posPtr - sizeArray) < 0 ? 0: (posPtr - sizeArray);
 
             do{
+                posAtual = (posPtr - sizeArray) < 0 ? 0: (posPtr - sizeArray);
                 ptr.seek(posAtual);
 
                 charChunk = new byte[(int)posPtr - (int)posAtual];
@@ -41,7 +41,6 @@ public class Desafio7
                 readArray(charChunk, listaImpressao);
 
                 posPtr = posAtual;
-                posAtual = (posPtr - sizeArray) < 0 ? 0: (posPtr - sizeArray);
 
             }while(posPtr > 0);
 
