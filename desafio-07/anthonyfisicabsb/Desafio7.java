@@ -25,7 +25,6 @@ public class Desafio7
         long posAtual = 0;
         byte[] charChunk = null;
         LinkedList<Byte> listaImpressao = new LinkedList<>();
-        char test = 'a';
 
         try {
             ptr = new RandomAccessFile(args[0], "r");
