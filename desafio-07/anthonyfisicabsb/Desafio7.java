@@ -1,6 +1,6 @@
 import java.io.RandomAccessFile;
 import java.io.IOException;
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 /*
     Programa que resolve o desafio do site osprogramadores.com.
@@ -13,21 +13,19 @@ public class Desafio7
     public static void main(String[] args) throws IOException
     {
         if(args.length != 1) {
-            System.out.println("Digite java -jar Desafio07.jar <nome-arquivo>");
+            System.out.println("Digite java Desafio07 <nome-arquivo>");
             return;
         }
-
-        RandomAccessFile ptr = null;
 
         final int sizeArray = 1000000; // tamanho em bytes do array
 
         long posPtr = 0;
         long posAtual = 0;
         byte[] charChunk = null;
-        LinkedList<Byte> listaImpressao = new LinkedList<>();
+        final ArrayList<Byte> listaImpressao = new ArrayList<>();
 
         try {
-            ptr = new RandomAccessFile(args[0], "r");
+            final RandomAccessFile ptr = new RandomAccessFile(args[0], "r");
 
             posPtr = ptr.length();
 
@@ -51,29 +49,28 @@ public class Desafio7
         }
     }
 
-    public static void readArray(byte charChunk[], LinkedList<Byte> impressao) throws Exception
+    public static void readArray(byte charChunk[], ArrayList<Byte> impressao) throws Exception
     {
         for(int i = charChunk.length - 1; i >= 0; i--){
             if((char)charChunk[i] == '\n'){
                 printString(impressao);
                 impressao.clear();
-
-                impressao.addFirst(charChunk[i]);
-            }else{
-                impressao.addFirst(charChunk[i]);
             }
+
+            impressao.add(0, charChunk[i]);
         }
     }
 
-    public static void printString(LinkedList<Byte> lista) throws Exception 
+    public static void printString(ArrayList<Byte> lista) throws Exception 
     {
-        byte bytes[] = new byte[lista.size()];
+        final byte bytes[] = new byte[lista.size()];
 
         for(int i=0; i < lista.size(); i++){
             bytes[i] = lista.get(i);
         }
 
-        String impressao = new String(bytes, "UTF-8");
+        final String impressao = new String(bytes, "UTF-8");
+
         System.out.print(impressao);
     }
 }
