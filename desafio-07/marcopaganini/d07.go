@@ -54,7 +54,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	size := int64(fi.Size())
+	size := fi.Size()
 
 	f, err := os.OpenFile(fname, os.O_RDONLY, 0)
 	if err != nil {
@@ -72,16 +72,16 @@ func main() {
 }
 
 // reverse reads data from r and writes text lines to w in reverse order.
-func reverse(r *os.File, w io.Writer, size int64) error {
+func reverse(r io.ReaderAt, w io.Writer, size int64) error {
 	var (
-		offset    int64
-		bufsize   int64
-		buf       []byte
-		printlast bool
+		offset         int64
+		bufsize        int64
+		buf            []byte
+		forcePrintLast bool
 	)
 
 	bufsize = min(chunkSize, size)
-	offset = max(int64(size-chunkSize), 0)
+	offset = max(size-chunkSize, 0)
 
 	for {
 		// Reallocate if size doesn't match.
@@ -97,12 +97,12 @@ func reverse(r *os.File, w io.Writer, size int64) error {
 			return fmt.Errorf("Reading chunk size too small (%d bytes)", chunkSize)
 		}
 
-		revprint(w, lines, (offset == 0), printlast)
+		revprint(w, lines, (offset == 0), forcePrintLast)
 		if offset == 0 {
 			break
 		}
 
-		printlast = true
+		forcePrintLast = true
 
 		// Move the offset back enough to make the current first line to be
 		// the last on the next iteration.
@@ -123,21 +123,23 @@ func reverse(r *os.File, w io.Writer, size int64) error {
 // will set printfirst to true once it is sure the first line is complete
 // (usually then the file read offset == 0)
 //
-// If the last line is blank and printlast is false, don't print it or we'll
+// If the last line is blank and forcePrintprintLast is false, don't print it or we'll
 // end up with an extra line at the beginning of the reversed output for files
 // ending in a newline (common case). Please note that tac behaves differently
 // in such situations.
-func revprint(w io.Writer, lines []string, printfirst, printlast bool) {
-	lastline := lines[len(lines)-1]
+func revprint(w io.Writer, lines []string, printfirst, forcePrintLast bool) {
+	first := 1
+	last := len(lines) - 1
 
-	if printlast && lastline != "" {
-		fmt.Fprintln(w, lastline)
-	}
-	for i := len(lines) - 2; i > 0; i-- {
-		fmt.Fprintln(w, lines[i])
-	}
 	if printfirst {
-		fmt.Fprintln(w, lines[0])
+		first = 0
+	}
+	if lines[last] == "" && !forcePrintLast {
+		last--
+	}
+
+	for i := last; i >= first; i-- {
+		fmt.Fprintln(w, lines[i])
 	}
 }
 
