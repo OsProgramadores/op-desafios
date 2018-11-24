@@ -14,13 +14,12 @@ import (
 	"log"
 	"os"
 	"runtime/pprof"
-	"strings"
 )
 
 const (
 	// Read chunk size in bytes. This must be larger than the largest text
 	// line in the file, or the program will fail.
-	chunkSize = 256 * 1024
+	chunkSize = 64 * 1024
 
 	// Output buffer size (in bytes).
 	writeBufSize = 16 * 1024
@@ -92,21 +91,19 @@ func reverse(r io.ReaderAt, w io.Writer, size int64) error {
 			return err
 		}
 
-		lines := strings.Split(string(buf), "\n")
-		if len(lines) < 2 {
-			return fmt.Errorf("Reading chunk size too small (%d bytes)", chunkSize)
-		}
-
-		revprint(w, lines, (offset == 0), forcePrintLast)
+		count := int64(revprint(w, buf, (offset == 0), forcePrintLast))
 		if offset == 0 {
 			break
+		}
+		if count == chunkSize {
+			return fmt.Errorf("chunk size is too small: %v", chunkSize)
 		}
 
 		forcePrintLast = true
 
 		// Move the offset back enough to make the current first line to be
 		// the last on the next iteration.
-		offset = offset - chunkSize + int64(len(lines[0]))
+		offset = offset - chunkSize + count
 		if offset < 0 {
 			bufsize = chunkSize + offset
 			offset = 0
@@ -115,32 +112,55 @@ func reverse(r io.ReaderAt, w io.Writer, size int64) error {
 	return nil
 }
 
-// revprint splits the byte slice buffer into lines and prints them backwards.
+// revprint prints the bytes slice backwards, using \n as line separators.
 //
-// This function expects the input slice to have been taken from a "window" of
-// bytes from a file. We always assume the first line in the slice to be
-// incomplete and don't print it unless printfirst is set to true. The caller
-// will set printfirst to true once it is sure the first line is complete
-// (usually then the file read offset == 0)
+// This function expects the bytes slice to be a "window" of bytes from a file.
+// We always assume the first line in the slice to be incomplete and don't
+// print it unless printfirst is set to true. The caller will set printfirst to
+// true once it is sure the first line is complete (usually then the file read
+// offset == 0)
 //
-// If the last line is blank and forcePrintprintLast is false, don't print it or we'll
-// end up with an extra line at the beginning of the reversed output for files
-// ending in a newline (common case). Please note that tac behaves differently
-// in such situations.
-func revprint(w io.Writer, lines []string, printfirst, forcePrintLast bool) {
-	first := 1
-	last := len(lines) - 1
+// If the last line is blank and forcePrintprintLast is false, don't print it
+// or we'll end up with an extra line at the beginning of the reversed output
+// for files ending in a newline (common case). Please note that tac behaves
+// differently in such situations.
+//
+// Returns the full length of the first line, newline included. In most cases
+// this line will not have been printed.
+func revprint(w io.Writer, buf []byte, printfirst, forcePrintLast bool) int32 {
+	var (
+		count int32
+		ix    int32
+		start int32
+	)
+
+	buflimit := int32(len(buf) - 1)
+	for ix = buflimit; ix >= 0; ix-- {
+		//fmt.Println("ix=", ix, "count=", count)
+		// If we found a newline and it's the last character in the file, only
+		// print it if forcePrintLast is set. Otherwise, we're in the middle of
+		// the buffer, so set the next start to this position + 1
+		if buf[ix] == '\n' {
+			start = ix + 1
+			if ix == buflimit {
+				if !forcePrintLast {
+					// count = 1 to include this newline.
+					count = 1
+					continue
+				}
+				start = ix
+			}
+			w.Write(buf[start : start+count])
+			count = 0
+		}
+		count++
+	}
 
 	if printfirst {
-		first = 0
+		w.Write(buf[0:count])
 	}
-	if lines[last] == "" && !forcePrintLast {
-		last--
-	}
-
-	for i := last; i >= first; i-- {
-		fmt.Fprintln(w, lines[i])
-	}
+	//fmt.Println("count =", count)
+	return count
 }
 
 // min returns the smallest of two int64 numbers.
