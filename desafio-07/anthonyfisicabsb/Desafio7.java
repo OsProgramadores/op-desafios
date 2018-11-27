@@ -1,6 +1,6 @@
 import java.io.RandomAccessFile;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.ArrayDeque;
 
 /*
     Programa que resolve o desafio do site osprogramadores.com.
@@ -22,7 +22,7 @@ public class Desafio7
         long posPtr = 0;
         long posAtual = 0;
         byte[] charChunk = null;
-        final ArrayList<Byte> listaImpressao = new ArrayList<>();
+        final ArrayDeque<Byte> listaImpressao = new ArrayDeque<>();
 
         try {
             final RandomAccessFile ptr = new RandomAccessFile(args[0], "r");
@@ -49,24 +49,23 @@ public class Desafio7
         }
     }
 
-    public static void readArray(byte charChunk[], ArrayList<Byte> impressao) throws Exception
+    public static void readArray(byte charChunk[], ArrayDeque<Byte> impressao) throws Exception
     {
         for(int i = charChunk.length - 1; i >= 0; i--){
             if((char)charChunk[i] == '\n'){
                 printString(impressao);
-                impressao.clear();
             }
 
-            impressao.add(0, charChunk[i]);
+            impressao.addFirst(charChunk[i]);
         }
     }
 
-    public static void printString(ArrayList<Byte> lista) throws Exception 
+    public static void printString(ArrayDeque<Byte> lista) throws Exception 
     {
         final byte bytes[] = new byte[lista.size()];
 
-        for(int i=0; i < lista.size(); i++){
-            bytes[i] = lista.get(i);
+        for(int i=0; lista.size() > 0; i++){
+            bytes[i] = lista.pollFirst();
         }
 
         final String impressao = new String(bytes, "UTF-8");
