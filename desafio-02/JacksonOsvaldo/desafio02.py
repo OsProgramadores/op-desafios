@@ -11,13 +11,13 @@ E-mail: jacksonosvaldo@live.com
 
 def primo(numero):
 	"""Função para testar se é ou não primo retornando valor lógico."""
-    num = 0
-    for i in range(numero):
-        resto = numero % (i + 1)
-        if resto == 0:
-            num = num + 1
-        if num > 2:
-            break
+	num = 0
+	for i in range(numero):
+		resto = numero % (i + 1)
+		if resto == 0:
+			num = num + 1
+		if num > 2:
+			break
     if num == 2:
         return True
 
