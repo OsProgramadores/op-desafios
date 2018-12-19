@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 
@@ -11,12 +11,10 @@ def primo(numero):
         if num > 2:
             break
     if num == 2:
-        return True
-    else:
-        return False
+        return bool(True)
 
 
-for i in range(10000):
-    testeprimo = primo(i)
+for numeroContador in range(10000):
+    testeprimo = primo(numeroContador)
     if testeprimo == True:
-        print('O número primo é: {}'.format(i))
+        print('O número primo é: {}'.format(numeroContador))
