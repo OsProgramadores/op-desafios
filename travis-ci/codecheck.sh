@@ -17,7 +17,8 @@ fi
 # (https://docs.travis-ci.com/user/customizing-the-build/#note-on-)
 set -e
 
-git diff --name-only $TRAVIS_COMMIT_RANGE | while read fname; do
+# Only Added and modified files are checked.
+git diff --diff-filter=AM --name-only $TRAVIS_COMMIT_RANGE | while read fname; do
   # May be possible to use TRAVIS_CI_BUILD instead of .. below.
   ext="${fname##*.}"
   if [[ "$ext" == "py" ]]; then
