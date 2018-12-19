@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
 
 """
 Resposta de Jackson Osvaldo da Silva Braga
@@ -6,10 +8,9 @@ GitHub: https://github.com/JacksonOsvaldo
 E-mail: jacksonosvaldo@live.com
 """
 
-import string
-
 
 def primo(numero):
+	"""Função para testar se é ou não primo retornando valor lógico."""
     num = 0
     for i in range(numero):
         resto = numero % (i + 1)
@@ -18,7 +19,7 @@ def primo(numero):
         if num > 2:
             break
     if num == 2:
-        return bool(True)
+        return True
 
 
 for numeroContador in range(10000):
