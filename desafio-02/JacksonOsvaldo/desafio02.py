@@ -19,7 +19,8 @@ def primo(numero):
             if num > 2:
                 break
     if num == 2:
-        return bool(True)
+        return True
+    pass
 
 
 for numeroContador in range(10000):
