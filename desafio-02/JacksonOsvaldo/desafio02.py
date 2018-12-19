@@ -18,11 +18,11 @@ def primo(numero):
 			num = num + 1
 		if num > 2:
 			break
-    if num == 2:
-        return True
+	if num == 2:
+		return True
 
 
 for numeroContador in range(10000):
-    testeprimo = primo(numeroContador)
-    if testeprimo == True:
-        print('O número primo é: {}'.format(numeroContador))
+	testeprimo = primo(numeroContador)
+	if testeprimo == True:
+		print('O número primo é: {}'.format(numeroContador))
