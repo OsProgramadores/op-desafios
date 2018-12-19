@@ -42,14 +42,20 @@ Ao criar um novo programa, mantenha a estrutura abaixo:
 ```
 desafio-01/
   seu_usuario_no_github/
-    arquivos com a sua solução
-    README.md <-- comentários, opcional.
+    linguagem-feature/
+      arquivos com a sua solução
+      README.md <-- comentários, opcional.
     ...
 desafio-02/
   seu_usuario_no_github/
-    arquivos com a sua solução
+    linguagem-feature/
+      arquivos com a sua solução
     ...
 ```
+
+* **Linguagem** é a linguagem em que o seu programa foi feito (em minúsculas). Olhe os outros casos de nomes de linguagens usadas no repo e mantenha o padrão.
+
+* **feature** é um diferenciador de uma _feature_ dentro da linguagem. Por exemplo, dois programas em python usando duas libraries, uma chamada _foo_ e uma chamada _bar_, ficariam em dois diretorios separados: `python-libfoo` e `python-libbar`. Só submeta mais de uma versão por linguagem se a diferença no programa for significativa.
 
 # Observações para linguagens específicas
 
