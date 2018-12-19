@@ -1,8 +1,12 @@
+#!/usr/bin/env python3
+
 """
 Resposta de Jackson Osvaldo da Silva Braga
 GitHub: https://github.com/JacksonOsvaldo
 E-mail: jacksonosvaldo@live.com
 """
+
+import string
 
 
 def primo(numero):
