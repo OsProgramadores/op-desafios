@@ -19,4 +19,4 @@ def primo(numero):
 for i in range(10000):
     testeprimo = primo(i)
     if testeprimo == True:
-        print ('O número primo é: {}'.format(i))
+        print('O número primo é: {}'.format(i))
