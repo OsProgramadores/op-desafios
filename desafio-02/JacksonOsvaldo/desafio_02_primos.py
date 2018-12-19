@@ -1,5 +1,8 @@
-#!/usr/bin/python3
-# -*- coding: utf-8 -*-
+"""
+Resposta de Jackson Osvaldo da Silva Braga
+GitHub: https://github.com/JacksonOsvaldo
+E-mail: jacksonosvaldo@live.com
+"""
 
 
 def primo(numero):
