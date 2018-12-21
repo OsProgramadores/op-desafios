@@ -21,7 +21,7 @@ def primo(numero):
 
     return num == 2
 
-for numeroContador in range(10):
+for numeroContador in range(10000):
     testeprimo = primo(numeroContador)
     if testeprimo is True:
         print('O número primo é: {}'.format(numeroContador))
