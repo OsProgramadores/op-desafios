@@ -1,10 +1,10 @@
 #! /usr/bin/python3
+# -*- encoding: utf-8 -*-
 """
 Script that checks if certain number is prime or not.
 It works on ranges of numbers too.
 """
-from math import sqrt
-import time
+#import time
 
 def is_primary(number):
     """
@@ -40,7 +40,7 @@ def is_primary(number):
 
 #time_start = time.time()
 #primes_counter = 0
-for n in range(1,  10000):
+for n in range(1, 10000):
     if is_primary(n):
         print(n)
         #primes_counter += 1
