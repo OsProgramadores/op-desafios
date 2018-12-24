@@ -1,3 +1,7 @@
+"""
+Author: Lucas
+Purpose: Answer to challenge 02
+"""
 NUMEROS = range(10000)
 for numero in NUMEROS:
     div = 1
