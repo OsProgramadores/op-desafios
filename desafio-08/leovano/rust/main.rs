@@ -38,17 +38,14 @@ fn main() {
     let file = BufReader::new(file);
 
     for line in file.lines() {
-        let frac = line.expect("LineFail");
-        let mut frac = frac.split('/');
-
-        let num = frac
-            .next()
-            .and_then(|it| it.parse::<i64>().ok())
+        let frac = line
+            .expect("LineFail")
+            .split('/')
+            .map(|it| it.parse::<i64>())
+            .collect::<Result<Vec<i64>, _>>()
             .expect("ParseFail");
-        let den = frac
-            .next()
-            .map_or(Ok(1), |it| it.parse::<i64>())
-            .expect("ParseFail");
+        let num = *frac.get(0).expect("Linha vazia");
+        let den = *frac.get(1).unwrap_or(&1);
 
         if let Some((int, num, den)) = simplify(num, den) {
             if int != 0 {
