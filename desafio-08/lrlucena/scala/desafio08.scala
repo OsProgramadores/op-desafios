@@ -1,4 +1,4 @@
-def mdc(a: Int, b: Int): Int = if (a==0) b else mdc(b % a, a)
+def mdc(a: Int, b: Int): Int = if (a == 0) b else mdc(b % a, a)
 
 def simplificar(a: Int, b: Int = 1): String = {
   val (c, d) = (a / b, a % b)
