@@ -17,8 +17,7 @@ def base10ToN(b: BigInt, base: BigInt, ss: List[BigInt] = Nil) : String =
   else                     base10ToN(b / base, base, b % base ::ss)
 
 def baseNToM(a: String, b1: Int, b2: Int) =
-  if(b1<2 || b1>62 || b2<2 || b2>62 || a.distinct.diff(digits.take(b1))!="") "???"
-  else if (baseNTo10(a, b1)> limit) "???"
+  if(b1<2 || b1>62 || b2<2 || b2>62 || a.distinct.diff(digits.take(b1))!="" || baseNTo10(a, b1)> limit) "???"
   else base10ToN(baseNTo10(a, b1), b2)
 
 var in = io.StdIn.readLine()
