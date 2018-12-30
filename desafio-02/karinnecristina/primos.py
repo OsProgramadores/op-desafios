@@ -8,6 +8,6 @@ for numero in range(1, 10001):
            if numero % divisor == 0:
               break
        else:
-        print(numero)
+            print(numero)
 
 
