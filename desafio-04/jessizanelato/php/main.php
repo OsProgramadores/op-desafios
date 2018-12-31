@@ -20,8 +20,6 @@ $tabuleiro = explode(PHP_EOL, $conteudo);
 
 if(empty($tabuleiro)) die("Não há peças no tabuleiro a serem contadas.\n");
 
-$pecas = [];
-
 foreach ($tabuleiro as $linha) {
     $pecasDaLinha = explode(' ', $linha);
     foreach ($pecasDaLinha as $peca) {
