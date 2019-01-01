@@ -11,7 +11,7 @@ def main():
     number2 = 5005
 
     for numero in range(number1, number2+1):
-        palavra = str(i)
+        palavra = str(numero)
         if palavra == palavra[::-1]:
             print(numero)
 
