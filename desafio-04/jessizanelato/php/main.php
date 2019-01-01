@@ -1,36 +1,33 @@
 <?php
 
-$definicaoPedrasXadrez = [1 => 'Peão', 2 => 'Bispo', 3 => 'Cavalo', 4 => 'Torre', 5 => 'Rainha', 6 => 'Rei'];
+$pecasXadrez = [0 => ['total' => 0, 'desc' => 'Vazio'],
+                1 => ['total' => 0, 'desc' => 'Peão'], 
+                2 => ['total' => 0, 'desc' => 'Bispo'], 
+                3 => ['total' => 0, 'desc' => 'Cavalo'], 
+                4 => ['total' => 0, 'desc' => 'Torre'], 
+                5 => ['total' => 0, 'desc' => 'Rainha'], 
+                6 => ['total' => 0, 'desc' => 'Rei']];
 
 # informar o nome do arquivo como parâmetro
 # exemplo: php main.php sample_1.txt
 $arquivo = $argv[1];
 
-if (!file_exists($arquivo)) {
-    die("Arquivo não encontrado.\n");
-}
+if (!file_exists($arquivo)) die("Arquivo não encontrado.\n");
 
-$aberturaArquivo = fopen($arquivo, "r");
-$conteudo = fread($aberturaArquivo, filesize($arquivo));
-fclose($aberturaArquivo);
+$conteudo = file_get_contents($arquivo);
 
 $tabuleiro = explode(PHP_EOL, $conteudo);
 
 if(empty($tabuleiro)) die("Não há peças no tabuleiro a serem contadas.\n");
 
-$pecas = [];
-
 foreach ($tabuleiro as $linha) {
     $pecasDaLinha = explode(' ', $linha);
     foreach ($pecasDaLinha as $peca) {
-        $peca = (int) $peca;
-        $peca = $peca > 0 && $peca < 7 ? $peca : 0;
-        if(!isset($pecas[$peca])) $pecas[$peca] = 0;
-        $pecas[$peca]++;
+        $pecasXadrez[$peca]['total']++;
     }
 }
 
-foreach ($definicaoPedrasXadrez as $codigo => $descricao) {
-    $totalPecas = isset($pecas[$codigo]) ? $pecas[$codigo] : 0;
-    echo "{$descricao}: {$totalPecas} peça(s)\n";
+foreach ($pecasXadrez as $key => $peca) {
+    if($key == 0) continue;
+    echo $peca['desc'] . ": " . $peca['total'] . " peça(s)" . PHP_EOL;
 }
