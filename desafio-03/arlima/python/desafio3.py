@@ -10,10 +10,10 @@ def main():
     number1 = 1001
     number2 = 5005
 
-    for i in range(number1, number2+1):
-        s = str(i)
-        if s == s[::-1]:
-            print(i)
+    for numero in range(number1, number2+1):
+        palavra = str(i)
+        if palavra == palavra[::-1]:
+            print(numero)
 
 if __name__ == "__main__":
     main()
