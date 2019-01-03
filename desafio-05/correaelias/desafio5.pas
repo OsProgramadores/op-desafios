@@ -1,4 +1,6 @@
 {
+  Solução do desafio 5 por Elias Correa
+  
   Download freepascal compiler (fpc) here https://www.freepascal.org/ or thru your distro package manager
   
   Compile with:
@@ -33,7 +35,7 @@ type
   end;
   
   TEmployee = record
-    FName: TSmallString; //name must come first because it is checked in variant record 'TData' using 'FName';
+    FName: TSmallString; //name must come first because it is checked in variant record 'TSlot' using 'FName';
     FId: LongInt;
     FSurname: TSmallString;
     FSalary: Double;
@@ -41,7 +43,7 @@ type
   end;
   
   TArea = record
-    FCode: TSmallString; //name must come first because it is checked in variant record 'TData' using 'FName';
+    FCode: TSmallString; //name must come first because it is checked in variant record 'TSlot' using 'FName';
     FName: TSmallString;
     FTotalEmployees: LongInt;
     FTotalSalary: Double;
@@ -49,12 +51,12 @@ type
   end;
   
   TSurname = record
-    FText: TSmallString; //name must come first because it is checked in variant record 'TData' using 'FName';
+    FText: TSmallString; //name must come first because it is checked in variant record 'TSlot' using 'FName';
     FTotalEmployees: LongInt;
     FMaxSalary: TVector;
   end;
   
-  //a varint record aka union in C family language
+  //a varint record aka union in C family languages
   TSlot = record
     case FType: LongInt of
       1: (FKey: TSmallString);
@@ -63,7 +65,7 @@ type
       4: (FSurname: TSurname);
   end;
   
-  //hash table
+  //handmade hash table
   TTable = array[0 .. TableSize - 1] of TVector;
   
   PThreadData = ^TThreadData;
@@ -75,8 +77,6 @@ type
     FTotalSalary: Double;
     FMinSalary, FMaxSalary: TVector;
     FAreas, FSurnames: TTable;
-    
-    FTotalAreas: LongInt;
   end;
   
 function Hash(const AKey: ShortString): QWord; inline;
@@ -354,7 +354,7 @@ procedure ThreadProc(AData: Pointer);
 begin
   TThread.CurrentThread.FreeOnTerminate := False;
   
-  while not TThread.CheckTerminated do
+  while not TThread.CurrentThread.CheckTerminated do
   begin
     with PThreadData(AData)^ do
     begin
