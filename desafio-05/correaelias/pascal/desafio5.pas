@@ -1,5 +1,5 @@
 {
-  Solução do desafio 5 em Pascal por Elias Correa
+  Solução do desafio 5 em Pascal por Elias Correa (Jan/2019)
   
   Download freepascal compiler (fpc) here https://www.freepascal.org/ or thru your distro package manager
   
