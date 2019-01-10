@@ -1,5 +1,5 @@
 #############################################
-#   Retorna os valores primos de 1 a 10000  #	
+#   Retorna os valores primos de 1 a 1000   #	
 #############################################
 
 import math
