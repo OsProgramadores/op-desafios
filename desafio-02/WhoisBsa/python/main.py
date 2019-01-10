@@ -5,6 +5,7 @@
 import math
 
 def fast_prime(numero):
+    """Função de retorno rapido de números primos"""
     if numero == 1:
         return False
 
