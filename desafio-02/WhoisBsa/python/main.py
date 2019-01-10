@@ -1,8 +1,9 @@
 ##############################################
-#   Retorna os valores primos de 1 a 10000   #	
+#   Retorna os valores primos de 1 a 10000   #
 ##############################################
 
 import math
+
 
 def fast_prime(numero):
     """Função de retorno rapido de números primos"""
@@ -15,8 +16,8 @@ def fast_prime(numero):
     if numero % 2 == 0:
         return False
 
-    maiorraiz = int(math.ceil(math.sqrt(numero))) # Recebe o maior valor da raiz quadrada do numero
-
+    maiorraiz = int(math.ceil(math.sqrt(numero)))
+    #    Recebe o maior valor da raiz quadrada do numero
     #    Caso queira saber mais sobre o ceil:
     #    https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Global_Objects/Math/ceil
 
@@ -25,6 +26,7 @@ def fast_prime(numero):
             return False
 
     return True
+
 
 print(1)
 for j in range(1, 10001):
