@@ -15,13 +15,6 @@ const (
 	buffersize = 65535
 )
 
-// Check é uma função para verificação de erros na maniputação de arquivos.
-func check(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 // Reverse é uma função para inverter um array de bytes.
 func reverse(s []byte) {
 	for i, j := 0, len(s)-1; i < j; i, j = i+1, j-1 {
@@ -35,7 +28,10 @@ func reverse(s []byte) {
 func processblock(f io.ReaderAt, out io.Writer, buffersize int64, position int64, ignorefirstreturn bool, line []byte) []byte {
 	buffer := make([]byte, buffersize)
 	_, err := f.ReadAt(buffer, position)
-	check(err)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	for i := buffersize - 1; i >= 0; i-- {
 		letter := buffer[i]
 		if letter == '\n' {
@@ -44,7 +40,9 @@ func processblock(f io.ReaderAt, out io.Writer, buffersize int64, position int64
 				line = append(line, '\n')
 			}
 			_, err := out.Write(line)
-			check(err)
+			if err != nil {
+				log.Fatal(err)
+			}
 			line = []byte{}
 		} else {
 			line = append(line, letter)
@@ -63,24 +61,6 @@ func getfilename() string {
 	return argsWithProg[1]
 }
 
-// Close é utilizada para fechar um arquivo. É necessária quando usamos um defer
-// no fechamento do arquivo.
-func close(c io.Closer) {
-	err := c.Close()
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-// Flush é utilizada para fechar um arquivo. É necessária quando usamos um defer
-// no fechamento do arquivo.
-func flush(c *bufio.Writer) {
-	err := c.Flush()
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 func main() {
 	var line []byte
 	var block int64
@@ -93,8 +73,10 @@ func main() {
 	}
 
 	// Pegando o tamanho do arquivo.
-	finfo, err1 := os.Stat(filename)
-	check(err1)
+	finfo, err := os.Stat(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	lenfile := finfo.Size()
 
@@ -104,20 +86,25 @@ func main() {
 	lenlastblock := lenfile % buffersize
 
 	// Abrindo o arquivo.
-	fin, err2 := os.Open(filename)
-	check(err2)
+	fin, err := os.Open(filename)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	defer close(fin)
+	//defer close(fin)
+	defer fin.Close()
 
 	// Abrindo o dispositivo de saída.
 	out := bufio.NewWriterSize(os.Stdout, 65535)
-	defer flush(out)
+	defer out.Flush()
 
 	// Veriicando se o arquivo tem um /n no final. Caso positivo vamos adicionar ao
 	// final da nossa saída também.
 	endchar := make([]byte, 1)
-	_, err3 := fin.ReadAt(endchar, lenfile-1)
-	check(err3)
+	_, err = fin.ReadAt(endchar, lenfile-1)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	if string(endchar[0]) == "\n" {
 		appendtoend = true
@@ -136,6 +123,8 @@ func main() {
 	if appendtoend {
 		line = append(line, '\n')
 	}
-	_, err := out.Write(line)
-	check(err)
+	_, err = out.Write(line)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
