@@ -11,6 +11,7 @@ before_install:
   - sudo pip3 install pylint
 
 script:
+  - ./travis-ci/dircheck.sh
   - pushd ./travis-ci
   - ./codecheck.sh
   - popd
