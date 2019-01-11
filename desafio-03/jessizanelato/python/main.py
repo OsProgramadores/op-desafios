@@ -1,5 +1,5 @@
-""" 
-Desafio 03 - Os Programadores - Imprimir números palindromicos 
+"""
+Desafio 03 - Os Programadores - Imprimir números palindromicos
 """
 
 import sys
@@ -43,8 +43,5 @@ class EncontrarPalindromicos():
             if str(numero) == r_string:
                 print(numero)
 
-"""
-Exemplo de como executar: python3 main.py 10 20 
-"""
 if __name__ == "__main__" and len(sys.argv) > 1:
     EncontrarPalindromicos(sys.argv[1], sys.argv[2]).executar()
