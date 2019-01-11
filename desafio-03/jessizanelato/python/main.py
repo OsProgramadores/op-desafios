@@ -1,4 +1,6 @@
-""" Desafio 03 - Os Programadores - Imprimir números palindromicos """
+""" 
+Desafio 03 - Os Programadores - Imprimir números palindromicos 
+"""
 
 import sys
 
@@ -17,7 +19,8 @@ class EncontrarPalindromicos():
         self.numero_inicial = int(numero_inicial)
         self.numero_final = int(numero_final)
 
-    def _reverse(self, string):
+    @staticmethod
+    def reverse(string):
         """
         Método responsável por retornar a string reversa de uma string
         Args:
@@ -32,17 +35,16 @@ class EncontrarPalindromicos():
 
     def executar(self):
         """
-        Método responsável por verificar se o número, entre os dois números informados, 
+        Método responsável por verificar se o número, entre os dois números informados,
         é um palindromo e imprimir caso seja
         """
         for numero in range(self.numero_inicial, self.numero_final):
-            r_string = self._reverse(str(numero))
+            r_string = EncontrarPalindromicos.reverse(str(numero))
             if str(numero) == r_string:
                 print(numero)
 
-""" 
+"""
 Exemplo de como executar: python3 main.py 10 20 
 """
 if __name__ == "__main__" and len(sys.argv) > 1:
-    palindromicos = EncontrarPalindromicos(sys.argv[1], sys.argv[2])
-    palindromicos.executar()
+    EncontrarPalindromicos(sys.argv[1], sys.argv[2]).executar()
