@@ -39,8 +39,7 @@ class EncontrarPalindromicos():
         é um palindromo e imprimir caso seja
         """
         for numero in range(self.numero_inicial, self.numero_final):
-            r_string = EncontrarPalindromicos.reverse(str(numero))
-            if str(numero) == r_string:
+            if str(numero) == EncontrarPalindromicos.reverse(str(numero)):
                 print(numero)
 
 if __name__ == "__main__" and len(sys.argv) > 1:
