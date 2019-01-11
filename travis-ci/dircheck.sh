@@ -52,7 +52,7 @@ fi
 
 if [[ -n "$res" ]]; then
   echo "ERROR: Problems detected in the directory structure:"
-  echo "======================================================================="
+  echo
   echo -ne "$res"
   echo "See https://github.com/osprogramadores/op-desafios#estrutura-de-diret%C3%B3rios for more details"
   exit 1
