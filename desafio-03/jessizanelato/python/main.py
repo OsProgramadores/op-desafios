@@ -25,21 +25,20 @@ class EncontrarPalindromicos():
         Returns:
             String revertida
         """
-        rString = ''
+        r_string = ''
         for i in string:
-            rString = i + rString
-        
-        return rString
+            r_string = i + r_string
+        return r_string
 
     def executar(self):
         """
-        Método responsável por verificar se o número, entre os dois números informados, é um palindromo e imprimir caso seja
+        Método responsável por verificar se o número, entre os dois números informados, 
+        é um palindromo e imprimir caso seja
         """
         for numero in range(self.numero_inicial, self.numero_final):
-            rString = self._reverse(str(numero))
-            if str(numero) == rString:
+            r_string = _reverse(str(numero))
+            if str(numero) == r_string:
                 print(numero)
-
 
 """ 
 Exemplo de como executar: python3 main.py 10 20 
