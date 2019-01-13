@@ -4,10 +4,13 @@
 VERIFY_TOKEN_URL="https://osprogramadores.com/v/verify-token/"
 VALIDATOR_URL="https://osprogramadores.com/v/"
 
+echo "Validator token check"
+echo "====================="
+
 # TRAVIS sets TRAVIS_COMMIT_RANGE to the range of commits for the current commit.
 if [[ -z "$TRAVIS_COMMIT_RANGE" ]]; then
-  echo >&2 "Note: TRAVIS_COMMIT_RANGE environment variable not set. Defaulting to HEAD^ HEAD"
-  export TRAVIS_COMMIT_RANGE="HEAD^ HEAD"
+  export TRAVIS_COMMIT_RANGE="HEAD^"
+  echo >&2 "Note: TRAVIS_COMMIT_RANGE environment variable not set. Defaulting to $TRAVIS_COMMIT_RANGE"
 fi
 
 # For now, we only allow the submittal of one non-legacy challenge at a time.
@@ -18,7 +21,7 @@ num_challenges=${#challenges[@]}
 
 # If no challenges, we exit without prejudice.
 if (( num_challenges == 0 )); then
-  echo "NOTE: No challenges found. Assuming other changes. Skipping."
+  echo "Note: No challenges found. Assuming other changes. Skipping."
   exit 0
 fi
 

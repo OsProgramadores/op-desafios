@@ -4,16 +4,23 @@ os:
 dist: trusty
 sudo: required
 
-language: python
-python:
-  - 3.6
-
-install:
-  - pip install pylint
-
-script:
-  - ./travis-ci/presubmit.sh
-
 notifications:
   webhooks: https://www.travisbuddy.com
   on_success: never
+
+matrix:
+  include:
+    - language: python
+      python: 3.6
+      install:
+        - pip install pylint
+      script:
+        - ./travis-ci/presubmit.sh dircheck pycheck validator
+
+    - language: go
+      go: master
+      install:
+        - go get -u golang.org/x/lint/golint
+      script:
+        - ./travis-ci/presubmit.sh gocheck
+

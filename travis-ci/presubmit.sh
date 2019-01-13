@@ -1,16 +1,6 @@
 #!/bin/bash
 
-echo
-echo "===== Directory Structure check ====="
-echo
-./travis-ci/dircheck.sh
-
-echo
-echo "===== Python code check (if needed) ====="
-echo
-./travis-ci/codecheck.sh
-
-echo
-echo "===== Validator token check ====="
-echo
-./travis-ci/validator.sh
+for presub in "$@"; do
+  ./travis-ci/$presub.sh
+  echo
+done

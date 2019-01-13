@@ -26,6 +26,9 @@ set -o nounset
 TLD="./desafio-*"
 res=""
 
+echo "Directory structure check"
+echo "========================="
+
 # Any files containing spaces or non-ascii (including utf8) characters.
 invalid_chars=$(find . -name .git -prune -o -print | grep -P '[^[:ascii:]]|[[:space:]]')
 if [[ -n "$invalid_chars" ]]; then

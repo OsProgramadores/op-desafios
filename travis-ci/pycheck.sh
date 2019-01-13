@@ -2,10 +2,13 @@
 # Test code formatting compliance.
 # So far only python3 supported.
 
+echo "Python (v3) code check"
+echo "======================"
+
 # TRAVIS sets TRAVIS_COMMIT_RANGE to the range of commits for the current commit.
 if [[ -z "$TRAVIS_COMMIT_RANGE" ]]; then
-  echo >&2 "Note: TRAVIS_COMMIT_RANGE environment variable not set. Defaulting to HEAD HEAD^"
-  export TRAVIS_COMMIT_RANGE="HEAD HEAD^"
+  echo >&2 "Note: TRAVIS_COMMIT_RANGE environment variable not set. Defaulting to HEAD^"
+  export TRAVIS_COMMIT_RANGE="HEAD^"
 fi
 
 # From this point on, we exit immediately with any failure.
