@@ -26,6 +26,9 @@ set -o nounset
 TLD="./desafio-*"
 res=""
 
+echo "Directory structure check"
+echo "========================="
+
 # Any files containing spaces or non-ascii (including utf8) characters.
 invalid_chars=$(find . -name .git -prune -o -print | grep -P '[^[:ascii:]]|[[:space:]]')
 if [[ -n "$invalid_chars" ]]; then
@@ -52,7 +55,7 @@ fi
 
 if [[ -n "$res" ]]; then
   echo "ERROR: Problems detected in the directory structure:"
-  echo "======================================================================="
+  echo
   echo -ne "$res"
   echo "See https://github.com/osprogramadores/op-desafios#estrutura-de-diret%C3%B3rios for more details"
   exit 1
