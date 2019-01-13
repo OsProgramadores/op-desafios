@@ -20,7 +20,7 @@ matrix:
     - language: go
       go: master
       install:
-        - go get -u github.com/golang/lint/golint
+        - go get -u golang.org/x/lint/golint
       script:
         - ./travis-ci/presubmit.sh gocheck
 
