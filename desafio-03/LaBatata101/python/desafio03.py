@@ -7,6 +7,7 @@ def palindromo(start, end):
 
 
 def main():
+    """Main function"""
     start = int(input('Entre o numero inicial: '))
     end = int(input('Entre o numero final: '))
     if start > end:
