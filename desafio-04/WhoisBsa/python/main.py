@@ -10,18 +10,18 @@ def main():
              5: [0, 'Rainha'],
              6: [0, 'Rei']}
 
-    f1 = open('ex1.txt', 'r')
-    f2 = open('ex2.txt', 'r')
-    ex1 = f1.read()
-    ex2 = f2.read()
+    file1 = open('ex1.txt', 'r')
+    file2 = open('ex2.txt', 'r')
+    ex_1 = file1.read()
+    ex_2 = file2.read()
     print('Exemplo 1:')
-    print(ex1)
+    print(ex_1)
     print('Exemplo 2:')
-    print(ex2)
+    print(ex_2)
 
     while True:
-        op = str(input('Qual tabuleiro você deseja usar? [1/2] '))
-        if op not in '12':
+        op_tab = str(input('Qual tabuleiro você deseja usar? [1/2] '))
+        if op_tab not in '12':
             print('Há apenas 2 opções, tente novamente\n')
         else:
             print('-=' * 20)
@@ -29,10 +29,10 @@ def main():
 
     print()
 
-    if op == '1':
-        tabuleiro = ex1
+    if op_tab == '1':
+        tabuleiro = ex_1
     else:
-        tabuleiro = ex2
+        tabuleiro = ex_2
 
     print(tabuleiro)
 
@@ -47,8 +47,8 @@ def main():
     for i in pecas.values():
         print(f'{i[1]}: {i[0]} peças')
 
-    f1.close()
-    f2.close()
+    file1.close()
+    file2.close()
 
 if __name__ == "__main__":
     main()
