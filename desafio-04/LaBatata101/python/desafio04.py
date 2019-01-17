@@ -10,7 +10,7 @@ Valor de cada peça:
 """
 
 
-table = [[4, 3, 2, 5, 6, 2, 3, 4],
+TABLE = [[4, 3, 2, 5, 6, 2, 3, 4],
          [1, 1, 1, 1, 1, 1, 1, 1],
          [0, 0, 0, 0, 0, 0, 0, 0],
          [0, 0, 0, 0, 0, 0, 0, 0],
@@ -26,9 +26,9 @@ def intersection(lst1, lst2):
 
 
 def count_pieces():
-    '''Count the pieces in the table'''
+    '''Count the pieces in the TABLE'''
     peao = bispo = cavalo = torre = rainha = rei = 0
-    for i in table:
+    for i in TABLE:
         peao += len(intersection(i, [1]))
         bispo += len(intersection(i, [2]))
         cavalo += len(intersection(i, [3]))
@@ -41,6 +41,6 @@ def count_pieces():
 
 
 if __name__ == '__main__':
-    pieces = count_pieces()
-    for k in pieces.keys():
-        print(f'{k}: {pieces[k]} peça(s)')
+    PIECES = count_pieces()
+    for k in PIECES:
+        print(f'{k}: {PIECES[k]} peça(s)')
