@@ -19,7 +19,7 @@ uses
   SysUtils, Classes;
 
 const
-  BufferLength = 1024 * 128; //amount of data each thread will work out from file (in Bytes)
+  BufferLength = 1024 * 1024 * 16; //amount of data each thread will work out from file (in Bytes)
   VectorInitialCapacity = 1;
   VectorGrowFactor = 2;
   TableSize = 997; //a prime number choosen by profilling
@@ -36,7 +36,6 @@ type
   
   TEmployee = record
     FName: TSmallString; //name must come first because it is checked in variant record 'TSlot' using 'FName';
-    FId: LongInt;
     FSurname: TSmallString;
     FSalary: Double;
     FArea: TSmallString;
@@ -72,7 +71,6 @@ type
   
   TThreadData = record
     FBuffer: array[0 .. BufferLength - 1] of Char;
-    FLength: LongInt;
     FTotalEmployees: LongInt;
     FTotalSalary: Double;
     FMinSalary, FMaxSalary: TVector;
@@ -203,108 +201,110 @@ begin
       AppendEmployee(AVectorOut, FSlots[I].FEmployee, AKeepMinSalary);
 end;
 
-procedure LoadJsonChunk(var JsonFile: TFileStream; ABuffer: PChar; out ALength: LongInt);
+procedure LoadJsonChunk(var JsonFile: TFileStream; ABuffer: PChar);
+var
+  Len: SizeInt;
 begin
-  ALength := JsonFile.Read(ABuffer^, BufferLength);
+  Len := JsonFile.Read(ABuffer^, BufferLength - 1);
   
   //rewind file until a '}' is found, reading only complete objects
   if JsonFile.Position <> JsonFile.Size then
   begin
-    while ABuffer[ALength - 1] <> '}' do
+    while ABuffer[Len - 1] <> '}' do
     begin
-      Dec(ALength);
+      Dec(Len);
       JsonFile.Position := JsonFile.Position - 1;
     end;
   end;
+  
+  //null terminated
+  ABuffer[Len] := #0;
 end;
 
-procedure GetString(ABuffer: PChar; var AIndex: LongInt; ALenght: LongInt; out AString: TSmallString); inline;
+procedure GetString(var ABuffer: PChar; out AString: TSmallString); inline;
 var
-  ValueBegin: LongInt;
+  Start, C: PChar;
 begin
-  while (AIndex < ALenght) and (ABuffer[AIndex] <> '"') do Inc(AIndex);
-  Inc(AIndex);
-  ValueBegin := AIndex;
-  while (AIndex < ALenght) and (ABuffer[AIndex] <> '"') do Inc(AIndex);
-  if (AIndex < ALenght) and (AIndex - ValueBegin > 0) then
-    SetString(AString, ABuffer + ValueBegin, AIndex - ValueBegin)
-  else if AIndex - ValueBegin = 0 then
+  C := ABuffer;
+  
+  while (C^ <> #0) and (C^ <> '"') do Inc(C);
+  if C^ = '"' then Inc(C); //skip '"'
+  
+  Start := C;
+  
+  while (C^ <> #0) and (C^ <> '"') do Inc(C);
+  
+  if (C^ = '"') and (Start^ <> '"') then
+    SetString(AString, Start, C - Start)
+  else //empty string
     AString := '';
-  Inc(AIndex);
+  
+  if C^ = '"' then Inc(C); //skip '"'
+  
+  ABuffer := C;
 end;
 
-procedure GetNumber(ABuffer: PChar; var AIndex, ALenght: LongInt; out ANumber: Double); inline;
+procedure GetNumberFast(var ABuffer: PChar; out ANumber: Double); inline;
 var
-  ValueBegin: LongInt;
+  C: PChar;
+  Number: LongInt = 0;
 begin
-  while (AIndex < ALenght) and (not (ABuffer[AIndex] in ['0'..'9', '.'])) do Inc(AIndex);
-  ValueBegin := AIndex;
-  while (AIndex < ALenght) and (ABuffer[AIndex] in ['0'..'9', '.']) do Inc(AIndex);
-  if (AIndex < ALenght) and (AIndex - ValueBegin > 0) then
+  C := ABuffer;
+
+  while (C^ <> #0) and (not (C^ in ['0'..'9', '.'])) do Inc(C);
+  
+  while C^ in ['0'..'9', '.'] do
   begin
-    ABuffer[AIndex] := Char(0);
-    ANumber := StrToFloat(ABuffer + ValueBegin);
+    if C^ <> '.' then
+      Number := Number * 10 + (LongInt(C^) - LongInt('0'));
+    Inc(C);
   end;
-  Inc(AIndex);
+  ANumber := Double(Number) * Double(0.01);
+  
+  ABuffer := C;
 end;
 
-procedure GetInteger(ABuffer: PChar; var AIndex, ALenght: LongInt; out AInteger: LongInt); inline;
+procedure ParseJsonChunk(ABuffer: PChar; var AData: TThreadData);
 var
-  ValueBegin: LongInt;
-begin
-  while (AIndex < ALenght) and (not (ABuffer[AIndex] in ['0'..'9'])) do Inc(AIndex);
-  ValueBegin := AIndex;
-  while (AIndex < ALenght) and (ABuffer[AIndex] in ['0'..'9']) do Inc(AIndex);
-  if (AIndex < ALenght) and (AIndex - ValueBegin > 0) then
-  begin
-    ABuffer[AIndex] := Char(0);
-    AInteger := StrToInt(ABuffer + ValueBegin);
-  end;
-  Inc(AIndex);
-end;
-
-procedure ParseJsonChunk(ABuffer: PChar; ALength: LongInt; var AData: TThreadData);
-var
-  I: LongInt;
+  C: PChar;
   Employee: TEmployee;
   Area: TArea;
 begin
-  I := 0;
+  Employee.FName := '';
   
   Area.FName := '';
   
-  while I < ALength do
+  C := ABuffer;
+  
+  while C^ <> #0 do
   begin
     //find a property
-    while (I < ALength) and (ABuffer[I] <> '"') do Inc(I);
-    Inc(I);
-    
-    if I >= ALength then Break;
+    while (C^ <> #0) and (C^ <> '"') do Inc(C);
+    if C^ = '"' then Inc(C); //skip '"'
     
     //employee (starts with i of id)
-    if ABuffer[I] = 'i' then
+    if C^ = 'i' then
     begin
       with Employee do
       begin
-        //get id
-        while (I < ALength) and (ABuffer[I] <> ':') do Inc(I);
-        GetInteger(ABuffer, I, ALength, FId);
+        //ignore id
+        while (C^ <> #0) and (C^ <> ',') do Inc(C);
         
         //get name
-        while (I < ALength) and (ABuffer[I] <> ':') do Inc(I);
-        GetString(ABuffer, I, ALength, FName);
+        while (C^ <> #0) and (C^ <> ':') do Inc(C);
+        GetString(C, FName);
         
         //get surname
-        while (I < ALength) and (ABuffer[I] <> ':') do Inc(I);
-        GetString(ABuffer, I, ALength, FSurname);
+        while (C^ <> #0) and (C^ <> ':') do Inc(C);
+        GetString(C, FSurname);
         
         //get salary
-        while (I < ALength) and (ABuffer[I] <> ':') do Inc(I);
-        GetNumber(ABuffer, I, ALength, FSalary);
+        while (C^ <> #0) and (C^ <> ':') do Inc(C);
+        GetNumberFast(C, FSalary);
         
         //get area
-        while (I < ALength) and (ABuffer[I] <> ':') do Inc(I);
-        GetString(ABuffer, I, ALength, FArea);
+        while (C^ <> #0) and (C^ <> ':') do Inc(C);
+        GetString(C, FArea);
       end;
       
       //update global counters
@@ -330,15 +330,15 @@ begin
       end;
     end
     //area (starts with c of code)
-    else if ABuffer[I] = 'c' then //area
+    else if C^ = 'c' then //area
     begin
       //get code
-     while (I < ALength) and (ABuffer[I] <> ':') do Inc(I);
-      GetString(ABuffer, I, ALength, Area.FCode);
+     while (C^ <> #0) and (C^ <> ':') do Inc(C);
+      GetString(C, Area.FCode);
       
       //get name
-      while (I < ALength) and (ABuffer[I] <> ':') do Inc(I);
-      GetString(ABuffer, I, ALength, Area.FName);
+      while (C^ <> #0) and (C^ <> ':') do Inc(C);
+      GetString(C, Area.FName);
       
       //set area name
       GetSlot(AData.FAreas, Area.FCode)^.FArea.FName := Area.FName;
@@ -356,16 +356,13 @@ begin
   
   while not TThread.CurrentThread.CheckTerminated do
   begin
-    with PThreadData(AData)^ do
-    begin
-      EnterCriticalSection(CriticalSection);
-      if EmployeeFile.Position = EmployeeFile.Size then
-        TThread.CurrentThread.Terminate;
-      LoadJsonChunk(EmployeeFile, @FBuffer[0], FLength);
-      LeaveCriticalSection(CriticalSection);
-      
-      ParseJsonChunk(@FBuffer[0], FLength, PThreadData(AData)^);
-    end;
+    EnterCriticalSection(CriticalSection);
+    if EmployeeFile.Position = EmployeeFile.Size then
+      TThread.CurrentThread.Terminate;
+    LoadJsonChunk(EmployeeFile, @(PThreadData(AData)^.FBuffer[0]));
+    LeaveCriticalSection(CriticalSection);
+    
+    ParseJsonChunk(@(PThreadData(AData)^.FBuffer[0]), PThreadData(AData)^);
   end;
 end;
 
@@ -400,7 +397,7 @@ begin
   
   InitCriticalSection(CriticalSection);
   
-  EmployeeFile := TFileStream.Create(ParamStr(1), fmOpenRead);
+  EmployeeFile := TFileStream.Create(ParamStr(1), fmOpenRead or fmShareDenyWrite);
   
   for I := 0 to High(Threads) do
   begin

@@ -57,6 +57,8 @@ desafio-02/
 
 * **feature** é um diferenciador de uma _feature_ dentro da linguagem. Por exemplo, dois programas em python usando duas libraries, uma chamada _foo_ e uma chamada _bar_, ficariam em dois diretorios separados: `python-libfoo` e `python-libbar`. Só submeta mais de uma versão por linguagem se a diferença no programa for significativa.
 
+* Arquivos com espaços ou caracteres não ASCII (acentos, emoji, etc) não serão aceitos no repositório.
+
 # Observações para linguagens específicas
 
 ## Python
