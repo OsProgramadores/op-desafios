@@ -82,15 +82,13 @@ func palavraToInt(b []byte) int {
 // de no máximo 4 digitos, maiores que lenMaiorSeq, partindo de uma posição p
 // de uma sequência de digidos "dados".
 func geraSequencias(posInicial int, palavra []byte, posicao int, sequencia string, dados []byte, lenDados int, testaPrimo []bool, lenMaiorSeq int) []sSequencia {
-
 	ret := []sSequencia{}
-
-	novaPalavra := append(palavra, dados[posicao])
+	novapalavra := append(palavra, dados[posicao])
 
 	// Se o tamanho da palavra é maior que quatro bytes então já ultrapassamos o limite
 	// para encontrar um numero primo. Por isso
 	// retornamos a sequência que encontramos se ela for maior ou igual a lenMaiorSeq.
-	if posicao >= lenDados || len(novaPalavra) > 4 {
+	if posicao >= lenDados || len(novapalavra) > 4 {
 		if len(sequencia) >= lenMaiorSeq {
 			ret = append(ret, sSequencia{sequencia, posInicial})
 		}
@@ -99,13 +97,13 @@ func geraSequencias(posInicial int, palavra []byte, posicao int, sequencia strin
 
 	// Aqui disparamos a busca por novas soluções considerando a novapalavra, partindo
 	// da nova posição e a sequencia que já temos.
-	r := geraSequencias(posInicial, novaPalavra, posicao+1, sequencia, dados, lenDados, testaPrimo, lenMaiorSeq)
+	r := geraSequencias(posInicial, novapalavra, posicao+1, sequencia, dados, lenDados, testaPrimo, lenMaiorSeq)
 	ret = append(ret, r...)
 
 	// Se a nova palavra for um primo, podemos colocá-la na sequencia e continuar
 	// a busca por novas palavras válidas.
-	if testaPrimo[palavraToInt(novaPalavra)] {
-		r = geraSequencias(posInicial, []byte{}, posicao+1, sequencia+string(novaPalavra), dados, lenDados, testaPrimo, lenMaiorSeq)
+	if testaPrimo[palavraToInt(novapalavra)] {
+		r = geraSequencias(posInicial, []byte{}, posicao+1, sequencia+string(novapalavra), dados, lenDados, testaPrimo, lenMaiorSeq)
 		ret = append(ret, r...)
 	}
 
@@ -178,9 +176,13 @@ func startWorkers(workers int, batchSize int, dados []byte, lenDados int) []sSeq
 		// nos proximos batches
 		for _, v := range batchResults {
 			l := len(v.sequencia)
-			if l >= lenMaiorSeq {
+			if l > lenMaiorSeq {
 				lenMaiorSeq = l
-				sequencias = append(sequencias, v)
+				sequencias = []sSequencia{v}
+			} else {
+				if l == lenMaiorSeq {
+					sequencias = append(sequencias, v)
+				}
 			}
 		}
 		a += batchSize
@@ -198,7 +200,7 @@ func main() {
 	log.SetFlags(0)
 
 	flag.StringVar(&optCPUProfile, "cpuprofile", "", "escreve a profile de cpu em arquivo")
-	flag.IntVar(&optBatchSize, "batchSize", 0, "tamanho do batch de processamento paralelo")
+	flag.IntVar(&optBatchSize, "batchsize", 0, "tamanho do batch de processamento paralelo")
 	flag.Parse()
 
 	if len(flag.Args()) != 1 {
@@ -234,28 +236,10 @@ func main() {
 	// Começando o trabalho de busca das soluções.
 	sequencias := startWorkers(runtime.NumCPU(), batchSize, dados, lenDados)
 
-	// Podemos ter muitas sequencias repetidas na mesma posição pois existem diversas
-	// combinações de numeros primos que podem formar sequencias válidas.
-
-	//Selecionando somente as maiores sequencias. Ainda podemos ter várias repetidas
-	lenMaiorSequencia := 0
-	maiores := []sSequencia{}
-	for _, v := range sequencias {
-		lenSequencia := len(v.sequencia)
-		if lenSequencia > lenMaiorSequencia {
-			lenMaiorSequencia = lenSequencia
-			maiores = []sSequencia{v}
-		} else {
-			if lenSequencia == lenMaiorSequencia {
-				maiores = append(maiores, v)
-			}
-		}
-	}
-
 	// Procurando a maior sequencia na menorPosicao.
 	menorPosicao := lenDados
 	sequenciaMenorPosicao := ""
-	for _, v := range maiores {
+	for _, v := range sequencias {
 		if v.posInicial < menorPosicao {
 			menorPosicao = v.posInicial
 			sequenciaMenorPosicao = v.sequencia
