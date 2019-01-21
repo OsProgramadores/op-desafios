@@ -62,7 +62,7 @@ func main() {
 	// Process results, find the longest.
 	for i := 2; i < len(pi); i++ {
 		result := <-results
-		if allLen(result) > allLen(longest) {
+		if allLen(result...) > allLen(longest...) {
 			longest = result
 		}
 	}
@@ -70,7 +70,7 @@ func main() {
 }
 
 // allLen returns the total length of all string elements in the slice.
-func allLen(digits []string) int {
+func allLen(digits ...string) int {
 	var size int
 	for i := 0; i < len(digits); i++ {
 		size += len(digits[i])
@@ -84,7 +84,6 @@ func findprimes(pi []byte, start int) []string {
 	var longest []string
 
 	for size := 1; size <= 4; size++ {
-		chain := []string{}
 
 		// Don't run over the end of pi.
 		if start+size > len(pi) {
@@ -103,11 +102,13 @@ func findprimes(pi []byte, start int) []string {
 		}
 
 		r := findprimes(pi, start+size)
-		chain = append(chain, numstr)
-		chain = append(chain, r...)
 
-		if allLen(chain) > allLen(longest) {
-			longest = chain
+		if allLen(r...)+len(numstr) > allLen(longest...) {
+			longest = make([]string, len(r)+1)
+			longest[0] = numstr
+			for i := 1; i <= len(r); i++ {
+				longest[i] = r[i-1]
+			}
 		}
 	}
 	return longest
