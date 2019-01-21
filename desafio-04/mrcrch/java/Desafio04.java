@@ -4,7 +4,7 @@ public class Desafio04 {
 
     private static final String MENSAGEM = "%s: %d peça(s)";
 
-    public static void main(final String[] args) throws Exception {
+    public static void main(final String[] args) {
 
         int pecas[] = new int[6];
 
