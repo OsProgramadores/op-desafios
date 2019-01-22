@@ -39,8 +39,8 @@ func main() {
 
 	longest := []string{}
 
-	// 256 simultaneous goroutines.
-	sem := make(chan bool, 256)
+	// Number of simultaneous goroutines.
+	sem := make(chan bool, 128)
 	results := make(chan []string, len(pi))
 
 	// Skip "3." at beginning.
@@ -62,7 +62,7 @@ func main() {
 	// Process results, find the longest.
 	for i := 2; i < len(pi); i++ {
 		result := <-results
-		if allLen(result...) > allLen(longest...) {
+		if allLen(result) > allLen(longest) {
 			longest = result
 		}
 	}
@@ -70,12 +70,25 @@ func main() {
 }
 
 // allLen returns the total length of all string elements in the slice.
-func allLen(digits ...string) int {
+func allLen(digits []string) int {
 	var size int
 	for i := 0; i < len(digits); i++ {
 		size += len(digits[i])
 	}
 	return size
+}
+
+// btoi converts a byte slice to an integer.
+func btoi(b []byte, offset, size int) int {
+	var ret int
+
+	mult := 1
+	end := offset + size
+	for i := end - 1; i >= offset; i-- {
+		ret += int(b[i]-'0') * mult
+		mult *= 10
+	}
+	return ret
 }
 
 // findprimes recursively finds primes at the given position in a slice of
@@ -90,22 +103,16 @@ func findprimes(pi []byte, start int) []string {
 			continue
 		}
 
-		numstr := string(pi[start : start+size])
-
-		// Don't recurse if not a prime.
-		num, err := strconv.Atoi(numstr)
-		if err != nil {
-			log.Fatal("Invalid number:", numstr)
-		}
+		num := btoi(pi, start, size)
 		if !primes[num] {
 			continue
 		}
 
 		r := findprimes(pi, start+size)
 
-		if allLen(r...)+len(numstr) > allLen(longest...) {
+		if allLen(r)+1 > allLen(longest) {
 			longest = make([]string, len(r)+1)
-			longest[0] = numstr
+			longest[0] = strconv.Itoa(num)
 			for i := 1; i <= len(r); i++ {
 				longest[i] = r[i-1]
 			}
