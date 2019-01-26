@@ -5,7 +5,6 @@ import (
 	"math"
 )
 
-
 // geraprimos é uma função para geração de um array que identifica se um
 // número, menor que n, é primo ou não.
 // Referência: https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes
@@ -32,11 +31,11 @@ func geraPrimos(n int64) []bool {
 	return flag1
 }
 
-func main(){
-  primo := geraPrimos(10001)
-  for i:=1;i<=10000;i++{
-    if primo[i]{
-      fmt.Println(i)
-    }
-  }
+func main() {
+	primo := geraPrimos(10001)
+	for i := 1; i <= 10000; i++ {
+		if primo[i] {
+			fmt.Println(i)
+		}
+	}
 }
