@@ -4,9 +4,9 @@ use std::env;
 use std::fs;
 
 fn main() {
-    let json = env::args().nth(1).expect("Arg1");
+    let json = env::args().nth(2).expect("Arg1");
     let cpus = env::args()
-        .nth(2)
+        .nth(1)
         .expect("Arg2")
         .parse::<u32>()
         .expect("Arg2Fail");
