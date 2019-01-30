@@ -136,4 +136,4 @@ def main(file_name):
         "{0:.2f}".format(row['salario']), sep="|")
 
 if __name__ == "__main__":
-    main('funcionarios.json')
+    main(file_name)
