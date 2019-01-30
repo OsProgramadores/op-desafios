@@ -90,7 +90,7 @@ def main(file_name):
             most_employees[1] += [[area[0], area[4]]]
 
 #menor número de funcionários
-        if area[4] !=0 and area[4] < least_employees[0]:
+        if area[4] != 0 and area[4] < least_employees[0]:
             least_employees[0] = area[4]
             least_employees[1] = [[area[0], area[4]]]
         elif area[4] == least_employees[0]:
