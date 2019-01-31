@@ -4,8 +4,8 @@
 # -*- coding: utf-8 -*-
 
 import json
-import pandas
 import sys
+import pandas
 
 
 def main(file_name):
