@@ -25,8 +25,8 @@ use crossbeam_channel::{Receiver, Sender};
 use scoped_threadpool::Pool;
 use std::io;
 
-#[default_allocator]
-const ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
+#[global_allocator]
+static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
 
 pub fn get_stats<'a>(
     json: &'a [u8],
