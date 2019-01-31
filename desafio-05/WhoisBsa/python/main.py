@@ -5,6 +5,7 @@
 
 import json
 import pandas
+import sys
 
 
 def main(file_name):
@@ -138,4 +139,4 @@ def main(file_name):
         "{0:.2f}".format(row['salario']), sep="|")
 
 if __name__ == "__main__":
-    main('funcionarios.json')
+    main(sys.argv[1])
