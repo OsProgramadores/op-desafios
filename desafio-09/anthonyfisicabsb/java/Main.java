@@ -4,7 +4,8 @@ import java.io.File;
 
 public class Main {
 
-    private static BigInteger limit = new BigInteger("0");
+    private static final BigInteger limit = convertToTen("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
+                                                   new BingInteger("62"));
 
     public static void main(String[] args) {
         Scanner sc = null;
@@ -16,8 +17,6 @@ public class Main {
             System.out.println("Digite java Main <arquivo>");
             System.exit(-1);
         }
-
-        limit = convertToTen("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", new BigInteger("62"));
 
         while (sc.hasNextLine()) {
             convertLine(sc.nextLine());
@@ -37,11 +36,9 @@ public class Main {
             return;
         }
 
-        BigInteger numConv = new BigInteger("0");
+        BigInteger numConv = convertToTen(toks[2], basOrg);
 
-        numConv = convertToTen(toks[2], basOrg);
-
-        if (numConv.intValue() == -1 || numConv.compareTo(limit) > 0) {
+        if (numConv.intValue() == null || numConv.compareTo(limit) > 0) {
             System.out.println("???");
             return;
         }
@@ -68,10 +65,10 @@ public class Main {
             else if (aux < 123 && aux > 96)
                 aux -= 61;
             else
-                return new BigInteger("-1");
+                return null;
 
             if (aux >= base.intValue())
-                return new BigInteger("-1");
+                return null;
 
             BigInteger temp = BigInteger.valueOf(aux);
             temp = temp.multiply(base.pow(str.length() - (1 + i)));
