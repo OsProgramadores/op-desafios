@@ -5,7 +5,7 @@ import java.io.File;
 public class Main {
 
     private static final BigInteger limit = convertToTen("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz",
-                                                   new BingInteger("62"));
+                                                   new BigInteger("62"));
 
     public static void main(String[] args) {
         Scanner sc = null;
@@ -31,14 +31,15 @@ public class Main {
         BigInteger basOrg = new BigInteger(toks[0]);
         BigInteger basDes = new BigInteger(toks[1]);
 
-        if (basOrg.intValue() > 62 || basOrg.intValue() < 2 || basDes.intValue() > 62 || basDes.intValue() < 2) {
+        if (basOrg.intValue() > 62 || basOrg.intValue() < 2 ||
+            basDes.intValue() > 62 || basDes.intValue() < 2) {
             System.out.println("???");
             return;
         }
 
         BigInteger numConv = convertToTen(toks[2], basOrg);
 
-        if (numConv.intValue() == null || numConv.compareTo(limit) > 0) {
+        if (numConv == null || numConv.compareTo(limit) > 0) {
             System.out.println("???");
             return;
         }
@@ -54,10 +55,9 @@ public class Main {
 
     public static BigInteger convertToTen(String str, BigInteger base) {
         BigInteger retorno = new BigInteger("0");
+        int i = str.length() - 1;
 
-        for (int i = str.length() - 1; i >= 0; i--) {
-            int aux = str.charAt(i);
-
+        for (int aux : str.toCharArray()) {
             if (aux < 58 && aux > 47)
                 aux -= 48;
             else if (aux < 91 && aux > 64)
@@ -71,9 +71,10 @@ public class Main {
                 return null;
 
             BigInteger temp = BigInteger.valueOf(aux);
-            temp = temp.multiply(base.pow(str.length() - (1 + i)));
+            temp = temp.multiply(base.pow(i));
 
             retorno = retorno.add(temp);
+	    i--;
         }
 
         return retorno;
