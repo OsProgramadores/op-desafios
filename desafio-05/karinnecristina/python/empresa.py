@@ -6,9 +6,9 @@ import json
 import pandas as pd
 from pandas.io.json import json_normalize
 
-def company(filename):
+def load(filename):
 
-    '''Processa arquivo JSON e une os dados em uma tabela.'''
+    '''Faz a leitura do arquivo JSON e une em uma tabela'''
 
     with open(filename) as file:
         data = json.load(file)
