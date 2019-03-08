@@ -1,4 +1,3 @@
-
 """ Tabuleiro de Xadrez """
 
 def main():
