@@ -6,10 +6,10 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
+	"math"
 	"os"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 )
 
 // Funcionario é a estrutura com os dados dos funcionarios no arquivo a ser lido
@@ -34,7 +34,23 @@ type Empresa struct {
 }
 
 func main() {
-	var filename string
+	var (
+		filename string
+		dados    Empresa
+	)
+
+	globalmin := math.MaxFloat64
+	globalmax := 0.0
+	globalavg := 0.0
+	leastemployees := math.MaxFloat64
+	mostemployees := 0.0
+	nomearea := make(map[string]string)
+	areaavg := make(map[string]float64)
+	areamin := make(map[string]float64)
+	areamax := make(map[string]float64)
+	countarea := make(map[string]float64)
+	lastnamemax := make(map[string]float64)
+	countlastname := make(map[string]float64)
 
 	if len(os.Args) != 2 {
 		fmt.Println("ERRO! Sintaxe: desafio5 \"nomedoarquivo\"")
@@ -43,35 +59,19 @@ func main() {
 		filename = os.Args[1]
 	}
 
-	jsonFile, err := os.Open(filename)
+	r, err := ioutil.ReadFile(filename)
 	if err != nil {
-		log.Fatalln(err)
+		fmt.Println("ERRO! Não consegui ler o arquivo !")
+		os.Exit(0)
 	}
 
-	defer jsonFile.Close()
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	var dados Empresa
-
-	var json = jsoniter.ConfigCompatibleWithStandardLibrary
-	json.Unmarshal([]byte(byteValue), &dados)
-
-	nomearea := make(map[string]string)
+	json := jsoniter.ConfigFastest
+	json.Unmarshal(r, &dados)
 
 	for _, a := range dados.Areas {
 		nomearea[a.Codigo] = a.Nome
+		areamin[a.Codigo] = math.MaxFloat64
 	}
-
-	globalmin := dados.Funcionarios[0].Salario
-	globalmax := 0.0
-	globalavg := 0.0
-	maxemployeesareas := 0.0
-	areaavg := make(map[string]float64)
-	areamin := make(map[string]float64)
-	areamax := make(map[string]float64)
-	countarea := make(map[string]float64)
-	lastnamemax := make(map[string]float64)
-	countlastname := make(map[string]float64)
 
 	for _, f := range dados.Funcionarios {
 		if f.Salario > globalmax {
@@ -86,13 +86,8 @@ func main() {
 
 		areaavg[f.Area] += f.Salario
 		countarea[f.Area]++
-		maxemployeesareas++
 
-		if _, ok := areamin[f.Area]; ok {
-			if f.Salario < areamin[f.Area] {
-				areamin[f.Area] = f.Salario
-			}
-		} else {
+		if f.Salario < areamin[f.Area] {
 			areamin[f.Area] = f.Salario
 		}
 
@@ -108,9 +103,6 @@ func main() {
 	}
 
 	globalavg = globalavg / float64(len(dados.Funcionarios))
-
-	leastemployees := maxemployeesareas
-	mostemployees := 0.0
 
 	for _, c := range countarea {
 		if c < leastemployees {

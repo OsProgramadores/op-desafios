@@ -5,11 +5,11 @@
 # Compilação
 
 ```
-javac PrimeNumbers.java
+javac Desafio04.java
 ```
 
 # Execução
 
 ```
-java -cp . PrimeNumbers 0 1000
+java -cp . Desafio04 < arquivo.txt
 ```
