@@ -1,7 +1,8 @@
+
 """ Tabuleiro de Xadrez """
 
 def main():
-    """ Conta as peças do tabuleiro """
+    """ Contas as peças do tabuleiro """
     pecas = {1: [0, 'Peão'],
              2: [0, 'Bispo'],
              3: [0, 'Cavalo'],
@@ -51,4 +52,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
