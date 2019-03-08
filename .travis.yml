@@ -6,7 +6,6 @@ sudo: required
 
 notifications:
   webhooks: https://www.travisbuddy.com
-  on_success: never
 
 matrix:
   include:
