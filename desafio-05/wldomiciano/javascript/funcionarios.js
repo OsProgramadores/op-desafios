@@ -1,5 +1,7 @@
+if (!process.argv[2]) return;
+
 const fs = require('fs');
-const data = JSON.parse(fs.readFileSync('funcionarios.json', 'utf8'));
+const data = JSON.parse(fs.readFileSync(process.argv[2], 'utf8'));
 
 function getMenorEMenorSalario(funcionarios) {
   const { menor, maior } = funcionarios.reduce(
@@ -19,7 +21,7 @@ function getMenorEMenorSalario(funcionarios) {
   return temp;
 }
 
-function print(dados, prefix = '', infix = '', onlyMax = false) {
+function print(dados, prefix = '', infix = '') {
   if (infix !== '') {
     const nomeArea = data.areas.filter(e => dados.maior[0].area === e.codigo)[0]
       .nome;
