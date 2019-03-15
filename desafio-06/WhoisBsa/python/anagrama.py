@@ -1,5 +1,4 @@
 """ Anagrams by WhoisBsa """
-
 from itertools import permutations
 import sys
 
@@ -21,7 +20,6 @@ def findPermutation(wrd, wordLine):
         else:
             print('This word is not available')
             break
-
 
 with open('words.txt', 'r') as f:
     word = sys.argv[1].upper()
