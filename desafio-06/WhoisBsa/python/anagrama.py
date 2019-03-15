@@ -4,18 +4,17 @@ from itertools import permutations
 import sys
 
 
-def findPermutation(word, f):
+def findPermutation(wrd, wordLine):
     """ Find the permutation of the words """
     while True:
-        for i in f.readlines():
-            if word in i:
+        for i in wordLine.readlines():
+            if wrd in i:
                 result = True
                 break
-            else: 
+            else:
                 result = False
-        
         if result:
-            parmutationList = permutations(word)
+            parmutationList = permutations(wrd)
             for item in parmutationList:
                 print(''.join(item))
             break
@@ -25,6 +24,7 @@ def findPermutation(word, f):
 
 
 with open('words.txt', 'r') as f:
-        word = sys.argv[1].upper()
-        findPermutation(word, f)
-        f.close()
+    word = sys.argv[1].upper()
+    findPermutation(word, f)
+    f.close()
+
