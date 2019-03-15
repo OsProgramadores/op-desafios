@@ -25,4 +25,3 @@ with open('words.txt', 'r') as f:
     word = sys.argv[1].upper()
     findPermutation(word, f)
     f.close()
-
