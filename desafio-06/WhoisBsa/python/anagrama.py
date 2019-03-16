@@ -1,27 +1,29 @@
 """ Anagrams by WhoisBsa """
 from itertools import permutations
-import sys
+import re, sys
 
 
-def findPermutation(wrd, wordLine):
+def findPermutation(wrd):
     """ Find the permutation of the words """
-    while True:
-        for i in wordLine.readlines():
-            if wrd in i:
-                result = True
-                break
-            else:
-                result = False
-        if result:
-            parmutationList = permutations(wrd)
-            for item in parmutationList:
-                print(''.join(item))
-            break
-        else:
-            print('This word is not available')
-            break
+    parmutationList = permutations(wrd)
+    for item in parmutationList:
+        print(''.join(item))
 
-with open('words.txt', 'r') as f:
-    word = sys.argv[1].upper()
-    findPermutation(word, f)
-    f.close()
+
+def checkWord(wrd, wordLine):
+    """ Checks whether the word exists in the file or not """
+    if re.search(r'\b' + re.escape(wrd) + r'\b', 
+        wordLine.read(), flags=re.IGNORECASE):
+        findPermutation(wrd)
+    else:
+        print('This word is not available')
+
+
+def main():
+    """ Main function """
+    with open('words.txt', 'r') as f:
+        word = sys.argv[1].upper()
+        checkWord(word, f)
+
+if __name__ == '__main__':
+    main()
