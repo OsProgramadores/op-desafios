@@ -1,6 +1,7 @@
 """ Anagrams by WhoisBsa """
 from itertools import permutations
-import re, sys
+import re
+import sys
 
 
 def findPermutation(wrd):
@@ -12,8 +13,7 @@ def findPermutation(wrd):
 
 def checkWord(wrd, wordLine):
     """ Checks whether the word exists in the file or not """
-    if re.search(r'\b' + re.escape(wrd) + r'\b', 
-        wordLine.read(), flags=re.IGNORECASE):
+    if re.search(r'\b' + re.escape(wrd) + r'\b', wordLine.read(), flags=re.IGNORECASE):
         findPermutation(wrd)
     else:
         print('This word is not available')
