@@ -1,13 +1,14 @@
 #include <boost/iostreams/device/mapped_file.hpp>
 
 #include <fstream>
-#include <iostream>
 #include <iomanip>
+#include <iostream>
 #include <map>
-#include <thread>
 #include <memory>
-#include <sstream>
 #include <set>
+#include <sstream>
+#include <string>
+#include <thread>
 #include <unordered_map>
 #include <vector>
 
@@ -108,9 +109,18 @@ void parse(ParseChunk* data)
 	string area_name;
 	Area* area;
 	vector<Employee>* employees;
-	const char* curr = strchr(data->data_chunk.begin, '"');
+	auto mystrchr = [&](const char* str, char ch) { while (*str && *str != ch) ++str; return str; };
+	auto myatoi = [&](const char* beg, const char* end) 
+	{ 
+		int ret = 0; 
+		while (beg < end) {
+			char c = *beg++; 
+			if (c == '.') continue; 
+			ret = ret * 10 + c - '0'; } 
+		return ret;
+	};
+	const char* curr = mystrchr(data->data_chunk.begin, '"');
 	const char* end;
-
 
 	while (curr && curr < data->data_chunk.end)
 	{
@@ -118,29 +128,29 @@ void parse(ParseChunk* data)
 		{
 		case 'i': // employee
 			curr += 2;
-			curr = strchr(curr + 1, ',');
+			curr = mystrchr(curr + 1, ',');
 			curr += 6;
-			curr = strchr(strchr(curr + 1, ':') + 1, '"') + 1;
-			end = strchr(curr, '"');
+			curr = mystrchr(mystrchr(curr + 1, ':') + 1, '"') + 1;
+			end = mystrchr(curr, '"');
 			employee.name = Chunk{ curr, end };
 
 			curr = end + 11;
-			curr = strchr(strchr(curr + 1, ':') + 1, '"') + 1;
-			end = strchr(curr, '"');
+			curr = mystrchr(mystrchr(curr + 1, ':') + 1, '"') + 1;
+			end = mystrchr(curr, '"');
 			employee.surname = Chunk{ curr, end };
 
 			curr = end + 9;
-			curr = strchr(curr + 1, ':') + 1;
-			end = strchr(curr, '.');
-			employee.salary = atoi(string(string(curr, end) + string(end + 1, 2)).c_str());
+			curr = mystrchr(curr + 1, ':') + 1;
+			end = mystrchr(curr, '.') + 3;
+			employee.salary = myatoi(curr, end);
 
-			curr = end + 9;
-			curr = strchr(strchr(curr + 1, ':') + 1, '"') + 1;
-			end = strchr(curr, '"');
+			curr = end + 6;
+			curr = mystrchr(mystrchr(curr + 1, ':') + 1, '"') + 1;
+			end = mystrchr(curr, '"');
 			employee.area = Chunk{ curr, end };
 
 			curr = end + 1;
-			curr = strchr(curr, '}');
+			curr = mystrchr(curr, '}');
 
 			area_name = string(employee.area.begin, employee.area.end);
 			area = &data->areas[area_name];
@@ -160,21 +170,21 @@ void parse(ParseChunk* data)
 
 		case 'c': // area
 			curr += 6;
-			curr = strchr(strchr(curr + 1, ':') + 1, '"') + 1;
-			end = strchr(curr, '"');
+			curr = mystrchr(mystrchr(curr + 1, ':') + 1, '"') + 1;
+			end = mystrchr(curr, '"');
 			area_name = string(curr, end);
 
 			curr = end + 6;
-			curr = strchr(strchr(curr + 1, ':') + 1, '"') + 1;
-			end = strchr(curr, '"');
+			curr = mystrchr(mystrchr(curr + 1, ':') + 1, '"') + 1;
+			end = mystrchr(curr, '"');
 			data->areas[area_name].name = string(curr, end);
 
 			curr = end + 1;
-			curr = strchr(curr, '}');
+			curr = mystrchr(curr, '}');
 			break;
 		}
 
-		curr = strchr(curr + 1, '"');
+		curr = mystrchr(curr + 1, '"');
 	}
 }
 
@@ -190,7 +200,6 @@ int main(int argc, char* argv[])
 		if (fileMap.is_open())
 		{
 			const char* data = fileMap.data();
-			size_t sz = strlen(data);
 
 			size_t cores = std::thread::hardware_concurrency();
 			size_t chunkSize = fileMap.size() / cores;
