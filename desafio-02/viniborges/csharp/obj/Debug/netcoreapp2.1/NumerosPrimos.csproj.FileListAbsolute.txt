@@ -1,0 +1,11 @@
+C:\Users\luisv\source\repos\OsProgramadores\op-desafios\desafio-02\viniborges\csharp\bin\Debug\netcoreapp2.1\NumerosPrimos.deps.json
+C:\Users\luisv\source\repos\OsProgramadores\op-desafios\desafio-02\viniborges\csharp\bin\Debug\netcoreapp2.1\NumerosPrimos.runtimeconfig.json
+C:\Users\luisv\source\repos\OsProgramadores\op-desafios\desafio-02\viniborges\csharp\bin\Debug\netcoreapp2.1\NumerosPrimos.runtimeconfig.dev.json
+C:\Users\luisv\source\repos\OsProgramadores\op-desafios\desafio-02\viniborges\csharp\bin\Debug\netcoreapp2.1\NumerosPrimos.dll
+C:\Users\luisv\source\repos\OsProgramadores\op-desafios\desafio-02\viniborges\csharp\bin\Debug\netcoreapp2.1\NumerosPrimos.pdb
+C:\Users\luisv\source\repos\OsProgramadores\op-desafios\desafio-02\viniborges\csharp\obj\Debug\netcoreapp2.1\NumerosPrimos.csprojAssemblyReference.cache
+C:\Users\luisv\source\repos\OsProgramadores\op-desafios\desafio-02\viniborges\csharp\obj\Debug\netcoreapp2.1\NumerosPrimos.csproj.CoreCompileInputs.cache
+C:\Users\luisv\source\repos\OsProgramadores\op-desafios\desafio-02\viniborges\csharp\obj\Debug\netcoreapp2.1\NumerosPrimos.AssemblyInfoInputs.cache
+C:\Users\luisv\source\repos\OsProgramadores\op-desafios\desafio-02\viniborges\csharp\obj\Debug\netcoreapp2.1\NumerosPrimos.AssemblyInfo.cs
+C:\Users\luisv\source\repos\OsProgramadores\op-desafios\desafio-02\viniborges\csharp\obj\Debug\netcoreapp2.1\NumerosPrimos.dll
+C:\Users\luisv\source\repos\OsProgramadores\op-desafios\desafio-02\viniborges\csharp\obj\Debug\netcoreapp2.1\NumerosPrimos.pdb
