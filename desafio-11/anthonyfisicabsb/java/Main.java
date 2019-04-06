@@ -45,7 +45,10 @@ public class Main {
         System.out.println();
     }
 
-    private static void getSequence(final int[] primeList, final int[] decimalFields, final int startPoint, final StringBuilder sb) {
+    private static void getSequence(final int[] primeList,
+                                    final int[] decimalFields,
+                                    final int startPoint,
+                                    final StringBuilder sb) {
         int numeroAtual = 0;
         final StringBuilder actualSeq = new StringBuilder();
 
