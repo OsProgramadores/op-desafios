@@ -190,8 +190,7 @@ public class Main {
         } catch (FileNotFoundException e) {
             throw new RuntimeException("Could not open file with rules!", e);
         }
-
+        
         return params;
     }
-
 }
