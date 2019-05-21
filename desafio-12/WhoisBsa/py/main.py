@@ -19,7 +19,6 @@ def main():
 
     with open('d12.txt', 'r') as file:
         numbers = file.readlines()
-        
         for number in numbers:
             ispower, num = check_exponentiation(int(number))
             if ispower:
