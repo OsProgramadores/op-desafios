@@ -4,14 +4,22 @@ os:
 dist: trusty
 sudo: required
 
-before_install:
-  - sudo apt-get update
-  - sudo apt-get install python3 python3-pip
-  - sudo pip3 install --upgrade pip
-  - sudo pip3 install pylint
+notifications:
+  webhooks: https://www.travisbuddy.com
 
-script:
-  - pushd ./travis-ci
-  - ./codecheck.sh
-  - popd
-  - ./travis-ci/validator.sh
+matrix:
+  include:
+    - language: python
+      python: 3.6
+      install:
+        - pip install pylint
+      script:
+        - ./travis-ci/presubmit.sh dircheck pycheck validator
+
+    - language: go
+      go: master
+      install:
+        - go get -u golang.org/x/lint/golint
+      script:
+        - ./travis-ci/presubmit.sh gocheck
+
