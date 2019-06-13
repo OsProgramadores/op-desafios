@@ -4,24 +4,25 @@ import (
 	"fmt"
 )
 
-func verificarNumeroPrimo(numero int) bool {
-	numeroDeDivisores := 0
+func gerarNumerosPrimos(max int) []bool {
+	primos := make([]bool, max+1)
 
-	for i := 1; i <= numero; i++ {
-		if numeroDeDivisores > 2 {
-			return false
-		} else if resto := numero % i; resto == 0 {
-			numeroDeDivisores++
+	for i := 2; i*i <= max; i++ {
+		if primos[i] == false {
+			for j := i * 2; j <= max; j += i {
+				primos[j] = true
+			}
 		}
-
 	}
-	return numeroDeDivisores == 2
+	return primos
 }
 
 func main() {
-	for numero := 1; numero <= 10000; numero++ {
-		if verificarNumeroPrimo(numero) {
-			fmt.Println(numero)
+	numerosPrimos := gerarNumerosPrimos(10000)
+
+	for i := 2; i < len(numerosPrimos); i++ {
+		if numerosPrimos[i] == false {
+			fmt.Printf("%d\n", i)
 		}
 	}
 }
