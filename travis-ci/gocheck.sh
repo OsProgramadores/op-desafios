@@ -1,8 +1,6 @@
 #!/bin/bash
 # Test code formatting compliance (Go)
 
-set -o nounset
-
 # Run golint on all files in the current directory.
 function go_lint() {
   golint -set_exit_status 2>&1
@@ -30,6 +28,8 @@ function go_fmt() {
 
 # Main
 
+echo
+echo "============="
 echo "Go Code check"
 echo "============="
 
@@ -38,6 +38,8 @@ if [[ -z "$TRAVIS_COMMIT_RANGE" ]]; then
   export TRAVIS_COMMIT_RANGE="HEAD^"
   echo >&2 "Note: TRAVIS_COMMIT_RANGE environment variable not set. Defaulting to $TRAVIS_COMMIT_RANGE"
 fi
+
+set -o nounset
 
 # List of all distinct directories having at least one modified with a ".go" extension
 go_dirs=$(git diff --diff-filter=AM --name-only $TRAVIS_COMMIT_RANGE | grep '\.go$' | xargs -l dirname 2>/dev/null | sort -u)
