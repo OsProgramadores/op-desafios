@@ -2,6 +2,8 @@
 # Test code formatting compliance.
 # So far only python3 supported.
 
+echo
+echo "======================"
 echo "Python (v3) code check"
 echo "======================"
 
