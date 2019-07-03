@@ -4,6 +4,8 @@
 VERIFY_TOKEN_URL="https://osprogramadores.com/v/verify-token/"
 VALIDATOR_URL="https://osprogramadores.com/v/"
 
+echo
+echo "====================="
 echo "Validator token check"
 echo "====================="
 

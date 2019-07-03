@@ -26,6 +26,8 @@ set -o nounset
 TLD="./desafio-*"
 res=""
 
+echo
+echo "========================="
 echo "Directory structure check"
 echo "========================="
 
