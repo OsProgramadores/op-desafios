@@ -16,5 +16,5 @@ def main():
         else:
             print("{0} false".format(number))
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
