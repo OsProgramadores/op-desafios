@@ -9,5 +9,5 @@ def isPrime(k):
 	if c+1 == 2 :
 		print(k)
 
-for i in range(2, 10):
+for i in range(2, 10000):
     isPrime(i)
