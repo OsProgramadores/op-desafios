@@ -10,7 +10,7 @@ def ispow(number):
     for ex in range(number+1):
         if 2 ** ex == number:
             print(f'{number} true {ex}')
-            break
+            
         elif 2 ** ex > number:
             print(f'{number} false')
             break
