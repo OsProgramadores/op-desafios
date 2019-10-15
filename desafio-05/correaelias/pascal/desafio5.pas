@@ -1,3 +1,8 @@
+{
+Compile with Free Pascal Compiler (FPC):
+fpc desafio5.pas -O4
+}
+
 program Desafio5;
 
 {$mode objfpc}
@@ -12,7 +17,7 @@ uses
 
 type
   TArea = record
-    FName: PChar;
+    FName: PShortString;
     FTotalEmployees: LongInt;
     FTotalSalary: Int64;
     FMinSalary, FMaxSalary: Int64;
@@ -40,9 +45,9 @@ type
 
   PThreadData = ^TThreadData;
 
-function GetArea(var AAreaList: TFPHashList; const ACode: ShortString): PArea; inline;
+function GetArea(var AAreaList: TFPHashList; ACode: PShortString): PArea; inline;
 begin
-  Result := AAreaList.Find(ACode);
+  Result := AAreaList.Find(ACode^);
   if Result = nil then
   begin
     Result := GetMem(SizeOf(TArea));
@@ -56,13 +61,13 @@ begin
       FMinNames := TFPList.Create;
       FMaxNames := TFPList.Create;
     end;
-    AAreaList.Add(ACode, Result);
+    AAreaList.Add(ACode^, Result);
   end;
 end;
 
-function GetSurname(var ASurnameList: TFPHashList; const ASurname: ShortString): PSurname; inline;
+function GetSurname(var ASurnameList: TFPHashList; const ASurname: PShortString): PSurname; inline;
 begin
-  Result := ASurnameList.Find(ASurname);
+  Result := ASurnameList.Find(ASurname^);
   if Result = nil then
   begin
     Result := GetMem(SizeOf(TSurname));
@@ -72,7 +77,7 @@ begin
       FMaxSalary := 0;
       FMaxNames := TFPList.Create;
     end;
-    ASurnameList.Add(ASurname, Result);
+    ASurnameList.Add(ASurname^, Result);
   end;
 end;
 
@@ -95,34 +100,43 @@ end;
 procedure ParseJsonChunk(var AData: TThreadData);
 var
   Index: SizeInt = 0;
-  Name, Surname, Code: PChar;
+  Name, Surname, Code: PShortString;
   Salary: Int64;
-  function GetString(): PChar; inline;
+  function GetString(): PShortString; inline;
+  var
+    Start: SizeInt;
   begin
     with AData do
     begin
       Index := PosEx(':', FBuffer, Index + 1);
       Index := PosEx('"', FBuffer, Index + 1);
-      Result := @FBuffer[Index + 1];
+      Start := Index;
       Index := PosEx('"', FBuffer, Index + 1);
-      FBuffer[Index] := #0;
+      FBuffer[Start] := Chr(Index - Start - 1);
+      Result := @FBuffer[Start];
     end;
   end;
   function GetNumber(): Int64; inline;
+  var
+    Start: SizeInt;
+    C: Char;
   begin
     Result := 0;
     with AData do
     begin
-      while not (FBuffer[Index] in ['0' .. '9']) do Inc(Index);
-      while FBuffer[Index] in ['0' .. '9', '.'] do
+      Start := Index + 1;
+      Index := PosEx('.', FBuffer, Index + 1);
+      Inc(Index, 3);
+      while Start < Index do
       begin
-        if FBuffer[Index] <> '.' then
-          Result := Result * 10 + (Ord(FBuffer[Index]) - Ord('0'));
-        Inc(Index);
+        C := FBuffer[Start];
+        if C <> '.' then
+          Result := Result * 10 + (Ord(C) - Ord('0'));
+        Inc(Start);
       end;
     end;
   end;
-  procedure AddName(var AList: TFPList; var AListSalary: Int64; AName, ASurname: PChar; ASalary: Int64; AKeepMinSalary: Boolean); inline;
+  procedure AddName(var AList: TFPList; var AListSalary: Int64; AName, ASurname: PShortString; ASalary: Int64; AKeepMinSalary: Boolean); inline;
   begin
     if AListSalary = ASalary then
     begin
@@ -212,8 +226,6 @@ begin
   ParseJsonChunk(PThreadData(AData)^);
 end;
 
-const
-  Cores = 16;
 var
   FilePath: AnsiString;
   FileStream: TFileStream;
@@ -225,14 +237,19 @@ var
   MostEmployees: LongInt = 0;
   LeastEmployees: LongInt = High(LongInt);
   CurrentSurname: PSurname;
+  Key: ShortString;
+  Cores: Int32 = 16;
 begin
-  if ParamCount <> 1 then
+  if ParamCount < 1 then
   begin
-    WriteLn('Usage: ', ParamStr(0), ' <input file>');
+    WriteLn('Usage: ', ParamStr(0), ' <input file> <thread_count>');
     Halt(1);
   end;
   
   FilePath := ParamStr(1);
+  
+  if ParamCount = 2 then
+    Cores := StrToInt(ParamStr(2));
   
   SetLength(Threads, Cores);
   SetLength(Data, Cores);
@@ -303,7 +320,8 @@ begin
       for J := 0 to Data[I].FAreas.Count - 1 do
       begin
         CurrentArea := Data[I].FAreas.Items[J];
-        with GetArea(FAreas, Data[I].FAreas.NameOfIndex(J))^ do
+        Key := Data[I].FAreas.NameOfIndex(J);
+        with GetArea(FAreas, @Key)^ do
         begin
           if CurrentArea^.FName <> nil then FName := CurrentArea^.FName;
           FTotalEmployees += CurrentArea^.FTotalEmployees;
@@ -317,7 +335,8 @@ begin
       for J := 0 to Data[I].FSurnames.Count - 1 do
       begin
         CurrentSurname := Data[I].FSurnames.Items[J];
-        with GetSurname(FSurnames, Data[I].FSurnames.NameOfIndex(J))^ do
+        Key := Data[I].FSurnames.NameOfIndex(J);
+        with GetSurname(FSurnames, @Key)^ do
         begin
           FTotalEmployees += CurrentSurname^.FTotalEmployees;
           JoinNameList(CurrentSurname^.FMaxNames, FMaxNames, CurrentSurname^.FMaxSalary, FMaxSalary, False);
@@ -332,10 +351,10 @@ begin
   with Data[0] do
   begin
     for I := 0 to FMinNames.Count div 2 - 1 do
-      WriteLn('global_min|', PChar(FMinNames[I * 2]), ' ', PChar(FMinNames[I * 2 + 1]), '|', (FMinSalary * 0.01):0:2);
+      WriteLn('global_min|', PShortString(FMinNames[I * 2])^, ' ', PShortString(FMinNames[I * 2 + 1])^, '|', (FMinSalary * 0.01):0:2);
     
     for I := 0 to FMaxNames.Count div 2 - 1 do
-      WriteLn('global_max|', PChar(FMaxNames[I * 2]), ' ', PChar(FMaxNames[I * 2 + 1]), '|', (FMaxSalary * 0.01):0:2);
+      WriteLn('global_max|', PShortString(FMaxNames[I * 2])^, ' ', PShortString(FMaxNames[I * 2 + 1])^, '|', (FMaxSalary * 0.01):0:2);
     
     WriteLn('global_avg|', ((Data[0].FTotalSalary * 0.01) / Data[0].FTotalEmployees):0:2);
   end;
@@ -347,13 +366,13 @@ begin
     begin
       if FTotalEmployees > 0 then
       begin
-        WriteLn('area_avg|', FName, '|', ((FTotalSalary * 0.01) / FTotalEmployees):0:2);
+        WriteLn('area_avg|', FName^, '|', ((FTotalSalary * 0.01) / FTotalEmployees):0:2);
         
         for J := 0 to FMinNames.Count div 2 - 1 do
-          WriteLn('area_min|', FName, '|', PChar(FMinNames[J * 2]), ' ', PChar(FMinNames[J * 2 + 1]), '|', (FMinSalary * 0.01):0:2);
+          WriteLn('area_min|', FName^, '|', PShortString(FMinNames[J * 2])^, ' ', PShortString(FMinNames[J * 2 + 1])^, '|', (FMinSalary * 0.01):0:2);
         
         for J := 0 to FMaxNames.Count div 2 - 1 do
-          WriteLn('area_max|', FName, '|', PChar(FMaxNames[J * 2]), ' ', PChar(FMaxNames[J * 2 + 1]), '|', (FMaxSalary * 0.01):0:2);
+          WriteLn('area_max|', FName^, '|', PShortString(FMaxNames[J * 2])^, ' ', PShortString(FMaxNames[J * 2 + 1])^, '|', (FMaxSalary * 0.01):0:2);
         
         if FTotalEmployees > MostEmployees then
           MostEmployees := FTotalEmployees;
@@ -369,54 +388,21 @@ begin
     with PArea(Data[0].FAreas.Items[I])^ do
     begin
       if FTotalEmployees = MostEmployees then
-        WriteLn('most_employees|', FName, '|', FTotalEmployees);
+        WriteLn('most_employees|', FName^, '|', FTotalEmployees);
       
       if FTotalEmployees = LeastEmployees then
-        WriteLn('least_employees|', FName, '|', FTotalEmployees);
+        WriteLn('least_employees|', FName^, '|', FTotalEmployees);
     end;
   end;
   
   //surnames
   for I := 0 to Data[0].FSurnames.Count - 1 do
   begin
+    Key := Data[0].FSurnames.NameOfIndex(I);
     with PSurname(Data[0].FSurnames.Items[I])^ do
       if FTotalEmployees > 1 then
         for J := 0 to FMaxNames.Count - 1 do
-          WriteLn('last_name_max|', Data[0].FSurnames.NameOfIndex(I), '|', PChar(FMaxNames[J]), ' ', Data[0].FSurnames.NameOfIndex(I), '|', (Double(FMaxSalary) * Double(0.01)):0:2);
+          WriteLn('last_name_max|', Key, '|', PShortString(FMaxNames[J])^, ' ', Key, '|', (Double(FMaxSalary) * Double(0.01)):0:2);
   end;
-  
-  //free memory
-  for I := 0 to High(Data) do
-  begin
-    with Data[I] do
-    begin
-      //global
-      FMinNames.Free;
-      FMaxNames.Free;
-      
-      //areas
-      For J := 0 to FAreas.Count - 1 do
-      begin
-        with PArea(FAreas.Items[J])^ do
-        begin
-          FMinNames.Free;
-          FMaxNames.Free;
-        end;
-        FreeMem(FAreas.Items[J]);
-      end;
-      FAreas.Free;
-      
-      //surnames
-      For J := 0 to FSurnames.Count - 1 do
-      begin
-        with PSurname(FSurnames.Items[J])^ do
-        begin
-          FMaxNames.Free;
-        end;
-        FreeMem(FSurnames.Items[J]);
-      end;
-      FSurnames.Free;
-    end;
-  end;
-  
+
 end.
