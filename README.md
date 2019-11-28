@@ -11,7 +11,7 @@ Este repositório contém as soluções para os desafios em http://osprogramador
    ```
 1. Entre no diretorio criado pelo git (`op-desafios`).
 
-1. Crie um remote apontando para o repositório dos OsProgramadores:.
+1. Crie um remote apontando para o repositório dos OsProgramadores:..........
 
    ```
    $ git remote add upstream https://github.com/OsProgramadores/op-desafios
