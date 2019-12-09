@@ -1,6 +1,5 @@
 """Software para identificar a quantaidade de peças de
 um tabuleiro de xadrez através de uma entrada do usuário"""
-global resultado
 resultado = {
     "peao": 0,
     "bispo": 0,
@@ -12,7 +11,8 @@ resultado = {
 
 def identificaralphanum(entrada):
     """Função para identificar se possui algum caracter Alphanumérico"""
-    for indice in range(0, len(entrada)):
+    tamanhoentrada = len(entrada)
+    for indice in range(0, tamanhoentrada):
         while entrada[indice].isalpha():
             return True
     return False
@@ -57,6 +57,7 @@ def contabiliza(entrada):
 def validarlinha(entrada):
     """Função que realiza toda validação dos dados de entrada e contabiliza as peças"""
     entradaarray = entrada.split(" ")
+
     while identificaralphanum(entradaarray):
         print("Por favor, digite apenas números.")
         return False
@@ -65,13 +66,15 @@ def validarlinha(entrada):
         print("Por favor, digite 8 números entre 0 e 6 com um espaço entre cada número.")
         return False
 
-    for indice in range(0, len(entradaarray)):
+    tamanhoentradaarray = len(entradaarray)
+
+    for indice in range(0, tamanhoentradaarray):
         valor = int(entradaarray[indice])
         while validarvalor(valor):
             print("Por favor, digite apenas números entre 0 e 6.")
             return False
 
-    for indice in range(0, len(entradaarray)):
+    for indice in range(0, tamanhoentradaarray):
         valor = int(entradaarray[indice])
         contabiliza(valor)
 
