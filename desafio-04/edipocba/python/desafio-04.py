@@ -1,4 +1,4 @@
-"""Software para identificar a quantaidade de peças de
+"""Software para identificar a quantidade de peças de
 um tabuleiro de xadrez através de uma entrada do usuário"""
 resultado = {
     "peao": 0,
