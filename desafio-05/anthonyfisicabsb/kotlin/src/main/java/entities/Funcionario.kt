@@ -5,5 +5,5 @@ class Funcionario {
     var nome: String? = null
     var sobrenome: String? = null
     var area: String? = null
-    var salario: Double? = null
+    var salario: Double = 0.toDouble()
 }
