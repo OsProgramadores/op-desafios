@@ -45,4 +45,4 @@ class Anagramas {
 }
 
 $anagramas = new Anagramas;
-$anagramas->mostrarAnagramas("word.txt", "ogd");
+$anagramas->mostrarAnagramas("words.txt", "ogd");
