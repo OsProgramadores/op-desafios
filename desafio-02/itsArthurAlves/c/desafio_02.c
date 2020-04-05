@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-
-
 void structure(int actualnumber2){
   int  indicator=1;
   bool order = false;
@@ -17,9 +15,7 @@ void structure(int actualnumber2){
    order = false;
   };
 };
- 
 void main (){
   int actualnumber;
   structure(actualnumber);
-
 }
