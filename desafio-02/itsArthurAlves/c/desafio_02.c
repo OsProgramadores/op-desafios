@@ -2,17 +2,21 @@
 #include <stdlib.h>
 #include <stdbool.h>
 void structure(int actualnumber2){
-  int  indicator=1;
-  bool order = false;
+  int  x, order = 1, indicator;
+  bool io = false;
   for (actualnumber2=1; actualnumber2<=10000; actualnumber2++){ 
-   if (actualnumber2%2 != 0){
-    order = true;
-   };
-   if(order == true){
-    printf ("The %dº number = %d\n", indicator, actualnumber2);
-    indicator++;
-   };
-   order = false;
+    for (x = 1; x<=actualnumber2; x++){
+      if (actualnumber2%x==0)
+        indicator++;
+    }
+    if (indicator==2)
+        io = true;
+    if (io==true){
+      printf("The %dº number is this: %d.\n", order, actualnumber2);
+      order++;
+    }
+    io = false;
+    indicator = 0;
   };
 };
 void main (){
