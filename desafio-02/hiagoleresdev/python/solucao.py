@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 """
-by Hiago Leres 
-
+Created on Thu April 14 01:17:33 2020
+Desafio 02 - Listar todos os números primos de 1 à 10000
+@author: Hiago
 """
 primes = [1]
 dividers = 0
