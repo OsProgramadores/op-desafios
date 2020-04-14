@@ -1,3 +1,7 @@
+"""
+by Hiago Leres 
+
+"""
 primes = [1]
 dividers = 0
 for i in range(2, 10000):
