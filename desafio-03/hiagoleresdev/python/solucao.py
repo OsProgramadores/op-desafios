@@ -7,7 +7,7 @@ Desafio 03 - Listar todos os numeros palindromos
 palindromes = []
 firstNumber = int(input('Type a first number to see all palindromes: '))
 finalNumber = int(input('Type a final number to see all palindromes: '))
-numberInverted = 0
+
 
 def isPalindrome(numero):    
     numberInverted = str(numero)[::-1]
