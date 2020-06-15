@@ -2,9 +2,8 @@
 
 # Português
 
-Solução para o desafio 3 (palíndromos) do site Os Programadores (acessível 
-em http://osprogramadores.com/desafios). Mostra todos os palíndromos decimais 
-dentro de uma determinada faixa.
+Solução para o desafio 4 (xadrez) do site Os Programadores (acessível 
+em http://osprogramadores.com/desafios). Contabiliza peças de xadrez.
 
 ## Como utilizar
 
