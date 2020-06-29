@@ -1,15 +1,13 @@
-
 function verificaPrimo(num){
-let cont = 0;
-for(let i = 0; i < num; i++){
-   if((num%(i+1)) === 0){
-       cont += 1;
-   }  
-}
+let primo = true;
+if(num<=1){ primo = false};
+for(let i = 2; i < num; i++){ 
 
-if(cont === 2){
-    return true;
-    }
+    if(num%i===0 && num!==i){
+        primo = false;
+        }  
+   }       
+   return primo;
 }
 
 let numeros = [];
