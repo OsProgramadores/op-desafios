@@ -1,13 +1,12 @@
 function verificaPrimo(num){
-let primo = true;
-if(num<=1){ primo = false};
-for(let i = 2; i < num; i++){ 
 
-    if(num%i===0 && num!==i){
-        primo = false;
+if(num<2){ return false};
+for(let i = 2; i < num; i++){ 
+    if(num%i===0){
+        return false
         }  
    }       
-   return primo;
+   return true;
 }
 
 let numeros = [];
