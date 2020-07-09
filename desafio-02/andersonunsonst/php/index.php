@@ -3,7 +3,7 @@
 function primeCheck($number)
 {
     if ($number == 1) {
-	    return 0; 
+        return 0; 
     }   
       
     for ($i = 2; $i <= sqrt($number); $i++) {
@@ -19,9 +19,9 @@ function primeCheck($number)
 function printPrime($min, $max)
 {
     for($min; $min < $max; $min++) {
-	    if(primeCheck($min)==1) {
-	 	    echo $min . PHP_EOL;
-	    }
+        if(primeCheck($min)==1) {
+            echo $min . PHP_EOL;
+        }
     }
 }
 
