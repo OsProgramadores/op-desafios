@@ -7,4 +7,4 @@ while aux < 1000:
             cont+=1
     if cont == 2:
         print(aux)
-    aux+=1
+    aux += 1
