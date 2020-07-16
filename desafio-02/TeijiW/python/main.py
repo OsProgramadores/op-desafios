@@ -1,5 +1,4 @@
 numbers_to_print = ""
-print("Please, wait, I'm calculating =)")
 for n1 in range(1, 10000):
     matches = 0
     for n2 in range(1, n1):
