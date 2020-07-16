@@ -1,9 +1,11 @@
 """
-  Cálculo de todos os números primos entre 1 e 10000
+Autor: Teiji Watanabe
+Cálculo de todos os números primos entre 1 e 10000
 """
 
 
 def main():
+    """Função principal que retorna os números primos"""
     numbers_to_print = ""
     for n1 in range(1, 10000):
         matches = 0
