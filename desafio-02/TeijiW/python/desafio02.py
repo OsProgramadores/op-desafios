@@ -1,3 +1,7 @@
+"""
+  Cálculo de todos os números primos entre 1 e 10000
+"""
+
 
 def main():
     numbers_to_print = ""
