@@ -15,11 +15,12 @@ def isPalindrome(text):
 
 
 def main():
+    """Main function"""
     numbers_list = []
     start = input("Start of period: ")
     end = input("End of period: ")
     for number in range(int(start), int(end)):
-        if(isPalindrome(number)):
+        if isPalindrome(number):
             numbers_list.append(number)
     print(*numbers_list, sep="\n")
 
