@@ -25,7 +25,7 @@ PIECES_NAMES = {
 
 
 def main():
-    # Main Function
+    """Main Function"""
     pieces_count = {
         0: 0,
         1: 0,
@@ -35,7 +35,7 @@ def main():
         5: 0,
         6: 0,
     }
-    for i in range(0, len(PIECES)):
+    for i, _ in enumerate(PIECES):
         for j in range(0, 7):
             pieces_count[j] += PIECES[i].count(j)
 
