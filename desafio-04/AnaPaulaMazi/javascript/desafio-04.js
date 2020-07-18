@@ -56,9 +56,10 @@ function imprimir (ret){
     }
 }
 
-
+console.log('Resultado do primerio tabuleiro:')
 let ret1 = contarPecas(tabuleiro1);
  imprimir (ret1);
-
+ console.log('\n');
+ console.log('Resultado do segundo tabuleiro:')
 let ret2 = contarPecas(tabuleiro2);
 imprimir (ret2);
