@@ -21,15 +21,27 @@ int print_line(FILE *fptr,long start, long end){
 	char linebuffer[LINE_BUFFER_SIZE];
 
 	fseek(fptr,start,SEEK_SET);
+	if(ferror(fptr)){
+	     perror("Seek error");
+	     return(-1);
+	}
 	if((end - start) <= LINE_BUFFER_SIZE){
 
 		fread(&linebuffer, sizeof(char),end - start, fptr);
+		if(ferror(fptr)){
+			perror("Read error");
+			return(-1);
+		}
 		linebuffer[end - start] = '\0';
 		printf("%s\n",linebuffer);
 	}
 
 	// precisa retornar pra onde o ponteiro do arquivo estava antes
 	fseek(fptr,cur_pos,SEEK_SET);
+	if(ferror(fptr)){
+	     perror("Seek error");
+	     return(-1);
+	}
 	return(0);
 }
 
@@ -57,6 +69,10 @@ int main(int argc , char* argv[]){
 	}
 	//dispensa o último char do arquivo porque costuma ser convertido em \n
 	fseek(fptr,-1,SEEK_END);	
+	if(ferror(fptr)){
+	     perror("Seek error");
+	     return(-1);
+	}
 	fsize = ftell(fptr);
 		
 	long count = 1;
@@ -66,13 +82,25 @@ int main(int argc , char* argv[]){
 	// this while must start with fseek to end 
 	while(seek_ret == 0){ // pega buffers de todo o arquivo
 		seek_ret = fseek(fptr,-BUFFER_SIZE,SEEK_CUR);
+		if(ferror(fptr)){
+			perror("Seek error");
+			return(-1);
+		}
 		if(seek_ret != 0){
 			bytes_to_read = end;
 		       	fseek(fptr,0,SEEK_SET);
+			if(ferror(fptr)){
+				perror("Seek error");
+				return(-1);
+			}
 		}
 		cr_pos = ftell(fptr);
 //		clear_buffer();
 		read_ret = fread(&buffer, sizeof(char),bytes_to_read, fptr);
+		if(ferror(fptr)){
+			perror("Read error");
+			return(-1);
+		}
 		for(long i = 1; i <= read_ret ; i++){
 			if(buffer[read_ret - i] == '\n'){
 				cr_pos = ftell(fptr) - i  ;
@@ -83,6 +111,10 @@ int main(int argc , char* argv[]){
 
 		}
 		fseek(fptr,cr_pos,SEEK_SET);
+		if(ferror(fptr)){
+			perror("Seek error");
+			return(-1);
+		}
 		count++;
 		
 	}
