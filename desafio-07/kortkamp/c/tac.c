@@ -12,26 +12,19 @@
  *
  */
 
-FILE *fptr;
-char buffer[BUFFER_SIZE] = {0};
-char linebuffer[LINE_BUFFER_SIZE+11111] = {0};
 
 
-void clear_buffer(){
-	for(int i = 0; i <= BUFFER_SIZE; i++)
-	       buffer[i] = 0;	
-
-}
 //print line delimited by file indexes : start , end
 //Precisa preservar o SEEK_CUR no arquivo 
-int print_line(long start, long end){
+int print_line(FILE *fptr,long start, long end){
 	long cur_pos = ftell(fptr);
-	
+	char linebuffer[LINE_BUFFER_SIZE];
+
 	fseek(fptr,start,SEEK_SET);
 	if((end - start) <= LINE_BUFFER_SIZE){
 
 		fread(&linebuffer, sizeof(char),end - start, fptr);
-		linebuffer[end - start] = 0;
+		linebuffer[end - start] = '\0';
 		printf("%s\n",linebuffer);
 	}
 
@@ -41,6 +34,12 @@ int print_line(long start, long end){
 }
 
 int main(int argc , char* argv[]){
+	
+	
+	FILE *fptr;
+	char buffer[BUFFER_SIZE];
+	
+	
 	long pos = LINE_BUFFER_SIZE-1 ;
 	long read_ret;
 	long seek_ret;
@@ -48,13 +47,13 @@ int main(int argc , char* argv[]){
 	long fsize = 0;
 	long last_cr = 0;
 	if(argc <= 1){
-		printf("Usage: %s path_to_file\n",argv[0]);
+		fprintf(stderr,"Usage: %s path_to_file\n",argv[0]);
 		return(0);
 	}
 	fptr = fopen(argv[1],"rb+");
 	if(fptr == NULL){
-		printf("Error opening file");
-		return(1);
+		perror("Error opening file");
+		return(-1);
 	}
 	//dispensa o último char do arquivo porque costuma ser convertido em \n
 	fseek(fptr,-1,SEEK_END);	
@@ -72,12 +71,12 @@ int main(int argc , char* argv[]){
 		       	fseek(fptr,0,SEEK_SET);
 		}
 		cr_pos = ftell(fptr);
-		clear_buffer();
+//		clear_buffer();
 		read_ret = fread(&buffer, sizeof(char),bytes_to_read, fptr);
 		for(long i = 1; i <= read_ret ; i++){
 			if(buffer[read_ret - i] == '\n'){
 				cr_pos = ftell(fptr) - i  ;
-				print_line(cr_pos+1,end);
+				print_line(fptr,cr_pos+1,end);
 
 				end = cr_pos;
 			}
@@ -87,7 +86,7 @@ int main(int argc , char* argv[]){
 		count++;
 		
 	}
-	print_line(0,end);
+	print_line(fptr,0,end);
 	fclose(fptr);
 	return(0);
 }
