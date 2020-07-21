@@ -1,13 +1,13 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdio.h>
-#define LINE_BUFFER_SIZE 100000 
-#define BUFFER_SIZE 1000000
+#define LINE_BUFFER_SIZE 1000
+#define BUFFER_SIZE 10000 
 
 /* TODO LIST	
- * -need to deal with lines bigger then LINE_BUFFER_SIZE(yes, im noob)
- * -print the line using the data stored in buffer, not loading linebuffer
- * -use malloc instead of arrays 
+ * (DONE!) 		-need to deal with lines bigger then LINE_BUFFER_SIZE(yes, im noob)
+ * (IMPOSSIBLE)		-print the line using the data stored in buffer, not loading linebuffer 
+ * (UNNECESSARY)	-use malloc instead of arrays 
  * 
  *
  */
@@ -18,14 +18,30 @@
 //Precisa preservar o SEEK_CUR no arquivo 
 int print_line(FILE *fptr,long start, long end){
 	long cur_pos = ftell(fptr);
-	char linebuffer[LINE_BUFFER_SIZE];
+
+	// o +1 facilita as contas já que posso encher 
+	// o buffer com LINE_BUFFER_SIZE bytes e o último
+	// elemento será deixado em '\0' facilitando o printf
+	char linebuffer[LINE_BUFFER_SIZE+1];
 
 	fseek(fptr,start,SEEK_SET);
 	if(ferror(fptr)){
 	     perror("Seek error");
 	     return(-1);
 	}
-	if((end - start) <= LINE_BUFFER_SIZE){
+	linebuffer[LINE_BUFFER_SIZE] = '\0';
+	while((end-start) > LINE_BUFFER_SIZE){
+		start += fread(&linebuffer, sizeof(char), LINE_BUFFER_SIZE, fptr);
+		printf("%s",linebuffer);
+
+		fseek(fptr,start,SEEK_SET);
+		if(ferror(fptr)){
+		     perror("Seek error");
+		     return(-1);
+		}
+
+	}
+//	if((end - start) <= LINE_BUFFER_SIZE){
 
 		fread(&linebuffer, sizeof(char),end - start, fptr);
 		if(ferror(fptr)){
@@ -34,7 +50,7 @@ int print_line(FILE *fptr,long start, long end){
 		}
 		linebuffer[end - start] = '\0';
 		printf("%s\n",linebuffer);
-	}
+//	}
 
 	// precisa retornar pra onde o ponteiro do arquivo estava antes
 	fseek(fptr,cur_pos,SEEK_SET);
