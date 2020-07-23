@@ -17,9 +17,12 @@ func main() {
 func isPrime(number int) bool {
 	var count int = 0
 	for i := 1; i <= number; i++ {
+		if count > 2 {
+			return false
+		}
 		if number%i == 0 {
 			count++
 		}
 	}
-	return count <= 2
+	return true
 }
