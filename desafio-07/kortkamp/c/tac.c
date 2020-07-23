@@ -5,17 +5,15 @@
 #define BUFFER_SIZE 10000 
 
 /* TODO LIST	
- * (DONE!) 		-need to deal with lines bigger then LINE_BUFFER_SIZE(yes, im noob)
+ * (DONE!)		-need to deal with lines bigger then LINE_BUFFER_SIZE(yes, im noob)
  * (IMPOSSIBLE)		-print the line using the data stored in buffer, not loading linebuffer 
  * (UNNECESSARY)	-use malloc instead of arrays 
- * 
- *
  */
 
 
 
-//print line delimited by file indexes : start , end
-//Precisa preservar o SEEK_CUR no arquivo 
+// print line delimited by file indexes : start , end
+// Precisa preservar o SEEK_CUR no arquivo 
 int print_line(FILE *fptr,long start, long end){
 	long cur_pos = ftell(fptr);
 
@@ -30,7 +28,7 @@ int print_line(FILE *fptr,long start, long end){
 	     return(-1);
 	}
 	linebuffer[LINE_BUFFER_SIZE] = '\0';
-	while((end-start) > LINE_BUFFER_SIZE){
+	while(end-start > LINE_BUFFER_SIZE){
 		start += fread(&linebuffer, sizeof(char), LINE_BUFFER_SIZE, fptr);
 		printf("%s",linebuffer);
 
