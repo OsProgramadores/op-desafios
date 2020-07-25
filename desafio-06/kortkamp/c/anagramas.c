@@ -7,8 +7,16 @@
 #define NUM_WORDS	24853		// num of words in file 
 #define MAX_LEN		23		// lenght of the largest word + '\0'
 
+
+
+char unordened_word_array[NUM_WORDS][MAX_LEN]; // array with words ordened in crescent order, from the small to the bigger one
 char word_array[NUM_WORDS][MAX_LEN]; // [num_of_words][len of largest word]
+char word_len[NUM_WORDS]; // lenght of each word in word_array; 
 int solution[INPUT_LIMIT] = {0}; // store the indexes os word_array for current solution
+
+int last_len_ocurrency[23];	// armazena os indexes da ultima ocorrencia de 
+				// uma palavra com determinado tamanho indicado pelo
+				// index da variavel last_len_ocurrency
 
 //push a new char into a buffer and return the new lenght
 int push(char *buffer, char c){
@@ -18,7 +26,32 @@ int push(char *buffer, char c){
 	buffer[pos + 1] = '\0';
 	return(pos+1);
 }	
-// return 0 if a buffer is completely filled by spaces
+// ordena as palavras da menor pra maior, assim espero, kkkk
+// de quebra a função gera um array de 23 elementos que informa o index
+// da ultima palavra de determinado tamanho 
+int sort(char src[][MAX_LEN], char dest[][MAX_LEN]){
+	int counter = 0;// contador para o buffer de destino.
+	for(int len = 1; len <=  MAX_LEN;len++){ // para todos os tamanhos de palavra de 1 até 23
+		for(int s_index = 0 ; s_index < NUM_WORDS; s_index++){ // para todas as palavras do dicionário
+			if(strlen(src[s_index]) == len){
+				last_len_ocurrency[len] = counter;
+			       	strcpy(dest[counter++],src[s_index]);
+			}
+		}
+	}
+}
+// returns the size of a string without counting spaces ' ' . 
+int no_space_strlen(char *buffer){
+	int counter = 0;
+	int space_counter = 0;
+	while(buffer[counter] != 0 ){
+		counter++;
+		if(buffer[counter] == ' ') space_counter++;
+	}
+	return(counter - space_counter);
+}
+
+// return 0 if a buffer is completely filled with spaces
 int blank(char *buffer){	
 	for(int i = 0; i < strlen(buffer);i++) 
 		if(buffer[i] != ' ') return(-1);
@@ -70,7 +103,7 @@ int search(char *input, int index){
 	
 //	printf("(%s) ",test_input);
 
-	for(int i = 0; i < NUM_WORDS; i++){// testa todas as palavras
+	for(int i = 0; i < last_len_ocurrency[no_space_strlen(test_input)]; i++){// testa todas as palavras
 		if(used(i,index) == 0)//dicard used words		
 			if(comb(test_input,word_array[i]) == 0) {
 				
@@ -124,7 +157,7 @@ int main(int argc,char* argv[]){
 	
 	int count = 0;
 	while(!feof(words_fp)){
-		fscanf(words_fp,"%s",word_array[count++]); 
+		fscanf(words_fp,"%s",unordened_word_array[count++]); 
 		if(ferror(words_fp)){
 			perror("Erro lendo o arquivo " WORDS_FILE);
 			return(-1);
@@ -132,6 +165,10 @@ int main(int argc,char* argv[]){
 	//	printf("%d\n",count);
 	}
 	fclose(words_fp);
+	
+	// ordena as palavras da menor pra maior
+	sort(unordened_word_array,word_array);
+
 
 	//aqui a brincadeira começa
 
@@ -141,10 +178,10 @@ int main(int argc,char* argv[]){
 	//printf(">>%s", word_array[1]);
 //	search(input);
 
-	char test[] = "Marcelo";
-	int ret = comb(test,"aero");
+	char test[] = "Mare  o";
+	//int ret = comb(test,"aero");
 	//printf("ret: %d, test[]:%s blank:%d",ret,test,blank("      "));
-		
-
+//	printf("no_space_strlen:%d strlen:%d",no_space_strlen(test),strlen(test));		
+//	for(int i = 0 ; i < NUM_WORDS;i++) printf("%s\n",word_array[https://www.google.com/search?client=firefox-b-e&q=unordenedi]);
 	return(search(input,0));
 }
