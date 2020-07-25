@@ -96,29 +96,30 @@ int comb(char *set, char *sub){
  * exclui as letras encontradas e chama a mesma função passando como work_buffer 
  * as letras restantes.*
  */
-int search(char *input, int index){
+int search(char *input, int solution_index, int first_index){
 	char test_word[MAX_LEN];
 	char test_input[INPUT_LIMIT];
 	strcpy(test_input,input);
 	
 //	printf("(%s) ",test_input);
 
-	for(int i = 0; i < last_len_ocurrency[no_space_strlen(test_input)]; i++){// testa todas as palavras
-		if(used(i,index) == 0)//dicard used words		
+	//for(int i = first_index; i < last_len_ocurrency[no_space_strlen(test_input)]; i++){// testa todas as palavras
+	for(int i = first_index; i < NUM_WORDS; i++){// testa todas as palavras
+//		if(used(i,solution_index) == 0)//dicard used words		
 			if(comb(test_input,word_array[i]) == 0) {
 				
-			//	printf("%d %s ",index,word_array[i]);
-				solution[index] = i; // current word
+				//printf("%d %s ",index,word_array[i]);
+				solution[solution_index] = i; // current word
 				if(blank(test_input) == 0){ //the input is blank 
-					print_solution(index);
-					//'printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
-					return(0); // sucess
+					print_solution(solution_index);
+					//printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+				//	return(0); // sucess
 				}
-				if(search(test_input,index+1) == 0) ;
+				search(test_input,solution_index+1,i+1);
 				strcpy(test_input,input);
 			}
 		}
-	solution[index] = 0;
+	solution[solution_index] = 0;
 //	printf("<\n");	
 	return(-1);
 }
@@ -157,7 +158,7 @@ int main(int argc,char* argv[]){
 	
 	int count = 0;
 	while(!feof(words_fp)){
-		fscanf(words_fp,"%s",unordened_word_array[count++]); 
+		fscanf(words_fp,"%s",word_array[count++]); 
 		if(ferror(words_fp)){
 			perror("Erro lendo o arquivo " WORDS_FILE);
 			return(-1);
@@ -183,5 +184,5 @@ int main(int argc,char* argv[]){
 	//printf("ret: %d, test[]:%s blank:%d",ret,test,blank("      "));
 //	printf("no_space_strlen:%d strlen:%d",no_space_strlen(test),strlen(test));		
 //	for(int i = 0 ; i < NUM_WORDS;i++) printf("%s\n",word_array[https://www.google.com/search?client=firefox-b-e&q=unordenedi]);
-	return(search(input,0));
+	return(search(input,0,0));
 }
