@@ -10,20 +10,20 @@ def verifica(valor):
     while x >= 0:
         aux = (2 ** x)
         if aux > valor:
-            return 0, 0
+            return False, 0
         if aux == valor:
-            return 1, str(x)
+            return True, str(x)
         x += 1
 
 def main():
-    """Funlçâo Principal"""
+    """Função Principal"""
     with open('d12.txt', 'r') as file_object:
         for item in file_object:
             status, p = verifica(int(item))
-            if status == 1:
-                print(str(item).rstrip() + " true " + p)
+            if status:
+                print(str(item).rstrip() + " " + str(status) + " " + p)
             else:
-                print(str(item).rstrip() + " false")
+                print(str(item).rstrip() + " " + str(status))
 
 
 if __name__ == "__main__":
