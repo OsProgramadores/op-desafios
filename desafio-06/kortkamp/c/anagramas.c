@@ -7,11 +7,13 @@
 #define NUM_WORDS	24853		// num of words in file 
 #define MAX_LEN		23		// lenght of the largest word + '\0'
 
-
+long ana_count = 0;
 
 char unordened_word_array[NUM_WORDS][MAX_LEN]; // array with words ordened in crescent order, from the small to the bigger one
 char word_array[NUM_WORDS][MAX_LEN]; // [num_of_words][len of largest word]
+char valid_words_array[NUM_WORDS][MAX_LEN]; // armazena todas as palavras cujos caracteres estejam contidos no input, acho que essa vai ser a sacada!!!!!!
 char word_len[NUM_WORDS]; // lenght of each word in word_array; 
+int valid_words;
 int solution[INPUT_LIMIT] = {0}; // store the indexes os word_array for current solution
 
 int last_len_ocurrency[23];	// armazena os indexes da ultima ocorrencia de 
@@ -40,6 +42,9 @@ int sort(char src[][MAX_LEN], char dest[][MAX_LEN]){
 		}
 	}
 }
+
+
+
 // returns the size of a string without counting spaces ' ' . 
 int no_space_strlen(char *buffer){
 	int counter = 0;
@@ -59,10 +64,11 @@ int blank(char *buffer){
 	return(0);
 }
 void print_solution(int max_index){
-	printf("");
-	for(int i = 0; i <= max_index; i++)
-		printf("%s ", word_array[solution[i]]);
-	printf("\n");
+	
+	for(int i = 0; i < max_index; i++)
+		printf("%s ", valid_words_array[solution[i]]);
+	
+	printf("%s\n", valid_words_array[solution[max_index]]);
 }
 // Test if a word of word_index was already used in solution array
 // return 0 if not used and -1 if already used 
@@ -91,6 +97,48 @@ int comb(char *set, char *sub){
 	}
 	return(0);
 }
+/* fast_comb a more fast version of comb *
+ *
+ */
+int fast_comb(char *set, char *sub){
+	char *index;
+	for(int j = 0 ; j < strlen(sub) ; j++){ // para cada letra da string sub
+		if((index = strchr(set,sub[j])) == NULL){
+			return(-1);
+		}
+	}
+	return(comb(set,sub));
+}
+
+
+/* Seleciona apenas as palavras cujos caracteres estejam presentes na sentença
+ * assim podemos restringir muito a nossa pesquisa
+ */
+int select_valid(char *input){
+	char temp[INPUT_LIMIT];
+	int counter = 0; //conta as ocorrencias de match
+	strcpy(temp,input);
+	for(int i = 0; i < NUM_WORDS; i ++){
+		if(comb(temp,word_array[i])==0){
+			strcpy(valid_words_array[counter++],word_array[i]);
+			strcpy(temp,input);
+		}
+	}
+	return(counter);
+}
+/* merge a sentence, removing space and shifting the parts together
+ */
+
+int merge(char *buffer){
+	int spaces = 0;
+	for(int i = 0 ; i < strlen(buffer); i++){
+		if(buffer[i+spaces] == ' ') spaces++;
+		buffer[i] = buffer[i+spaces];
+	}
+}
+
+
+
 /* A função de busca deve criar um buffer e testar cada palavra da words_list
  * se a palavra coincidir e não for maior que o work_buffer(input_buffer), a gente
  * exclui as letras encontradas e chama a mesma função passando como work_buffer 
@@ -104,9 +152,9 @@ int search(char *input, int solution_index, int first_index){
 //	printf("(%s) ",test_input);
 
 	//for(int i = first_index; i < last_len_ocurrency[no_space_strlen(test_input)]; i++){// testa todas as palavras
-	for(int i = first_index; i < NUM_WORDS; i++){// testa todas as palavras
+	for(int i = first_index; i < valid_words; i++){// testa todas as palavras
 //		if(used(i,solution_index) == 0)//dicard used words		
-			if(comb(test_input,word_array[i]) == 0) {
+			if(fast_comb(test_input,valid_words_array[i]) == 0) {
 				
 				//printf("%d %s ",index,word_array[i]);
 				solution[solution_index] = i; // current word
@@ -115,13 +163,14 @@ int search(char *input, int solution_index, int first_index){
 					//printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
 				//	return(0); // sucess
 				}
+				merge(test_input);
 				search(test_input,solution_index+1,i+1);
 				strcpy(test_input,input);
 			}
 		}
 	solution[solution_index] = 0;
 //	printf("<\n");	
-	return(-1);
+	return(0);
 }
 
 int main(int argc,char* argv[]){
@@ -169,7 +218,7 @@ int main(int argc,char* argv[]){
 	
 	// ordena as palavras da menor pra maior
 	sort(unordened_word_array,word_array);
-
+	valid_words = select_valid(input);
 
 	//aqui a brincadeira começa
 
@@ -179,10 +228,12 @@ int main(int argc,char* argv[]){
 	//printf(">>%s", word_array[1]);
 //	search(input);
 
-	char test[] = "Mare  o";
+	char test[] = "a e i";
+	merge(test);
+//	printf("%s", test);
 	//int ret = comb(test,"aero");
 	//printf("ret: %d, test[]:%s blank:%d",ret,test,blank("      "));
 //	printf("no_space_strlen:%d strlen:%d",no_space_strlen(test),strlen(test));		
-//	for(int i = 0 ; i < NUM_WORDS;i++) printf("%s\n",word_array[https://www.google.com/search?client=firefox-b-e&q=unordenedi]);
+//	for(int i = 0 ; i < valid_words;i++) printf("%d %s\n",i, valid_words_array[i]);
 	return(search(input,0,0));
 }
