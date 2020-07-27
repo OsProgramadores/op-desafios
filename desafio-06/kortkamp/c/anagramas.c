@@ -129,7 +129,7 @@ int make_new_dict(char *input,char *dest_dict[23],char *src_dict[MAX_LEN], int s
 	int counter = 0; //conta as ocorrencias de match
 	strcpy(temp,input);
 	for(int i = 0; i < src_size; i ++){
-		if(comb(temp,src_dict[i])==0){
+		if(fast_comb(temp,src_dict[i])==0){
 			//strcpy(valid_words_array[counter++],word_array[i]);
 			dest_dict[counter++] = src_dict[i];
 		//	printf("%s   %ld  >> %ld \n",src_dict[i], src_dict[i],dest_dict[counter-1]);
@@ -277,6 +277,6 @@ int main(int argc,char* argv[]){
 
 //	for(int i = 0 ; i < dict_size;i++) printf(">>%s\n",dict[i]);
 	search(dict,dict_size,input,0,0);
-	fprintf(stderr,"solucoes:%d",ana_count);
+//	fprintf(stderr,"solucoes:%d",ana_count);
 	return(0);
 }
