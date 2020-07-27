@@ -14,7 +14,7 @@ char word_array[NUM_WORDS][MAX_LEN]; // [num_of_words][len of largest word]
 char valid_words_array[NUM_WORDS][MAX_LEN]; // armazena todas as palavras cujos caracteres estejam contidos no input, acho que essa vai ser a sacada!!!!!!
 char word_len[NUM_WORDS]; // lenght of each word in word_array; 
 int valid_words;
-int solution[INPUT_LIMIT] = {0}; // store the indexes os word_array for current solution
+char *solution[INPUT_LIMIT] = {0}; // store the indexes os word_array for current solution
 
 int last_len_ocurrency[23];	// armazena os indexes da ultima ocorrencia de 
 				// uma palavra com determinado tamanho indicado pelo
@@ -66,16 +66,9 @@ int blank(char *buffer){
 void print_solution(int max_index){
 	
 	for(int i = 0; i < max_index; i++)
-		printf("%s ", valid_words_array[solution[i]]);
+		printf("%s ", solution[i]);
 	
-	printf("%s\n", valid_words_array[solution[max_index]]);
-}
-// Test if a word of word_index was already used in solution array
-// return 0 if not used and -1 if already used 
-int used(int word_index, int solution_max_index){
-	for(int i = 0; i <= solution_max_index; i++)
-		if(word_index == solution[i]) return(-1);
-	return(0);
+	printf("%s\n", solution[max_index]);
 }
 
 // Return 0 if sub is a subset of set
@@ -114,11 +107,11 @@ int fast_comb(char *set, char *sub){
 /* Seleciona apenas as palavras cujos caracteres estejam presentes na sentença
  * assim podemos restringir muito a nossa pesquisa
  */
-int select_valid(char *input){
+int select_valid(char *input,char dest_bufferi[][MAX_LEN],char src_buffer[][MAX_LEN], int src_size){
 	char temp[INPUT_LIMIT];
 	int counter = 0; //conta as ocorrencias de match
 	strcpy(temp,input);
-	for(int i = 0; i < NUM_WORDS; i ++){
+	for(int i = 0; i < src_size; i ++){
 		if(comb(temp,word_array[i])==0){
 			strcpy(valid_words_array[counter++],word_array[i]);
 			strcpy(temp,input);
@@ -126,6 +119,27 @@ int select_valid(char *input){
 	}
 	return(counter);
 }
+
+/* Make a new dictionary of valid words 
+ *
+ *
+ */
+int make_new_dict(char *input,char *dest_dict[23],char *src_dict[MAX_LEN], int src_size){
+	char temp[INPUT_LIMIT];
+	int counter = 0; //conta as ocorrencias de match
+	strcpy(temp,input);
+	for(int i = 0; i < src_size; i ++){
+		if(comb(temp,src_dict[i])==0){
+			//strcpy(valid_words_array[counter++],word_array[i]);
+			dest_dict[counter++] = src_dict[i];
+		//	printf("%s   %ld  >> %ld \n",src_dict[i], src_dict[i],dest_dict[counter-1]);
+			strcpy(temp,input);
+		}
+	}
+	return(counter);
+}
+
+
 /* merge a sentence, removing space and shifting the parts together
  */
 
@@ -144,30 +158,48 @@ int merge(char *buffer){
  * exclui as letras encontradas e chama a mesma função passando como work_buffer 
  * as letras restantes.*
  */
-int search(char *input, int solution_index, int first_index){
+int search(char *prev_dict[MAX_LEN], int prev_dict_size, char *input, int solution_index, int first_index){
+	
+	// solution_index : indice da solução a ser preechido caso um anagrama seja encontrado
+	// first_index : primeiro índice do word_buffer a ser procurado.
+	// dict_indexes : array with indexes of dictionary with all words used in precious search
+	//for(int i = 0 ; i < prev_dict_size;i++) printf("%s\n",prev_dict[i]);
 	char test_word[MAX_LEN];
 	char test_input[INPUT_LIMIT];
-	strcpy(test_input,input);
+	int dict_size;// size of current dictionary
+	char  **dict = NULL;
 	
+	dict = (char **)malloc(prev_dict_size * sizeof(char*));
+	strcpy(test_input,input);
+	dict_size = make_new_dict(test_input, dict,prev_dict,prev_dict_size);
+//	printf("dict for %s: ",input);
+//	for(int i = 0 ; i < dict_size;i++) printf("%s ",dict[i]);
+//	printf("\n");
+//	return(0); // >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+//	char current_buffer[][MAX_LEN];	
+//	current_buffer = malloc(word_buffer_size*MAX_LEN);
+		
 //	printf("(%s) ",test_input);
 
 	//for(int i = first_index; i < last_len_ocurrency[no_space_strlen(test_input)]; i++){// testa todas as palavras
-	for(int i = first_index; i < valid_words; i++){// testa todas as palavras
-//		if(used(i,solution_index) == 0)//dicard used words		
-			if(fast_comb(test_input,valid_words_array[i]) == 0) {
+	for(int i = 0; i < dict_size; i++){// testa todas as palavras
+			if(fast_comb(test_input,dict[i]) == 0) {
 				
 				//printf("%d %s ",index,word_array[i]);
-				solution[solution_index] = i; // current word
+				solution[solution_index] = dict[i]; // current word
 				if(blank(test_input) == 0){ //the input is blank 
 					print_solution(solution_index);
-					//printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+					ana_count++;
+					//	printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n");
 				//	return(0); // sucess
 				}
 				merge(test_input);
-				search(test_input,solution_index+1,i+1);
+				search((dict+i+1),dict_size-(i+1),test_input,solution_index+1,i+1);
 				strcpy(test_input,input);
 			}
 		}
+//	printf("<<\n");
+	free(dict);	
 	solution[solution_index] = 0;
 //	printf("<\n");	
 	return(0);
@@ -218,7 +250,7 @@ int main(int argc,char* argv[]){
 	
 	// ordena as palavras da menor pra maior
 	sort(unordened_word_array,word_array);
-	valid_words = select_valid(input);
+	valid_words = select_valid(input,valid_words_array,word_array,NUM_WORDS);
 
 	//aqui a brincadeira começa
 
@@ -235,5 +267,16 @@ int main(int argc,char* argv[]){
 	//printf("ret: %d, test[]:%s blank:%d",ret,test,blank("      "));
 //	printf("no_space_strlen:%d strlen:%d",no_space_strlen(test),strlen(test));		
 //	for(int i = 0 ; i < valid_words;i++) printf("%d %s\n",i, valid_words_array[i]);
-	return(search(input,0,0));
+//	printf("ptr:%d  int:%d  long:%d\n",sizeof(int*),sizeof(int),sizeof(long));   
+	
+	char **dict = NULL;
+	int dict_size = NUM_WORDS;	
+	dict = (char **)malloc(NUM_WORDS * sizeof(char*));
+	for(int i = 0 ;i < dict_size;i++) dict[i] = word_array[i];
+	//	dict_size = make_new_dict(input, dict,word_array,NUM_WORDS);
+
+//	for(int i = 0 ; i < dict_size;i++) printf(">>%s\n",dict[i]);
+	search(dict,dict_size,input,0,0);
+	fprintf(stderr,"solucoes:%d",ana_count);
+	return(0);
 }
