@@ -10,13 +10,13 @@ if (( $# < 1 )); then
 fi
 
 for check in "$@"; do
-  if [[ ! -x "./travis-ci/$check.sh" ]]; then
+  if [[ ! -x "./ci/$check.sh" ]]; then
     echo "*** Invalid check: $check.sh"
     bad=1
     continue
   fi
 
-  ./travis-ci/$check.sh || bad=1
+  ./ci/$check.sh || bad=1
 done
 
 # Return error if any of the previous tests failed.

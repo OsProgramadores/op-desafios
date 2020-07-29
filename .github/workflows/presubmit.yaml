@@ -1,0 +1,34 @@
+name: Presubmit tests
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14.x
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Compute file changes using API
+        run: |
+          URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
+          curl -s -X GET -G $URL | jq -r '.[] | .filename' > $HOME/changed_files.txt
+
+      - name: Install & build dependencies
+        run: |
+          go get -u golang.org/x/lint/golint
+          pip install pylint
+
+      - name: Check code and directory structure
+        run: |
+          ./ci/presubmit.sh dircheck gocheck pycheck validator
