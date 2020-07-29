@@ -9,16 +9,10 @@ echo "====================="
 echo "Validator token check"
 echo "====================="
 
-# TRAVIS sets TRAVIS_COMMIT_RANGE to the range of commits for the current commit.
-if [[ -z "$TRAVIS_COMMIT_RANGE" ]]; then
-  export TRAVIS_COMMIT_RANGE="HEAD^"
-  echo >&2 "Note: TRAVIS_COMMIT_RANGE environment variable not set. Defaulting to $TRAVIS_COMMIT_RANGE"
-fi
-
 # For now, we only allow the submittal of one non-legacy challenge at a time.
 # For unique challenge verification, we consider the distinct count of the
 # tuple desafio-XX/username/language-feature for all added and modified files.
-challenges=($(git diff --diff-filter=AM --name-only $TRAVIS_COMMIT_RANGE | cut -d/ -f1-3 | grep -v '^desafio-0[1-7]' | grep '^desafio-[0-9]\+' | sort -u))
+challenges=( $(cat $HOME/changed_files.txt | cut -d/ -f1-3 | grep -v '^desafio-0[1-7]' | grep '^desafio-[0-9]\+' | sort -u) )
 num_challenges=${#challenges[@]}
 
 # If no challenges, we exit without prejudice.
@@ -35,10 +29,11 @@ if (( num_challenges > 1 )); then
   exit 1
 fi
 
-# Locate all .valid files with our expected pattern: desafio-XX/username/language-pattern/.valid
-# Note that git diff --name-only only gives us the filenames. We need to extract the challenge
-# directories and check if .valid exists in those locations.
-cfiles=($(git diff --diff-filter=AM --name-only $TRAVIS_COMMIT_RANGE | grep -v '^desafio-0[1-7]' | grep '^desafio-[0-9]\+/[^/]*/[^/]*' ))
+# Locate all .valid files with our expected pattern:
+# desafio-XX/username/language-pattern/.valid Note that we only have filenames.
+# We need to extract the challenge directories and check if .valid exists in
+# those locations.
+cfiles=( $(cat $HOME/changed_files.txt | grep -v '^desafio-0[1-7]' | grep '^desafio-[0-9]\+/[^/]*/[^/]*' ) )
 valid=()
 for cfile in $cfiles; do
   cdir=${cfile%/*}

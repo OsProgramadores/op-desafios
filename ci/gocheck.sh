@@ -26,6 +26,13 @@ function go_fmt() {
   fi
 }
 
+# Generate a clean GOPATH in the specified directory.
+function clean_gopath() {
+  export gp="${1?}"
+  rm -rf "${gp}"
+  mkdir -p "${gp}"/{src,pkg,bin}
+}
+
 # Main
 
 echo
@@ -33,16 +40,10 @@ echo "============="
 echo "Go Code check"
 echo "============="
 
-# TRAVIS sets TRAVIS_COMMIT_RANGE to the range of commits for the current commit.
-if [[ -z "$TRAVIS_COMMIT_RANGE" ]]; then
-  export TRAVIS_COMMIT_RANGE="HEAD^"
-  echo >&2 "Note: TRAVIS_COMMIT_RANGE environment variable not set. Defaulting to $TRAVIS_COMMIT_RANGE"
-fi
-
 set -o nounset
 
 # List of all distinct directories having at least one modified with a ".go" extension
-go_dirs=$(git diff --diff-filter=AM --name-only $TRAVIS_COMMIT_RANGE | grep '\.go$' | xargs -l dirname 2>/dev/null | sort -u)
+go_dirs=$(grep '\.go$' "$HOME/changed_files.txt" | xargs -l dirname 2>/dev/null | sort -u)
 
 tmpfile=`mktemp`
 trap "rm -f $tmpfile" EXIT
@@ -60,15 +61,24 @@ for dir in $go_dirs; do
   echo "Testing directory: $dir"
   echo "============================================================"
 
+  # Copy current directory to a clean directory inside GOPATH.
+  export GOPATH="/tmp/go"
+  export TESTDIR="${GOPATH}/src/test"
+  clean_gopath "${GOPATH}"
+
+  pushd "${dir}" >/dev/null
+  cp -ar . "${TESTDIR}"
+  popd >/dev/null
+
   # Fetch dependencies.
+  pushd "${TESTDIR}" >/dev/null
   go get -t ./...
 
   for test in go_lint go_vet go_fmt; do
     echo -e "\n*** Running test $test"
-    pushd "$dir" >/dev/null
     $test && echo "No problems found" || err=1
-    popd >/dev/null
   done
+  popd >/dev/null
 done
 
 # Restore FDs and close FDs 6/7.
