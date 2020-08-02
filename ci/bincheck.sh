@@ -6,18 +6,13 @@ echo "=================="
 echo "Binary Files check"
 echo "=================="
 
-if [[ -z "$TRAVIS_COMMIT_RANGE" ]]; then
-  echo >&2 "Note: TRAVIS_COMMIT_RANGE environment variable not set. Defaulting to HEAD HEAD^"
-  export TRAVIS_COMMIT_RANGE="HEAD HEAD^"
-fi
-
 tempfile="$(mktemp --tmpdir=/tmp binfoo.XXXX)"
 trap "rm -f $tempfile" 0
 
 set -o errexit
 
 # Only check files added or modified by this commit.
-git diff --diff-filter=AM --name-only $TRAVIS_COMMIT_RANGE | while read fname; do
+cat "$HOME/changed_files.txt" | while read fname; do
   file --mime "${fname}" | grep "charset=binary$" >>$tempfile
 done
 
