@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define TRUE -1
+#define FALSE 0
 #define LIMIT 100
 #define MAX_NUM_SIZE 100
 /*
@@ -20,7 +22,16 @@
 13/13
 15/0
 */
-
+// Verefica se uma string numérica é igual a zero
+// bool: Se igual a zero retorna -1, se não retorna 0
+int zero(char *num){
+	int pos = 0;
+	while(num[pos] != '\0'){
+		if(num[pos] != '0') return(FALSE);
+		pos++;
+	}
+	return(TRUE);
+}
 // clear zeroes in left of a value
 // e remove a caspa do cristiano ronaldo
 int clear_zero(char *val){
@@ -155,9 +166,33 @@ int divide(char *num, char *den, char *quo, char *resto){
 		num_pos++;
 	}
 //	printf("%s / %s = %s  sobra %s\n",num ,den,quo,resto);
+	clear_zero(quo);
+	clear_zero(resto);
 	return(0);
 }
+int mdc(char *val1 , char *val2, char *mdc_val){
+/* Algoritmo de Euclides
+   MDC(a, b)
+   while (b != 0)
+       r = a % b
+       a = b
+       b = r
+   return a;
+*/
+	char temp1[MAX_NUM_SIZE];
+	char temp2[MAX_NUM_SIZE];
+	char quo[MAX_NUM_SIZE];
 
+	strcpy(temp1,val1);
+	strcpy(temp2,val2);
+
+	while(zero(temp2) == FALSE){
+		divide(temp1,temp2,quo,mdc_val);
+		strcpy(temp1,temp2);
+		strcpy(temp2,mdc_val);
+	}
+	strcpy(mdc_val,temp1);
+}
 int main(int argc, char* argv[]){
 	
 	FILE *fp;
@@ -165,8 +200,14 @@ int main(int argc, char* argv[]){
 	char num[100] = {0};// numerador
 	char den[100] = {0};// denominador
 	char quo[100];
+	char mdc_value[MAX_NUM_SIZE];
 	char resto[100];
-	char val[] = "00130";
+	char val1[MAX_NUM_SIZE] = "100";
+	char val2[MAX_NUM_SIZE] = "100";
+	char mdc_val[MAX_NUM_SIZE];
+//	mdc(val2,val1,val_mdc);
+//	printf("MDC(%s,%s) = %s\n", val1, val2 ,val_mdc);
+//	return(0);
 	/*for(int i = 0; i < 100000; i++){// validação das funções
 		long int v1 = rand();
 		long int v2 = rand();
@@ -200,12 +241,19 @@ int main(int argc, char* argv[]){
 		if(sscanf(line,"%[^/]/%s",num,den) == 1){ // apenas um valor na linha
 			strcpy(den,"1");
 		}
+		mdc(num,den,mdc_val);
+		divide(num,mdc_val,val1,resto);
+		divide(den,mdc_val,val2,resto);
+		strcpy(num,val1);
+		strcpy(den,val2);
+		
 		if(divide(num,den,quo,resto) == -1){
 			printf("ERR\n");
 		}else{
 			// print solution
 			clear_zero(quo);
 			clear_zero(resto);
+			
 			if(quo[0] != '0')// se o primeiro algarismo for zero não imprima
 				printf("%s ",quo);
 			if(resto[0] != '0')
@@ -213,10 +261,6 @@ int main(int argc, char* argv[]){
 			printf("\n");
 		}
 	}	
-	char v1[100] = "654";
-	char v2[100] = "89777";
-	char r[100];
-	int signal = subtrair(v1,v2,r);
-//	printf("\nsub:%d(%s)\n",signal,r);
+
 	return(0);
 }
