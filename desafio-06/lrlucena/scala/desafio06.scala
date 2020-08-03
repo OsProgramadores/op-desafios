@@ -1,23 +1,18 @@
-object Desafio6 extends App {
+def clean(s: String) = s.toUpperCase.filter(c => c >= 'A' && c <= 'Z')
 
-  def clean(s: String) = s.toUpperCase.filter(c => c >= 'A' && c <= 'Z')
+implicit class D(r: String) { def -(s: String) = r.toSeq.diff(s).unwrap }
 
-  def anagrams(input: String, words: List[String], list: List[String] = Nil): List[String] = {
-    var wrds = words
-    if (input.nonEmpty)
-      words.flatMap { word =>
-        wrds = wrds.tail
-        val w = input diff word
-        anagrams(w, wrds.filter(_.diff(w)==""), word :: list)
-      }
-    else List(list.reverse.mkString(" "))
-  }
+def anagrams(input: String, words: List[String], list: List[String] = Nil): List[String] =
+  if (input.nonEmpty)
+    words.tails.flatMap {
+      case wrds @ word :: _ =>
+        val unusedLetters = input - word
+        anagrams(unusedLetters, wrds.filter(_ - unusedLetters == ""), word :: list)
+      case _ => Nil
+    }.toList
+  else List(list.reverse.mkString(" "))
 
-  val input = clean(args.headOption.getOrElse("oi gente"))
+val input = clean(args.headOption.getOrElse("oi gente"))
+val words = io.Source.fromFile("words.txt").getLines().filter(_ - input == "").toList.sorted
 
-  val words = io.Source.fromFile("words.txt").getLines.toList.filter(_.diff(input) == "").sorted
-  //.fromURL("https://osprogramadores.com/desafios/d06/words.txt")
-
-  val a = anagrams(input, words).mkString("\n")
-  println(a)
-}
+println(anagrams(input, words).mkString("\n"))
