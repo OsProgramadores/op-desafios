@@ -4,22 +4,16 @@
 Desafio 02
 """
 
-numeros = (n for n in range(1, 10001))
 primos = []
 
-for numero in numeros:
+for numero in range(2, 10001):
     if numero == 2:
         primos.append(numero)
-
     if numero > 2:
-        divisores = (n for n in range(1, numero + 1))
-        contador = 0
-        for divisor in divisores:
-            if contador > 2:
-                break
+        for divisor in range(2, numero):
             if numero % divisor == 0:
-                contador += 1
-        if contador <= 2:
+                break
+        else:
             primos.append(numero)
 
 # Exibe a relação de números primos
