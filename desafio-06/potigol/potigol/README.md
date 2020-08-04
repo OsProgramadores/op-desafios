@@ -7,9 +7,8 @@
 
 ## Execução
 
-````shell
-$ potigol anagram.poti
-Digite uma palavra: verdade
+````terminal
+$ echo verdade | potigol anagram.poti
 AD VERDE
 ADD VEER
 DAD VEER
