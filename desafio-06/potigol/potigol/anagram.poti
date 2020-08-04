@@ -4,7 +4,7 @@ sub(list: Lista[Texto]): Lista[Lista[Texto]] = se list == [] então [] senão li
 
 anagrams(input: Texto, words, list: Lista[Texto]): Lista[Texto] = escolha input
   caso "" => [list.inverta.junte(" ")]
-  caso _  => para ws em sub(words), w em [input - ws.cabeca], ana em anagrams(w, ws.cauda.selecione(contem(w)), ws.cabeca :: list) gere ana fim
+  caso _  => para ws em sub(words), in em [input - ws.cabeca], ana em anagrams(in, ws.cauda.selecione(contem(in)), ws.cabeca :: list) gere ana fim
 fim
 
 input = leia_texto.maiúsculo.selecione(c => c >= 'A' e c <= 'Z')
