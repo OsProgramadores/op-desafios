@@ -89,11 +89,11 @@ object Desafio05 extends App {
   }
 
   // Questao 3
-  for((cod, quant) <- quantidade.toList.groupBy(_._2).head._2){
+  for((cod, quant) <- quantidade.toList.sortBy(_._2).take(1)){
     println(s"least_employees|${areas(cod)}|${quant}")
   }
 
-  for((cod, quant) <- quantidade.toList.groupBy(_._2).takeRight(2).head._2){
+  for((cod, quant) <- quantidade.toList.sortBy(_._2).takeRight(2).take(1)){
     if (cod.nonEmpty)
       println(s"most_employees|${areas(cod)}|${quant}")
   }
