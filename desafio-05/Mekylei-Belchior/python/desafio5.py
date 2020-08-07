@@ -44,7 +44,7 @@ def area(dados):
 
     for linha in areamin.itertuples():
         print(f'area_min|{linha[6]}|{linha[2]} {linha[3]}|{linha[4]:.2f}')
-    
+
     for linha in area_avg.iteritems():
         print(f'area_avg|{linha[0]}|{linha[1]:.2f}')
 
@@ -62,11 +62,18 @@ def funcionario_area(dados):
             print(f'least_employees|{linha[0]}|{linha[1]}')
 
 
-def funcionario_sobrenome():
+def funcionario_sobrenome(dados):
     """
     Maiores salários para funcionários com o mesmo sobrenome.
     """
-    pass
+    duplicados = dados['sobrenome'].value_counts()
+    duplicados = [nome[0] for nome in duplicados.iteritems() if nome[1] >= 2]
+    duplicados = dados.query('sobrenome in @duplicados')
+    maiores = duplicados.groupby('sobrenome')
+    maiores = maiores.max()
+
+    for linha in maiores.itertuples():
+        print(f'last_name_max|{linha[0]}|{linha[2]} {linha[0]}|{linha[3]:.2f}')
 
 
 def empregados(arquivo):
@@ -91,10 +98,9 @@ def main(json):
 
     dados = empregados(json)
     geral(dados)
-    print()
     area(dados)
-    print()
     funcionario_area(dados)
+    funcionario_sobrenome(dados)
 
 
 if __name__ == '__main__':
