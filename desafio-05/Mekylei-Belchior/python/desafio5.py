@@ -29,11 +29,24 @@ def geral(dados):
     print(f'global_avg|{gavg:.2f}')
 
 
-def area():
+def area(dados):
     """
     Quem mais recebe e quem menos recebe em cada área e a média salarial em cada área.
     """
-    pass
+    amax = dados.groupby('area')['salario'].max()
+    amin = dados.groupby('area')['salario'].min()
+    areamax = dados.query('salario in @amax')
+    areamin = dados.query('salario in @amin')
+    area_avg = dados.groupby('nome_area')['salario'].mean()
+
+    for linha in areamax.itertuples():
+        print(f'area_max|{linha[6]}|{linha[2]} {linha[3]}|{linha[4]:.2f}')
+
+    for linha in areamin.itertuples():
+        print(f'area_min|{linha[6]}|{linha[2]} {linha[3]}|{linha[4]:.2f}')
+    
+    for linha in area_avg.iteritems():
+        print(f'area_avg|{linha[0]}|{linha[1]:.2f}')
 
 
 def funcionario_area():
@@ -72,6 +85,8 @@ def main(json):
 
     emp = empregados(json)
     geral(emp)
+    print()
+    area(emp)
 
 
 if __name__ == '__main__':
