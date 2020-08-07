@@ -43,13 +43,24 @@ def funcionario_sobrenome():
 def empregados(arquivo):
     """ Carrega a base de dados. """
 
-    pass
+    with open(arquivo, 'r', encoding='utf-8') as arquivo_json:
+       dados_json = load(arquivo_json)
+    
+    funcionarios = dados_json.pop('funcionarios')
+    areas = dados_json.pop('areas')
+    
+    base = pd.DataFrame(funcionarios)
+    area = pd.DataFrame(areas)
+    area.rename(columns={'codigo': 'area'}, inplace=True)
+    empregados = pd.merge(base, area, on='area', suffixes=[None, '_area'])
+    
+    return empregados
 
 
 def main(json):
     """ Função principal. """
 
-    pass   
+    Emp = empregados(json)   
 
 
 if __name__ == '__main__':
