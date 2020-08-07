@@ -49,11 +49,17 @@ def area(dados):
         print(f'area_avg|{linha[0]}|{linha[1]:.2f}')
 
 
-def funcionario_area():
+def funcionario_area(dados):
     """
     Área(s) com o maior e menor número de funcionários.
     """
-    pass
+    quantidade = dados.groupby('nome_area')['area'].count()
+
+    for linha in quantidade.iteritems():
+        if linha[1] == quantidade.max():
+            print(f'most_employees|{linha[0]}|{linha[1]}')
+        if linha[1] == quantidade.min():
+            print(f'least_employees|{linha[0]}|{linha[1]}')
 
 
 def funcionario_sobrenome():
@@ -83,10 +89,12 @@ def empregados(arquivo):
 def main(json):
     """ Função principal. """
 
-    emp = empregados(json)
-    geral(emp)
+    dados = empregados(json)
+    geral(dados)
     print()
-    area(emp)
+    area(dados)
+    print()
+    funcionario_area(dados)
 
 
 if __name__ == '__main__':
