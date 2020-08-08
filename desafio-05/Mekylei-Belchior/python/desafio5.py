@@ -29,10 +29,13 @@ def area(dados):
     """
     Quem mais recebe e quem menos recebe em cada área e a média salarial em cada área.
     """
+    # pylint: disable=unused-variable
     amax = dados.groupby('area')['salario'].max()
     amin = dados.groupby('area')['salario'].min()
+    # As variáveis amax e amin são usadas nas querys abaixo
     areamax = dados.query('salario in @amax')
     areamin = dados.query('salario in @amin')
+    # pylint: enable=unused-variable
     area_avg = dados.groupby('nome_area')['salario'].mean()
 
     for linha in areamax.itertuples():
@@ -82,11 +85,11 @@ def empregados(arquivo):
     areas = dados_json.pop('areas')
 
     base = pd.DataFrame(funcionarios)
-    area = pd.DataFrame(areas)
-    area.rename(columns={'codigo': 'area'}, inplace=True)
-    empregados = pd.merge(base, area, on='area', suffixes=[None, '_area'])
+    setor = pd.DataFrame(areas)
+    setor.rename(columns={'codigo': 'area'}, inplace=True)
+    colaboradores = pd.merge(base, area, on='area', suffixes=[None, '_area'])
 
-    return empregados
+    return colaboradores
 
 
 def main(json):
