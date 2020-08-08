@@ -87,7 +87,7 @@ def empregados(arquivo):
     base = pd.DataFrame(funcionarios)
     setor = pd.DataFrame(areas)
     setor.rename(columns={'codigo': 'area'}, inplace=True)
-    colaboradores = pd.merge(base, area, on='area', suffixes=[None, '_area'])
+    colaboradores = pd.merge(base, setor, on='area', suffixes=[None, '_area'])
 
     return colaboradores
 
