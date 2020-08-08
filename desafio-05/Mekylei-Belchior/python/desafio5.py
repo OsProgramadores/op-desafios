@@ -1,10 +1,6 @@
 #!/usr/bin/python
 #-*- coding: utf-8 -*-
 
-"""
-Desafio 05
-"""
-
 """ Importa os pacotes """
 from json import load
 import sys
@@ -80,7 +76,7 @@ def empregados(arquivo):
     """ Carrega a base de dados. """
 
     with open(arquivo, 'r', encoding='utf-8') as arquivo_json:
-       dados_json = load(arquivo_json)
+        dados_json = load(arquivo_json)
 
     funcionarios = dados_json.pop('funcionarios')
     areas = dados_json.pop('areas')
@@ -108,4 +104,3 @@ if __name__ == '__main__':
         main(sys.argv[1])
     else:
         raise TypeError('Informe os dois argumentos: arquivo (.py) e o arquivo (.json)')
-        sys.exit()
