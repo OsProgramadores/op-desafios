@@ -19,5 +19,12 @@ RED VADE
 RED VEDA
 ````
 
-Nota: O programa produz a saida correta, mas fica muito acima do tempo especificado num processador de capacidade média. O tempo
-para gerar a lista de anagramas com uma palavra de 16 letras (maryhadalittleox) foi em torno de 12 minutos. -- marcopaganini
+> O pior caso até agora é para a entrada "maryhadalittleox".
+
+````terminal
+$ time echo maryhadalittleox | potigol anagram.poti > maryhadalittleox.txt
+
+real    0m48.343s
+user    0m53.547s
+sys     0m8.234s
+````
