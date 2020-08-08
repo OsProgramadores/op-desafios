@@ -1,0 +1,12 @@
+contem(text: Texto) = (word: Texto) => word - text == ""
+
+sub(list: Lista[Texto]): Lista[Lista[Texto]] = se list == [] então [] senão list :: sub(list.cauda) fim
+
+anagrams(input: Texto, words, list: Lista[Texto]): Lista[Texto] = escolha input
+  caso "" => [list.inverta.junte(" ")]
+  caso _  => para ws em sub(words), in em [input - ws.cabeca], ana em anagrams(in, ws.cauda.selecione(contem(in)), ws.cabeca :: list) gere ana fim
+fim
+
+input = leia_texto.maiúsculo.selecione(c => c >= 'A' e c <= 'Z')
+words = Arquivo.leia("words.txt").selecione(contem(input)).ordene
+escreva anagrams(input, words, []).junte("\n")
