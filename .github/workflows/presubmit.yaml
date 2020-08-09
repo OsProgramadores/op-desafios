@@ -1,5 +1,5 @@
 name: Presubmit tests
-on: [pull_request_target]
+on: [pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -32,21 +32,3 @@ jobs:
       - name: Check code and directory structure
         run: |
           ./ci/presubmit.sh dircheck gocheck pycheck validator
-
-      - name: Tests OK
-        uses: unsplash/comment-on-pr@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          msg: "👍 Congratulações @${{ github.actor }}! O seu PR passou pelos testes automáticos com sucesso!<p>Próximo passo: um dos administradores fará a revisão do PR e (possivelmente) o merge no repositório oficial. Em caso de problemas, os admins poderão solicitar modificações. Nestes casos, por favor, monitore o seu PR e efetue as modificações assim que possível para evitar demoras na inclusão."
-          check_for_duplicate_msg: false
-        if: ${{ success() }}
-
-      - name: Tests Failed
-        uses: unsplash/comment-on-pr@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          msg: "🛑 Atenção @${{ github.actor }}: Os testes automáticos detectaram um problema no seu repositório. Por favor, verifique a página de <a href='https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}/checks'>Detalhes</a> para identificar o problema. Não é necessário abrir outro PR para corrigir o problema. Apenas corrija o problema no seu cliente, e execute um outro git commit seguido de git push e o PR será atualizado automaticamente com o novo commit."
-          check_for_duplicate_msg: false
-        if: ${{ failure() }}
