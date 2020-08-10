@@ -1,4 +1,4 @@
-# Scala
+# Scala 2.13+
 
 ## Execução
 
