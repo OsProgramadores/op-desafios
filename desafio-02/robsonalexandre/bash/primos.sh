@@ -1,16 +1,12 @@
 #!/bin/bash
-num=1
-while ((num <= 10000)); do
-  primo=1
-  div=$((num/2))
-  while ((div > 1)); do
+for num in {2..10000}; do
+  primo=
+  md=$((num/2))
+  for((div=2;div<=md;div++)); do
     if ((num%div == 0)); then
-      primo=0 # $num não é primo
+      primo=0
       break
-    else
-      ((div--))
     fi
   done
-  ((primo == 1)) && echo "$num" # $num é primo
-  ((num++))
+  [[ $primo ]] || echo $num
 done
