@@ -1,109 +1,132 @@
-#!/usr/bin/python
 #-*- coding: utf-8 -*-
 
 """ Importa os pacotes """
+from sys import argv
 from json import load
-import sys
-
-import pandas as pd
+from pandas import DataFrame, merge
 
 
-def geral(dados):
-    """
-    Quem mais recebe e quem menos recebe na empresa e a média salarial da empresa.
-    """
-    gmax = dados[dados['salario'] == dados['salario'].max()][['nome', 'sobrenome', 'salario']]
-    gmin = dados[dados['salario'] == dados['salario'].min()][['nome', 'sobrenome', 'salario']]
-    gavg = dados['salario'].mean()
+class Informacoes():
+    """ Obtém a relação de informações dos funcionários. """
 
-    for linha in gmax.itertuples():
-        print(f'global_max|{linha[1]} {linha[2]}|{linha[3]:.2f}')
-
-    for linha in gmin.itertuples():
-        print(f'global_min|{linha[1]} {linha[2]}|{linha[3]:.2f}')
-
-    print(f'global_avg|{gavg:.2f}')
+    def __init__(self, dados):
+        self.dados = dados
+        self.impressao = ''
 
 
-def area(dados):
-    """
-    Quem mais recebe e quem menos recebe em cada área e a média salarial em cada área.
-    """
-    # pylint: disable=unused-variable
-    amax = dados.groupby('area')['salario'].max()
-    amin = dados.groupby('area')['salario'].min()
-    # As variáveis amax e amin são usadas nas querys abaixo
-    areamax = dados.query('salario in @amax')
-    areamin = dados.query('salario in @amin')
-    # pylint: enable=unused-variable
-    area_avg = dados.groupby('nome_area')['salario'].mean()
+    def geral(self):
+        """
+        Quem mais recebe e quem menos recebe na empresa e a média salarial da empresa.
+        """
+        salario_info = self.dados['salario'].describe()
+        maior = salario_info['max']
+        menor = salario_info['min']
+        gavg = salario_info['mean'].round(2)
 
-    for linha in areamax.itertuples():
-        print(f'area_max|{linha[6]}|{linha[2]} {linha[3]}|{linha[4]:.2f}')
+        gmax = self.dados.loc[self.dados['salario'] == maior, ['nome', 'sobrenome', 'salario']]
+        gmin = self.dados.loc[self.dados['salario'] == menor, ['nome', 'sobrenome', 'salario']]
 
-    for linha in areamin.itertuples():
-        print(f'area_min|{linha[6]}|{linha[2]} {linha[3]}|{linha[4]:.2f}')
+        for linha in gmax.itertuples():
+            self.impressao = f'global_max|{linha[1]} {linha[2]}|{linha[3]:.2f}\n'
 
-    for linha in area_avg.iteritems():
-        print(f'area_avg|{linha[0]}|{linha[1]:.2f}')
+        for linha in gmin.itertuples():
+            self.impressao += f'global_min|{linha[1]} {linha[2]}|{linha[3]:.2f}\n'
+
+        self.impressao += f'global_avg|{gavg}\n'
 
 
-def funcionario_area(dados):
-    """
-    Área(s) com o maior e menor número de funcionários.
-    """
-    quantidade = dados.groupby('nome_area')['area'].count()
+    def area(self):
+        """
+        Quem mais recebe e quem menos recebe em cada área e a média salarial em cada área.
+        """
+        amax = self.dados.groupby('area')['salario'].max()
+        amin = self.dados.groupby('area')['salario'].min()
 
-    for linha in quantidade.iteritems():
-        if linha[1] == quantidade.max():
-            print(f'most_employees|{linha[0]}|{linha[1]}')
-        if linha[1] == quantidade.min():
-            print(f'least_employees|{linha[0]}|{linha[1]}')
+        amax = self.dados.query('salario in @amax')
+        amin = self.dados.query('salario in @amin')
+        area_avg = self.dados.groupby('nome_area')['salario'].mean()
 
+        for linha in amax.itertuples():
+            self.impressao += f'area_max|{linha[6]}|{linha[2]} {linha[3]}|{linha[4]:.2f}\n'
 
-def funcionario_sobrenome(dados):
-    """
-    Maiores salários para funcionários com o mesmo sobrenome.
-    """
-    duplicados = dados['sobrenome'].value_counts()
-    duplicados = [nome[0] for nome in duplicados.iteritems() if nome[1] >= 2]
-    duplicados = dados.query('sobrenome in @duplicados')
-    maiores = duplicados.groupby('sobrenome')
-    maiores = maiores.max()
+        for linha in amin.itertuples():
+            self.impressao += f'area_min|{linha[6]}|{linha[2]} {linha[3]}|{linha[4]:.2f}\n'
 
-    for linha in maiores.itertuples():
-        print(f'last_name_max|{linha[0]}|{linha[2]} {linha[0]}|{linha[3]:.2f}')
+        for linha in area_avg.iteritems():
+            self.impressao += f'area_avg|{linha[0]}|{linha[1]:.2f}\n'
 
 
-def empregados(arquivo):
-    """ Carrega a base de dados. """
+    def funcionario_area(self):
+        """
+        Área(s) com o maior e menor número de funcionários.
+        """
+        quantidade = self.dados['nome_area'].value_counts()
 
-    with open(arquivo, 'r', encoding='utf-8') as arquivo_json:
+        for linha in quantidade.iteritems():
+            if linha[1] == quantidade.max():
+                self.impressao += f'most_employees|{linha[0]}|{linha[1]}\n'
+            if linha[1] == quantidade.min():
+                self.impressao += f'least_employees|{linha[0]}|{linha[1]}\n'
+
+
+    def funcionario_sobrenome(self):
+        """
+        Maiores salários para funcionários com o mesmo sobrenome.
+        """
+        duplicados = []
+
+        frequencia_sobrenomes = self.dados['sobrenome'].value_counts()
+
+        if frequencia_sobrenomes.min() < 2:
+            for nomes in frequencia_sobrenomes.iteritems():
+                if nomes[1] >= 2:
+                    duplicados.append(nomes[0])
+                else:
+                    break
+            duplicados = self.dados.query('sobrenome in @duplicados')
+            maiores_salarios = duplicados.loc[
+                duplicados.groupby('sobrenome')['salario'].idxmax()]
+        else:
+            maiores_salarios = self.dados.loc[
+                self.dados.reset_index().groupby('sobrenome')['salario'].idxmax()]
+
+        for linha in maiores_salarios.itertuples():
+            self.impressao += f'last_name_max|{linha[3]}|{linha[2]} {linha[3]}|{linha[4]:.2f}\n'
+
+
+def carregar_dados(arquivo):
+    """ Carrega os dados. """
+
+    with open(arquivo, encoding='utf-8') as arquivo_json:
         dados_json = load(arquivo_json)
 
     funcionarios = dados_json.pop('funcionarios')
     areas = dados_json.pop('areas')
 
-    base = pd.DataFrame(funcionarios)
-    setor = pd.DataFrame(areas)
+    empregado = DataFrame(funcionarios)
+    setor = DataFrame(areas)
     setor.rename(columns={'codigo': 'area'}, inplace=True)
-    colaboradores = pd.merge(base, setor, on='area', suffixes=[None, '_area'])
+    base_dados = merge(empregado, setor, on='area', suffixes=[None, '_area'])
 
-    return colaboradores
+    return base_dados
 
 
 def main(json):
     """ Função principal. """
 
-    dados = empregados(json)
-    geral(dados)
-    area(dados)
-    funcionario_area(dados)
-    funcionario_sobrenome(dados)
+    base = carregar_dados(json)
+
+    dados = Informacoes(base)
+    dados.geral()
+    dados.area()
+    dados.funcionario_area()
+    dados.funcionario_sobrenome()
+
+    print(dados.impressao, end='')
 
 
 if __name__ == '__main__':
-    if len(sys.argv) == 2:
-        main(sys.argv[1])
+    if len(argv) == 2:
+        main(argv[1])
     else:
         raise TypeError('Informe os dois argumentos: arquivo (.py) e o arquivo (.json)')
