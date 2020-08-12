@@ -1,4 +1,4 @@
-package desafio05;
+package classes;
 
 public class Funcionarios {
 	private Integer id;
@@ -61,5 +61,3 @@ public class Funcionarios {
 	}
 
 }
-
-

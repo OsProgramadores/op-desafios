@@ -1,4 +1,4 @@
-package desafio05;
+package classes;
 
 public class Areas {
 	private String codigo;
