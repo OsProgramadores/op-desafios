@@ -1,19 +1,20 @@
-implicit class D(r: String) { def -(s: String) = r.toSeq.diff(s).unwrap }
-def clean(s: String) = s.toUpperCase.filter(c => c >= 'A' && c <= 'Z')
+implicit class D(r: String) {
+  def -(s: String) = r.toSeq.diff(s).unwrap
+  def clean = r.toUpperCase.filter(c => c >= 'A' && c <= 'Z')
+}
+
+def readFile(file: String) = io.Source.fromFile(file).getLines()
+
 def contains(letters: String)(word: String) = (word - letters).isEmpty
 
-def anagrams(input: String, words: List[String], list: List[String] = Nil): Iterator[String] =
-  if (input.isEmpty)
-    Iterator(list.reverse.mkString(" "))
-  else 
-    words.tails.flatMap {
-      case word :: wrds =>
-        val unusedInput = input - word
-        anagrams(unusedInput, wrds.filter(contains(unusedInput)), word :: list)
-      case _ => Nil
-    }
+def anagrams(input: String, words: List[String], list: List[String] = Nil): Unit = input match {
+  case "" => println(list.sorted.mkString(" "))
+  case _  => for (word :: wrds <- words.tails) {
+               val unusedInput = input - word
+               anagrams(unusedInput, wrds.filter(contains(unusedInput)), word :: list)
+             }
+}
 
-val input = clean(args.headOption.getOrElse("oi gente"))
-val words = io.Source.fromFile("words.txt").getLines().filter(contains(input)).toList.sorted
-
-println(anagrams(input, words).mkString("\n"))
+val input = args.headOption.getOrElse("oi gente").clean
+val words = readFile("words.txt").filter(contains(input)).toList.sortBy(_.length).reverse
+anagrams(input, words)
