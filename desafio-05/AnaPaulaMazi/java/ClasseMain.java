@@ -1,17 +1,20 @@
-package desafio05;
+
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
-
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import classes.*;
 
+
+
+
+
 public class ClasseMain {
+	
 
 	public static void main(String[] args) throws IOException {
 
@@ -19,13 +22,17 @@ public class ClasseMain {
 
 			List<Funcionarios> funcionariosList = new ArrayList<Funcionarios>();
 			List<Areas> areasList = new ArrayList<Areas>();
-			Scanner teclado = new Scanner(System.in);
-			String arquivo;
+			JsonReader reader;
+			
+			if(args.length > 0) {
+				 reader = new JsonReader(new FileReader(args[0]));
+			} else {
+				reader =  new JsonReader(new FileReader("funcionarios.json"));
+			}
+			
+		
 
-			System.out.println("\nInforme o endereço completo da arquivo .json a ser analisado: ");
-			arquivo = teclado.nextLine();
-
-			JsonReader reader = new JsonReader(new FileReader(arquivo));
+			
 
 			Gson gson = new Gson();
 
@@ -48,7 +55,7 @@ public class ClasseMain {
 			analise.funcionariosArea();
 
 			reader.close();
-			teclado.close();
+			
 
 		} catch (FileNotFoundException e) {
 			System.out.println("Erro ao abrir o arquivo.");
