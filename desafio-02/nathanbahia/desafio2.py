@@ -1,3 +1,8 @@
+"""
+Github: github.com/nathanbahia
+LinkedIn: linkedi.com/in/nathanbahia
+"""
+
 primos = []
 
 
