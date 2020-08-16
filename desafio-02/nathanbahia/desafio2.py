@@ -2,6 +2,7 @@ primos = []
 
 
 def checa_numeros_primos(num):
+    """ Recebe um número e o avalia como primo ou não """
     divisores = list(range(2, num))
     if num > 1:
         for d in divisores:
