@@ -19,10 +19,10 @@ def verifica_primo(num):
         if num // div < div:
             primos.append(num)
             return
-        
+
         if num % div == 0:
             return
-        
+
         div += 1
 
 
