@@ -1,23 +1,32 @@
-"""
-Github: github.com/nathanbahia
-LinkedIn: linkedi.com/in/nathanbahia
-"""
+'''
+RESOLUÇÃO DO DESAFIO 2 EM PYTHON
+
+Modifiquei a função e ficou bem mais rápida a execução, obrigado!
+
+Fonte de Pesquisa:
+
+https://brasilescola.uol.com.br/matematica/
+como-reconhecer-os-numeros-primos.htm
+'''
+
 
 primos = []
 
 
-def checa_numeros_primos(num):
-    """ Recebe um número e o avalia como primo ou não """
-    divisores = list(range(2, num))
-    if num > 1:
-        for d in divisores:
-            if num != d and num % d == 0:
-                return
+def verifica_primo(num):
+    ''' Recebe um número como parâmetro avalia se ele é primo ou não '''
+    div = 2
+    while True:
+        if num // div < div:
+            primos.append(num)
+            return
+        elif num % div == 0:
+            return
+        else:
+            div += 1
 
-        primos.append(num)
 
-
-for i in range(10000):
-    checa_numeros_primos(i)
+for i in range(2, 10000):
+    verifica_primo(i)
 
 print(primos)
