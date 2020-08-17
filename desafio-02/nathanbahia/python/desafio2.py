@@ -9,7 +9,6 @@ https://brasilescola.uol.com.br/matematica/
 como-reconhecer-os-numeros-primos.htm
 '''
 
-
 primos = []
 
 
@@ -28,5 +27,6 @@ def verifica_primo(num):
 
 for i in range(2, 10000):
     verifica_primo(i)
+
 
 print(primos)
