@@ -4,7 +4,7 @@
 def is_palindrome(num):
     """ Converte um número em string, o inverte e verifica
     se ele é igual ao número original """
-   
+
     reversed_num = ''.join(list(str(num)))
     if int(reversed_num) == num:
         print(reversed_num)
