@@ -11,7 +11,7 @@ def is_power(num):
         if res > num:
             print(num, 'false')
             return
-        elif res == num:
+        if res == num:
             print(num, 'true', c)
             return
         c += 1
@@ -19,6 +19,5 @@ def is_power(num):
 
 with open('d12.txt', 'r') as txt:
     for line in txt.readlines():
-        num = int(line)
-        is_power(num)
-
+        number = int(line)
+        is_power(number)
