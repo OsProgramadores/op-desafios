@@ -15,6 +15,7 @@ def nome_area(func, area):
     for a in area:
         if func['area'] == a['codigo']:
             return a['nome']
+    return None
 
 
 def analise_salarios(funcionarios):
