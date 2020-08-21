@@ -149,10 +149,10 @@ def mesmo_sobrenome(funcionarios):
 with open('funcionarios.json', 'r', encoding="utf-8") as json_file:
     info = json.load(json_file)
 
-    func = info['funcionarios']
-    area = info['areas']
+    json_func = info['funcionarios']
+    json_area = info['areas']
 
-    analise_salarios(func)
-    analise_area(func, area)
-    contagem_funcionarios(func, area)
-    mesmo_sobrenome(func)
+    analise_salarios(json_func)
+    analise_area(json_func, json_area)
+    contagem_funcionarios(json_func, json_area)
+    mesmo_sobrenome(json_func)
