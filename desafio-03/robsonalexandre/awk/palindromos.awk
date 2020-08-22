@@ -1,6 +1,6 @@
 #!/usr/bin/awk -f
 BEGIN {
-  if (ARGC<2) {
+  if (ARGC<3) {
     print "É necessário informar 2 números:\n  palindromos.awk NUM NUM"
   } else {
     for (num=ARGV[1];num<=ARGV[2];num++) {
