@@ -10,6 +10,7 @@ $ source "$HOME/.sdkman/bin/sdkman-init.sh"
 # Execução
 
 ````terminal
+$ export lang="C.UTF-8"
 $ scalac desafio05.scala -d desafio05.jar
 $ scala desafio05.jar Funcionarios-10K.json | sort
 ````
