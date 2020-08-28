@@ -7,42 +7,41 @@ case class Funcionario(id: String, nome: String, sobrenome: String, salario: Dou
 }
 
 object Desafio05 extends App {
-  def parse[A](stream: Iterator[String], field: String) = {
+  def parse[A](stream: Iterator[String], field: String) : Iterator[Array[String]] = {
     var str = ""
-    def inc(s: String) = {
+    def inc(s: String): Option[Array[String]] = {
       str = str + s
       val index = str.indexOf('}')
       val (line, new_str) = str.splitAt(index + 1)
       str = new_str
-      if(line.isEmpty || line.contains(']'))
+      if (line.isEmpty || line.contains(']'))
         None
       else
         Some(line.dropRight(1).dropWhile(_ != '"').replace(':',',').split(",").map(_.stripSuffix("\"").stripPrefix("\"")))
     }
     stream.dropWhile(!_.contains(s""""${field}":[""")).drop(1)
       .takeWhile(!_.contains("""["""))
+      .++(Iterator.fill(10)(""))
       .flatMap(inc _)
   }
 
   def calc(f: Funcionario, grupo: String, h: scala.collection.mutable.Map[String, List[Funcionario]], comp: (Double, Double) => Boolean) ={
     h(grupo) match {
-      case Nil                              => h(grupo) = List(f)
-      case l if comp(l.head.salario, f.salario) =>
-      case l if f.salario == l.head.salario => h(grupo) = f::l
-      case l                                => h(grupo) = List(f)
+      case     head :: _ if comp(head.salario, f.salario) =>
+      case l @ head :: _ if f.salario == head.salario     => h(grupo) = f :: l
+      case _                                              => h(grupo) = List(f)
     }
   }
 
-  val stream = Source.fromFile(args(0)).getLines()
-  val stream2 = Source.fromFile(args(0)).getLines()
+  val stream, stream2 = Source.fromFile(args(0)).getLines()
 
   val menores, maiores, sobrenome = HashMap[String, List[Funcionario]]().withDefault(l => List[Funcionario]())
-  val soma = HashMap[String, Double]().withDefault(l => 0.0)
+  val soma = HashMap[String, Double]().withDefault(l => 0)
   val quantidade, qSobrenome = HashMap[String, Int]().withDefault(l => 0)
 
   val areas = parse(stream2, "areas").map(f => (f(1), f(3))).toMap.withDefault(l => "***Error***")
   val funcionarios = parse(stream, "funcionarios").map(f => Funcionario(f(1), f(3), f(5), f(7).toDouble, f(9)))
-
+  var index = 0
   funcionarios.foreach{ f =>
     // Questao 1
     calc(f, "", menores, _ < _)
@@ -67,11 +66,9 @@ object Desafio05 extends App {
   for (f <- menores("")){
     println(s"global_min|${f.nomeCompleto}|${f.sal}")
   }
-
   for (f <- maiores("")){
     println(s"global_max|${f.nomeCompleto}|${f.sal}")
   }
-
   println(s"global_avg|${soma("") / quantidade("") formatted "%.2f"}")
 
   // Questao 2
@@ -83,7 +80,6 @@ object Desafio05 extends App {
       println(s"area_min|${area._2}|${f.nomeCompleto}|${f.sal}")
     }
   }
-
   for((cod, valor) <- soma if cod != "") {
     println(s"area_avg|${areas(cod)}|${valor / quantidade(cod) formatted "%.2f"}")
   }
@@ -92,10 +88,8 @@ object Desafio05 extends App {
   for((cod, quant) <- quantidade.toList.sortBy(_._2).take(1)){
     println(s"least_employees|${areas(cod)}|${quant}")
   }
-
-  for((cod, quant) <- quantidade.toList.sortBy(_._2).takeRight(2).take(1)){
-    if (cod.nonEmpty)
-      println(s"most_employees|${areas(cod)}|${quant}")
+  for((cod, quant) <- quantidade.toList.sortBy(_._2).takeRight(2).take(1) if cod.nonEmpty){
+    println(s"most_employees|${areas(cod)}|${quant}")
   }
 
   // Questao 4
