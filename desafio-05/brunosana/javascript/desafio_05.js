@@ -45,11 +45,12 @@ let funcionarios
 fs.readFile(`./${process.argv[2]}`, (err, data) => {
     if (err) throw err;
     funcionarios = JSON.parse(data);
-    let questao1_a = global_min(funcionarios.funcionarios).forEach(f=> {
+    //Questao 1_a
+    global_min(funcionarios.funcionarios).forEach(f=> {
         console.log(`global_min | ${f.nome} ${f.sobrenome} | ${f.salario.toFixed(2)}`);
-    }) 
-    
-    let questao1_b = global_max(funcionarios.funcionarios).forEach(f => {
+    })
+    //Questao 1_b    
+    global_max(funcionarios.funcionarios).forEach(f => {
         console.log(`global_max | ${f.nome} ${f.sobrenome} | ${f.salario.toFixed(2)}`);
     });
     
@@ -60,21 +61,21 @@ fs.readFile(`./${process.argv[2]}`, (err, data) => {
     //Questão 2
     let areas_with_func_numbers = [];
     funcionarios.areas.forEach(e=>{
-    let new_array = []
-    funcionarios.funcionarios.map(f => {
-        f.area == e.codigo ? new_array.push(f) : null;
-    });
-    let questao2_a = global_min(new_array).forEach(f=> {
-        console.log(`area_min | ${e.nome} | ${f.nome} ${f.sobrenome} | ${f.salario.toFixed(2)}`);
-    }) 
-    
-    let questao2_b = global_max(new_array).forEach(f => {
-        console.log(`area_max | ${e.nome} | ${f.nome} ${f.sobrenome} | ${f.salario.toFixed(2)}`);
-    });
-    
-    console.log(`area_avg | ${e.nome} | ${global_avg(new_array)}`);
-    e.numero_funcionarios = new_array.length;
-    areas_with_func_numbers.push(e);
+    let new_array = funcionarios.funcionarios.filter(f => f.area == e.codigo);
+    //Questao 2_a
+    if(new_array.length > 0){
+        global_min(new_array).forEach(f=> {
+            console.log(`area_min | ${e.nome} | ${f.nome} ${f.sobrenome} | ${f.salario.toFixed(2)}`);
+        }) 
+        //Questao 2_b
+        global_max(new_array).forEach(f => {
+            console.log(`area_max | ${e.nome} | ${f.nome} ${f.sobrenome} | ${f.salario.toFixed(2)}`);
+        });
+        
+        console.log(`area_avg | ${e.nome} | ${global_avg(new_array)}`);
+        e.numero_funcionarios = new_array.length;
+        areas_with_func_numbers.push(e);
+    }
     })
     
     areas_with_func_numbers.sort(function (ex, ey){
