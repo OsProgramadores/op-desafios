@@ -1,21 +1,14 @@
+#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define INT_MAX 2147483647 // definição do maior int
-
-// Definições feitas para um melhor controle de alocação da memória
-#define MALLOC(var, type, size)                                \
-    if ((var = (type *)malloc(sizeof(type) * (size))) == NULL) \
-    printf("Erro ao alocar no arquivo '%s', linha: %d\n", __FILE__, __LINE__), abort() // alocação de memória, se não conseguir, vai parar e mostrar a linha do erro.
-#define REALLOC(var, type, size)                                     \
-    if ((var = (type *)realloc(var, sizeof(type) * (size))) == NULL) \
-    printf("Erro ao alocar no arquivo '%s', linha: %d\n", __FILE__, __LINE__), abort() // alocação de memória, se não conseguir, vai parar e mostrar a linha do erro.
-#define FREE(var)    \
-    if (var != NULL) \
-    free(var), var = NULL // após verificar se a váriavel realmente aponta pra memória, tentando evitar double free, libera a memória, e diz que a váriavel agora aponta pra Null(0)
-#define MINALLOC 100      // eficiência na alocação de arrays
-// fim do controle de alocação da memória memória
+//Macros de alocação da memória
+#define MALLOC(var, type, size) var = (type *)malloc(sizeof(type) * (size))
+#define REALLOC(var, type, size) var = (type *)realloc(var, sizeof(type) * (size))
+#define FREE(var) free(var), var = NULL
+#define MINALLOC 100 // melhora na alocação de arrays
+//
 
 typedef struct // estrutura de regras
 {
