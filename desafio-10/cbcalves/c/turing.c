@@ -1,4 +1,3 @@
-#include <limits.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -9,6 +8,7 @@
 #define FREE(var) free(var), var = NULL
 #define MINALLOC 100 // melhora na alocação de arrays
 //
+#define NAOACHOU -1
 
 typedef struct // estrutura de regras
 {
@@ -23,18 +23,22 @@ typedef struct // estrutura de regras
 regras_t **regras = NULL;       // array de regras
 int regras_size = 0;            // numero de regras carregadas
 char regras_filename[128] = ""; // arquivo carregado
-size_t __regras_estado_geral = 0;
-size_t __regras_estado_inicial = 0;
-size_t __regras_estado_halt = 0;
+// estados chave
+size_t __regras_estado_geral = 0;   // '*'
+size_t __regras_estado_inicial = 0; // '0'
+size_t __regras_estado_halt = 0;    // 'halt'
 
-size_t regras_hash(char *str) // http://www.cse.yorku.ca/~oz/hash.html <- retirado deste site o cálculo do hash
+size_t regras_hash(const char *str) // calculo de hash UNIX ELFHASH
 {
-    size_t hash = 0;
-
-    while (*str != 0)
-        hash = (*(str++)) + (hash << 6) + (hash << 16) - hash;
-
-    return hash;
+    size_t h = 0, high = 0;
+    while (*str)
+    {
+        h = (h << 4) + ((unsigned char)*str++);
+        if (high == (h & 0xF0000000))
+            h ^= high >> 24;
+        h &= ~high;
+    }
+    return h;
 }
 
 void regras_quicksort(int l, int r) //sort do vetor (ou array) de regras, método de sort é quick sort
@@ -69,16 +73,13 @@ void regras_quicksort(int l, int r) //sort do vetor (ou array) de regras, métod
 
 void regras_free()
 {
-    if (regras_size > 0) // se existem regras carregas, libera a memória
-    {
-        for (int i = 0; i < regras_size; i++)
-            FREE(regras[i]);
-        regras_size = 0;
-    }
+    for (int i = 0; i < regras_size; i++)
+        FREE(regras[i]);
+    regras_size = 0;
     FREE(regras);
 }
 
-void regras_carregar(char *filename) // carregar as regras
+void regras_carregar(const char *filename) // carregar as regras
 {
     FILE *fs = NULL;
     char line[2048], estado[20], novoestado[20];
@@ -129,10 +130,10 @@ void regras_carregar(char *filename) // carregar as regras
     return;
 }
 
-int regras_estado(size_t state, char c) // encontrar a regra desse símbolo para o estado
+int regras_estado(size_t state, char c) // encontrar a regra para este símbolo no estado
 {
-    int i = 0, isecond = INT_MAX;
-    if (c == ' ') // se for ' ' (espaço) tem que mudar para '_' que está nas regras
+    int i = 0, isecond = NAOACHOU;
+    if (c == ' ') // se for ' ' (espaço) tem que mudar para '_'
         c = '_';
 
     while (i < regras_size && regras[i]->state != state)
@@ -156,10 +157,10 @@ int regras_estado(size_t state, char c) // encontrar a regra desse símbolo para
             isecond = i;
     }
 
-    return isecond; // retorna não achou (INT_MAX) ou achou uma menos específica
+    return isecond; // retorna NAOACHOU (-1) ou achou uma menos específica
 }
 
-char *regras_processar(char *command) // processa a fita
+char *regras_processar(const char *command) // processa a fita
 {
     size_t n_regra = 0;
     int i = 0, s_len = 0;
@@ -183,7 +184,7 @@ char *regras_processar(char *command) // processa a fita
             s[i + 1] = 0;
         }
 
-        else if (i < 0) // se leitor for menor que o tamanho da string, aumenta a string
+        else if (i < 0) // se leitor for menor que o tamanho da string, aumenta a string e move tudo
         {
             s_len++;
             REALLOC(s, char, s_len + 1);
@@ -192,7 +193,7 @@ char *regras_processar(char *command) // processa a fita
             i = 0;
         }
         n_regra = regras_estado(state, s[i]); // achar a regra para a leitura no atual estado
-        if (n_regra == INT_MAX)               // se não existe regra, algo de errado não está certo, abortar
+        if (n_regra == NAOACHOU)              // se não existe regra, algo de errado não está certo, abortar
         {
             REALLOC(s, char, 4);
             s[0] = 'E', s[1] = 'R', s[2] = 'R', s[3] = 0;
@@ -217,21 +218,20 @@ char *regras_processar(char *command) // processa a fita
             return s;
         }
     }
-    for (i = 0; i < strlen(s); i++) // left trim (apagar os espaço, à esquerda da fita, em branco)
+    for (i = 0; i < s_len; i++) // left trim (apagar os espaço, à esquerda da fita e mover tudo)
     {
         if (s[i] != ' ')
             break;
     }
     if (i > 0)
-        memcpy(&s[0], &s[i], strlen(s) - i + 1);
-    for (i = strlen(s) - 1; i >= 0; i--) // right trim (apagar os espaços, à direita da fita, em branco)
+        memcpy(&s[0], &s[i], s_len - i + 1);
+    for (i = s_len - i - 1; i >= 0; i--) // right trim (apagar os espaços, à direita da fita)
     {
         if (s[i] == ' ')
             s[i] = 0;
         else
             break;
     }
-    REALLOC(s, char, strlen(s) + 1); // fim do trim, e ajuste no tamanho da fita
 
     return s;
 }
