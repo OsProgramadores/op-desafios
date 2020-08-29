@@ -6,6 +6,7 @@
 #define MALLOC(var, type, size) var = (type *)malloc(sizeof(type) * (size))
 #define REALLOC(var, type, size) var = (type *)realloc(var, sizeof(type) * (size))
 #define FREE(var) free(var), var = NULL
+#define ERRODEALOCAO -1
 #define MINALLOC 100 // melhora na alocação de arrays
 //
 #define NAOACHOU -1
@@ -79,14 +80,14 @@ void regras_free()
     FREE(regras);
 }
 
-void regras_carregar(const char *filename) // carregar as regras
+int regras_carregar(const char *filename) // carregar as regras
 {
     FILE *fs = NULL;
     char line[2048], estado[20], novoestado[20];
     regras_t *insert = NULL;
 
     if (strcmp(filename, regras_filename) == 0) // verifica se precisa carregar regras novas
-        return;
+        return 1;
 
     memcpy(regras_filename, filename, 128); // guarda o nome do arquivo de regras que foi carregado
 
@@ -101,7 +102,13 @@ void regras_carregar(const char *filename) // carregar as regras
     }
 
     regras_free();
-    REALLOC(regras, regras_t *, MINALLOC);
+    MALLOC(regras, regras_t *, MINALLOC);
+    if (!regras)
+    {
+        printf("ERRO: Alocação de memória para a array de regras, bytes não alocados: %d\n", (int)(sizeof(regras_t *) * MINALLOC));
+        regras_filename[0] = 0;
+        return ERRODEALOCAO;
+    }
 
     fs = fopen(filename, "r");
     if (fs == NULL)
@@ -114,6 +121,13 @@ void regras_carregar(const char *filename) // carregar as regras
         if (line[0] == ';' || line[0] == 10 || line[0] == '\r') // continua se for comentário ou linha vazia
             continue;
         MALLOC(insert, regras_t, 1); // aloca uma estrutura de dados
+        if (!insert)
+        {
+            printf("ERRO: Alocação de memória para a estrutura de regra, bytes não alocados: %d\n", (int)sizeof(regras_t));
+            regras_filename[0] = 0;
+            regras_free();
+            return ERRODEALOCAO;
+        }
         sscanf(line, "%s %c %c %c %s", estado, &insert->symbol, &insert->newsymbol, &insert->direction, novoestado);
         insert->state = regras_hash(estado);
         if (novoestado[0] == 'h' && novoestado[1] == 'a' && novoestado[2] == 'l' && novoestado[3] == 't') // estado de halt
@@ -122,12 +136,21 @@ void regras_carregar(const char *filename) // carregar as regras
             insert->newstate = regras_hash(novoestado);
         regras_size++;
         if ((regras_size % MINALLOC) == 0)
+        {
             REALLOC(regras, regras_t *, regras_size + MINALLOC);
+            if (!regras)
+            {
+                printf("ERRO: Alocação de memória para a array de regras, bytes não alocados: %d\n", (int)(sizeof(regras_t *) * (MINALLOC + regras_size)));
+                regras_filename[0] = 0;
+                regras_free();
+                return ERRODEALOCAO;
+            }
+        }
         regras[regras_size - 1] = insert; // carrega essa estrutura de dados no final do vetor
     }
     fclose(fs);
     regras_quicksort(0, regras_size - 1); // sort nas regras
-    return;
+    return 1;
 }
 
 int regras_estado(size_t state, char c) // encontrar a regra para este símbolo no estado
@@ -169,6 +192,12 @@ char *regras_processar(const char *command) // processa a fita
 
     s_len = strlen(command);
     MALLOC(s, char, s_len + 1); // aloca e prepara a fita
+    if (!s)
+    {
+        printf("ERRO: Alocação de memória para a fita, bytes não alocados: %d\n", (s_len + 1));
+        return NULL;
+    }
+
     memcpy(s, command, s_len + 1);
 
     if (s_len == 0) // string vazia não existe o q fazer
@@ -180,6 +209,11 @@ char *regras_processar(const char *command) // processa a fita
         {
             s_len++;
             REALLOC(s, char, s_len + 1);
+            if (!s)
+            {
+                printf("ERRO: Alocação de memória para a fita, bytes não alocados: %d\n", (s_len + 1));
+                return NULL;
+            }
             s[i] = ' ';
             s[i + 1] = 0;
         }
@@ -188,6 +222,11 @@ char *regras_processar(const char *command) // processa a fita
         {
             s_len++;
             REALLOC(s, char, s_len + 1);
+            if (!s)
+            {
+                printf("ERRO: Alocação de memória para a fita, bytes não alocados: %d\n", (s_len + 1));
+                return NULL;
+            }
             memcpy(&s[1], s, s_len);
             s[0] = ' ';
             i = 0;
@@ -195,7 +234,15 @@ char *regras_processar(const char *command) // processa a fita
         n_regra = regras_estado(state, s[i]); // achar a regra para a leitura no atual estado
         if (n_regra == NAOACHOU)              // se não existe regra, algo de errado não está certo, abortar
         {
-            REALLOC(s, char, 4);
+            if (s_len < 3)
+            {
+                REALLOC(s, char, 4);
+                if (!s)
+                {
+                    printf("ERRO: Alocação de memória para a fita, bytes não alocados: %d\n", 4);
+                    return NULL;
+                }
+            }
             s[0] = 'E', s[1] = 'R', s[2] = 'R', s[3] = 0;
             return s;
         }
@@ -213,7 +260,15 @@ char *regras_processar(const char *command) // processa a fita
             i--;
         else if (regras[n_regra]->direction != '*') // se for '*' não faz nada, se for diferente aborta o programa
         {
-            REALLOC(s, char, 4);
+            if (s_len < 3)
+            {
+                REALLOC(s, char, 4);
+                if (!s)
+                {
+                    printf("ERRO: Alocação de memória para a fita, bytes não alocados: %d\n", 4);
+                    return NULL;
+                }
+            }
             s[0] = 'E', s[1] = 'R', s[2] = 'R', s[3] = 0;
             return s;
         }
@@ -260,11 +315,19 @@ int main(int argc, char *argv[])
         if (strlen(filename) == 0)                             // continua se for vazia
             continue;
 
-        regras_carregar(filename);           // carrega as regras
-        printf("%s,%s,", filename, command); // inicia a impressão da saída
-        fita = regras_processar(command);    // processa a fita
-        printf("%s\n", fita);                // posta o resultado da fita
-        FREE(fita);                          // apaga o resultado
+        if (regras_carregar(filename) == ERRODEALOCAO) // carrega as regras
+        {
+            printf("Memória insuficiente para execução do programa\n");
+            break;
+        }
+        fita = regras_processar(command); // processa a fita
+        if (!fita)                        // retornou Null, deu erro na memoria ao processar o comando
+        {
+            printf("Memória insuficiente para execução do programa\n");
+            break;
+        }
+        printf("%s,%s,%s\n", filename, command, fita); // posta o resultado da fita
+        FREE(fita);                                    // apaga o resultado
     }
     fclose(df);
     regras_free(); // limpa a memória
