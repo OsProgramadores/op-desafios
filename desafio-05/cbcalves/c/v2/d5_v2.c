@@ -180,7 +180,10 @@ int areas_get(char *codigo, int incluir)
     {
         pthread_mutex_lock(&mtx_area);
         if ((resp = areas_get(codigo, 0)) < INT_MAX)
+        {
+            pthread_mutex_unlock(&mtx_area);
             return resp;
+        }
         resp = areas_size;
         areas_size++;
         REALLOC(areas, area_t, areas_size);
@@ -192,8 +195,8 @@ int areas_get(char *codigo, int incluir)
         areas[resp].min = NULL;
         areas[resp].max_salario = 0;
         areas[resp].min_salario = INT_MAX;
-        return resp;
         pthread_mutex_unlock(&mtx_area);
+        return resp;
     }
     return INT_MAX;
 }
