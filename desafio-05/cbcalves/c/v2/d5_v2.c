@@ -1,31 +1,23 @@
 #include "uthash.h" // https://troydhanson.github.io/uthash/  hash table utilizada no processo
 #include <fcntl.h>
+#include <limits.h>
 #include <pthread.h> // não sei explicar pthread.h foi mais rápido que threads.h
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define MALLOC(var, type, size) var = (type *)malloc(sizeof(type) * (size)) // versão mais perigosa sem verificação de alocação
-#define FREE(var) free(var), var = NULL                                     // free e bota a variavel como Null(0)
-
-// tamanho das variáveis usadas, tem haver com a velocidade para alocar (foram feitas medidas para chegar nos numeros abaixo)
-#define S_NOME 13
-#define S_SOBRENOME 21
-#define S_CODIGO 3
-#define S_NOME_CARGO 28
-// total de áreas possíveis ao fazer contas com os exemplos de dados que ele vai processar
-// estou alocando todas as áreas possíveis pois é mais rápido fazer uma conta do que ficar com find
-#define TOTAL_AREAS 1296
-// evitando problemas defino o maior inteiro possível
-#define INT_MAX 2147483647
+#define MALLOC(var, type, size) var = (type *)malloc(sizeof(type) * (size))
+#define REALLOC(var, type, size) var = (type *)realloc(var, sizeof(type) * (size))
+#define FREE(var) free(var), var = NULL // free e bota a variavel como Null(0)
+#define START_AREAS 2
 
 typedef struct funcionario_st
 {
-    char nome[S_NOME];
-    char sobrenome[S_SOBRENOME];
+    char *nome;
+    char *sobrenome;
     int salario;
-    char codigo[S_CODIGO];
+    char *codigo;
     struct funcionario_st *next;  // apontando para o próximo funcionario
     struct funcionario_st *area;  // apontando para o próximo max ou min
     struct funcionario_st *snome; // apontando para o próximo sobrenome max
@@ -33,26 +25,30 @@ typedef struct funcionario_st
 
 typedef struct area_st
 {
-    char codigo[S_CODIGO], nome[S_NOME_CARGO];
-    funcionario_t *max, *min; // lista de max e min
+    char *codigo;
+    char *nome;
+    funcionario_t *max; // lista de max
+    funcionario_t *min; // lista de min
     unsigned long long custo;
-    int total, max_salario, min_salario;
-    struct area_st *global; // apontando para o próximo max ou min global
-} area_t;                   // controle de max e min por área
+    int total;
+    int max_salario;
+    int min_salario;
+} area_t; // controle de max e min por área
 
 typedef struct
 {
-    char sobrenome[S_SOBRENOME];
+    char *sobrenome;
     UT_hash_handle hh;  // hash table
     funcionario_t *max; //lista de max
-    int total, max_salario;
+    int total;
+    int max_salario;
 } sobrenome_t; // controle de max por sobrenome
 
 typedef struct
 {
-    area_t *max; // lista de max
-    area_t *min; // lista de min
-    int max_size, min_size, total, max_salario, min_salario;
+    int total;
+    int max_salario;
+    int min_salario;
     unsigned long long custo;
 } global_t; // controle de max e min global
 
@@ -65,11 +61,13 @@ typedef struct
 
 // Variáveis globais
 area_t *areas = NULL;
+int areas_size = 0;
 sobrenome_t *sobrenomes = NULL;
 global_t global;
 // mutex -> sinalizações para evitar colisões nos dados
 pthread_mutex_t mtx_max;
 pthread_mutex_t mtx_min;
+pthread_mutex_t mtx_area;
 pthread_mutex_t mtx_sbn1;
 pthread_mutex_t mtx_sbn2;
 
@@ -80,19 +78,22 @@ int sobrenomes_process(void *funcionario) // processar o sobrenome
     int sinal = 0;
 
     // a parte mais demorada é achar
-    pthread_mutex_lock(&mtx_sbn1);
     HASH_FIND_STR(sobrenomes, func->sobrenome, pos);
     if (pos == NULL)
     {
-        MALLOC(pos, sobrenome_t, 1);
-        memcpy(pos->sobrenome, func->sobrenome, S_SOBRENOME);
-        pos->total = 0;
-        pos->max = NULL;
-        pos->max_salario = 0;
-        HASH_ADD_STR(sobrenomes, sobrenome, pos);
+        pthread_mutex_lock(&mtx_sbn1); // devido a grande repetição de sobrenomes parar aqui e achar novamente gasta menos tempo
+        HASH_FIND_STR(sobrenomes, func->sobrenome, pos);
+        if (pos == NULL)
+        {
+            MALLOC(pos, sobrenome_t, 1);
+            pos->sobrenome = func->sobrenome;
+            HASH_ADD_STR(sobrenomes, sobrenome, pos);
+            pos->total = 0;
+            pos->max = NULL;
+            pos->max_salario = 0;
+        }
+        pthread_mutex_unlock(&mtx_sbn1);
     }
-    // libera o prox da fila
-    pthread_mutex_unlock(&mtx_sbn1);
 
     pthread_mutex_lock(&mtx_sbn2);
     pos->total++;
@@ -111,15 +112,13 @@ int sobrenomes_process(void *funcionario) // processar o sobrenome
     pthread_mutex_unlock(&mtx_sbn2);
     return sinal;
 }
-int areas_process_max(void *funcionario) // processar a área e anotar o valor máximo
+int areas_process_max(void *funcionario, int cod) // processar a área e anotar o valor máximo
 {
     funcionario_t *func = (funcionario_t *)funcionario;
-    int sinal = 0, cod = (func->codigo[0] - ((func->codigo[0] < 'A') ? '0' : 'A' - 10)) * 36;
-    cod += func->codigo[1] - ((func->codigo[1] < 'A') ? '0' : 'A' - 10);
+    int sinal = 0;
 
     pthread_mutex_lock(&mtx_max);
     areas[cod].total++;
-    areas[cod].custo += func->salario;
 
     if (areas[cod].max_salario < func->salario)
     {
@@ -129,6 +128,7 @@ int areas_process_max(void *funcionario) // processar a área e anotar o valor m
         if (global.max_salario < func->salario) // deixo apenas anotado o valor global
             global.max_salario = func->salario;
         sinal = 1;
+        return sinal;
     }
     else if (areas[cod].max_salario == func->salario)
     {
@@ -140,13 +140,14 @@ int areas_process_max(void *funcionario) // processar a área e anotar o valor m
     return sinal;
 }
 
-int areas_process_min(void *funcionario) // processar a área e anotar o valor mínimo
+int areas_process_min(void *funcionario, int cod) // processar a área e anotar o valor mínimo
 {
     funcionario_t *func = (funcionario_t *)funcionario;
-    int sinal = 0, cod = (func->codigo[0] - ((func->codigo[0] < 'A') ? '0' : 'A' - 10)) * 36;
-    cod += func->codigo[1] - ((func->codigo[1] < 'A') ? '0' : 'A' - 10);
+    int sinal = 0;
 
     pthread_mutex_lock(&mtx_min);
+    areas[cod].custo += func->salario;
+
     if (areas[cod].min_salario > func->salario)
     {
         areas[cod].min_salario = func->salario;
@@ -155,6 +156,7 @@ int areas_process_min(void *funcionario) // processar a área e anotar o valor m
         if (global.min_salario > func->salario) // deixo apenas anotado o valor global
             global.min_salario = func->salario;
         sinal = 1;
+        return sinal;
     }
     else if (areas[cod].min_salario == func->salario)
     {
@@ -165,11 +167,41 @@ int areas_process_min(void *funcionario) // processar a área e anotar o valor m
     pthread_mutex_unlock(&mtx_min);
     return sinal;
 }
+int areas_get(char *codigo, int incluir)
+{
+    int resp = 0;
+    while (resp < areas_size)
+    {
+        if (areas[resp].codigo && codigo[0] == areas[resp].codigo[0] && codigo[1] == areas[resp].codigo[1])
+            return resp;
+        resp++;
+    }
+    if (incluir)
+    {
+        pthread_mutex_lock(&mtx_area);
+        if ((resp = areas_get(codigo, 0)) < INT_MAX)
+            return resp;
+        resp = areas_size;
+        areas_size++;
+        REALLOC(areas, area_t, areas_size);
+        areas[resp].codigo = codigo;
+        areas[resp].nome = NULL;
+        areas[resp].total = 0;
+        areas[resp].custo = 0;
+        areas[resp].max = NULL;
+        areas[resp].min = NULL;
+        areas[resp].max_salario = 0;
+        areas[resp].min_salario = INT_MAX;
+        return resp;
+        pthread_mutex_unlock(&mtx_area);
+    }
+    return INT_MAX;
+}
 
 void *processar(void *processos)
 {
     int sinal = 1, cod = 0;
-    char codigo = 0;
+    char *codigo = NULL;
     char *p = NULL, *s = NULL;
     funcionario_t *ret = NULL, *new = NULL;
 
@@ -191,7 +223,6 @@ void *processar(void *processos)
                 new->next = ret;
                 ret = new;
                 ret->snome = NULL;
-                ret->area = NULL;
                 sinal = 0;
             }
 
@@ -199,19 +230,19 @@ void *processar(void *processos)
             while (*p != '"')
                 p++;
             p += 8;
-            s = ret->nome;
+            ret->nome = p;
             while (*p != '"')
-                *(s++) = *(p++);
-            *s = 0;
+                p++;
+            *p = 0;
 
             p += 2;
             while (*p != '"')
                 p++;
             p += 13;
-            s = ret->sobrenome;
+            ret->sobrenome = p;
             while (*p != '"')
-                *(s++) = *(p++);
-            *s = 0;
+                p++;
+            *p = 0;
 
             p += 2;
             while (*p != '"')
@@ -231,108 +262,110 @@ void *processar(void *processos)
             while (*p != '"')
                 p++;
             p += 8;
-            ret->codigo[0] = *(p++);
-            ret->codigo[1] = *(p++);
-            ret->codigo[2] = 0;
-            sinal += areas_process_max(ret);
-            sinal += areas_process_min(ret);
+            ret->codigo = p;
+            p += 2;
+            *p = 0;
+            p++;
+
+            if (ret->codigo[0] == 'A' && ret->codigo[1] == '1') // nada aqui, circulando
+                cod = 0;
+            else if (ret->codigo[0] == 'A' && ret->codigo[1] == '2')
+                cod = 1;
+            else
+                cod = areas_get(ret->codigo, 1);
+
+            sinal += areas_process_max(ret, cod);
+            sinal += areas_process_min(ret, cod);
             sinal += sobrenomes_process(ret);
         }
         else if (*p == 'c')
         {
             p += 9;
-            cod = (*p - ((*p < 'A') ? '0' : 'A' - 10)) * 36;
-            codigo = *p;
-            p++;
-            cod += *p - ((*p < 'A') ? '0' : 'A' - 10);
-            areas[cod].codigo[0] = codigo;
-            areas[cod].codigo[1] = *p;
-            areas[cod].codigo[2] = 0;
-
-            p += 3;
+            codigo = p;
+            p += 2;
+            *p = 0;
+            p += 2;
             while (*p != '"')
                 p++;
             p += 8;
-            s = areas[cod].nome;
+
+            if (codigo[0] == 'A' && codigo[1] == '1') // nada aqui, circulando
+                cod = 0;
+            else if (codigo[0] == 'A' && codigo[1] == '2')
+                cod = 1;
+            else
+            {
+                cod = areas_get(ret->codigo, 0);
+                if (cod == INT_MAX)
+                    continue;
+            }
+            areas[cod].nome = p;
             while (*p != '"')
-                *(s++) = *(p++);
-            *s = 0;
+                p++;
+            *p = 0;
+            p++;
         }
     }
     ((processar_t *)processos)->coletor = ret;
     return NULL;
 }
 
+void show_area_print(area_t *index)
+{
+    funcionario_t *func = NULL;
+    double salariof = 0;
+
+    func = index->max;
+    while (func != NULL)
+    {
+        salariof = (double)func->salario / 100.F;
+        printf("area_max|%s|%s %s|%.2f\n", index->nome, func->nome, func->sobrenome, salariof);
+        if (func->salario == global.max_salario)
+            printf("global_max|%s %s|%.2f\n", func->nome, func->sobrenome, salariof);
+        func = func->area;
+    }
+    func = index->min;
+    while (func != NULL)
+    {
+        salariof = (double)func->salario / 100.F;
+        printf("area_min|%s|%s %s|%.2f\n", index->nome, func->nome, func->sobrenome, salariof);
+        if (func->salario == global.min_salario)
+            printf("global_min|%s %s|%.2f\n", func->nome, func->sobrenome, salariof);
+        func = func->area;
+    }
+}
+
 void show_area() // mostrar os resultados por área e global
 {
     int i = 0;
     double salariof = 0;
-    area_t *index = NULL, *most_emp = NULL, *least_emp = NULL;
+    area_t *index = NULL, *most_emp = &areas[0], *least_emp = &areas[0];
     funcionario_t *func = NULL;
 
-    for (i = 0; i < TOTAL_AREAS; i++)
+    for (i = 0; i < areas_size; i++)
     {
-        if (areas[i].total == 0)
-            continue;
         index = &areas[i];
 
-        if (index->max_salario == global.max_salario) // anotando os maiores salários
-        {
-            index->global = global.max;
-            global.max = index;
-        }
-        if (index->min_salario == global.min_salario) // anotando os menores salários
-        {
-            index->global = global.min;
-            global.min = index;
-        }
+        show_area_print(index);
+
         global.total += index->total;
         global.custo += index->custo;
 
-        if (index->total > 0)
-        {
-            salariof = ((double)index->custo / 100.F) / (double)index->total;
-            printf("area_avg|%s|%.2f\n", index->nome, salariof);
+        salariof = ((double)index->custo / 100.F) / (double)index->total;
+        printf("area_avg|%s|%.2f\n", index->nome, salariof);
 
-            if (most_emp == NULL || index->total > most_emp->total) // área com mais funcionários
-                most_emp = index;
-            if (least_emp == NULL || index->total < least_emp->total) // área com menos funcionários
-                least_emp = index;
-        }
-        for (func = index->max; func != NULL; func = func->area)
-        {
-            salariof = (double)index->max_salario / 100.F;
-            printf("area_max|%s|%s %s|%.2f\n", index->nome, func->nome, func->sobrenome, salariof);
-        }
-        for (func = index->min; func != NULL; func = func->area)
-        {
-            salariof = (double)index->min_salario / 100.F;
-            printf("area_min|%s|%s %s|%.2f\n", index->nome, func->nome, func->sobrenome, salariof);
-        }
+        if (index->total > most_emp->total) // área com mais funcionários
+            most_emp = index;
+        if (index->total < least_emp->total) // área com menos funcionários
+            least_emp = index;
     }
-    // globais de maior e menor salários
     salariof = ((double)global.custo / 100.F) / (double)global.total;
     printf("global_avg|%.2f\n", salariof);
-    for (index = global.max; index != NULL; index = index->global)
-    {
-        for (func = index->max; func != NULL; func = func->area)
-        {
-            salariof = (double)global.max_salario / 100.F;
-            printf("global_max|%s %s|%.2f\n", func->nome, func->sobrenome, salariof);
-        }
-    }
-    for (index = global.min; index != NULL; index = index->global)
-    {
-        for (func = index->min; func != NULL; func = func->area)
-        {
-            salariof = (double)global.min_salario / 100.F;
-            printf("global_min|%s %s|%.2f\n", func->nome, func->sobrenome, salariof);
-        }
-    }
 
     printf("most_employees|%s|%d\n", most_emp->nome, most_emp->total);
     printf("least_employees|%s|%d\n", least_emp->nome, least_emp->total);
 }
+
 void show_sobrenomes() // mostrar os resultados por sobrenomes
 {
     double salariof = 0;
@@ -380,40 +413,39 @@ int main(int argc, char *argv[])
         abort();
     }
     //inicialização das areas
-    MALLOC(areas, area_t, TOTAL_AREAS);
-    for (i = 0; i < TOTAL_AREAS; i++)
+    MALLOC(areas, area_t, START_AREAS);
+    areas_size = START_AREAS;
+    for (i = 0; i < START_AREAS; i++)
     {
+        areas[i].codigo = NULL;
+        areas[i].nome = NULL;
         areas[i].total = 0;
         areas[i].custo = 0;
         areas[i].max = NULL;
         areas[i].min = NULL;
-        areas[i].global = NULL;
         areas[i].min_salario = INT_MAX;
         areas[i].max_salario = 0;
     }
     // inicialização das variaveis do global
-    global.max = NULL;
-    global.min = NULL;
     global.custo = 0;
-    global.max_size = 0;
-    global.min_size = 0;
     global.total = 0;
     global.max_salario = 0;
     global.min_salario = INT_MAX;
     // inicialização da sinalização
     pthread_mutex_init(&mtx_max, NULL);
     pthread_mutex_init(&mtx_min, NULL);
+    pthread_mutex_init(&mtx_area, NULL);
     pthread_mutex_init(&mtx_sbn1, NULL);
     pthread_mutex_init(&mtx_sbn2, NULL);
 
-    //inicialização do controle de threads
+    // inicialização do controle de threads
     threads_max = sysconf(_SC_NPROCESSORS_ONLN); // numero de processadores (* o numero de threads em cada);
     if (threads_max < 2)
         threads_max = 2;
     MALLOC(processos, processar_t, threads_max);
     buffer_max = (f.st_size / threads_max) + 1; // somo 1 pois a divisão pode não ser exata
 
-    // incialização das threads
+    // criação das threads
     j = 0; // funciona como o resto que devia ter sido processado mas não foi na thread anterior
     for (i = 0; i < threads_max; i++)
     {
@@ -421,9 +453,9 @@ int main(int argc, char *argv[])
         buffer_size = read(fjson, buffer, buffer_max + j);
         for (j = 0; buffer[buffer_size - j - 1] != '}'; j++)
             ;
-        buffer[buffer_size - j - 1] = 0;
         processos[i].buffer = buffer;
         pthread_create(&processos[i].id, NULL, processar, &processos[i]);
+        buffer[buffer_size - j - 1] = 0;
         lseek(fjson, -j, SEEK_CUR);
     }
     close(fjson);
@@ -437,6 +469,7 @@ int main(int argc, char *argv[])
     // inicio da limpeza geral
     pthread_mutex_destroy(&mtx_max);
     pthread_mutex_destroy(&mtx_min);
+    pthread_mutex_destroy(&mtx_area);
     pthread_mutex_destroy(&mtx_sbn1);
     pthread_mutex_destroy(&mtx_sbn2);
 
