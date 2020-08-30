@@ -11,7 +11,7 @@ private:
     // depois faz-se a avaliação se estiver perto das bordas
     const int xPulo[8] = {2, 1, -1, -2, -2, -1, 1, 2};
     const int yPulo[8] = {1, 2, 2, 1, -1, -2, -2, -1};
-    int init_x, init_y;
+    unsigned int init_x, init_y;
     void destruir()
     {
         if (xadrez)
