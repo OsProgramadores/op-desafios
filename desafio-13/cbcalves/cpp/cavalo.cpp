@@ -95,7 +95,7 @@ public:
         }
         std::cout << std::endl;
         for (auto s : passos) // mostrar os passos
-            std::cout << std::setw(3) << s << std::endl;
+            std::cout << s << std::endl;
     }
 };
 
