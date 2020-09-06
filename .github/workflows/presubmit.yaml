@@ -19,7 +19,7 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Compute file changes using API
+      - name: Compute changed files
         run: |
           URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
           curl -s -X GET -G $URL | jq -r '.[] | .filename' > $HOME/changed_files.txt
@@ -29,6 +29,22 @@ jobs:
           go get -u golang.org/x/lint/golint
           pip install pylint
 
-      - name: Check code and directory structure
+      - name: Check binary files
         run: |
-          ./ci/presubmit.sh dircheck gocheck pycheck validator
+          ./ci/bincheck.sh
+
+      - name: Check directory structure
+        run: |
+          ./ci/dircheck.sh
+
+      - name: Check Validator code
+        run: |
+          ./ci/validator.sh
+
+      - name: Check Python code
+        run: |
+          ./ci/pycheck.sh
+
+      - name: Check Go code
+        run: |
+          ./ci/gocheck.sh
