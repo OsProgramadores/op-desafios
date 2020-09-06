@@ -13,13 +13,15 @@
 #   Where:
 #     desafio-*: top level directory we check.
 #     username: Github username. No files at this level.
-#     language: Language. Has to be lowercase. No files other than .gitignore at this level.
+#     language: Language. Has to be lowercase. No files other than .gitignore
+#               and .valid at this level.
 #     user_files: Free form.
 #
 #   Also:
 #     - No spaces in filenames.
 #     - Only ascii chars in filenames.
-#     - No files or directories starting with ".", except for files names .gitignore.
+#     - No files or directories starting with ".", except for files named
+#       .gitignore and .valid.
 
 # Fail on use of undefined variable.
 set -o nounset
@@ -52,17 +54,17 @@ function check_dir_structure() {
   local ret=""
 
   # See the "Directory structure check" help message below for detailed rules.
-  # Note the use of grep to remove any directory called .gitignore (not valid)
+  # Note the use of grep to remove any directory called .gitignore or .valid
   # and then a negative lookahead to remove any dot files that are not named
-  # .gitignore.
+  # .gitignore or .valid.
   valid=$(mktemp)
   desafios=$(mktemp)
 
   grep '^desafio-[0-9]*' $CHANGES | sort -u >"${desafios}"
 
   grep '^desafio-[0-9]*/[^/]*/[a-z0-9_+-]*/.\+$' "${desafios}" |
-    grep -v '/\.gitignore/' |
-      grep -Pv '/\.(?!gitignore).*' > "${valid}"
+    grep -v '/\.\(gitignore\|valid\)/' |
+    grep -Pv '/\.(?!(gitignore|valid)$).*' > "${valid}"
 
   invalid=$(diff --unchanged-line-format='' --old-line-format='%L' "${desafios}" "${valid}")
   rm -f "${valid}" "${desafios}"
