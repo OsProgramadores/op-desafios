@@ -29,6 +29,10 @@ jobs:
           go get -u golang.org/x/lint/golint
           pip install pylint
 
+      - name: Check binary files
+        run: |
+          ./ci/bincheck.sh
+
       - name: Check directory structure
         run: |
           ./ci/dircheck.sh
