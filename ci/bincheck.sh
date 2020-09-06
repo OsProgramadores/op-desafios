@@ -1,27 +1,36 @@
 #!/bin/bash
 # Exit with an error code if the current commit contains binary files.
 
-echo
-echo "=================="
-echo "Binary Files check"
-echo "=================="
+echo '
+==================
+Binary Files check
+==================
+'
 
-tempfile="$(mktemp --tmpdir=/tmp binfoo.XXXX)"
-trap "rm -f $tempfile" 0
+tmpfile="$(mktemp)"
+trap "rm -f ${tmpfile}" 0
 
 set -o errexit
+set -o nounset
 
 # Only check files added or modified by this commit.
 cat "$HOME/changed_files.txt" | while read fname; do
-  file --mime "${fname}" | grep "charset=binary$" >>$tempfile
+  if [[ -s "$fname" ]]; then
+    if file --mime "${fname}" | grep -q "charset=binary$"; then
+      echo "${fname}" >>"${tmpfile}"
+    fi
+  else
+    echo "*** NOTE: Unable to open \"$fname\". This should not happen."
+  fi
 done
 
-if [[ -s "$tempfile" ]]; then
+if [[ -s "${tmpfile}" ]]; then
   echo "Binary files are not allowed in this repository."
   echo "The following files appear to contain binary data:"
   echo
-  sed -e 's/^/* /' "$tempfile"
+  cat "${tmpfile}"
   exit 1
 fi
 
+echo "Test OK: No binary files found."
 exit 0
