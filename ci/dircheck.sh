@@ -19,45 +19,92 @@
 #   Also:
 #     - No spaces in filenames.
 #     - Only ascii chars in filenames.
+#     - No files or directories starting with ".", except for files names .gitignore.
 
 # Fail on use of undefined variable.
 set -o nounset
 
-TLD="./desafio-*"
-res=""
+CHANGES="${HOME}/changed_files.txt"
 
-echo
-echo "========================="
-echo "Directory structure check"
-echo "========================="
+# Returns the name of any files containing spaces or non-ascii (including
+# UTF-8) characters.
+function check_filenames() {
+  invalid_files=$(grep -P '[^[:ascii:]]|[[:space:]]' $CHANGES)
+  if [[ -n "$invalid_files" ]]; then
+    echo "*** Files contain invalid characters (spaces or non-ascii):\n$invalid_files\n\n"
+  fi
+}
 
-# Any files containing spaces or non-ascii (including utf8) characters.
-invalid_chars=$(find . -name .git -prune -o -print | grep -P '[^[:ascii:]]|[[:space:]]')
-if [[ -n "$invalid_chars" ]]; then
-  res="${res}*** Files with invalid characters (spaces or non-ascii):\n$invalid_chars\n\n"
-fi
+# Returns the directories of any duplicated challenges. We don't want to see any dupes
+# for a "desafios-XX/username/language" tuple.
+function check_multiple() {
+  level3=$(grep -o '^desafio-[0-9]*/[^/]*/[^/]*/' $CHANGES | sort -u)
+  num=$(echo -e "$level3" | wc -l)
+  if (( num > 1 )); then
+    echo "*** Found ${num} desafios in this PR. Please submit one PR for each):\n$level3\n\n"
+  fi
+}
 
-# Any files found on 2nd level. We expect only directories here (username).
-invalid_level2=$(find . -mindepth 2 -maxdepth 2 -type f -path "$TLD")
-if [[ -n "$invalid_level2" ]]; then
-  res="${res}*** Invalid username (must be a directory, not a file):\n$invalid_level2\n\n"
-fi
+# If we have anything under desafios-XX, make sure it follows the following pattern:
+# desafios-XX/username/language/files... We will not accept incomplete paths or paths
+# with no files or just directories.
+function check_dir_structure() {
+  local ret=""
 
-# Any files not called .gitignore on the 3rd level. We expect only directories here (language).
-invalid_level3=$(find . -mindepth 3 -maxdepth 3 -type f -path "$TLD" | grep -v \.gitignore)
-if [[ -n "$invalid_level3" ]]; then
-  res="${res}*** Invalid language (must be a directory, not a file):\n$invalid_level3\n\n"
-fi
+  # See the "Directory structure check" help message below for detailed rules.
+  # Note the use of grep to remove any directory called .gitignore (not valid)
+  # and then a negative lookahead to remove any dot files that are not named
+  # .gitignore.
+  valid=$(mktemp)
+  desafios=$(mktemp)
 
-# Any directories on the 3rd level having uppercase characters (language should be all lowercase).
-invalid_level3_case=$(find . -mindepth 3 -maxdepth 3 -type d -path "$TLD" -name '*[A-Z]*')
-if [[ -n "$invalid_level3_case" ]]; then
-  res="${res}*** Language directories must be all lowercase:\n$invalid_level3_case\n\n"
-fi
+  grep '^desafio-[0-9]*' $CHANGES | sort -u >"${desafios}"
+
+  grep '^desafio-[0-9]*/[^/]*/[a-z0-9_+-]*/.\+$' "${desafios}" |
+    grep -v '/\.gitignore/' |
+      grep -Pv '/\.(?!gitignore).*' > "${valid}"
+
+  invalid=$(diff --unchanged-line-format='' --old-line-format='%L' "${desafios}" "${valid}")
+  rm -f "${valid}" "${desafios}"
+
+  if [[ -n "$invalid" ]]; then
+    echo "*** Invalid directory structure. Incorrect files/directories:\n$invalid\n\n"
+  fi
+}
+
+echo '
+=========================
+Directory structure check
+========================='
+
+invalid_filenames=$(check_filenames)
+invalid_multiple=$(check_multiple)
+invalid_dir_structure=$(check_dir_structure)
+
+res="${invalid_filenames}${invalid_multiple}${invalid_dir_structure}"
 
 if [[ -n "$res" ]]; then
-  echo "ERROR: Problems detected in the directory structure:"
-  echo
+echo '
+=== ATTENTION ===
+
+We detected problems in your file structure.
+
+We expect every submission to follow the following directory structure:
+
+desafio-NN/git-username/language/your_files_and_directories...
+
+Note that:
+
+1) We don not allow spaces or non-ascii characters in filenames.
+2) We only accept ONE desafio per PR.
+3) We reject incomplete paths (missing username, language, files).
+4) Language only accepts lowercase characters, numbers, "-", "_", and "+".
+5) We can have any structure under files, but we do not accept files or
+   directories starting with a "." *unless* it is a file called .gitignore
+
+Errors:
+'
+
   echo -ne "$res"
   echo "See https://github.com/osprogramadores/op-desafios#estrutura-de-diret%C3%B3rios for more details"
   exit 1
