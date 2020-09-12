@@ -8,7 +8,7 @@ with open('d12.txt', 'r') as f:
         if numero == 0:
             print('0 false')
             continue
-        
+
         if numero == 1:
             print('1 true 0')
             continue
