@@ -3,8 +3,7 @@ def gcd(a, b):
     """ MDC... """
     if b == 0:
         return a
-    else:
-        return gcd(b, a%b)
+    return gcd(b, a%b)
 
 with open('frac.txt', 'r') as f:
     for line in f:
