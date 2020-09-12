@@ -1,4 +1,4 @@
-""" Desafio 04 em Python por @ikkebr - OsProgramadores"""
+""" Desafio 04 em Python por @ikkebr g- OsProgramadores"""
 entrada = []
 
 for linhas in range(8):
