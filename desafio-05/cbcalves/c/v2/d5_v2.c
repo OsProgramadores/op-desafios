@@ -7,9 +7,6 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-#define MALLOC(var, type, size) var = (type *)malloc(sizeof(type) * (size))
-#define REALLOC(var, type, size) var = (type *)realloc(var, sizeof(type) * (size))
-#define FREE(var) free(var), var = NULL // free e bota a variavel como Null(0)
 #define START_AREAS 2
 
 typedef struct funcionario_st
@@ -46,9 +43,9 @@ typedef struct
 
 typedef struct
 {
-    int total;
     int max_salario;
     int min_salario;
+    int total;
     unsigned long long custo;
 } global_t; // controle de max e min global
 
@@ -85,12 +82,12 @@ int sobrenomes_process(void *funcionario) // processar o sobrenome
         HASH_FIND_STR(sobrenomes, func->sobrenome, pos);
         if (pos == NULL)
         {
-            MALLOC(pos, sobrenome_t, 1);
+            pos = (sobrenome_t *)malloc(sizeof(sobrenome_t));
             pos->sobrenome = func->sobrenome;
-            HASH_ADD_STR(sobrenomes, sobrenome, pos);
             pos->total = 0;
             pos->max = NULL;
             pos->max_salario = 0;
+            HASH_ADD_STR(sobrenomes, sobrenome, pos);
         }
         pthread_mutex_unlock(&mtx_sbn1);
     }
@@ -186,7 +183,7 @@ int areas_get(char *codigo, int incluir)
         }
         resp = areas_size;
         areas_size++;
-        REALLOC(areas, area_t, areas_size);
+        areas = (area_t *)realloc(areas, sizeof(area_t) * areas_size);
         areas[resp].codigo = codigo;
         areas[resp].nome = NULL;
         areas[resp].total = 0;
@@ -206,7 +203,7 @@ void *processar(void *processos)
     int sinal = 1, cod = 0;
     char *codigo = NULL;
     char *p = NULL, *s = NULL;
-    funcionario_t *ret = NULL, *new = NULL;
+    funcionario_t *ret = NULL, *novo = NULL;
 
     p = ((processar_t *)processos)->buffer;
     while (*p)
@@ -222,10 +219,11 @@ void *processar(void *processos)
         {
             if (sinal) // usa o retorno dos processamentos para definir se precisa alocar outra ficha
             {
-                MALLOC(new, funcionario_t, 1);
-                new->next = ret;
-                ret = new;
+                novo = (funcionario_t *)malloc(sizeof(funcionario_t));
+                novo->next = ret;
+                ret = novo;
                 ret->snome = NULL;
+                ret->area = NULL;
                 sinal = 0;
             }
 
@@ -234,6 +232,7 @@ void *processar(void *processos)
                 p++;
             p += 8;
             ret->nome = p;
+            p += 2;
             while (*p != '"')
                 p++;
             *p = 0;
@@ -303,6 +302,7 @@ void *processar(void *processos)
                     continue;
             }
             areas[cod].nome = p;
+            p += 7;
             while (*p != '"')
                 p++;
             *p = 0;
@@ -416,7 +416,7 @@ int main(int argc, char *argv[])
         abort();
     }
     //inicialização das areas
-    MALLOC(areas, area_t, START_AREAS);
+    areas = (area_t *)malloc(sizeof(area_t) * START_AREAS);
     areas_size = START_AREAS;
     for (i = 0; i < START_AREAS; i++)
     {
@@ -445,14 +445,14 @@ int main(int argc, char *argv[])
     threads_max = sysconf(_SC_NPROCESSORS_ONLN); // numero de processadores (* o numero de threads em cada);
     if (threads_max < 2)
         threads_max = 2;
-    MALLOC(processos, processar_t, threads_max);
+    processos = (processar_t *)malloc(sizeof(processar_t) * threads_max);
     buffer_max = (f.st_size / threads_max) + 1; // somo 1 pois a divisão pode não ser exata
 
     // criação das threads
     j = 0; // funciona como o resto que devia ter sido processado mas não foi na thread anterior
     for (i = 0; i < threads_max; i++)
     {
-        MALLOC(buffer, char, buffer_max + j);
+        buffer = (char *)malloc(sizeof(char) * (buffer_max + j));
         buffer_size = read(fjson, buffer, buffer_max + j);
         for (j = 0; buffer[buffer_size - j - 1] != '}'; j++)
             ;
@@ -486,7 +486,7 @@ int main(int argc, char *argv[])
             free(current_user);                 /* free it */
         }
     }
-    FREE(areas);
+    free(areas);
     for (i = 0; i < threads_max; i++)
     {
         funcionario_t *coletor = processos[i].coletor;
@@ -494,10 +494,10 @@ int main(int argc, char *argv[])
         {
             funcionario_t *tmp = coletor;
             coletor = tmp->next;
-            FREE(tmp);
+            free(tmp);
         }
     }
     for (i = 0; i < threads_max; i++)
-        FREE(processos[i].buffer);
-    FREE(processos);
+        free(processos[i].buffer);
+    free(processos);
 }

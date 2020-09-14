@@ -1,7 +1,7 @@
 #!make
 CC=gcc
-CFLAGS=-I. -flto -funroll-loops -pthread
-LFLAGS=-I. -flto -funroll-loops -pthread
+CFLAGS=-I. -flto -funroll-loops -pthread -lm
+LFLAGS=-I. -flto -funroll-loops -pthread -lm
 OBJ=obj/d5_v2.o
 DBG=-Ofast
 
