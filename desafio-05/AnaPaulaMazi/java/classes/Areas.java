@@ -11,7 +11,7 @@ public class Areas {
 		this.nome = nome;
 		
 	}
-
+	
 	public String getCodigo() {
 		return codigo;
 	}
