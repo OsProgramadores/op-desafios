@@ -4,7 +4,6 @@ def primo_numero(num):
     """Diz se é número primo"""
     if num < 1:
         return False
-    
     for x in range(2, num):
         if num % x == 0:
             return False
