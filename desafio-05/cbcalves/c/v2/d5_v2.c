@@ -26,7 +26,7 @@ typedef struct area_st
     char *nome;
     funcionario_t *max; // lista de max
     funcionario_t *min; // lista de min
-    unsigned long long custo;
+    size_t custo;
     int total;
     int max_salario;
     int min_salario;
@@ -46,7 +46,7 @@ typedef struct
     int max_salario;
     int min_salario;
     int total;
-    unsigned long long custo;
+    size_t custo;
 } global_t; // controle de max e min global
 
 typedef struct
@@ -200,12 +200,11 @@ int areas_get(char *codigo, int incluir)
 
 void *processar(void *processos)
 {
-    int sinal = 1, cod = 0;
+    int sinal = 1, cod;
     char *codigo = NULL;
-    char *p = NULL, *s = NULL;
+    char *p = ((processar_t *)processos)->buffer;
     funcionario_t *ret = NULL, *novo = NULL;
 
-    p = ((processar_t *)processos)->buffer;
     while (*p)
     {
         while (*p && *p != '{')
@@ -297,9 +296,12 @@ void *processar(void *processos)
                 cod = 1;
             else
             {
-                cod = areas_get(ret->codigo, 0);
+                cod = areas_get(codigo, 0);
                 if (cod == INT_MAX)
+                {
+                    p += 9;
                     continue;
+                }
             }
             areas[cod].nome = p;
             p += 7;
@@ -315,10 +317,9 @@ void *processar(void *processos)
 
 void show_area_print(area_t *index)
 {
-    funcionario_t *func = NULL;
-    double salariof = 0;
+    funcionario_t *func = index->max;
+    double salariof;
 
-    func = index->max;
     while (func != NULL)
     {
         salariof = (double)func->salario / 100.F;
@@ -341,11 +342,10 @@ void show_area_print(area_t *index)
 void show_area() // mostrar os resultados por área e global
 {
     int i = 0;
-    double salariof = 0;
-    area_t *index = NULL, *most_emp = &areas[0], *least_emp = &areas[0];
-    funcionario_t *func = NULL;
+    double salariof;
+    area_t *index, *most_emp = &areas[0], *least_emp = &areas[0];
 
-    for (i = 0; i < areas_size; i++)
+    for (; i < areas_size; i++)
     {
         index = &areas[i];
 
@@ -371,12 +371,12 @@ void show_area() // mostrar os resultados por área e global
 
 void show_sobrenomes() // mostrar os resultados por sobrenomes
 {
-    double salariof = 0;
-    sobrenome_t *index = NULL;
-    funcionario_t *func = NULL;
+    double salariof;
+    sobrenome_t *index = sobrenomes;
+    funcionario_t *func;
 
     // sobrenomes com mais de 2 funcionários
-    for (index = sobrenomes; index != NULL; index = index->hh.next)
+    for (; index != NULL; index = index->hh.next)
     {
         if (index->total < 2)
             continue;
@@ -390,12 +390,11 @@ void show_sobrenomes() // mostrar os resultados por sobrenomes
 
 int main(int argc, char *argv[])
 {
-    int fjson = 0, i = 0, j = 0;
-    void *nada = NULL; // sem função, criado para o pthread
+    int fjson, i, j;
     struct stat f;
     char *buffer = NULL;
     processar_t *processos; // coletar todos os funcionarios criados e apagar no final
-    size_t threads_max = 0, buffer_size = 0, buffer_max = 0;
+    size_t threads_max = 0, buffer_max = 0;
 
     if (argc < 2)
     {
@@ -407,13 +406,13 @@ int main(int argc, char *argv[])
     if (fjson < 0)
     {
         printf("Arquivo não encontrado\n");
-        abort();
+        exit(1);
     }
     i = fstat(fjson, &f);
-    if (fjson < 0)
+    if (i < 0)
     {
         printf("Arquivo não encontrado\n");
-        abort();
+        exit(1);
     }
     //inicialização das areas
     areas = (area_t *)malloc(sizeof(area_t) * START_AREAS);
@@ -452,6 +451,7 @@ int main(int argc, char *argv[])
     j = 0; // funciona como o resto que devia ter sido processado mas não foi na thread anterior
     for (i = 0; i < threads_max; i++)
     {
+        size_t buffer_size;
         buffer = (char *)malloc(sizeof(char) * (buffer_max + j));
         buffer_size = read(fjson, buffer, buffer_max + j);
         for (j = 0; buffer[buffer_size - j - 1] != '}'; j++)
@@ -464,7 +464,7 @@ int main(int argc, char *argv[])
     close(fjson);
     // encerramento das threads
     for (i = 0; i < threads_max; i++)
-        pthread_join(processos[i].id, &nada);
+        pthread_join(processos[i].id, NULL);
 
     show_area();
     show_sobrenomes();
