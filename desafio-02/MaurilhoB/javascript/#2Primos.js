@@ -1,8 +1,6 @@
 for (var i = 1; i <= 10000; i++) {
 	imprimePrimos(i)
 }
-
-
 function imprimePrimos(input_number){
 	let divisores = 0;
 	for (var i = 1; i <= input_number; i++) {
