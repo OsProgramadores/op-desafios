@@ -8,5 +8,4 @@ function imprimePrimos(input_number){
 		divisores++
 	}
 	}
-	if (divisores == 2) {console.log(input_number)}
-}
+	if (divisores == 2) {console.log(input_number)}}
