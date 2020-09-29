@@ -24,7 +24,15 @@ function primo() {
         //caso seja zero, o número de divisores irá ser acrescido
         
         if (i % x == 0) {
+<<<<<<< HEAD
           divisor += 1;
+=======
+<<<<<<< HEAD
+          divisor += 1;
+=======
+          divisor =+ 1;
+>>>>>>> a2398105acfbe0b6e9e382efe4f02834bdef4695
+>>>>>>> 7e49c2d32ecc5690b5b93d91c7a30dcbc1f87e4a
         }
       
       }
