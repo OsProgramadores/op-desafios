@@ -24,7 +24,7 @@ function primo() {
         //caso seja zero, o número de divisores irá ser acrescido
         
         if (i % x == 0) {
-          divisor =+ 1;
+          divisor += 1;
         }
       
       }
