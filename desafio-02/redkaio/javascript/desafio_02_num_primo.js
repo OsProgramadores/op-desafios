@@ -1,38 +1,40 @@
-//Aqui está uma função que irá determinar os números palíndromos entre um intervalo de números comprimidos
-//entre o primeiro número (x) e o segundo número (y)
-function isPalyndrome(x, y) {
-  //Antes de qualquer coisa, vamos checar a condição para o programa rodar independente de x ser maior ou menor que y, e vice-versa
-  if (x < y) {
-    //Após checada a condição, o for loop se encarregará de processar os números na ordem correta
-    for (i = x; i <= y; i++) {
+function primo() {
+    
+  //var i para os números que serão checados se são primos ou não
+  var i = 0;
+  
+  //var x para que haja a divisão entre i e x para averiguar o modal entre elas
+  var x = 0;
+  
+  //var divisor que será a soma de divisores totais entre os número i e número x
+  var divisor = 0;
+
+  for (i = 2; i <= 10000; i++) {
+    
+    //toda vez que o for loop começar e se e rodar novamente, devemos resetar a variável divisor
+    //para que ela não se acumule
+    divisor = 0;
+    
+    //a utilização do número x irá checar a quantidade de divisores entre a divisão i e x
+    //note que o for loop aqui irá realizar a divisão de todos os números x que começará do 1
+    //até chegar no número i
+    for (x = 1; x <= i; x++) {
       
-      //Aqui a mágica acontece. A variável reverse irá se encarregar de ler o valor de i,
-      //transformá-lo em uma String usando o toString(),
-      //desmembrar o valor da array com o split(), para algarismos com dois ou mais dígitos,
-      //inverter a ordem do array com utilizando o reverse() e,
-      //por fim, combinar o valor do array com a ordem invertida em um novo número com join()
-      //Para termos certeza que o resultado é um número, utilizamos a função Number()
-      //que irá passar no teste de equalidade utilizando '==='
-      var reverse = Number(i.toString().split([]).reverse().join([]));
-
-      //Checando mais uma condição, caso a variável reverse seja igual ao número i
-      //O programa irá exibir o número, e irá repetir o processo até checar todos os
-      //números no intervalo definido pelo usuário
-      if (reverse === i) {
-        console.log(i);
+      //aqui checaremos se o modal entre i e x é zero
+      //caso seja zero, o número de divisores irá ser acrescido
+      
+      if (i % x == 0) {
+        divisor += 1;
       }
+    
     }
-
-    //O código abaixo é a outra condição caso o número x seja maior que y, exibindo assim
-    //os números na ordem descrescente
-  } else {
-    for (i = x; i >= y; i--) {
-      var reverse = Number(i.toString().split([]).reverse().join([]));
-      if (reverse === i) {
-        console.log(i);
-      }
+    //números primos só são divisíveis por 1 e por eles mesmos, portanto
+    //se o número de divisores for no total 2, o número é primo, e o código irá retornar o valor
+    //por fim, o divisor será resetado no início do código, para que seja feita a verificação novamente
+    if (divisor == 2) {
+      console.log(i);
     }
   }
 }
 
-isPalyndrome(100, 1);
+primo();
