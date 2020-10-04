@@ -8,7 +8,7 @@ int main()
 {
     list<int> primes = { 2, 3, 5, 7 };
 
-    for( int i = 11; i <= 10000; ++i ) 
+    for( int i = 11; i <= 10000; ++i )
     {
         bool is_prime = true;
 

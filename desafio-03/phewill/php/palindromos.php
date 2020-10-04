@@ -1,5 +1,5 @@
 <?php
-//Autor - William Garcia 
+//Autor - William Garcia
 //Executável - https://repl.it/JVaf/latest
 $contP = 0;
 $min = 3500;
