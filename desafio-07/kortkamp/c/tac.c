@@ -2,30 +2,30 @@
 #include <stdio.h>
 #include <stdio.h>
 #define LINE_BUFFER_SIZE	1000
-#define BUFFER_SIZE		10000 
+#define BUFFER_SIZE		10000
 #define ERROR			-1
 
 
-/* TODO LIST	
+/* TODO LIST
  * (DONE!)		-need to deal with lines bigger then LINE_BUFFER_SIZE(yes, im noob)
- * (IMPOSSIBLE)		-print the line using the data stored in buffer, not loading linebuffer 
- * (UNNECESSARY)	-use malloc instead of arrays 
+ * (IMPOSSIBLE)		-print the line using the data stored in buffer, not loading linebuffer
+ * (UNNECESSARY)	-use malloc instead of arrays
  */
 
 
 
 // print line delimited by file indexes : start , end
-// Precisa preservar o SEEK_CUR no arquivo 
+// Precisa preservar o SEEK_CUR no arquivo
 int print_line(FILE *fptr,long start, long end){
 	long cur_pos = ftell(fptr);
-	// o +1 facilita as contas já que posso encher 
+	// o +1 facilita as contas já que posso encher
 	// o buffer com LINE_BUFFER_SIZE bytes e o último
 	// elemento será deixado em '\0' facilitando o printf
 	char linebuffer[LINE_BUFFER_SIZE+1];
 
 	fseek(fptr,start,SEEK_SET);
 	if(ferror(fptr)) return(ERROR);
-	
+
 	while(end-start > LINE_BUFFER_SIZE){
 		start += fread(&linebuffer, 1, LINE_BUFFER_SIZE, fptr);
 		linebuffer[LINE_BUFFER_SIZE] = '\0';
@@ -66,18 +66,18 @@ int main(int argc , char* argv[]){
 		return(ERROR);
 	}
 	// dispensa o último char do arquivo porque costuma ser convertido em \n
-	fseek(fptr,-1,SEEK_END);	
+	fseek(fptr,-1,SEEK_END);
 	if(ferror(fptr)){
 		perror("Seek error");
 		return(ERROR);
 	}
 	fsize = ftell(fptr);
-		
+
 	long count = 1;
 	long end = fsize; // end of line intended to print
 	long cr_pos = -1; // position os CR found, start of line intended to print
-	long bytes_to_read = BUFFER_SIZE;	
-	// this while must start with fseek to end 
+	long bytes_to_read = BUFFER_SIZE;
+	// this while must start with fseek to end
 	while(seek_ret == 0){ // pega buffers de todo o arquivo
 
 		seek_ret = fseek(fptr,-BUFFER_SIZE,SEEK_CUR);
@@ -87,7 +87,7 @@ int main(int argc , char* argv[]){
 		}
 		if(seek_ret != 0){
 			if(count == 1) bytes_to_read = fsize;	// se for a primeira leitura
-			else bytes_to_read = cr_pos;		
+			else bytes_to_read = cr_pos;
 		       	fseek(fptr,0,SEEK_SET);
 			if(ferror(fptr)){
 				perror("Seek error");

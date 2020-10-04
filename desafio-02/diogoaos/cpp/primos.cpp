@@ -27,7 +27,7 @@ vector<int> eratostenes(int n) {
 int main() {
   int max_prime = 10000;
   auto list = eratostenes(max_prime);
-  
+
   for (int i = 0; i < (int) list.size(); i++) {
     if (i > 0) {
       cout << " ";

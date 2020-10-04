@@ -25,7 +25,7 @@ public class Main {
                 final StringBuilder response = new StringBuilder();
 
                 fitas.forEach(ch -> response.append(ch));
-                
+
                 final String responseStr = response.toString().trim();
 
                 System.out.print(lineArray[0] + ",");
@@ -190,7 +190,7 @@ public class Main {
         } catch (FileNotFoundException e) {
             throw new RuntimeException("Could not open file with rules!", e);
         }
-        
+
         return params;
     }
 }

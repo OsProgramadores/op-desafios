@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
 	       	printf("Usage: %s filename\n",argv[0]);
 		return(0);
 	}
-	pf = fopen(argv[1], "r");	
+	pf = fopen(argv[1], "r");
 	if(pf == NULL){
 		printf("Error opening file %s",argv[1] );
 		return(1);
@@ -43,17 +43,17 @@ int main(int argc, char *argv[]){
 			number[0] = '1';
 		}
 		while((sobra == 0)){
-			
+
 			pcounter = 0;
 			sobra = 0;
 			while(number[pcounter] != 0){
-			
+
 				old = number[pcounter] - '0'; //convert to int
 				number[pcounter]  = (10*sobra + old) / 2 ;
 				sobra = (10*sobra + old) % 2 ;
-	
+
 				number[pcounter] +=  '0'; // convert back to ascii
-	
+
 				pcounter ++;
 			}
 
@@ -64,6 +64,6 @@ int main(int argc, char *argv[]){
 		}else printf("false\n");
 		sobra = 0;
 	}
-	
+
 	return(0);
 }
