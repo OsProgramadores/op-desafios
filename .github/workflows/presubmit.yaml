@@ -29,6 +29,10 @@ jobs:
           go get -u golang.org/x/lint/golint
           pip install pylint
 
+      - name: Check directory structure
+        run: |
+          ./ci/dircheck.sh
+
       - name: Check binary files
         run: |
           ./ci/bincheck.sh
@@ -37,13 +41,9 @@ jobs:
         run: |
           ./ci/utfcheck.sh
 
-      - name: Check directory structure
+      - name: Check files containing lines with trailing spaces or tabs
         run: |
-          ./ci/dircheck.sh
-
-      - name: Check Validator code
-        run: |
-          ./ci/validator.sh
+          ./ci/trailing-spaces-check.sh
 
       - name: Check Python code
         run: |
@@ -52,3 +52,8 @@ jobs:
       - name: Check Go code
         run: |
           ./ci/gocheck.sh
+
+      - name: Check Validator code
+        run: |
+          ./ci/validator.sh
+
