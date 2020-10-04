@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class desafio02 {
 
 	public static void main(String[] args) {
-		
+
 		int n = 1;
 		   int nDivisores = 0;
 
@@ -16,7 +16,7 @@ public class desafio02 {
 		      }
 		    }
 		    if(nDivisores == 2){
-		        System.out.println(n + " é primo");
+		        System.out.println(n + " Ã© primo");
 		      }
 		    nDivisores = 0;
 		    n++;
