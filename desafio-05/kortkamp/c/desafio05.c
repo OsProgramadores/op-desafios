@@ -44,12 +44,12 @@ struct stats_surname{
 // Stores the list os surnames. In fact we have onlye 4917 surnames.
 char surname_list[MAX_SURNAMES][MAX_NAME_SIZE];
 
-// Stores areas codes in 2 char form 
-// where index of area_index means 
+// Stores areas codes in 2 char form
+// where index of area_index means
 // the index of area in stats array.
 char area_index[MAX_AREAS][3];
 
-// Returns the index os a area code. 
+// Returns the index os a area code.
 // If not found add that area code in the array.
 int get_area_index(char area[3]){
 	int count = 0;
@@ -82,7 +82,7 @@ void initialize_vars(){
 		surnames[i].count = 0;
 		surname_list[i][0] = '\0';
 	}
-	// Area "00" means global. 
+	// Area "00" means global.
 	get_area_index("00");
 }
 
@@ -177,7 +177,7 @@ void update_surnames(int index){
 	surnames[index].count ++;
 }
 
-// Get and process every json entry in the file 
+// Get and process every json entry in the file
 int process_entries(FILE *fp){
 	char buffer[20000] ;
 	count = 1;
@@ -191,7 +191,7 @@ int process_entries(FILE *fp){
 		buff_pos = 0;
 		// Just get the name at each 4917 entries,
 		// for others 4916 the name repeats.
-		if(count == 4917 || count == 1){ 
+		if(count == 4917 || count == 1){
 			count = 1;
 			//get new name
 			//buff_pos = 6;
@@ -208,7 +208,7 @@ int process_entries(FILE *fp){
 			while(buffer[buff_pos++] != 'e' );
 			buff_pos += 3 ;
 			while(buffer[buff_pos++] != ':' );
-			buff_pos++;	
+			buff_pos++;
 			sscanf(buffer + buff_pos, "%[^\"]",surname_list[count]);
 		}
 		// Search for AREA backwards.
@@ -220,14 +220,14 @@ int process_entries(FILE *fp){
 		// Search for salary.
 		while(buffer[buff_size--] != 'o' );
 		buff_size += 4;
-		sscanf(buffer + buff_size, "%f",&salario);	
+		sscanf(buffer + buff_size, "%f",&salario);
 		// Update the global stat.
 		max_min_avg(GLOBAL_INDEX);
 		// Update area stats
 		max_min_avg(get_area_index(area));
 		update_surnames(count);
 		count++;
-	// While we get a comma after "close bracket" continue 
+	// While we get a comma after "close bracket" continue
 	}while(comma == ',');
 	// Get area strings.
 	int ret;
@@ -249,7 +249,7 @@ int main(int argc, char *argv[]){
 		perror("Error opening file ");
 		return(-1);
 	}
-	initialize_vars();	
+	initialize_vars();
 	process_entries(fp);
 	fclose(fp);
 	print_results();

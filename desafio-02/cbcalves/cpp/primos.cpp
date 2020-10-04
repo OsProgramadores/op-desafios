@@ -21,7 +21,7 @@ int main()
             if ((i % primos[j]) == 0)
                 break;
             // Se o resultado for menor que o divisor, quer dizer que
-            // não tem um primo que multiplicando por outro primo menor 
+            // não tem um primo que multiplicando por outro primo menor
             // de o número, ele é primo, não vou até o fim da array.
             if ((i / primos[j]) < primos[j])
             {

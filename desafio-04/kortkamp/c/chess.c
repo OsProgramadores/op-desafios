@@ -57,7 +57,7 @@ int main(int argc, char *argv[]){
 			quantidade[table[j][i]-'0']++;
 	for(int i = 1; i <= 6; i++)
 		printf("%s: %d peça(s)\n",nome[i],quantidade[i]);
-	
+
 	// Goodbye.
 	return(0);
 }
