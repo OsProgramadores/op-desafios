@@ -3,12 +3,10 @@
 
 
 function matriz (col, lin) {
-  
     //A variável Matriz é a escolhida para receber os dados das colunas e linhas do tabuleiro
     let matriz = [];
     let i = 0;
     let j = 0;
-  
     //Utilizando Nested For Loops - ou For Loops dentro de outors - vamos criar arrays que serão os números
     //de linhas e enviá-los para a Matriz, lembrando que cada vez que rodarmos o For loop para as linhas,
     //o loop entenderá que deve-se criar novamente um array linha vazio []
@@ -18,7 +16,7 @@ function matriz (col, lin) {
       for(j = 0; j < col; j++){
         //Já aqui, a variável coluna irá gerar aleatoriamente números entre 0 e 6
         //Para isso, usamos a função Math.floor que serve para arredondar os números
-        //E a função Math.random que gera números aleatórios entre 0 e 1. 
+        //E a função Math.random que gera números aleatórios entre 0 e 1.
         //Multiplicamos por 7 para que os resultados sejam arredondados para 0 - o menor
         //E 6 - o maior
         let coluna = Math.floor((Math.random() * 7));
@@ -53,7 +51,6 @@ function matriz (col, lin) {
     torre = pecas[4];
     rainha = pecas[5];
     rei = pecas[6];
-  
     //Por fim, iremos retornar os valores das peças abaixo.
     console.log("Casas vazias: " + vazio);
     console.log("Peões: " + peao);
@@ -63,7 +60,4 @@ function matriz (col, lin) {
     console.log("Rainhas: " + rainha);
     console.log("Reis: " + rei);
   }
-  
   matriz(8, 8);
-  
-  
