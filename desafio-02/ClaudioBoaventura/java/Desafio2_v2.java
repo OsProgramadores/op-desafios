@@ -21,7 +21,7 @@ public class Desafio2_v2{
 					if (ehPrimo){
 						System.out.println(i);
 					}
-					
+
 				}{
 					break;
 				}

@@ -8,7 +8,7 @@
 
 if __name__ == '__main__':
     board = input().split()
-    
+
     parts = ('Peão', 'Bispo', 'Cavalo', 'Torre', 'Rainha', 'Rei')
 
     for num in range(1, 7):

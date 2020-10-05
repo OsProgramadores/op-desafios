@@ -7,10 +7,10 @@
 			while(1) {
 				printf("Digite um intervalo de números positivos: ");
 				scanf("%d %d", & inicio, & fim);
-				
+
 				//checar se os números são positivos
 				if( inicio >= 0 && fim >= 0) {
-					//colocando o menor número como começo do intervalo					
+					//colocando o menor número como começo do intervalo
 					if( inicio < fim) {
 						for( i = inicio + 1; i <= fim; i++){
 							if(palindromo(i)) {
@@ -41,7 +41,7 @@
 		int invertido = 0, resto, x;
 
 		x = a;
-		
+
 		while( x != 0) {
 			resto = x % 10;
 			invertido = (invertido * 10) + resto;

@@ -5,7 +5,7 @@ echo "3"
 while [ $var -le  100000 ]
 do
     ((var2=2))
-    ((var3=0))    
+    ((var3=0))
     while [ $var2 -lt $var ]
     do
         ((var4=$var % $var2 ))
@@ -13,12 +13,12 @@ do
         then
             ((var3=1))
             break
-        fi 
-        ((var2=$var2 + 1)) 
+        fi
+        ((var2=$var2 + 1))
     done
     if [ $var3 -eq 0 ]
     then
-       echo "$var" 
+       echo "$var"
     fi
     ((var=$var + 1))
 done

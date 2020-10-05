@@ -26,7 +26,7 @@ int zero(char *num){
 // e remove a caspa do cristiano ronaldo
 int clear_zero(char *val){
 	while(val[0] == '0') strcpy(val,val+1);
-	if(val[0] == '\0') strcpy(val,"0"); 	// mantém ao menos 1 zero 
+	if(val[0] == '\0') strcpy(val,"0"); 	// mantém ao menos 1 zero
 	return(0);
 }
 
@@ -41,13 +41,13 @@ int shift(char *str, int value,int size){
 
 // Faz uma subtração inteira positiva de strings numericas de tamanho arbitrário
 // se o resultado for < 0 , retorna -1 else retorna 0
-// TODO permitir o uso da mesma string em val e diff  val -= sub 
+// TODO permitir o uso da mesma string em val e diff  val -= sub
 // falha de segmentação quando chamado com subtrair("123","12",var)
 // a função previsa ser muito otimizada, está horrorosa.
 int subtrair(char *val, char *sub, char *diff){
 	clear_zero(val);
 	clear_zero(sub);
-	
+
 	int val_len = strlen(val); // lenght of val
 	int sub_len = strlen(sub); // lenght of sub
 	int val_pos = 0; // position in val
@@ -70,9 +70,9 @@ int subtrair(char *val, char *sub, char *diff){
 			empresta = 1;
 		}else empresta = 0;
 		diff[val_pos] = val[val_pos] - sub[sub_pos];
-		sub[sub_pos] -= emprestou;		
+		sub[sub_pos] -= emprestou;
 		if(empresta == 1) {
-			val[val_pos] -= 10; 
+			val[val_pos] -= 10;
 		}
 	}
 	if(empresta == 1){
@@ -82,14 +82,14 @@ int subtrair(char *val, char *sub, char *diff){
 			}else if(diff[i] >=  empresta) {
 				diff[i] --;
 				empresta = 0;
-			}	
-		}			
+			}
+		}
 
 	}
 	shift(val,'0',val_len);shift(sub,'0',sub_len);shift(diff,'0',val_len);// desfaz a conversão
 	if(empresta == 1){
 		subtrair(sub,val,diff);
-		return(-1);	
+		return(-1);
 	}
 	return(0);
 }
@@ -105,8 +105,8 @@ int divide(char *num, char *den, char *quo, char *resto){
 	int num_len = strlen(num);
 	int den_len = strlen(den);
 	int num_pos = den_len;
-	
-	quo[0] = '\0';	
+
+	quo[0] = '\0';
 	if(den_len > num_len){
 		strcpy(quo,"0");
 		strcpy(resto,num);
@@ -115,13 +115,13 @@ int divide(char *num, char *den, char *quo, char *resto){
 	}
 	/* vai pegando os pedaços do numerador de tamanhos igual ao denominador*/
 	strncpy(temp_num,num,den_len);
-	temp_num[den_len] = '\0';	
-	strcpy(resto,num);	
+	temp_num[den_len] = '\0';
+	strcpy(resto,num);
 	while(num_pos <= num_len ){
 		sub_counter = 0;
 		while(result != -1){
 			result = subtrair(temp_num,den,temp_diff);
-			if(result != -1){	
+			if(result != -1){
 				strcpy(temp_num,temp_diff);
 				strcpy(resto,temp_num);
 				sub_counter ++;
@@ -138,7 +138,7 @@ int divide(char *num, char *den, char *quo, char *resto){
 	return(0);
 }
 
-// Retorna o MDC de dois números 
+// Retorna o MDC de dois números
 // usando o algoritmo de Euclides
 int mdc(char *val1 , char *val2, char *mdc_val){
 	char temp1[MAX_NUM_SIZE];
@@ -157,7 +157,7 @@ int mdc(char *val1 , char *val2, char *mdc_val){
 }
 
 int main(int argc, char* argv[]){
-	
+
 	FILE *fp;
 	char line[MAX_NUM_SIZE *2 + 1] = {0};// buffer de linha lida do arquivo
 	char num[MAX_NUM_SIZE];// numerador
@@ -176,11 +176,11 @@ int main(int argc, char* argv[]){
 	if(fp == NULL){
 		perror("Error opening file");
 		return(-1);
-	}	
+	}
 	while(fscanf(fp, "%s", line) != EOF){
 		if(ferror(fp)){
 			perror("Error reading file");
-			return(-1);	
+			return(-1);
 		}
 		if(sscanf(line,"%[^/]/%s",num,den) == 1){ // leu apenas um valor na linha
 			strcpy(den,"1");
@@ -190,20 +190,20 @@ int main(int argc, char* argv[]){
 		divide(den,mdc_val,val2,resto);
 		strcpy(num,val1);
 		strcpy(den,val2);
-		
+
 		if(divide(num,den,quo,resto) == -1){
 			printf("ERR\n");
 		}else{
 			// print solution
 			clear_zero(quo);
 			clear_zero(resto);
-			
+
 			if(quo[0] != '0')// se o primeiro algarismo for zero não imprima
 				printf("%s ",quo);
 			if(resto[0] != '0')// se o numerador for zero , não imprima
 				printf("%s/%s",resto,den);
 			printf("\n");
 		}
-	}	
+	}
 	return(0);
 }

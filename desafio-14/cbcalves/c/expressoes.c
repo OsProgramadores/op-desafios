@@ -63,7 +63,7 @@ int expressao_calcular(expressao_t *units) // percorre as unidades realizando as
     if (units->next == NULL) // se tem apenas uma unidade não existe operação
         return units->numero;
 
-    for (int i = 0; i < 3; i++) 
+    for (int i = 0; i < 3; i++)
     {
         op = units->next;
         while (op != NULL)

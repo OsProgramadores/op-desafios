@@ -34,13 +34,13 @@ public class Desafio12 {
 	private static BigInteger getExpoent(final String num){
 		BigInteger actualNum = new BigInteger(num);
 		final BigInteger TWO = new BigInteger("2");
-		
+
 		if(actualNum.max(BigInteger.ZERO).equals(BigInteger.ZERO)){
 			return MINUS_ONE;
 		}
 
 		BigInteger expoent = BigInteger.ZERO;
-	
+
 		while(actualNum.mod(TWO).intValue() == 0){
 			actualNum = actualNum.shiftRight(1);
 			expoent = expoent.add(BigInteger.ONE);

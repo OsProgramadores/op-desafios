@@ -24,7 +24,7 @@ public class Funcionario {
         return nome + " " + sobrenome;
     }
 
-    
+
     public String getArea() {
         return area;
     }

@@ -6,7 +6,7 @@ public class PrimeNumbers {
 	public static void main(String[] args) {
 		int rangeStart = 1;
 		int rangeEnd = 10000;
-		
+
 		//Initialize the list with the range to validate
 		List<Integer> primeNummberList = new ArrayList<Integer>();
 		for (int i = rangeStart; i <= rangeEnd; i++) {
@@ -15,7 +15,7 @@ public class PrimeNumbers {
 				primeNummberList.add(i);
 			}
 		}
-		
+
 		//Using the Sieve of Eratosthenes method
 		for (int i = rangeStart; i <= Math.sqrt(rangeEnd); i++) {
 			if (isPrime(i)) {
@@ -24,13 +24,13 @@ public class PrimeNumbers {
 				}
 			}
 		}
-		
+
 		//Print the result: the list of prime numbers contained at the range calculated
 		for (Integer primeNumber : primeNummberList) {
 			System.out.println(primeNumber);
 		}
 	}
-	
+
 	public static boolean isPrime(int n) {
 		int counter = 0;
 		for (int i = 1; i <= n; i++) {
@@ -38,7 +38,7 @@ public class PrimeNumbers {
 				counter++;
 			}
 		}
-		
+
 		return counter > 0 && counter <= 2;
 	}
 }

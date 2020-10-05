@@ -1,4 +1,4 @@
-/*TODO 
+/*TODO
  * 1 mesclar as funções comb e fast_comb
  * 2 trabalhar com qualquer tamanho de dicionario
  *
@@ -10,7 +10,7 @@
 
 #define INPUT_LIMIT	100		// max input lenght
 #define WORDS_FILE	"words.txt"	// name of the file
-#define NUM_WORDS	24853		// num of words in file 
+#define NUM_WORDS	24853		// num of words in file
 #define MAX_LEN		23		// lenght of the largest word + '\0'
 
 long ana_count = 0; // contador global para contabilizar a quantidade de anagramas gerados
@@ -23,23 +23,23 @@ int push(char *buffer, char c){
 	buffer[pos] = c;
 	buffer[pos + 1] = '\0';
 	return(pos+1);
-}	
+}
 
 // return 0 if a buffer is completely filled with spaces
-int blank(char *buffer){	
-	for(int i = 0; i < strlen(buffer);i++) 
+int blank(char *buffer){
+	for(int i = 0; i < strlen(buffer);i++)
 		if(buffer[i] != ' ') return(-1);
 	return(0);
 }
 void print_solution(int max_index){
-	
+
 	for(int i = 0; i < max_index; i++)
 		printf("%s ", solution[i]);
 	printf("%s\n", solution[max_index]);
 }
 // comb() verify combination
 // Return 0 if sub is a subset of set
-// in another words, all chars in string sub 
+// in another words, all chars in string sub
 // are too in the string set
 // a important note: set is partialy destroyed if successful
 // a chars of set that are part of sub are substituted for spaces in set.
@@ -70,7 +70,7 @@ int fast_comb(char *set, char *sub){
 	return(comb(set,sub));
 }
 
-/* Make a new dictionary of valid words 
+/* Make a new dictionary of valid words
  * and return the num of words in the new dictionary
  */
 int make_new_dict(char *input,char *dest_dict[23],char *src_dict[MAX_LEN], int src_size){
@@ -104,13 +104,13 @@ int merge(char *buffer){
  *
  */
 int search(char *prev_dict[MAX_LEN], int prev_dict_size, char *input, int solution_index){
-	
+
 	// solution_index : indice da solução a ser preechido caso um anagrama seja encontrado
 	// dict_indexes : array with indexes of dictionary with all words used in precious search
 	char test_word[MAX_LEN];
 	char temp_input[INPUT_LIMIT];
 	int dict_size;// size of current dictionary
-	// dict é um ponteiro para os ponteiros do novo dicionário a ser criado 
+	// dict é um ponteiro para os ponteiros do novo dicionário a ser criado
 	// essa ideia parece ter sido a melhor estratégia para otimizar o algoritmo
 	// pois a cada nova chamada do search() a função cria um novo dicionário sem
 	// comprometer muita memória pois não armazena as palavras novamente, apenas os
@@ -124,15 +124,15 @@ int search(char *prev_dict[MAX_LEN], int prev_dict_size, char *input, int soluti
 		dict = prev_dict;
 		dict_size = prev_dict_size;
 	}else dict_size = make_new_dict(input, dict,prev_dict,prev_dict_size);
-	
+
 	strcpy(temp_input,input);
 	for(int i = 0; i < dict_size; i++){// testa todas as palavras
 			if(fast_comb(temp_input,dict[i]) == 0) {
 				solution[solution_index] = dict[i]; // current word
-				if(blank(temp_input) == 0){ //the input is blank 
+				if(blank(temp_input) == 0){ //the input is blank
 					print_solution(solution_index);
 					ana_count++;
-				//	free(dict);	
+				//	free(dict);
 				//	return(0);
 				}
 				merge(temp_input); // elimina os espacos pra ganhar tempo nas operações seguintes
@@ -140,7 +140,7 @@ int search(char *prev_dict[MAX_LEN], int prev_dict_size, char *input, int soluti
 				strcpy(temp_input,input);
 			}
 		}
-	free(dict);	
+	free(dict);
 	solution[solution_index] = 0;
 	return(0);
 }
@@ -159,7 +159,7 @@ int main(int argc,char* argv[]){
 		fprintf(stderr,"Erro: entrada maxima %d\n",INPUT_LIMIT);
 		return(-1);
 	}
-	
+
 	//trata a entrada
 	for(int i = 0 ; i < strlen(argv[1]);i++){
 		if((argv[1][i]>='A')&&(argv[1][i]<='Z')) push(input,argv[1][i]);
@@ -169,7 +169,7 @@ int main(int argc,char* argv[]){
 			fprintf(stderr,"Caracteres permitidos: A-Z a-z\n");
 			return(-1);
 		}
-	}	
+	}
 	//abre o arquivo , carrega o array e fecha
 	words_fp = fopen(WORDS_FILE,"rb+");
 	if(words_fp == NULL){
@@ -178,7 +178,7 @@ int main(int argc,char* argv[]){
 	}
 	int count = 0;
 	while(!feof(words_fp)){
-		fscanf(words_fp,"%s",word_array[count++]); 
+		fscanf(words_fp,"%s",word_array[count++]);
 		if(ferror(words_fp)){
 			perror("Erro lendo o arquivo " WORDS_FILE);
 			return(-1);
@@ -190,7 +190,7 @@ int main(int argc,char* argv[]){
 	num_words--; // é necessário diminuir 1 porque a função acima também conta o EOF.
 
 	//aqui a brincadeira começa
-	
+
 	char **dict = NULL;
 	dict = (char **)malloc(num_words * sizeof(char*));
 	if(dict == NULL){
@@ -199,7 +199,7 @@ int main(int argc,char* argv[]){
 	}
 	for(int i = 0 ;i < num_words;i++) dict[i] = word_array[i];
 	// aqui eu converti o array de words para poiter of poiters para
-	// padronizar a chamada da função search. 
+	// padronizar a chamada da função search.
 	// não consegui trabalhar do jeito que eu queria usando arrays
 	search(dict,num_words,input,0);
 	return(0);
