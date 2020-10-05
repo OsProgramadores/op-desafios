@@ -37,22 +37,22 @@ function contarPecas( tabuleiro){
         let quant = 0;
 
         for (const x in pecas) {
-            pecas[x].quantidade = 0;            
-        }         
+            pecas[x].quantidade = 0;
+        }
 
     tabuleiro.forEach( (valor, chave) => {
         valor.forEach((valor, chave) => {
            quant =  valor > 0 ? pecas[valor].quantidade++ : null;
             return quant;
         });
-        
+
     });
 }
 
 function imprimir (ret){
     for (const x in pecas) {
         console.log (`${pecas[x].peca}: ${pecas[x].quantidade} peça(s)`);
-        
+
     }
 }
 

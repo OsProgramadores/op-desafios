@@ -177,36 +177,36 @@ void parse_json_chunk(ThreadData *data){
             while(*c != ',') ++c;
           }
         }
-        
+
         //read name
         c += 7;
         c = get_string(c, name_str, true);
-        
+
         //read surname
         c += 11;
         c = get_string_hashed(c, surname_str);
-        
+
         //read salary
         c += 9;
         c = get_number(c, salary);
-        
+
         //read area
         c += 6;
         c = get_string_hashed(c, area_str);
-        
+
         //update global counters
         data->total_salary += salary;
         ++data->total_employees;
         add_min_name(data->min_names, data->min_salary, name_str, surname_str, salary);
         add_max_name(data->max_names, data->max_salary, name_str, surname_str, salary);
-        
+
         //update area
         area = &data->areas[area_str];
         ++area->total_employees;
         area->total_salary += salary;
         add_min_name(area->min_names, area->min_salary, name_str, surname_str, salary);
         add_max_name(area->max_names, area->max_salary, name_str, surname_str, salary);
-        
+
         //update surname
         surname = &data->surnames[surname_str];
         ++surname->total_employees;
@@ -216,11 +216,11 @@ void parse_json_chunk(ThreadData *data){
         //get code
         c += 6;
         c = get_string_hashed(c, area_str);
-        
+
         //get name
         c += 6;
         c = get_string(c, name_str);
-        
+
         //set area name
         data->areas[area_str].name = name_str;
       break;
@@ -228,15 +228,15 @@ void parse_json_chunk(ThreadData *data){
   }
 }
 
-int main(int argc, char *argv[]) {  
+int main(int argc, char *argv[]) {
   if(argc != 2 && argc != 3){
     std::cout << "Usage: d5 [num_threads] <file>";
     return 1;
   }
-  
+
   FILE *file;
   int num_threads;
-  
+
   if(argc == 3){
     num_threads = atoi(argv[1]);
     file = fopen(argv[2], "rb");
@@ -244,28 +244,28 @@ int main(int argc, char *argv[]) {
     num_threads = std::thread::hardware_concurrency();
     file = fopen(argv[1], "rb");
   }
-  
+
   if(!file){
     std::cout << "Invalid file path.";
     return 1;
   }
-  
+
   //get file size
   fseek(file, 0, SEEK_END);
   size_t file_size = ftell(file);
   rewind(file);
-  
+
   std::vector<ThreadData> data(num_threads);
   std::vector<std::thread> threads(num_threads);
-  
+
   for(int i = 0; i < num_threads; ++i){
     //if its the last buffer, read the remains
     size_t buffer_size = (i == num_threads - 1) ? file_size - ftell(file) : ceil(file_size / num_threads);
-    
+
     char *buffer = new char[buffer_size];
-    
+
     size_t read_size = fread(buffer, 1, buffer_size, file);
-    
+
     //read complete json objects only
     for(size_t j = read_size - 1; j > 0; --j){
       if(buffer[j] == '}'){
@@ -274,29 +274,29 @@ int main(int argc, char *argv[]) {
       }
       fseek(file, -1, SEEK_CUR);
     }
-    
+
     data[i].buffer = buffer;
     data[i].surnames.reserve(10000); //reserve good space to avoid slow map rebuild/realloc
     threads[i] = std::thread(parse_json_chunk, &data[i]);
   }
-  
+
   fclose(file);
-  
+
   for(auto& thread : threads){
     thread.join();
   }
-  
+
   ThreadData& d = data[0];
-  
+
   //join threads results
-  
+
   for(auto it = data.begin() + 1; it != data.end(); ++it){
     //global
     d.total_employees += it->total_employees;
     d.total_salary += it->total_salary;
     join_name_list(it->min_names, d.min_names, it->min_salary, d.min_salary, true);
     join_name_list(it->max_names, d.max_names, it->max_salary, d.max_salary, false);
-    
+
     //areas
     for(auto& pair : it->areas){
       Area& area1 = d.areas[pair.first];
@@ -307,7 +307,7 @@ int main(int argc, char *argv[]) {
       join_name_list(area2.min_names, area1.min_names, area2.min_salary, area1.min_salary, true);
       join_name_list(area2.max_names, area1.max_names, area2.max_salary, area1.max_salary, false);
     }
-    
+
     //surnames
     for(auto& pair : it->surnames){
       Surname& surname1 = d.surnames[pair.first];
@@ -316,54 +316,54 @@ int main(int argc, char *argv[]) {
       join_name_list(surname2.max_names, surname1.max_names, surname2.max_salary, surname1.max_salary, false);
     }
   }
-  
+
   //write results
-  
+
   //global
-  
+
   for(auto it = d.min_names.begin(); it != d.min_names.end(); it += 2){
     std::cout << "global_min|" << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << d.min_salary * 0.01 << '\n';
   }
-  
+
   for(auto it = d.max_names.begin(); it != d.max_names.end(); it += 2){
     std::cout << "global_max|" << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << d.max_salary * 0.01 << '\n';
   }
-  
+
   std::cout << "global_avg|" << std::fixed << std::setprecision(2) << d.total_salary * 0.01 / d.total_employees << '\n';
-  
+
   //areas
-  
+
   const Area* least_employees = nullptr;
   const Area* most_employees = nullptr;
-  
+
   for(auto& pair : d.areas){
     const Area& area = pair.second;
     if(area.total_employees > 0){
       std::cout << "area_avg|" << area.name << '|' << std::fixed << std::setprecision(2) << area.total_salary * 0.01 / area.total_employees << '\n';
-      
+
       for(auto it = area.min_names.begin(); it != area.min_names.end(); it += 2){
         std::cout << "area_min|" << area.name << '|' << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << area.min_salary * 0.01 << '\n';
       }
-      
+
       for(auto it = area.max_names.begin(); it != area.max_names.end(); it += 2){
         std::cout << "area_max|" << area.name << '|' << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << area.max_salary * 0.01 << '\n';
       }
-      
+
       if(most_employees == nullptr || area.total_employees > most_employees->total_employees){
         most_employees = &area;
       }
-      
+
       if(least_employees == nullptr || area.total_employees < least_employees->total_employees){
         least_employees = &area;
       }
     }
   }
-  
+
   std::cout << "least_employees|" << least_employees->name << '|' << least_employees->total_employees << '\n';
   std::cout << "most_employees|" << most_employees->name << '|' << most_employees->total_employees << '\n';
-  
+
   //surnames
-  
+
   for(auto& pair : d.surnames){
     const HString& surname_str = pair.first;
     const Surname& surname = pair.second;

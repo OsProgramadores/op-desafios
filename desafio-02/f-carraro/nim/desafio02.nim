@@ -1,6 +1,6 @@
 import sequtils
 
-proc primes(to: int) : seq[int] = 
+proc primes(to: int) : seq[int] =
     var sieve = (2..to).toSeq
     for i, n in sieve:
         if n == 0: continue

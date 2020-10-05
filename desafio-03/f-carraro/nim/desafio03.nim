@@ -1,6 +1,6 @@
 import sequtils
 
-proc isPalindrome(num: uint64): bool = 
+proc isPalindrome(num: uint64): bool =
   var n = num
   var digits : seq[uint64]
   while n > 0'u64:

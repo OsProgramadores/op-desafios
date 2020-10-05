@@ -1,2 +1,2 @@
-**Compilação do Programa**: javac Desafio7.java  
-**Execução do Programa**: java Desafio7 *arquivo-texto*  
+**Compilação do Programa**: javac Desafio7.java
+**Execução do Programa**: java Desafio7 *arquivo-texto*

@@ -17,13 +17,13 @@ using namespace std;
 
 typedef long long int LongInteger;
 
-struct Chunk 
+struct Chunk
 {
 	const char* begin;
 	const char* end;
 };
 
-struct Employee 
+struct Employee
 {
 	Chunk name;
 	Chunk surname;
@@ -110,13 +110,13 @@ void parse(ParseChunk* data)
 	Area* area;
 	vector<Employee>* employees;
 	auto mystrchr = [&](const char* str, char ch) { while (*str && *str != ch) ++str; return str; };
-	auto myatoi = [&](const char* beg, const char* end) 
-	{ 
-		int ret = 0; 
+	auto myatoi = [&](const char* beg, const char* end)
+	{
+		int ret = 0;
 		while (beg < end) {
-			char c = *beg++; 
-			if (c == '.') continue; 
-			ret = ret * 10 + c - '0'; } 
+			char c = *beg++;
+			if (c == '.') continue;
+			ret = ret * 10 + c - '0'; }
 		return ret;
 	};
 	const char* curr = mystrchr(data->data_chunk.begin, '"');
