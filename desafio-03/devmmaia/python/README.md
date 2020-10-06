@@ -1,4 +1,4 @@
-# Gerador de números palindrômicos
+# Gerador de nÃºmeros palindrÃ´micos
 
 ### Uso:
 python 3.6+

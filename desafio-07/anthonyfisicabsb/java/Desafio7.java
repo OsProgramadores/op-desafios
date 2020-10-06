@@ -60,7 +60,7 @@ public class Desafio7
         }
     }
 
-    public static void printString(ArrayDeque<Byte> lista) throws Exception 
+    public static void printString(ArrayDeque<Byte> lista) throws Exception
     {
         final byte bytes[] = new byte[lista.size()];
 

@@ -8,7 +8,7 @@
 
 if __name__ == '__main__':
     smaller, bigger = input().split()
-    
+
     for num in range(int(smaller), int(bigger) + 1):
         str_num = str(num)
         if str_num == str_num[::-1]:

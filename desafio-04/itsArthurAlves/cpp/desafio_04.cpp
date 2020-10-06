@@ -60,5 +60,5 @@ int main(){
   entertab(matrix);
   outtab(matrix);
 return(0);
- 
+
 }
