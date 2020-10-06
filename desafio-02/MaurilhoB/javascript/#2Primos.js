@@ -1,11 +1,13 @@
-for (var i = 1; i <= 10000; i++) {
-	imprimePrimos(i)
+for (var i = 2; i <= 10000; i++)
+{
+	printPrimes(i)
 }
-function imprimePrimos(input_number){
+function printPrimes(input_number)
+{
 	let divisores = 0;
-	for (var i = 1; i <= input_number; i++) {
-	if (input_number % i == 0){
-		divisores++
+	for (var i = 2; i <= input_number; i++)
+	{
+		if (input_number % i == 0) divisores++
 	}
-	}
-	if (divisores == 2) {console.log(input_number)}}
+	if (divisores === 1) console.log(input_number);
+}
