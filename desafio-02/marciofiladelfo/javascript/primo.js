@@ -1,5 +1,5 @@
 function getPrime(valor){
-    let result = "";  
+    let result = 0;  
     for(let counter = 1; counter <= valor; counter++){
         let divisor = 0;
         for(let aux = 1 ; aux <= counter ; aux++){
@@ -11,6 +11,5 @@ function getPrime(valor){
             result += `${counter}, `;
         }
     }
-    console.log(result);
 }
 getPrime(1000);
