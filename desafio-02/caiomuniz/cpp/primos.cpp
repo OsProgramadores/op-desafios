@@ -13,9 +13,9 @@ int main(int argc, char const *argv[])
     {
         if (ePrimo(i))
             primos.push_back(i);
-        
+
     }
-    
+
     for (size_t i = 0; i < primos.size(); i++)
     {
         std::cout << primos[i] << " ";

@@ -22,9 +22,9 @@ def isPalindrome(n):
             # têm que ser iguais aos números de 0 à len(n)/2 do seu respectivo
             # reverso
             return True
-        else: 
+        else:
             return False
-        
+
 
 def main():
     # Criando um array que irá conter todos os palíndromos
@@ -33,7 +33,7 @@ def main():
         if(isPalindrome(i)):
             # Se o número for palíndromo, adicionar esse número ao array
             pal.append(i)
-    
+
     # Imprimir o array de palíndromos
     print(pal)
 

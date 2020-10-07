@@ -10,7 +10,7 @@ def create(indice, j):
         result = result * 10 + (n % 10)
         n = n // 10
     return result
-  
+
 def print_next(ls, fim):
     ls.sort()
     while ls:
@@ -18,20 +18,20 @@ def print_next(ls, fim):
         if val > fim:
             break
         print(val)
-        
+
 def main():
     buffer = list()
-    
+
     inicio = int(sys.argv[1])
     fim = int(sys.argv[2])
     max_buffer = 10000
     finalizar = False
     faixas = ((i, (i+max_buffer)) for i in range(1,fim, max_buffer))
-   
+
     for rng in faixas:
         for j in range(2):
             for sequencia in range(*rng):
-        
+
                 valor = create(sequencia, j)
                 if valor > fim:
                     finalizar = True
@@ -40,11 +40,11 @@ def main():
         print_next(buffer, fim)
         if finalizar:
             break
-       
+
     print_next(buffer, fim)
-        
+
 if __name__ == '__main__':
 
     main()
-        
+
 

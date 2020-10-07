@@ -110,7 +110,7 @@ int next(int x, int y, int step) { // return the next posssible move as moves[] 
 #endif
 	for (int i = 0; i < 10000000; i++);
 
-	
+
 	for (int i = 0; i < 8; i++) {
 		tx = x + moves[warnsdorff(x, y, i)][0];
 		ty = y + moves[warnsdorff(x, y, i)][1];
@@ -124,7 +124,7 @@ int next(int x, int y, int step) { // return the next posssible move as moves[] 
 				       	return(0);
 				}
 			}
-		
+
 //	if ((tstep > (board_size * board_size)&&(x == startx)&&(y == starty))) {
 	if ((tstep > (board_size * board_size))) {
 		//print_table();
@@ -132,7 +132,7 @@ int next(int x, int y, int step) { // return the next posssible move as moves[] 
 	}
 
 	}
-	
+
 	return(1); // no sucess
 }
 
@@ -141,7 +141,7 @@ int next(int x, int y, int step) { // return the next posssible move as moves[] 
 int main(int argc, char* argv[]) {
 	//printf("KNIGHT'S TOUR SOLVER \n");
 	for(int i = 1 ; i < argc; i ++){
-		if(argv[i][0] != '-') argv[i][1] = 'h'; //Error: call Help menu 
+		if(argv[i][0] != '-') argv[i][1] = 'h'; //Error: call Help menu
 		switch(argv[i][1]){
 			case 'h':
 			fprintf(stderr, "%s OPTS\n"
@@ -150,7 +150,7 @@ int main(int argc, char* argv[]) {
 				"-s xxx	: board size\n"
 				"-p a1	: initial position(dafault = a1\n"
 			      ,argv[0]);
-			return(0);	
+			return(0);
 		break;
 			case 'w':
 			use_warns = atoi(argv[i+1]) ;
@@ -159,7 +159,7 @@ int main(int argc, char* argv[]) {
 			case 's':
 			board_size = atoi(argv[i + 1]);
 			i++;
-		break;		
+		break;
 			case 'p':
 			startx = argv[i + 1][0] - 'a';
 			argv[i + 1][0] = '0';

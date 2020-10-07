@@ -28,6 +28,6 @@ public class Area {
     public void setCodigo(String codigo) {
         this.codigo = codigo;
     }
-    
-    
+
+
 }

@@ -11,7 +11,7 @@ int main (void)
     unsigned long long limite_inferior, limite_superior;
     std::cin >> limite_inferior >> limite_superior;
     std::vector<unsigned long long> palindromos;
-    
+
     //Todos os numeros abaixo de 10 são palindromos.
     if (limite_inferior < 10)
     {
@@ -19,7 +19,7 @@ int main (void)
         {
             std::cout << i << " ";
         }
-        
+
     }
 
     //Para numeros dois ou mais digitos
@@ -35,11 +35,11 @@ int main (void)
             if (numero == numero_reverso)
                 std::cout << i << " ";
         }
-        
+
     }
-    
+
     std::cout << std::endl;
-    
+
     return 0;
 }
 

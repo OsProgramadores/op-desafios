@@ -2,7 +2,7 @@
 
 ## Execução
 
-O código está disponível para execução online: https://scastie.scala-lang.org/lrlucena/DjXYV7PQSRqtqqK6cTn8sQ 
+O código está disponível para execução online: https://scastie.scala-lang.org/lrlucena/DjXYV7PQSRqtqqK6cTn8sQ
 
 Para executar localmente faça
 
