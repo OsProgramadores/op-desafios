@@ -11,5 +11,6 @@ function getPrime(valor){
             result += `${counter}, `;
         }
     }
+    return result;
 }
 getPrime(1000);
