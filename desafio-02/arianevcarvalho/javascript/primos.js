@@ -1,7 +1,3 @@
-// Detectar números primos de 1 a 10000
-
-/*Função para identificar os números primos*/
-
 function identifier(){
     let primeNumbers=[],divisores = 0, l=0
     for (i=2; i<10000; i++){ 
@@ -18,8 +14,4 @@ function identifier(){
     }
    return primeNumbers
 }
-
-
-// Chamada da função
-
 console.log (identifier())
