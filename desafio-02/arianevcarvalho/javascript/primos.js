@@ -7,8 +7,8 @@ function identifier(){
     for (i=2; i<10000; i++){ 
         for (n=0; n<=i;n++){
             if (i%n==0){
-                divisores +=1    
-            }          
+                divisores +=1
+            }
         }
         if (divisores<3){
             primeNumbers[l]=i
