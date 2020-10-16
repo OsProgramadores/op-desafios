@@ -38,7 +38,7 @@ public class PrimeNumbers {
 			if (number % prime == 0) {
 				return false;
 			}
-		
+
 			if (number / prime < prime && number % prime != 0) {
 				return true;
 			}
