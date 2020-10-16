@@ -7,7 +7,7 @@ Desafio 2: listando números primos.
 Escreva um programa para listar todos os números primos entre 1 e 10000.
 """
 
-RANGE = 10000
+RANGE = 100
 
 def main():
 
@@ -20,8 +20,7 @@ def main():
 
 
   for numero in range(2, RANGE+1):
-    primo = numero_primo(numero)
-    if(primo):
+    if(numero_primo(numero)):
       print("{} é primo.".format(numero), end="\n")
 
 if(__name__ == "__main__"):
