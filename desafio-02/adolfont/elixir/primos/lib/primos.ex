@@ -12,7 +12,7 @@ defmodule Primos do
   def is_prime?(3), do: true
 
   def is_prime?(number) do
-    2..div(number, 2)
+    2..floor(:math.sqrt(number))
     |> Enum.reduce_while(
       true,
       fn x, _acc ->
