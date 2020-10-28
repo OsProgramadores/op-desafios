@@ -10,7 +10,7 @@ int main()
         int divisor;
         int div_a = 0;
         int div_b = 0;
-        
+
         if (std::cin.peek() != '/') {
             if (dividendo)
                 std::cout << dividendo << std::endl;
