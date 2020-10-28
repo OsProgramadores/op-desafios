@@ -1,88 +1,38 @@
 // compilar no unix/linux
-// > gcc -Ofast primospi.c -o primospi -lm -pthread
+// > gcc -Ofast primospi.c -o primospi -lm
 //
 // compilado no MINGW64 (Windows)
 // $ gcc -Ofast primospi.c -o primospi -lm
 //
 #include <stdio.h>
 #include <stdlib.h>
-#ifndef _WIN32 // adicionado para compilar no windows
-#include <pthread.h>
-#include <unistd.h>
-#endif // _WIN32
+#include <string.h>
+
+#define ORGANIZE 1000 // a cada ORGANIZE em primos eu vejo a maior sequencia e apago a array de primos
 
 typedef struct pilist_st
 {
     char *start;
     char *end;
-    struct pilist_st *coletor; // encadeamento para limpeza de memória
-} pilist_t;                    // lista de números primos extraídos de PI
-
-typedef struct
-{
-    size_t id;
-    char *start;
-    char *end;
-    char *resp;
-} mythread_t; // estrutura das threads
+} pilist_t; // lista de números primos extraídos de PI
 
 //// Variáveis globais
-char *maior_start = NULL;   // maior início
-char *maior_end = NULL;     // maior final
-int *primos_list = NULL;    // lista de números primos de 2 até 9973
-char *buffer = NULL;        // arquivo do número PI
-size_t buffer_size = 0;     // tamanho do arquivo do número PI
-pilist_t *coletor = NULL;   // encadeamento da lista para limpeza
-mythread_t *threads = NULL; // estrutura das threads
-size_t threads_max = 0;     // máximo de threads que serão abertas
+pilist_t maior;          // maior início e final
+int *primos_list = NULL; // lista de números primos de 2 até 9973
+char *buffer = NULL;     // arquivo do número PI
+size_t buffer_size = 0;  // tamanho do arquivo do número PI
+pilist_t *lista = NULL;  // lista de primos de PI
+size_t lista_size = 0;   // tamanho da lista
 //// Fim das variáveis globais
-
-void free_coletor() // limpeza dos números primos extraídos de PI
-{
-    pilist_t *tmp = NULL;
-    while (coletor != NULL)
-    {
-        tmp = coletor;
-        coletor = coletor->coletor;
-        free(tmp);
-    }
-}
 
 void free_all() // limpeza de toda a memória alocada
 {
-    free_coletor();
+    if (lista)
+        free(lista);
     if (primos_list)
         free(primos_list);
-    if (threads)
-        free(threads);
     if (buffer)
         free(buffer);
-}
-
-void threads_init() // construtor das threads
-{
-    if (threads_max == 0)
-    {
-#ifndef _WIN32
-        threads_max = sysconf(_SC_NPROCESSORS_ONLN) * 2; // numero de processadores (* o numero de threads em cada);
-#endif
-        if (threads_max < 4)
-            threads_max = 4;
-        threads = (mythread_t *)malloc(sizeof(mythread_t) * threads_max);
-        if (!threads)
-        {
-            printf("Memória insuficiente para processar os números primos de PI\n");
-            free_all();
-            exit(1);
-        }
-    }
-    for (int i = 0; i < threads_max; i++)
-    {
-        threads[i].id = 0;
-        threads[i].start = NULL;
-        threads[i].end = NULL;
-        threads[i].resp = NULL;
-    }
 }
 
 void primos_init() // construtor dos primos de 1 a 9973 (solução do desafio 2)
@@ -134,104 +84,92 @@ int primos_isprimo(int i) // retorna se um número está na lista de primos ou n
     return 1;
 }
 
-pilist_t *processar_alocar() // alocação de memória para anotar um número primo extraído de PI
+char *processar_maiorprimo_r(char *in_end, int k) // processo recursivo para achar a maior sequencia de primos possível
 {
-    pilist_t *pilst = NULL;
-    pilst = (pilist_t *)malloc(sizeof(pilist_t));
-    if (!pilst)
-    {
-        printf("Memória insuficiente para alocar a lista de números primos de PI\n");
-        free_all();
-        exit(1);
-    }
-    pilst->coletor = coletor;
-    coletor = pilst;
-    pilst->end = NULL;
-    pilst->start = NULL;
-    return pilst;
-}
+    char *max = in_end, *resp = NULL;
 
-void *processar_maiorprimo_r(void *in) // processo recursivo para achar a maior sequencia de primos possível
-{
-    mythread_t *this_thread = (mythread_t *)in;
-    pilist_t *entrada = coletor;
-    char *maior = this_thread->end, *this_end = this_thread->end;
-    while (entrada != NULL)
+    for (; k < lista_size - 1; k++)
     {
-        if ((this_end + 1) == entrada->start)
+        if ((in_end + 1) < lista[k].start) // como está em ordem de início, se o início ficou mais alto que o final procurado, não existe mais sequencia
+            break;
+        if ((in_end + 1) == lista[k].start) // se o início é igual ao final, aumenta a sequencia para verificar
         {
-            this_thread->end = entrada->end;
-            processar_maiorprimo_r(in);
-            if (maior < this_thread->resp)
-                maior = this_thread->resp;
+            resp = processar_maiorprimo_r(lista[k].end, k + 1);
+            if (max < resp)
+                max = resp;
         }
-        entrada = entrada->coletor;
     }
-    this_thread->resp = maior;
-    return 0;
+    return max;
 }
 
-void processar_jointhread(size_t i) // analizar o resultado das threads
+void processar_maiorprimo() // analise das recursões
 {
-    if (threads[i].id == 0)
-        return;
-#ifndef _WIN32
-    pthread_join(threads[i].id, NULL);
-#endif
-    if ((maior_end - maior_start) < (threads[i].resp - threads[i].start))
+    char *resp = NULL;
+
+    for (int k = 0; k < lista_size - 1; k++)
     {
-        maior_start = threads[i].start;
-        maior_end = threads[i].resp;
+        resp = processar_maiorprimo_r(lista[k].end, k + 1);
+        if ((maior.end - maior.start) < (resp - lista[k].start))
+        {
+            maior.start = lista[k].start;
+            maior.end = resp;
+        }
     }
-}
 
-void processar_maiorprimo() // processo de abertura das threads
-{
-    pilist_t *entrada = coletor;
-    int i = 0;
-
-    threads_init();
-
-    while (entrada != NULL)
-    {
-        processar_jointhread(i);
-        threads[i].start = entrada->start;
-        threads[i].end = entrada->end;
-        threads[i].resp = NULL;
-#ifndef _WIN32
-        pthread_create(&threads[i].id, NULL, processar_maiorprimo_r, &threads[i]);
-#else
-        processar_maiorprimo_r(&threads[i]); // windows não vai abrir pthread
-        threads[i].id = 1;
-#endif
-
-        if (++i == threads_max)
-            i = 0;
-        entrada = entrada->coletor;
-    }
-    for (i = 0; i < threads_max; i++)
-        processar_jointhread(i);
-
-    // uso uma das alocações para anotar o resultado até agora e saber se ele tem continuidade
+    // uso a primeira posição para anotar o resultado até agora e saber se ele tem continuidade
     // no próximo processamento
-    entrada = coletor;
-    coletor = coletor->coletor;
-    entrada->start = maior_start;
-    entrada->end = maior_end;
-    entrada->coletor = NULL;
-    free_coletor();
-    coletor = entrada;
+    lista[0].start = maior.start;
+    lista[0].end = maior.end;
+    lista_size = 1;
+}
+void processar_quicksort(int l, int r) //sort da array de primos pelo menor endereço de "start"
+{
+    pilist_t *v = &lista[r];
+    pilist_t tmp;
+    int i = l - 1, j = r;
+    if (r <= l)
+        return;
+    while (1)
+    {
+        while (lista[++i].start < v->start)
+            ;
+        while (v->start < lista[--j].start)
+        {
+            if (j == l)
+                break;
+        }
+        if (i >= j)
+            break;
+        memcpy(&tmp, &lista[i], sizeof(pilist_t));
+        memcpy(&lista[i], &lista[j], sizeof(pilist_t));
+        memcpy(&lista[j], &tmp, sizeof(pilist_t));
+    }
+    memcpy(&tmp, &lista[i], sizeof(pilist_t));
+    memcpy(&lista[i], &lista[r], sizeof(pilist_t));
+    memcpy(&lista[r], &tmp, sizeof(pilist_t));
+
+    processar_quicksort(l, i - 1);
+    processar_quicksort(i + 1, r);
 }
 
 void processar() // ler o arquivo de PI, separar os primos e chamar as funcoes que calculam as sequencias
 {
     char s1[2] = {0, 0}, s2[3] = {0, 0, 0}, s3[4] = {0, 0, 0, 0}, s4[5] = {0, 0, 0, 0, 0};
-    pilist_t *pilst = NULL;
     char *p = buffer;
+
+    lista = (pilist_t *)malloc(sizeof(pilist_t) * (ORGANIZE + 4));
+    if (!lista)
+    {
+        printf("Memória insuficiente para alocar a lista de números primos de PI\n");
+        free_all();
+        exit(1);
+    }
 
     while (*p != '.')
         p++;
     p++;
+
+    fprintf(stdout, "%03d%%", 0);
     while (*p)
     {
         s1[0] = *p;
@@ -241,42 +179,41 @@ void processar() // ler o arquivo de PI, separar os primos e chamar as funcoes q
 
         if (primos_isprimo(atoi(s1))) // somente 1 char
         {
-            pilst = processar_alocar();
-            pilst->end = p;
-            pilst->start = p;
+            lista[lista_size].end = p;
+            lista[lista_size].start = p;
+            lista_size++;
         }
         if (s2[0] && primos_isprimo(atoi(s2))) // somente 2 chars
         {
-            pilst = processar_alocar();
-            pilst->end = p;
-            pilst->start = p - 1;
+            lista[lista_size].end = p;
+            lista[lista_size].start = p - 1;
+            lista_size++;
         }
         if (s3[0] && primos_isprimo(atoi(s3))) // somente 3 chars
         {
-            pilst = processar_alocar();
-            pilst->end = p;
-            pilst->start = p - 2;
+            lista[lista_size].end = p;
+            lista[lista_size].start = p - 2;
+            lista_size++;
         }
         if (s4[0] && primos_isprimo(atoi(s4))) // somente 4 chars
         {
-            pilst = processar_alocar();
-            pilst->end = p;
-            pilst->start = p - 3;
+            lista[lista_size].end = p;
+            lista[lista_size].start = p - 3;
+            lista_size++;
         }
-        if (((p - buffer) % 10000) == 0) // a cada 10.000 números analizados ele faz o processamento e apaga a lista
+        if (ORGANIZE < lista_size) // a cada ORGANIZE primos na lista ele faz o processamento e apaga a lista
         {
-            if (((p - buffer) % 100000) == 0) // anota algo na tela para não parecer que ficou paralizado, é entediante aguardar sem saber o progresso
-                fprintf(stdout, "%ld00K", ((p - buffer) / 100000));
-            else
-                fprintf(stdout, ".");
+            fprintf(stdout, "\b\b\b\b%03ld%%", ((p - buffer) / 10000)); // esperar sem saber o progresso cansa
             fflush(stdout);
-            processar_maiorprimo();
+            processar_quicksort(0, lista_size - 1); // sort da array
+            processar_maiorprimo();                 // processa a array
         }
 
         p++;
     }
-    processar_maiorprimo(); // caso ainda tenha algum número incluído na lista processa antes de retornar
-    printf("\n");
+    fprintf(stdout, "\b\b\b\b100%%");
+    processar_quicksort(0, lista_size - 1);
+    processar_maiorprimo(); // caso ainda tenha algum número incluído na lista, processa antes de retornar
 }
 
 int main()
@@ -313,9 +250,8 @@ int main()
     primos_init();
     processar();
 
-    maior_end++;
-    *maior_end = 0;
-    printf("%s\n", maior_start);
+    *++maior.end = 0; // para mostrar entre maior inicio e maior fim eu sinalizo que a string acabou em maior.end+1
+    printf("\b\b\b\b%s\n", maior.start);
 
     free_all();
 
