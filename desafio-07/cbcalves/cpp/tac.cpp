@@ -14,14 +14,12 @@ int main(int argc, char *argv[])
     size_t last = 0;
     char *buffer = nullptr;
 
-    if (argc < 2) 
-    {
+    if (argc < 2) {
         std::cout << "Uso: " << argv[0] << " <arquivo>" << std::endl;
         return 0;
     }
     fs.open(argv[1], std::fstream::in);
-    if (!fs.is_open()) 
-    {
+    if (!fs.is_open()) {
         std::cout << "Arquivo não encontrado" << std::endl;
         abort();
     }
@@ -29,8 +27,7 @@ int main(int argc, char *argv[])
     fs.seekg(0, std::fstream::end);
     size = fs.tellg(); // tamanho do arquivo
 
-    if (size < BUFFER_SIZE) 
-    {
+    if (size < BUFFER_SIZE) {
         buffer = new char[size + 1];
     } else {
         buffer = new char[BUFFER_SIZE + 1];
@@ -41,16 +38,13 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
-    while (size) 
-    {
+    while (size) {
         if ((size + last) < BUFFER_SIZE) // se tiver algo no buffer que não foi mostrado ele vai fechar a linha de novo
         {
             fs.seekg(0, std::fstream::beg);
             fs.read(buffer, (size + last));
             size = 0;
-        } 
-        else 
-        {
+        } else {
             size = (size + last) - BUFFER_SIZE;
             fs.seekg(size, std::fstream::beg);
             fs.read(buffer, BUFFER_SIZE);
