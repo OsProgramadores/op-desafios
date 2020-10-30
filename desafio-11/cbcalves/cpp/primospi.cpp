@@ -1,23 +1,10 @@
 #include <algorithm>
+#include <fstream>
+#include <iomanip>
 #include <iostream>
-#include <thread>
 #include <vector>
 
-#define MAX_THREADS 300 // máximo de threads (se subir muito o número e o computador não aguentar, vai ficar lento)
-#define ORGANIZE 10000  // a cada ORGANIZE em primos eu vejo a maior sequencia e apago parte do veto de primos
-
-#define DELETE(ptr)     \
-    if (ptr != nullptr) \
-    delete ptr, ptr = nullptr // defini esse DELETE para evitar problemas de acesso ao apagar ponteiros
-
-struct Pi_Primes //estrutura que guarda os primos e a posição deles em pi
-{
-    int start, end;
-    std::string number;
-    Pi_Primes() : start(INT32_MAX), number(""), end(INT32_MAX) {}       //inicialização da variável
-    void set(int i, char *s, int e) { start = i, number = s, end = e; } //entrada de dados
-    bool operator<(Pi_Primes B) { return (start < B.start); }           // comparação para sort pela posição em pi
-};
+#define ORGANIZE 10000 // a cada ORGANIZE em primos eu vejo a maior sequencia e apago o vetor de primos
 
 class Primos // classe para calcular e guardar todos os primos de 2 até 9973
 {
@@ -25,9 +12,11 @@ private:
     std::vector<int> primos;
 
 public:
-    Primos() : primos(4) //usando o desafio 02 para formar os primos até 9973
+    Primos() // usando o desafio 02 para formar os primos até 9973
     {
-        int j = 0;
+        size_t j = 0;
+        primos.reserve(1229); // numero de primos até 9973
+        primos.resize(4);
         primos[0] = 2;
         primos[1] = 3;
         primos[2] = 5;
@@ -67,259 +56,136 @@ public:
     }
 };
 
-class Threads // uso de threads para formar as combinações de primos e encontrar a maior possível
+namespace primespi
 {
-private:
-    struct Instancias //estrutura que vai rodar e retornar o resultado de cada thread
+    struct pi_primes_t // estrutura que guarda os primos e a posição deles em pi
     {
-        std::thread funcao;
-        std::vector<Pi_Primes> *max_pi;
-        Instancias() { max_pi = nullptr; }
+        char *start;
+        char *end;
+        pi_primes_t() : start(nullptr), end(nullptr) {}             // inicialização das variáveis
+        void set(char *s, char *e) { start = s, end = e; }          // entrada de dados
+        bool operator<(pi_primes_t B) { return (start < B.start); } // comparação para sort pela posição em pi
     };
-    std::vector<Instancias> _threads;   // vetor (array) de threads que abro até MAX_THREADS
-    std::vector<Pi_Primes> *threads_pi; // endereço do vetor com todos os primos de pi
-    static size_t OPEN_THREADS;         // controle de threads abertas
+    pi_primes_t max;
 
-public:
-    Threads() { _threads.reserve(100); }
-    ~Threads() { clear(); }
-
-    size_t size() { return _threads.size(); } // tamanho da array de threads
-
-    void join(const size_t &index) // acho mais prático fazer join, uma por uma,
-    {                              // para poder já ir trabalhando os dados antes que todas tenham acabado
-        if (index < _threads.size())
-        {
-            if (_threads[index].funcao.joinable())
-            {
-                _threads[index].funcao.join();
-            }
-            return;
-        }
-    }
-    void join() // fecha todas as threads
+    char *maior_seq_r(const std::vector<pi_primes_t> &pi, char *in_end, size_t i)
     {
-        for (auto &i : _threads)
+        char *maior = in_end, *resp = nullptr;
+
+        for (; i < pi.size(); i++)
         {
-            if (i.funcao.joinable())
+            if ((in_end + 1) < pi[i].start) // como está em ordem de início, se o início ficou mais alto que o final procurado, não existe mais sequencia
+                break;
+            if ((in_end + 1) == pi[i].start) // se o início é igual ao final, aumenta a sequencia para verificar
             {
-                i.funcao.join();
+                resp = maior_seq_r(pi, pi[i].end, i + 1);
+                if (maior < resp)
+                    maior = resp;
             }
         }
+        return maior;
     }
-    void set(std::vector<Pi_Primes> *pi) { threads_pi = pi; } // definir endereço do veto de primos
-    void clear()                                              // apagar o vetor para abrir mais threads
+
+    void maior_seq(std::vector<pi_primes_t> &pi) // forma as sequencias de primos
     {
-        join();
-        for (auto &i : _threads)
+        char *resp = nullptr;
+        for (size_t i = 0; i < pi.size(); i++)
         {
-            DELETE(i.max_pi);
-        }
-        _threads.clear();
-        OPEN_THREADS = 0;
-    }
 
-    size_t add(void (*func)(std::vector<Pi_Primes> *, std::vector<Pi_Primes> **, int), int pos) // incluir uma thread
-    {
-        size_t index = _threads.size();
-
-        if (OPEN_THREADS >= MAX_THREADS)
-            return SIZE_MAX;
-
-        _threads.resize(index + 1);
-        OPEN_THREADS++;
-
-        _threads[index].funcao = std::thread(func, threads_pi, &_threads[index].max_pi, pos);
-        return index;
-    }
-    std::vector<Pi_Primes> *get(const size_t &index) { return _threads[index].max_pi; } // pegar o resultado da thread
-};
-size_t Threads::OPEN_THREADS = 0; // controle de threads abertas
-
-void palavra(std::string &s, std::vector<Pi_Primes> *vector) // transforma a sequencia de primos em string para saber o tamanho da string
-{
-    s = "";
-    if (vector == nullptr)
-        return;
-    for (auto &i : *vector)
-    {
-        s += i.number;
-    }
-}
-
-void maior_seq(std::vector<Pi_Primes> *pi, std::vector<Pi_Primes> **max_pi, int pos) // forma as sequencias de primos
-{
-    std::vector<Pi_Primes> *resp, *tmp;
-    std::string s_max, s_in;
-    for (size_t i = pos + 1; i < pi->size(); i++)
-    {
-        if ((*pi)[pos].end == (*pi)[i].start)
-        {
-            resp = new std::vector<Pi_Primes>;
-            maior_seq(pi, &resp, i);
-            palavra(s_in, resp);
-            if (*max_pi == nullptr || s_in.length() > s_max.length())
+            resp = maior_seq_r(pi, pi[i].end, i + 1);
+            if ((max.end - max.start) < (resp - pi[i].start))
             {
-                tmp = *max_pi;
-                DELETE(tmp);
-                *max_pi = resp;
-                s_max = s_in;
+                max.end = resp;
+                max.start = pi[i].start;
             }
-            else
-                DELETE(resp);
         }
-    }
-    if (*max_pi == nullptr)
-    {
-        tmp = new std::vector<Pi_Primes>;
-        *max_pi = tmp;
+        pi.clear();
+        pi.push_back(max);
     }
 
-    (*max_pi)->emplace((*max_pi)->begin(), (*pi)[pos]);
-}
-
-void merge(std::vector<Pi_Primes> &v1, const std::vector<Pi_Primes> &v2, int pos) // junta dois vetores a partir de uma posição do segundo
-{
-    for (pos = v2.size() - pos; pos < v2.size(); pos++)
-        v1.push_back(v2[pos]);
-}
+} // namespace primespi
 
 int main()
 {
-    int pos = 0, progress = 0;
-    char c = 0;
-    char s1[2] = {0, 0}, s2[3] = {0, 0, 0}, s3[4] = {0, 0, 0, 0}, s4[5] = {0, 0, 0, 0, 0}; //usando char para dar mais velocidade, string é uma classe completa
-    std::string s_in, s_max;
-    std::vector<Pi_Primes> pi;
-    std::vector<Pi_Primes> max_pi;
-    std::vector<Pi_Primes> tmp;
+    std::fstream fs;
+    char *c = nullptr, *buffer = nullptr;
+    size_t buffer_size = 0;
+    char s1[2] = {0, 0}, s2[3] = {0, 0, 0}, s3[4] = {0, 0, 0, 0}, s4[5] = {0, 0, 0, 0, 0};
+    std::vector<primespi::pi_primes_t> pi_primes;
+    primespi::pi_primes_t pi_primes_insert;
     Primos primos;
-    Threads threads;
-    Pi_Primes entrar;
 
-    std::cout << "uso: ./primospi < pi-1M.txt | aperte ctrl+C se não fez isso" << std::endl;
-
-    while (std::cin >> c && c != '.') // pular o '3.'
-        ;
-
-    while (std::cin >> c) // após o . vai até não ter mais entradas
+    fs.open("pi-1M.txt", std::fstream::in);
+    if (!fs.is_open())
     {
-        s1[0] = c;                                              // 1 numero
-        s2[0] = s2[1], s2[1] = c;                               // 2 numeros
-        s3[0] = s3[1], s3[1] = s3[2], s3[2] = c;                // 3 numeros
-        s4[0] = s4[1], s4[1] = s4[2], s4[2] = s4[3], s4[3] = c; // 4 numeros
+        std::cout << "Arquivo não encontrado" << std::endl;
+        exit(1);
+    }
+    fs.seekg(0, std::fstream::end);
+    buffer_size = fs.tellg(); // tamanho do arquivo
+    fs.seekg(0, std::fstream::beg);
+
+    buffer = new char[buffer_size + 1];
+    if (!buffer)
+    {
+        std::cout << "Memória insuficiente para abrir o arquivo" << std::endl;
+        fs.close();
+        exit(1);
+    }
+    fs.read(buffer, buffer_size);
+    fs.close();
+    c = buffer;
+
+    pi_primes.reserve(ORGANIZE + 4);
+
+    while (*c != '.') // pular o '3.'
+        c++;
+    c++;
+
+    std::cout << std::setw(3) << 0 << "%" << std::flush;
+    while (*c) // após o . vai até não ter mais entradas
+    {
+        s1[0] = *c;                                              // 1 número
+        s2[0] = s2[1], s2[1] = *c;                               // 2 números
+        s3[0] = s3[1], s3[1] = s3[2], s3[2] = *c;                // 3 números
+        s4[0] = s4[1], s4[1] = s4[2], s4[2] = s4[3], s4[3] = *c; // 4 números
 
         if (primos.is_primo(s1))
         {
-            entrar.set(pos, s1, pos + 1);
-            pi.push_back(entrar);
+            pi_primes_insert.set(c, c);
+            pi_primes.push_back(pi_primes_insert);
+        }
+        if (s2[0] && primos.is_primo(s2)) //maior que 0 garante que o [0] está preenchido
+        {
+            pi_primes_insert.set(c - 1, c);
+            pi_primes.push_back(pi_primes_insert);
+        }
+        if (s3[0] && primos.is_primo(s3))
+        {
+            pi_primes_insert.set(c - 2, c);
+            pi_primes.push_back(pi_primes_insert);
+        }
+        if (s4[0] && primos.is_primo(s4))
+        {
+            pi_primes_insert.set(c - 3, c);
+            pi_primes.push_back(pi_primes_insert);
         }
 
-        if (s2[0] > 0 && primos.is_primo(s2)) //maior que 0 garante que o [0] está preenchido
+        if (ORGANIZE < pi_primes.size()) // quando a variavel atinge "ORGANIZE" entradas, reorganizar e deixar a maior entrada
         {
-            entrar.set(pos - 1, s2, pos + 1);
-            pi.push_back(entrar);
+            std::cout << "\b\b\b\b" << std::setw(3) << ((c - buffer) / 10000) << "%" << std::flush;
+            std::sort(pi_primes.begin(), pi_primes.end()); //sort pelo índice de inicio.
+            primespi::maior_seq(pi_primes);
         }
-        if (s3[0] > 0 && primos.is_primo(s3))
-        {
-            entrar.set(pos - 2, s3, pos + 1);
-            pi.push_back(entrar);
-        }
-        if (s4[0] > 0 && primos.is_primo(s4))
-        {
-            entrar.set(pos - 3, s4, pos + 1);
-            pi.push_back(entrar);
-        }
-
-        if (pi.size() > 0 && (pi.size() / ORGANIZE) > 1) // quando a variavel atinge 10mil entradas, reorganizar e deixar a maior entrada
-        {
-            std::sort(pi.begin(), pi.end()); //sort pelo índice de inicio.
-            threads.set(&pi);
-            threads.clear();
-            for (size_t i = 0; i < pi.size() - 300; i++)
-            {
-                if (threads.add(maior_seq, i) == SIZE_MAX)
-                {
-                    i--;
-                    for (size_t j = 0; j < threads.size(); j++)
-                    {
-                        threads.join(j);
-                        if (threads.get(j) != nullptr)
-                            palavra(s_in, threads.get(j));
-                        if (threads.get(j) != nullptr && s_in.length() > s_max.length())
-                        {
-                            max_pi = *threads.get(j);
-                            s_max = s_in;
-                        }
-                    }
-                    threads.clear();
-                }
-            }
-            for (size_t j = 0; j < threads.size(); j++)
-            {
-                threads.join(j);
-                if (threads.get(j) != nullptr)
-                    palavra(s_in, threads.get(j));
-                if (threads.get(j) != nullptr && s_in.length() > s_max.length())
-                {
-                    max_pi = *threads.get(j);
-                    s_max = s_in;
-                }
-            }
-            threads.clear();
-            tmp = max_pi;
-            merge(max_pi, pi, 299);
-            pi = max_pi;
-            max_pi = tmp;
-        }
-        if ((pos / ORGANIZE) > progress) // esperar sem um aviso de trabalhando da ansiedade, a cada 10k numeros processados ele vai dizer
-        {
-            progress = pos / ORGANIZE;
-            std::cout << progress << "0k..." << std::flush;
-        }
-        pos++;
+        c++;
     }
-    std::cout << std::endl;
-    std::sort(pi.begin(), pi.end());
-    threads.set(&pi);
-    threads.clear();
-    for (size_t i = 0; i < pi.size() - max_pi.size(); i++)
-    {
+    std::cout << "\b\b\b\b" << std::setw(3) << 100 << "%" << std::flush;
+    std::sort(pi_primes.begin(), pi_primes.end()); //sort pelo índice de inicio.
+    primespi::maior_seq(pi_primes);
 
-        if (threads.add(maior_seq, i) == SIZE_MAX)
-        {
-            i--;
-            for (size_t j = 0; j < threads.size(); j++)
-            {
-                threads.join(j);
-                if (threads.get(j) != nullptr)
-                    palavra(s_in, threads.get(j));
-                if (threads.get(j) != nullptr && s_in.length() > s_max.length())
-                {
-                    max_pi = *threads.get(j);
-                    s_max = s_in;
-                }
-            }
-            threads.clear();
-        }
-    }
-    for (size_t j = 0; j < threads.size(); j++)
-    {
-        threads.join(j);
-        if (threads.get(j) != nullptr)
-            palavra(s_in, threads.get(j));
-        if (threads.get(j) != nullptr && s_in.length() > s_max.length())
-        {
-            max_pi = *threads.get(j);
-            s_max = s_in;
-        }
-    }
-    threads.clear();
+    *++primespi::max.end = 0;
+    std::cout << "\b\b\b\b" << primespi::max.start << std::endl; // mostrar o numero
 
-    for (auto &i : max_pi) // mostrar os numeros com espaço só pra confimar
-        std::cout << i.number << " ";
-    std::cout << std::endl;
-    std::cout << s_max << std::endl; // mostrar o numero sem espaços
-
+    delete[] buffer;
     return 0;
 }
