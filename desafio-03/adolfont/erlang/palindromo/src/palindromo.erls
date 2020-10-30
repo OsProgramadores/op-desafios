@@ -1,0 +1,50 @@
+-module(palindromo).
+
+% Para executar:
+% escript palindromo.erls numero_inicial numero_final
+
+% Exemplo:
+% escript palindromo.erls 1 100
+
+-export([palindromos/2, main/1]).
+
+main([String_Inicio, String_Fim]) ->
+    try
+      Inicio = list_to_integer(String_Inicio),
+      Fim = list_to_integer(String_Fim),
+      io:format("palindromo ~w ~w = \n", [Inicio, Fim]),
+      palindromos(Inicio, Fim)
+    catch
+      _:_ ->
+          usage()
+    end;
+main(_) ->
+    usage().
+
+usage() ->
+    io:format("uso: palindromo inicio fim\n"),
+    halt(1).
+
+palindromos(Inicio, Fim)
+    when is_integer(Inicio) and is_integer(Fim) and (Inicio > 0) and (Fim > 0) and
+           (Inicio =< Fim)
+           and (Fim =< 1 bsl 64) ->
+    palindromos(Inicio, Fim, Inicio).
+
+palindromos(_Inicio, Fim, Atual) when Atual =:= Fim + 1 ->
+    io:format("");
+palindromos(Inicio, Fim, Atual) ->
+    mostra_palindromo(Atual),
+    palindromos(Inicio, Fim, Atual + 1).
+
+mostra_palindromo(Valor) ->
+    case eh_palindromo(Valor) of
+      true ->
+          io:format("~B~n", [Valor]);
+      false ->
+          1
+    end.
+
+eh_palindromo(Valor) ->
+    integer_to_list(Valor) =:= lists:reverse(integer_to_list(Valor)).
+
