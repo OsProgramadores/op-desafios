@@ -15,8 +15,8 @@ def power2(num):
 
     if result.is_integer():
         return (num, True, int(result))
-    else:
-        return (num, False, 0)
+
+    return (num, False, 0)
 
 
 def main():
