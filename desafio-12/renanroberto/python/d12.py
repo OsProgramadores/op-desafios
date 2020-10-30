@@ -1,7 +1,13 @@
+"""
+Reads a file containing a number per line and test if they are a power of 2
+"""
+
 import math
 
 
 def power2(num):
+    """Takes a number x and compute log2(x) of that number. If it is
+    a integer n, then 2^n = x"""
     if num == 0:
         return (num, False, 0)
 
@@ -14,6 +20,7 @@ def power2(num):
 
 
 def main():
+    """Reads d12.txt, applies power2 and pretty print the results"""
     file = open("d12.txt", "r")
 
     nums = [int(num) for num in file]
