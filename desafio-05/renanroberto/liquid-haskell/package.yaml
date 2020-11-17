@@ -1,0 +1,61 @@
+name:                liquid-haskell
+version:             0.1.0.0
+github:              "githubuser/liquid-haskell"
+license:             BSD3
+author:              "Renan Roberto"
+maintainer:          "@example@example.com"
+copyright:           "2020 Renan Roberto"
+
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+# Metadata used when publishing your package
+# synopsis:            Short description of your package
+# category:            Web
+
+# To avoid duplicated efforts in documentation and dealing with the
+# complications of embedding Haddock markup inside cabal files, it is
+# common to point users to the README.md file.
+description:         Please see the README on GitHub at <https://github.com/githubuser/liquid-haskell#readme>
+
+dependencies:
+- liquid-base
+- liquidhaskell
+- directory
+- text
+- bytestring
+- containers
+- mtl
+- parallel
+- aeson
+- json-stream
+
+library:
+  source-dirs: src
+
+executables:
+  liquid-haskell-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    - -Wall
+    - -Werror
+    - -O2
+    - -fplugin=LiquidHaskell
+    dependencies:
+    - liquid-haskell
+
+tests:
+  liquid-haskell-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - liquid-haskell

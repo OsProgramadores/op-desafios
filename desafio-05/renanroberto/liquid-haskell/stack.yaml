@@ -1,0 +1,13 @@
+resolver: nightly-2020-06-25
+
+packages:
+  - .
+
+extra-deps:
+  - text-format-0.3.2
+  - Diff-0.3.4
+  - liquid-fixpoint-0.8.10.1
+  - liquidhaskell-0.8.10.1
+  - liquid-base-4.14.0.0
+  - liquid-ghc-prim-0.6.1
+  - json-stream-0.4.2.4
