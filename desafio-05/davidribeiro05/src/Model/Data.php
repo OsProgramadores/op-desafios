@@ -2,24 +2,47 @@
 
 namespace Src\Model;
 
+/**
+ * Author: David Ribeiro
+ * Class Data
+ * @package Src\Model
+ */
 abstract class Data
 {
+    /**
+     * @var
+     */
     private $data;
 
+    /**
+     * @var
+     */
     private $salary;
 
+    /**
+     * @var
+     */
     private $department;
 
+    /**
+     * Data constructor.
+     */
     public function __construct()
     {
         $this->readerEmployee();
     }
 
+    /**
+     * @return mixed
+     */
     public function data()
     {
         return $this->data;
     }
 
+    /**
+     * @return mixed
+     */
     protected function readerEmployee()
     {
         $json = file_get_contents(__DIR__ . "/Funcionarios10K.json");
@@ -42,6 +65,9 @@ abstract class Data
         return $this->data;
     }
 
+    /**
+     * @return mixed
+     */
     protected function salary()
     {
         foreach ($this->data as $key => $value) {
@@ -50,6 +76,9 @@ abstract class Data
         return $this->salary = $arr;
     }
 
+    /**
+     * @return mixed
+     */
     protected function department()
     {
         foreach ($this->data as $key => $value) {
