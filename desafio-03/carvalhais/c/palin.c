@@ -11,10 +11,10 @@
  * @date 13/12/2019
  * @brief Solution for challenge #3 from OsProgramadores website
  *
- * Challenge asks to write a program to list all decimal numbers palindromes 
+ * Challenge asks to write a program to list all decimal numbers palindromes
  * between two given numbers (initial and final). It may be assumed that:
  * - only positive integers will be used as will be used as limits
- * - single digit numbers are palindromes by definition 
+ * - single digit numbers are palindromes by definition
  * - all number are representable as 64-bit unsigned ints
  *
  * @see https://osprogramadores.com/desafios/d03/
@@ -30,10 +30,10 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-/** 
+/**
  * Default value fir the '-b' option. */
 #define DEFAULT_OPT_BASE    10
-/** 
+/**
  * Maximum numeric string length. */
 #define MAX_NUM_STR_LEN     25
 /**
@@ -50,24 +50,24 @@ bool is_palindrome(const char *s) {
     size_t len = strlen(s);
     int i = 0;
     int j = len - 1;
-    
+
     if(len == 0)
         return false;
     while(i < j)
-        if(s[i++] != s[j--]) 
+        if(s[i++] != s[j--])
             return false;
     return true;
 }
 
-/** 
- * @brief Displays a help message. 
+/**
+ * @brief Displays a help message.
  */
 void help_message(void) {
-    char message[] = 
+    char message[] =
 "Usage: %s [OPTION]... INITIAL FINAL\n"
 "Show all decimmal palindromes between INITIAL and FINAL (inclusive).\n"
 "\n"
-"The numbers INITIAL and FINAL must be representable as 64-bit unsigned\n" 
+"The numbers INITIAL and FINAL must be representable as 64-bit unsigned\n"
 "ints. Also, INITAL must smaller than FINAL, otherwise it's considered an\n"
 "error.\n"
 "\n"
@@ -79,7 +79,7 @@ void help_message(void) {
     fprintf(stdout, message, program_name);
 }
 
-/** 
+/**
  * @brief Wraps calls to strtoull() and tests for error conditions.
  *
  * @param str string that holds the number to be converted
@@ -90,7 +90,7 @@ void help_message(void) {
 bool strtoull_wrapper(const char *str, int base, unsigned long long* dest){
     char *end;
     unsigned long long value = 0;
-    
+
     errno = 0;
     value = strtoull(str, &end, base);
     /* an overflow has ocurred */
@@ -151,7 +151,7 @@ int main(int argc, char *argv[]) {
                 option_invalid = true;
                 break;
         }
-        /* stop processing of further options if any of the following option 
+        /* stop processing of further options if any of the following option
          * flags are set */
         if(option_h || option_invalid)
             break;
@@ -165,17 +165,17 @@ int main(int argc, char *argv[]) {
         exit(EXIT_SUCCESS);
     }
 
-    /* if we got here, any options were valid and the relevant variables were 
-     * set accordingly; in case of invalid options (or arguments), program 
+    /* if we got here, any options were valid and the relevant variables were
+     * set accordingly; in case of invalid options (or arguments), program
      * should have already output and error message and exited */
 
-    /* we need the remaining arguments to be exactly INITIAL and FINAL to be 
+    /* we need the remaining arguments to be exactly INITIAL and FINAL to be
      * able to keep processing */
     if(argc - optind < 2) {
         help_message();
         exit(EXIT_FAILURE);
     }
-    
+
     /* read initial and final values */
     if(!strtoull_wrapper(argv[optind], numeric_base, &value)){
         fprintf(stderr, "%s: invalid initial value\n", program_name);
@@ -195,7 +195,7 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
     final = (uint64_t)value;
-    
+
     /* allocate space for the numeric string */
     number_string = calloc(MAX_NUM_STR_LEN, sizeof(char));
     if(number_string == NULL){

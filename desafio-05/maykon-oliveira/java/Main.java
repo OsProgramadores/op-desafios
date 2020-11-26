@@ -22,26 +22,26 @@ public class Main {
         List<Funcionario> funcionariosList = new ArrayList<>();
         List<Area> areasList = new ArrayList<>();
         FileReader JSON_FILE;
-        
+
         if (args.length > 0) {
             JSON_FILE = new FileReader(args[0]);
         } else {
             JSON_FILE = new FileReader("..\\funcionarios.json");
         }
-        
+
         Gson gson = new Gson();
         JsonParser parser = new JsonParser();
         JsonElement jsonElement = parser.parse(JSON_FILE);
-        
+
         if (jsonElement.isJsonObject()) {
             JsonObject jsonObject = jsonElement.getAsJsonObject();
             JsonArray funcionarioArrayJson = jsonObject.getAsJsonArray("funcionarios");
             JsonArray areaArrayJson = jsonObject.getAsJsonArray("areas");
-            
+
             for (JsonElement funcionario : funcionarioArrayJson) {
                 funcionariosList.add(gson.fromJson(funcionario, Funcionario.class));
             }
-            
+
             for (JsonElement area : areaArrayJson) {
                 areasList.add(gson.fromJson(area, Area.class));
             }
@@ -52,5 +52,5 @@ public class Main {
         manager.numeroFuncionarioPorArea();
         manager.salariosMesmoSobrenome();
     }
-    
+
 }

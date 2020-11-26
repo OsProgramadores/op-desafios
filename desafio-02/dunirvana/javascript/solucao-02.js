@@ -20,19 +20,19 @@
      * @param num Numero a ser checado
      */
     function ehPrimo(num) {
-        if (num <= 1) 
+        if (num <= 1)
             return false; // negativos
 
-        if (num % 2 == 0 && num > 2) 
+        if (num % 2 == 0 && num > 2)
             return false; // pares
 
         let rq = Math.sqrt(num); // raiz quadrada para o limite das iteracoes, ja que ao menos um dos fatores deve ser menor ou igual a raiz
         for(let i = 3; i <= rq; i++) { // inicia em 3, encerra quando chegar na raiz quadrada, incrementa
 
-            if(num % i === 0) 
+            if(num % i === 0)
                 return false; // o modulo mostrara que um divisor foi encontrado
         }
-        
+
         return true;
       }
 

@@ -18,4 +18,4 @@
           print *,j
         end if
       end do
-      end program primos    
+      end program primos

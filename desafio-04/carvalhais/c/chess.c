@@ -11,15 +11,15 @@
  * @date 15/06/2020
  * @brief Solution for challenge #4 from OsProgramadores website
  *
- * Challenge is to write a program that can parse an input of numbers 
- * representing chess pieces without using any conditional constructs 
+ * Challenge is to write a program that can parse an input of numbers
+ * representing chess pieces without using any conditional constructs
  * (if, else, switch, etc).
- * 
- * The input is given as an 8 by 8 grid of integers (between 0 and 6, 
- * inclusively on both ends), each integer representing a given piece 
+ *
+ * The input is given as an 8 by 8 grid of integers (between 0 and 6,
+ * inclusively on both ends), each integer representing a given piece
  * type.
- * 
- * The program then should output a list containing the count for each 
+ *
+ * The program then should output a list containing the count for each
  * piece type in a predefined manner.
  *
  * @see https://osprogramadores.com/desafios/d04/
@@ -32,12 +32,12 @@
 #define CHAR_TABLE_SIZE     127
 
 /**
- * Since conditional statements aren't allowed, the program will constitute 
- * of simple interface in which numbers are directly read from the standard 
+ * Since conditional statements aren't allowed, the program will constitute
+ * of simple interface in which numbers are directly read from the standard
  * input.
- * 
- * Each character acts as an index to an int array, and every character in 
- * the input is counted. This avoids the need for any conditional structure. 
+ *
+ * Each character acts as an index to an int array, and every character in
+ * the input is counted. This avoids the need for any conditional structure.
  * The output only prints the char count for the relevant characters though.
  */
 int main(void) {

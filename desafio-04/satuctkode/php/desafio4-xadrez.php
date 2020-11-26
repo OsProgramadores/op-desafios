@@ -36,7 +36,7 @@
         $total_peca_atual = 0;
         foreach($tabuleiro_exemplo2 as $linha){
             $total_peca_atual += count(array_keys($linha, $codigo_peca_atual));
-        }      
+        }
         echo "<strong>".$pecas[$codigo_peca_atual].":</strong> ".$total_peca_atual." peça(s)<br>";
         $codigo_peca_atual++;
     }

@@ -113,7 +113,7 @@ Class Funcionarios {
         }
       }
     }
-    
+
     foreach($funcAreaArray as $index => $valor) {
       if($index == 0) {
         array_push($area_min, array("nome" => $valor['nome'],
