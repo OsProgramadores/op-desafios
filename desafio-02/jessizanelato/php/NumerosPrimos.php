@@ -1,7 +1,7 @@
 <?php
 
 final class NumerosPrimos {
-    
+
     public static function encontrarNumerosPrimos ($inicio = 1, $limite) {
 
         $numerosPrimos = [];
@@ -9,11 +9,11 @@ final class NumerosPrimos {
         for($num = $inicio; $num <= $limite; $num++){
 
             $divisores = self::encontrarDivisores($num);
-        
+
             if(count($divisores) == 1) {
                 $numerosPrimos[] = $num;
             }
-            
+
         }
 
         return $numerosPrimos;

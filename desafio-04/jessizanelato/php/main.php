@@ -1,11 +1,11 @@
 <?php
 
 $pecasXadrez = [0 => ['total' => 0, 'desc' => 'Vazio'],
-                1 => ['total' => 0, 'desc' => 'Peão'], 
-                2 => ['total' => 0, 'desc' => 'Bispo'], 
-                3 => ['total' => 0, 'desc' => 'Cavalo'], 
-                4 => ['total' => 0, 'desc' => 'Torre'], 
-                5 => ['total' => 0, 'desc' => 'Rainha'], 
+                1 => ['total' => 0, 'desc' => 'Peão'],
+                2 => ['total' => 0, 'desc' => 'Bispo'],
+                3 => ['total' => 0, 'desc' => 'Cavalo'],
+                4 => ['total' => 0, 'desc' => 'Torre'],
+                5 => ['total' => 0, 'desc' => 'Rainha'],
                 6 => ['total' => 0, 'desc' => 'Rei']];
 
 # informar o nome do arquivo como parâmetro

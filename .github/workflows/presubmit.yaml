@@ -1,0 +1,59 @@
+name: Presubmit tests
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.14.x
+
+      - name: Install Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+
+      - name: Compute changed files
+        run: |
+          URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
+          curl -s -X GET -G $URL | jq -r '.[] | .filename' > $HOME/changed_files.txt
+
+      - name: Install & build dependencies
+        run: |
+          go get -u golang.org/x/lint/golint
+          pip install pylint
+
+      - name: Check directory structure
+        run: |
+          ./ci/dircheck.sh
+
+      - name: Check binary files
+        run: |
+          ./ci/bincheck.sh
+
+      - name: Check files with invalid UTF-8 content
+        run: |
+          ./ci/utfcheck.sh
+
+      - name: Check files containing lines with trailing spaces or tabs
+        run: |
+          ./ci/trailing-spaces-check.sh
+
+      - name: Check Python code
+        run: |
+          ./ci/pycheck.sh
+
+      - name: Check Go code
+        run: |
+          ./ci/gocheck.sh
+
+      - name: Check Validator code
+        run: |
+          ./ci/validator.sh
+

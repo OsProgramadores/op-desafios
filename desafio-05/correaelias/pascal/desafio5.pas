@@ -1,520 +1,408 @@
 {
-  Solução do desafio 5 em Pascal por Elias Correa (Jan/2019)
-  
-  Download freepascal compiler (fpc) here https://www.freepascal.org/ or thru your distro package manager
-  
-  Compile with:
-  fpc desafio5.pas -O4
+Compile with Free Pascal Compiler (FPC):
+fpc desafio5.pas -O4
 }
 
 program Desafio5;
 
-{$MODE OBJFPC}{$H+}
+{$mode objfpc}
+{$inline on}
 
-uses
+uses 
   {$ifdef unix}
-  cthreads,
-  cmem, // the c memory manager is on some systems much faster for multi-threading
+  Cthreads,
+  CMem, //the c memory manager is on some systems much faster for multi-threading
   {$endif}
-  SysUtils, Classes;
-
-const
-  BufferLength = 1024 * 1024 * 16; //amount of data each thread will work out from file (in Bytes)
-  VectorInitialCapacity = 1;
-  VectorGrowFactor = 2;
-  TableSize = 997; //a prime number choosen by profilling
+  SysUtils, Classes, Contnrs, StrUtils, Math;
 
 type
-  TSmallString = string[32];
-  
-  PSlot = ^TSlot;
-  
-  TVector = record
-    FLength, FCapacity: LongInt;
-    FSlots: PSlot;
-  end;
-  
-  TEmployee = record
-    FName: TSmallString; //name must come first because it is checked in variant record 'TSlot' using 'FName';
-    FSurname: TSmallString;
-    FSalary: Double;
-    FArea: TSmallString;
-  end;
-  
   TArea = record
-    FCode: TSmallString; //name must come first because it is checked in variant record 'TSlot' using 'FName';
-    FName: TSmallString;
+    FName: PShortString;
     FTotalEmployees: LongInt;
-    FTotalSalary: Double;
-    FMaxSalary, FMinSalary: TVector;
+    FTotalSalary: Int64;
+    FMinSalary, FMaxSalary: Int64;
+    FMinNames, FMaxNames: TFPList;
   end;
+  
+  PArea = ^TArea;
   
   TSurname = record
-    FText: TSmallString; //name must come first because it is checked in variant record 'TSlot' using 'FName';
     FTotalEmployees: LongInt;
-    FMaxSalary: TVector;
+    FMaxSalary: Int64;
+    FMaxNames: TFPList;
   end;
   
-  //a varint record aka union in C family languages
-  TSlot = record
-    case FType: LongInt of
-      1: (FKey: TSmallString);
-      2: (FEmployee: TEmployee);
-      3: (FArea: TArea);
-      4: (FSurname: TSurname);
-  end;
-  
-  //handmade hash table
-  TTable = array[0 .. TableSize - 1] of TVector;
-  
-  PThreadData = ^TThreadData;
+  PSurname = ^TSurname;
   
   TThreadData = record
-    FBuffer: array[0 .. BufferLength - 1] of Char;
+    FBuffer: AnsiString;
     FTotalEmployees: LongInt;
-    FTotalSalary: Double;
-    FMinSalary, FMaxSalary: TVector;
-    FAreas, FSurnames: TTable;
+    FTotalSalary: Int64;
+    FMinSalary, FMaxSalary: Int64;
+    FMinNames, FMaxNames: TFPList;
+    FAreas, FSurnames: TFPHashList;
   end;
-  
-function Hash(const AKey: ShortString): QWord; inline;
-type
-  {a variant record (like an union in C language)
-  is used to ease individual byte manipulation}
-  TNumber = record
-    case FType: Byte of
-      0:
-        (FData: QWord);
-      1:
-        (FBytes: record
-          F1, F2, F3, F4, F5, F6, F7, F8: Byte;
-        end)
-  end;
-var
-  Number: TNumber;
+
+  PThreadData = ^TThreadData;
+
+function GetArea(var AAreaList: TFPHashList; ACode: PShortString): PArea; inline;
 begin
-  Number.FData := 0;
-  if Length(AKey) >= 1 then Number.FBytes.F1 := Byte(AKey[1]); //Pascal ShortStrings starts at 1
-  if Length(AKey) >= 2 then Number.FBytes.F2 := Byte(AKey[2]);
-  if Length(AKey) >= 3 then Number.FBytes.F3 := Byte(AKey[3]);
-  if Length(AKey) >= 4 then Number.FBytes.F4 := Byte(AKey[4]);
-  if Length(AKey) >= 5 then Number.FBytes.F5 := Byte(AKey[5]);
-  if Length(AKey) >= 6 then Number.FBytes.F6 := Byte(AKey[6]);
-  if Length(AKey) >= 7 then Number.FBytes.F7 := Byte(AKey[7]);
-  if Length(AKey) >= 8 then Number.FBytes.F8 := Byte(AKey[8]);
-  Result := Number.FData;
+  Result := AAreaList.Find(ACode^);
+  if Result = nil then
+  begin
+    Result := GetMem(SizeOf(TArea));
+    with Result^ do
+    begin
+      FName := nil;
+      FTotalEmployees := 0;
+      FTotalSalary := 0;
+      FMinSalary := 0;
+      FMaxSalary := 0;
+      FMinNames := TFPList.Create;
+      FMaxNames := TFPList.Create;
+    end;
+    AAreaList.Add(ACode^, Result);
+  end;
 end;
 
-function AppendSlot(var AVector: TVector; ASlot: PSlot): PSlot;
+function GetSurname(var ASurnameList: TFPHashList; const ASurname: PShortString): PSurname; inline;
 begin
-  with AVector do
+  Result := ASurnameList.Find(ASurname^);
+  if Result = nil then
   begin
-    if FLength + 1 > FCapacity then
+    Result := GetMem(SizeOf(TSurname));
+    with Result^ do
     begin
-      if FCapacity = 0 then FCapacity := VectorInitialCapacity else FCapacity := Trunc(FCapacity * VectorGrowFactor);
-      FSlots := ReallocMem(FSlots, SizeOf(TSlot) * FCapacity);
+      FTotalEmployees := 0;
+      FMaxSalary := 0;
+      FMaxNames := TFPList.Create;
     end;
-    Result := @FSlots[FLength];
-    Inc(FLength);
-    if ASlot <> nil then
+    ASurnameList.Add(ASurname^, Result);
+  end;
+end;
+
+procedure JoinNameList(const ASourceList: TFPList; var ADestList: TFPList; ASourceSalary: Int64; var ADestSalary: Int64; AKeepMinSalary: Boolean);
+begin
+  if ASourceSalary = ADestSalary then
+  begin
+    ADestList.AddList(ASourceList);
+  end
+  else if (ADestSalary = 0) or
+          (AKeepMinSalary and (ASourceSalary < ADestSalary)) or
+          ((not AKeepMinSalary) and (ASourceSalary > ADestSalary)) then
+  begin
+    ADestSalary := ASourceSalary;
+    ADestList.Clear;
+    ADestList.AddList(ASourceList);
+  end;
+end;
+
+procedure ParseJsonChunk(var AData: TThreadData);
+var
+  Index: SizeInt = 0;
+  Name, Surname, Code: PShortString;
+  Salary: Int64;
+  function GetString(): PShortString; inline;
+  var
+    Start: SizeInt;
+  begin
+    with AData do
     begin
-      Result^ := ASlot^;
+      Index := PosEx(':', FBuffer, Index + 1);
+      Index := PosEx('"', FBuffer, Index + 1);
+      Start := Index;
+      Index := PosEx('"', FBuffer, Index + 1);
+      FBuffer[Start] := Chr(Index - Start - 1);
+      Result := @FBuffer[Start];
+    end;
+  end;
+  function GetNumber(): Int64; inline;
+  var
+    Start: SizeInt;
+    C: Char;
+  begin
+    Result := 0;
+    with AData do
+    begin
+      Start := Index + 1;
+      Index := PosEx('.', FBuffer, Index + 1);
+      Inc(Index, 3);
+      while Start < Index do
+      begin
+        C := FBuffer[Start];
+        if C <> '.' then
+          Result := Result * 10 + (Ord(C) - Ord('0'));
+        Inc(Start);
+      end;
+    end;
+  end;
+  procedure AddName(var AList: TFPList; var AListSalary: Int64; AName, ASurname: PShortString; ASalary: Int64; AKeepMinSalary: Boolean); inline;
+  begin
+    if AListSalary = ASalary then
+    begin
+      AList.Add(AName);
+      if ASurname <> nil then AList.Add(ASurname);
     end
-    else
-      FillChar(Result^, SizeOf(TSlot), 0);
-  end;
-end;
-
-function FloatEqual(AA, AB: Double): Boolean; inline;
-const
-  Epsilon = 0.000001;
-begin
-  Result := Abs(AA - AB) < Epsilon;
-end;
-
-procedure AppendEmployee(var AVector: TVector; const AEmployee: TEmployee; AKeepMinSalary: Boolean);
-var
-  Slot: TSlot;
-begin
-  Slot.FEmployee := AEmployee;
-  with AVector do
-  begin
-    if (FLength = 0) or FloatEqual(AEmployee.FSalary, FSlots[0].FEmployee.FSalary) then
+    else if (AListSalary = 0) or
+            (AKeepMinSalary and (ASalary < AListSalary)) or
+            ((not AKeepMinSalary) and (ASalary > AListSalary)) then
     begin
-      AppendSlot(AVector, @Slot);
-    end
-    else if (AKeepMinSalary and (AEmployee.FSalary < FSlots[0].FEmployee.FSalary)) or
-            ((not AKeepMinSalary) and (AEmployee.FSalary > FSlots[0].FEmployee.FSalary)) then
-    begin
-      FLength := 0;
-      AppendSlot(AVector, @Slot);
+      AListSalary := ASalary;
+      AList.Clear;
+      AList.Add(AName);
+      if ASurname <> nil then AList.Add(ASurname);
     end;
   end;
-end;
-
-function GetSlot(var ATable: TTable; const AKey: TSmallString): PSlot;
-var
-  I, Key: SizeInt;
 begin
-  Key := SizeInt(Hash(AKey) mod QWord(TableSize));
-  with ATable[Key] do
-  begin
-    for I := 0 to FLength - 1 do
-    begin
-      if (Length(AKey) = Length(FSlots[I].FKey)) and CompareMem(@AKey[1], @(FSlots[I].FKey[1]), Length(AKey)) then
-        Exit(@FSlots[I]);
-    end;
-  end;
-  Result := AppendSlot(ATable[Key], nil);
-  Result^.FKey := AKey;
-end;
-
-function SlotCount(const ATable: TTable): SizeInt;
-var
-  I: SizeInt;
-begin
-  Result := 0;
-  for I := 0 to High(ATable) do
-    Result += ATable[I].FLength;
-end;
-
-function GetSlotByIndex(const ATable: TTable; AIndex: LongInt): PSlot;
-var
-  I: SizeInt;
-begin
-  for I := 0 to High(ATable) do
-  begin
-    if AIndex < ATable[I].FLength then
-      Exit(@(ATable[I].FSlots[AIndex]))
-    else
-      AIndex -= ATable[I].FLength;
-  end;
-  Result := nil;
-end;
-
-procedure JoinEmployeeVectors(const AVectorIn: TVector; var AVectorOut: TVector; AKeepMinSalary: Boolean);
-var
-  I: LongInt;
-begin
-  with AVectorIn do
-    for I := 0 to FLength - 1 do
-      AppendEmployee(AVectorOut, FSlots[I].FEmployee, AKeepMinSalary);
-end;
-
-procedure LoadJsonChunk(var JsonFile: TFileStream; ABuffer: PChar);
-var
-  Len: SizeInt;
-begin
-  Len := JsonFile.Read(ABuffer^, BufferLength - 1);
-  
-  //rewind file until a '}' is found, reading only complete objects
-  if JsonFile.Position <> JsonFile.Size then
-  begin
-    while ABuffer[Len - 1] <> '}' do
-    begin
-      Dec(Len);
-      JsonFile.Position := JsonFile.Position - 1;
-    end;
-  end;
-  
-  //null terminated
-  ABuffer[Len] := #0;
-end;
-
-procedure GetString(var ABuffer: PChar; out AString: TSmallString); inline;
-var
-  Start, C: PChar;
-begin
-  C := ABuffer;
-  
-  while (C^ <> #0) and (C^ <> '"') do Inc(C);
-  if C^ = '"' then Inc(C); //skip '"'
-  
-  Start := C;
-  
-  while (C^ <> #0) and (C^ <> '"') do Inc(C);
-  
-  if (C^ = '"') and (Start^ <> '"') then
-    SetString(AString, Start, C - Start)
-  else //empty string
-    AString := '';
-  
-  if C^ = '"' then Inc(C); //skip '"'
-  
-  ABuffer := C;
-end;
-
-procedure GetNumberFast(var ABuffer: PChar; out ANumber: Double); inline;
-var
-  C: PChar;
-  Number: LongInt = 0;
-begin
-  C := ABuffer;
-
-  while (C^ <> #0) and (not (C^ in ['0'..'9', '.'])) do Inc(C);
-  
-  while C^ in ['0'..'9', '.'] do
-  begin
-    if C^ <> '.' then
-      Number := Number * 10 + (LongInt(C^) - LongInt('0'));
-    Inc(C);
-  end;
-  ANumber := Double(Number) * Double(0.01);
-  
-  ABuffer := C;
-end;
-
-procedure ParseJsonChunk(ABuffer: PChar; var AData: TThreadData);
-var
-  C: PChar;
-  Employee: TEmployee;
-  Area: TArea;
-begin
-  Employee.FName := '';
-  
-  Area.FName := '';
-  
-  C := ABuffer;
-  
-  while C^ <> #0 do
-  begin
-    //find a property
-    while (C^ <> #0) and (C^ <> '"') do Inc(C);
-    if C^ = '"' then Inc(C); //skip '"'
-    
-    //employee (starts with i of id)
-    if C^ = 'i' then
-    begin
-      with Employee do
+  repeat
+    Index := PosEx('"', AData.FBuffer, Index + 1);
+    case AData.FBuffer[Index + 1] of
+      'i': //employee (starts with i of id)
       begin
         //ignore id
-        while (C^ <> #0) and (C^ <> ',') do Inc(C);
+        Inc(Index, 2);
+        Index := PosEx(',', AData.FBuffer, Index + 1);
         
         //get name
-        while (C^ <> #0) and (C^ <> ':') do Inc(C);
-        GetString(C, FName);
+        Inc(Index, 6);
+        Name := GetString();
         
         //get surname
-        while (C^ <> #0) and (C^ <> ':') do Inc(C);
-        GetString(C, FSurname);
+        Inc(Index, 11);
+        Surname := GetString();
         
         //get salary
-        while (C^ <> #0) and (C^ <> ':') do Inc(C);
-        GetNumberFast(C, FSalary);
+        Inc(Index, 9);
+        Index := PosEx(':', AData.FBuffer, Index + 1);
+        Salary := GetNumber();
         
         //get area
-        while (C^ <> #0) and (C^ <> ':') do Inc(C);
-        GetString(C, FArea);
+        Inc(Index, 6);
+        Code := GetString();
+        
+        //updata global counters
+        AData.FTotalSalary += Salary;
+        Inc(AData.FTotalEmployees);
+        AddName(AData.FMinNames, AData.FMinSalary, Name, Surname, Salary, True);
+        AddName(AData.FMaxNames, AData.FMaxSalary, Name, Surname, Salary, False);
+        
+        //update areas
+        with GetArea(AData.FAreas, Code)^ do
+        begin
+          Inc(FTotalEmployees);
+          FTotalSalary += Salary;
+          AddName(FMinNames, FMinSalary, Name, Surname, Salary, True);
+          AddName(FMaxNames, FMaxSalary, Name, Surname, Salary, False);
+        end;
+        
+        //update surnames
+        with GetSurname(AData.FSurnames, Surname)^ do
+        begin
+          Inc(FTotalEmployees);
+          AddName(FMaxNames, FMaxSalary, Name, nil, Salary, False);
+        end;
       end;
-      
-      //update global counters
-      Inc(AData.FTotalEmployees);
-      AData.FTotalSalary += Employee.FSalary;
-      AppendEmployee(AData.FMinSalary, Employee, True);
-      AppendEmployee(AData.FMaxSalary, Employee, False);
-      
-      //update areas
-      with GetSlot(AData.FAreas, Employee.FArea)^.FArea do
+      'c': //area (starts with c of code)
       begin
-        Inc(FTotalEmployees);
-        FTotalSalary += Employee.FSalary;
-        AppendEmployee(FMinSalary, Employee, True);
-        AppendEmployee(FMaxSalary, Employee, False);
+        //get code
+        Inc(Index, 6);
+        Code := GetString();
+        
+        //get name
+        Inc(Index, 6);
+        Name := GetString();
+        
+        //set area name
+        GetArea(AData.FAreas, Code)^.FName := Name;
       end;
-      
-      //update surnames
-      with GetSlot(AData.FSurnames, Employee.FSurname)^.FSurname do
-      begin
-        Inc(FTotalEmployees);
-        AppendEmployee(FMaxSalary, Employee, False);
-      end;
-    end
-    //area (starts with c of code)
-    else if C^ = 'c' then //area
-    begin
-      //get code
-     while (C^ <> #0) and (C^ <> ':') do Inc(C);
-      GetString(C, Area.FCode);
-      
-      //get name
-      while (C^ <> #0) and (C^ <> ':') do Inc(C);
-      GetString(C, Area.FName);
-      
-      //set area name
-      GetSlot(AData.FAreas, Area.FCode)^.FArea.FName := Area.FName;
     end;
-  end;
+  until Index = 0;
 end;
-
-var
-  CriticalSection: TRTLCriticalSection;
-  EmployeeFile: TFileStream;
 
 procedure ThreadProc(AData: Pointer);
 begin
   TThread.CurrentThread.FreeOnTerminate := False;
   
-  while not TThread.CurrentThread.CheckTerminated do
-  begin
-    EnterCriticalSection(CriticalSection);
-    if EmployeeFile.Position = EmployeeFile.Size then
-      TThread.CurrentThread.Terminate;
-    LoadJsonChunk(EmployeeFile, @(PThreadData(AData)^.FBuffer[0]));
-    LeaveCriticalSection(CriticalSection);
-    
-    ParseJsonChunk(@(PThreadData(AData)^.FBuffer[0]), PThreadData(AData)^);
-  end;
+  ParseJsonChunk(PThreadData(AData)^);
 end;
 
 var
+  FilePath: AnsiString;
+  FileStream: TFileStream;
+  I, J: Integer;
+  BufferSize, ReadSize: Int64;
   Threads: array of TThread;
   Data: array of TThreadData;
-  I, J: LongInt;
-  TotalSalary: Double = 0.0;
-  TotalEmployees: LongInt = 0;
+  CurrentArea: PArea;
   MostEmployees: LongInt = 0;
   LeastEmployees: LongInt = High(LongInt);
-  MinSalary, MaxSalary: TVector;
-  Areas, Surnames: TTable;
-  
+  CurrentSurname: PSurname;
+  Key: ShortString;
+  Cores: Int32 = 16;
 begin
-  
-  if ParamCount <> 1 then
+  if ParamCount < 1 then
   begin
-    WriteLn('Usage: ', ParamStr(0), ' <input file>');
-    Halt;
+    WriteLn('Usage: ', ParamStr(0), ' <input file> <thread_count>');
+    Halt(1);
   end;
   
-  FormatSettings.DecimalSeparator := '.';
+  FilePath := ParamStr(1);
   
-  FillChar(MinSalary, SizeOf(MinSalary), 0);
-  FillChar(MaxSalary, SizeOf(MaxSalary), 0);
-  FillChar(Areas, SizeOf(Areas), 0);
-  FillChar(Surnames, SizeOf(Surnames), 0);
+  if ParamCount = 2 then
+    Cores := StrToInt(ParamStr(2));
   
-  SetLength(Threads, TThread.ProcessorCount);
-  SetLength(Data, TThread.ProcessorCount);
+  SetLength(Threads, Cores);
+  SetLength(Data, Cores);
   
-  InitCriticalSection(CriticalSection);
-  
-  EmployeeFile := TFileStream.Create(ParamStr(1), fmOpenRead or fmShareDenyWrite);
-  
-  for I := 0 to High(Threads) do
+  for I := 0 to High(Data) do
   begin
-    Threads[I] := TThread.ExecuteInThread(@ThreadProc, @Data[I]);
-    Threads[I].Priority := tpTimeCritical;
+    with Data[I] do
+    begin
+      FBuffer := '';
+      FTotalEmployees := 0;
+      FTotalSalary := 0;
+      FMinSalary := 0;
+      FMaxSalary := 0;
+      FMinNames := TFPList.Create;
+      FMaxNames := TFPList.Create;
+      FAreas := TFPHashList.Create;
+      FSurnames := TFPHashList.Create;
+    end;
   end;
+  
+  FileStream := TFileStream.Create(FilePath, fmOpenRead or fmShareDenyWrite);
+  
+  for I := 0 to High(Data) do
+  begin
+    if I = High(Data) then //if its the last buffer, read the remains
+      BufferSize := FileStream.Size - FileStream.Position
+    else
+      BufferSize := Ceil(FileStream.Size / Cores);
     
+    SetLength(Data[I].FBuffer, BufferSize);
+    
+    ReadSize := FileStream.Read(Data[I].FBuffer[1], BufferSize);
+    
+    for J := ReadSize downto 1 do
+    begin
+      if Data[I].FBuffer[J] = '}' then Break;
+      
+      FileStream.Position := FileStream.Position - 1;
+      
+      Dec(ReadSize);
+    end;
+    
+    SetLength(Data[I].FBuffer, ReadSize);
+    
+    Threads[I] := TThread.ExecuteInThread(@ThreadProc, @Data[I]);
+  end;
+  
+  FileStream.Free;
+  
   for I := 0 to High(Threads) do
   begin
     Threads[I].WaitFor;
     Threads[I].Free;
   end;
   
-  EmployeeFile.Free;
-  
-  DoneCriticalSection(CriticalSection);
-  
-  //join results
-  for I := 0 to High(Data) do
+  //join threads results
+  for I := 1 to High(Data) do
   begin
-    //global
-    TotalEmployees += Data[I].FTotalEmployees;
-    TotalSalary += Data[I].FTotalSalary;
-    
-    JoinEmployeeVectors(Data[I].FMinSalary, MinSalary, True);
-    JoinEmployeeVectors(Data[I].FMaxSalary, MaxSalary, False);
-    
-    //areas
-    for J := 0 to SlotCount(Data[I].FAreas) - 1 do
+    with Data[0] do
     begin
-      with GetSlotByIndex(Data[I].FAreas, J)^ do
+      //global
+      FTotalEmployees += Data[I].FTotalEmployees;
+      FTotalSalary += Data[I].FTotalSalary;
+      JoinNameList(Data[I].FMinNames, FMinNames, Data[I].FMinSalary, FMinSalary, True);
+      JoinNameList(Data[I].FMaxNames, FMaxNames, Data[I].FMaxSalary, FMaxSalary, False);
+      
+      //areas
+      for J := 0 to Data[I].FAreas.Count - 1 do
       begin
-        with GetSlot(Areas, FArea.FCode)^.FArea do
+        CurrentArea := Data[I].FAreas.Items[J];
+        Key := Data[I].FAreas.NameOfIndex(J);
+        with GetArea(FAreas, @Key)^ do
         begin
-          if Length(FArea.FName) <> 0 then FName := FArea.FName;
-          FTotalEmployees += FArea.FTotalEmployees;
-          FTotalSalary += FArea.FTotalSalary;
-          JoinEmployeeVectors(FArea.FMinSalary, FMinSalary, True);
-          JoinEmployeeVectors(FArea.FMaxSalary, FMaxSalary, False);
+          if CurrentArea^.FName <> nil then FName := CurrentArea^.FName;
+          FTotalEmployees += CurrentArea^.FTotalEmployees;
+          FTotalSalary += CurrentArea^.FTotalSalary;
+          JoinNameList(CurrentArea^.FMinNames, FMinNames, CurrentArea^.FMinSalary, FMinSalary, True);
+          JoinNameList(CurrentArea^.FMaxNames, FMaxNames, CurrentArea^.FMaxSalary, FMaxSalary, False);
         end;
       end;
-    end;
-    
-    //surnames
-    for J := 0 to SlotCount(Data[I].FSurnames) - 1 do
-    begin
-      with GetSlotByIndex(Data[I].FSurnames, J)^ do
+      
+      //surnames
+      for J := 0 to Data[I].FSurnames.Count - 1 do
       begin
-        with GetSlot(Surnames, FSurname.FText)^.FSurname do
+        CurrentSurname := Data[I].FSurnames.Items[J];
+        Key := Data[I].FSurnames.NameOfIndex(J);
+        with GetSurname(FSurnames, @Key)^ do
         begin
-          FTotalEmployees += FSurname.FTotalEmployees;
-          JoinEmployeeVectors(FSurname.FMaxSalary, FMaxSalary, False);
+          FTotalEmployees += CurrentSurname^.FTotalEmployees;
+          JoinNameList(CurrentSurname^.FMaxNames, FMaxNames, CurrentSurname^.FMaxSalary, FMaxSalary, False);
         end;
       end;
     end;
   end;
   
-  //print results
+  //write results
   
   //global
-  for I := 0 to MinSalary.FLength - 1 do
+  with Data[0] do
   begin
-    with MinSalary.FSlots[I].FEmployee do
-      WriteLn('global_min|', FName, ' ', FSurname, '|', FSalary:0:2);
+    for I := 0 to FMinNames.Count div 2 - 1 do
+      WriteLn('global_min|', PShortString(FMinNames[I * 2])^, ' ', PShortString(FMinNames[I * 2 + 1])^, '|', (FMinSalary * 0.01):0:2);
+    
+    for I := 0 to FMaxNames.Count div 2 - 1 do
+      WriteLn('global_max|', PShortString(FMaxNames[I * 2])^, ' ', PShortString(FMaxNames[I * 2 + 1])^, '|', (FMaxSalary * 0.01):0:2);
+    
+    WriteLn('global_avg|', ((Data[0].FTotalSalary * 0.01) / Data[0].FTotalEmployees):0:2);
   end;
-  
-  for I := 0 to MaxSalary.FLength - 1 do
-  begin
-    with MaxSalary.FSlots[I].FEmployee do
-      WriteLn('global_max|', FName, ' ', FSurname, '|', FSalary:0:2);
-  end;
-  
-  WriteLn('global_avg|', (TotalSalary / TotalEmployees):0:2);
   
   //areas
-  for I := 0 to SlotCount(Areas) - 1 do
+  for I := 0 to Data[0].FAreas.Count - 1 do
   begin
-    with GetSlotByIndex(Areas, I)^.FArea do
+    with PArea(Data[0].FAreas.Items[I])^ do
     begin
-      for J := 0 to FMaxSalary.FLength - 1 do
-        with FMaxSalary.FSlots[J] do
-          WriteLn('area_max|', FName, '|', FEmployee.FName, ' ', FEmployee.FSurname, '|', FEmployee.FSalary:0:2);
-      
-      for J := 0 to FMinSalary.FLength - 1 do
-        with FMinSalary.FSlots[J] do
-          WriteLn('area_min|', FName, '|', FEmployee.FName, ' ', FEmployee.FSurname, '|', FEmployee.FSalary:0:2);
-      
       if FTotalEmployees > 0 then
-        WriteLn('area_avg|', FName, '|', (FTotalSalary / FTotalEmployees):0:2);
-      
-      if FTotalEmployees > MostEmployees then
-        MostEmployees := FTotalEmployees;
-      
-      if (FTotalEmployees > 0) and (FTotalEmployees < LeastEmployees) then
-        LeastEmployees := FTotalEmployees;
+      begin
+        WriteLn('area_avg|', FName^, '|', ((FTotalSalary * 0.01) / FTotalEmployees):0:2);
+        
+        for J := 0 to FMinNames.Count div 2 - 1 do
+          WriteLn('area_min|', FName^, '|', PShortString(FMinNames[J * 2])^, ' ', PShortString(FMinNames[J * 2 + 1])^, '|', (FMinSalary * 0.01):0:2);
+        
+        for J := 0 to FMaxNames.Count div 2 - 1 do
+          WriteLn('area_max|', FName^, '|', PShortString(FMaxNames[J * 2])^, ' ', PShortString(FMaxNames[J * 2 + 1])^, '|', (FMaxSalary * 0.01):0:2);
+        
+        if FTotalEmployees > MostEmployees then
+          MostEmployees := FTotalEmployees;
+        
+        if (FTotalEmployees > 0) and (FTotalEmployees < LeastEmployees) then
+          LeastEmployees := FTotalEmployees;
+      end;
     end;
   end;
   
-  for I := 0 to SlotCount(Areas) - 1 do
+  for I := 0 to Data[0].FAreas.Count - 1 do
   begin
-    with GetSlotByIndex(Areas, I)^.FArea do
+    with PArea(Data[0].FAreas.Items[I])^ do
     begin
       if FTotalEmployees = MostEmployees then
-        WriteLn('most_employees|', FName, '|', FTotalEmployees);
+        WriteLn('most_employees|', FName^, '|', FTotalEmployees);
       
       if FTotalEmployees = LeastEmployees then
-        WriteLn('least_employees|', FName, '|', FTotalEmployees);
+        WriteLn('least_employees|', FName^, '|', FTotalEmployees);
     end;
   end;
-
+  
   //surnames
-  for I := 0 to SlotCount(Surnames) - 1 do
+  for I := 0 to Data[0].FSurnames.Count - 1 do
   begin
-    with GetSlotByIndex(Surnames, I)^.FSurname do
+    Key := Data[0].FSurnames.NameOfIndex(I);
+    with PSurname(Data[0].FSurnames.Items[I])^ do
       if FTotalEmployees > 1 then
-        for J := 0 to FMaxSalary.FLength - 1 do
-          with FMaxSalary.FSlots[J] do
-            WriteLn('last_name_max|', FText, '|', FEmployee.FName, ' ', FEmployee.FSurname, '|', FEmployee.FSalary:0:2);
+        for J := 0 to FMaxNames.Count - 1 do
+          WriteLn('last_name_max|', Key, '|', PShortString(FMaxNames[J])^, ' ', Key, '|', (Double(FMaxSalary) * Double(0.01)):0:2);
   end;
+
 end.

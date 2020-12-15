@@ -19,3 +19,5 @@ overflow-checks = false
 [profile.release]
 lto = true
 codegen-units = 1
+incremental = false  # solve build regression
+

@@ -1,23 +1,20 @@
-object Desafio6 extends App {
-
-  def clean(s: String) = s.toUpperCase.filter(c => c >= 'A' && c <= 'Z')
-
-  def anagrams(input: String, words: List[String], list: List[String] = Nil): List[String] = {
-    var wrds = words
-    if (input.nonEmpty)
-      words.flatMap { word =>
-        wrds = wrds.tail
-        val w = input diff word
-        anagrams(w, wrds.filter(_.diff(w)==""), word :: list)
-      }
-    else List(list.reverse.mkString(" "))
-  }
-
-  val input = clean(args.headOption.getOrElse("oi gente"))
-
-  val words = io.Source.fromFile("words.txt").getLines.toList.filter(_.diff(input) == "").sorted
-  //.fromURL("https://osprogramadores.com/desafios/d06/words.txt")
-
-  val a = anagrams(input, words).mkString("\n")
-  println(a)
+implicit class D(r: String) {
+  def -(s: String) = r.toSeq.diff(s).unwrap
+  def clean = r.toUpperCase.filter(c => c >= 'A' && c <= 'Z')
 }
+
+def readFile(file: String) = io.Source.fromFile(file).getLines()
+
+def contains(letters: String)(word: String) = (word - letters).isEmpty
+
+def anagrams(input: String, words: List[String], list: List[String] = Nil): Unit = input match {
+  case "" => println(list.sorted.mkString(" "))
+  case _  => for (word :: wrds <- words.tails) {
+               val unusedInput = input - word
+               anagrams(unusedInput, wrds.filter(contains(unusedInput)), word :: list)
+             }
+}
+
+val input = args.headOption.getOrElse("oi gente").clean
+val words = readFile("words.txt").filter(contains(input)).toList.sortBy(_.length).reverse
+anagrams(input, words)
