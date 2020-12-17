@@ -333,7 +333,7 @@ int main(int argc, char *argv[]) {
     );
 
     std::vector<ThreadData> data(num_threads);
-    std::vector<std::thread> threads(num_threads);
+    std::vector<std::thread> threads( num_threads - 1 );
 
     char *mmap_init = mapping_start + offset - aligned_offset;
 
@@ -368,109 +368,95 @@ int main(int argc, char *argv[]) {
         else { parse_json_chunk(&data[i]); }
     }
 
-    {
-        //ScopedTimer t2{"timer waiting all threads end"};
-        for(auto& thread : threads){
-          if(thread.joinable()){ thread.join(); }
-        }
+    for(auto& thread : threads){
+        if(thread.joinable()){ thread.join(); }
     }
 
+    ThreadData &d = data[0];
+
+    //join threads results
+    for(std::vector<ThreadData>::iterator it = data.begin() + 1; it != data.end(); ++it)
     {
-        //ScopedTimer t3{"\ntimer to join all results"};
-        ThreadData &d = data[0];
+      //global
+      d.total_employees += it->total_employees;
+      d.total_salary += it->total_salary;
+      join_name_list(it->min_names, d.min_names, it->min_salary, d.min_salary, true);
+      join_name_list(it->max_names, d.max_names, it->max_salary, d.max_salary, false);
 
-        {
-        //ScopedTimer t4{"timer in join"};
-        //join threads results
-        for(std::vector<ThreadData>::iterator it = data.begin() + 1; it != data.end(); ++it)
-        {
-          //global
-          d.total_employees += it->total_employees;
-          d.total_salary += it->total_salary;
-          join_name_list(it->min_names, d.min_names, it->min_salary, d.min_salary, true);
-          join_name_list(it->max_names, d.max_names, it->max_salary, d.max_salary, false);
+      //areas
+      for(auto iter = it->areas.begin(); iter != it->areas.end(); iter++){
+        Area& area1 = d.areas[iter->first];
+        Area& area2 = iter.value();
+        if(area2.name.len){ area1.name = area2.name; }
 
-          //areas
-          for(auto iter = it->areas.begin(); iter != it->areas.end(); iter++){
-            Area& area1 = d.areas[iter->first];
-            Area& area2 = iter.value();
-            if(area2.name.len){ area1.name = area2.name; }
-//            std::cout << "-----------------------------------------------------> " << area1.name << "\n";
-            area1.total_employees += area2.total_employees;
-            area1.total_salary += area2.total_salary;
-            join_name_list(area2.min_names, area1.min_names, area2.min_salary, area1.min_salary, true);
-            join_name_list(area2.max_names, area1.max_names, area2.max_salary, area1.max_salary, false);
-          }
+        area1.total_employees += area2.total_employees;
+        area1.total_salary += area2.total_salary;
+        join_name_list(area2.min_names, area1.min_names, area2.min_salary, area1.min_salary, true);
+        join_name_list(area2.max_names, area1.max_names, area2.max_salary, area1.max_salary, false);
+      }
 
-          //surnames
-          for(auto iter = it->surnames.begin(); iter != it->surnames.end(); iter++){
-            Surname& surname1 = d.surnames[iter->first];
-            Surname& surname2 = iter.value();
-            surname1.total_employees += surname2.total_employees;
-            join_name_list(surname2.max_names, surname1.max_names, surname2.max_salary, surname1.max_salary, false);
-          }
+      //surnames
+      for(auto iter = it->surnames.begin(); iter != it->surnames.end(); iter++){
+        Surname& surname1 = d.surnames[iter->first];
+        Surname& surname2 = iter.value();
+        surname1.total_employees += surname2.total_employees;
+        join_name_list(surname2.max_names, surname1.max_names, surname2.max_salary, surname1.max_salary, false);
+      }
+    }
+
+    std::ios_base::sync_with_stdio(false);
+
+    //write results
+
+    //global
+    for(auto it = d.min_names.begin(); it != d.min_names.end(); it += 2){
+      std::cout << "global_min|" << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)d.min_salary * 0.01) << '\n';
+    }
+
+    for(auto it = d.max_names.begin(); it != d.max_names.end(); it += 2){
+      std::cout << "global_max|" << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)d.max_salary * 0.01) << '\n';
+    }
+
+    std::cout << "global_avg|" << std::fixed << std::setprecision(2) << (double)((double)d.total_salary * 0.01) / (double)d.total_employees << '\n';
+
+    //areas
+    const Area* least_employees = nullptr;
+    const Area* most_employees = nullptr;
+
+    for(auto& pair : d.areas){
+      const Area& area = pair.second;
+      if(area.total_employees > 0){
+        std::cout << "area_avg|" << area.name << '|' << std::fixed << std::setprecision(2) << (double)((double)area.total_salary * 0.01 / area.total_employees) << '\n';
+
+        for(auto it = area.min_names.begin(); it != area.min_names.end(); it += 2){
+          std::cout << "area_min|" << area.name << '|' << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)area.min_salary * 0.01) << '\n';
         }
 
+        for(auto it = area.max_names.begin(); it != area.max_names.end(); it += 2){
+          std::cout << "area_max|" << area.name << '|' << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)area.max_salary * 0.01) << '\n';
         }
 
-        std::ios_base::sync_with_stdio(false);
-
-        //write results
-
-        //global
-        for(auto it = d.min_names.begin(); it != d.min_names.end(); it += 2){
-          std::cout << "global_min|" << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)d.min_salary * 0.01) << '\n';
+        if(most_employees == nullptr || area.total_employees > most_employees->total_employees){
+          most_employees = &area;
         }
 
-        for(auto it = d.max_names.begin(); it != d.max_names.end(); it += 2){
-          std::cout << "global_max|" << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)d.max_salary * 0.01) << '\n';
+        if(least_employees == nullptr || area.total_employees < least_employees->total_employees){
+          least_employees = &area;
         }
+      }
+    }
 
-        std::cout << "global_avg|" << std::fixed << std::setprecision(2) << (double)((double)d.total_salary * 0.01) / (double)d.total_employees << '\n';
+    std::cout << "least_employees|" << least_employees->name << '|' << least_employees->total_employees << '\n';
+    std::cout << "most_employees|" << most_employees->name << '|' << most_employees->total_employees << '\n';
 
-        //areas
-        const Area* least_employees = nullptr;
-        const Area* most_employees = nullptr;
-
-        for(auto& pair : d.areas){
-          const Area& area = pair.second;
-          if(area.total_employees > 0){
-            std::cout << "area_avg|" << area.name << '|' << std::fixed << std::setprecision(2) << (double)((double)area.total_salary * 0.01 / area.total_employees) << '\n';
-
-            for(auto it = area.min_names.begin(); it != area.min_names.end(); it += 2){
-              std::cout << "area_min|" << area.name << '|' << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)area.min_salary * 0.01) << '\n';
+    //surnames
+    for(auto& pair : d.surnames){
+        const HString& surname_str = pair.first;
+        const Surname& surname = pair.second;
+        if(surname.total_employees > 1){
+            for(auto& name : surname.max_names){
+              std::cout << "last_name_max|" << surname_str << '|' << name << ' ' << surname_str << '|' << std::fixed << std::setprecision(2) << (double)((double)surname.max_salary * 0.01) << '\n';
             }
-
-            for(auto it = area.max_names.begin(); it != area.max_names.end(); it += 2){
-              std::cout << "area_max|" << area.name << '|' << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)area.max_salary * 0.01) << '\n';
-            }
-
-            if(most_employees == nullptr || area.total_employees > most_employees->total_employees){
-              most_employees = &area;
-            }
-
-            if(least_employees == nullptr || area.total_employees < least_employees->total_employees){
-              least_employees = &area;
-            }
-          }
-        }
-
-        std::cout << "least_employees|" << least_employees->name << '|' << least_employees->total_employees << '\n';
-        std::cout << "most_employees|" << most_employees->name << '|' << most_employees->total_employees << '\n';
-
-        {
-        //ScopedTimer t5{"timer in print surnames"};
-        //surnames
-        for(auto& pair : d.surnames){
-            const HString& surname_str = pair.first;
-            const Surname& surname = pair.second;
-            if(surname.total_employees > 1){
-                for(auto& name : surname.max_names){
-      //              std::cout << "last_name_max|" << surname_str << '|' << name << ' ' << surname_str << '|' << std::fixed << std::setprecision(2) << (double)((double)surname.max_salary * 0.01) << '\n';
-                  std::cout << "last_name_max|" << surname_str << '|' << name << ' ' << surname_str << '|' << std::fixed << std::setprecision(2) << (double)((double)surname.max_salary * 0.01) << '\n';
-                }
-            }
-        }
         }
     }
 
