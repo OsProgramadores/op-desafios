@@ -1,9 +1,8 @@
 /*
  * Desafio 5 em C++ (C++11/17) por Jonathas Valeriano
-   
  * Para compilar(gcc):
  * g++ -std=c++17 -pthread -lstdc++fs -Ofast -ftree-vectorize main.cpp -o d5
- * 
+ *
  * Obs!: fork do source da solução C++ feita por Elias Correa.
  * Todos os créditos dos algoritmos e estruturas de dados para o dev original desta solução.
 */
@@ -163,12 +162,12 @@ inline char *get_number(char *c, int& num){
 }
 
 void parse_json_chunk(ThreadData *data){
-    
+
   ::madvise(data->buffer, data->buffer_len, MADV_SEQUENTIAL);
-    
+
   char *c = data->buffer;
   char *c_end = data->buffer + data->buffer_len;
-  
+
   int salary, id_offset = 0;
   HString name_str, surname_str, area_str;
   Area *area;
@@ -198,7 +197,7 @@ void parse_json_chunk(ThreadData *data){
             while(*c != ',') ++c;
           }
         }
-        
+
         //read name
         c += 7;
         c = get_string(c, name_str, true);
@@ -266,7 +265,7 @@ public:
         {
             std::cout << std::string{ phrase + " --> " + std::to_string(diff.count()) + " us ~ " + std::to_string(diff.count()/1000.00) + " ms ~ " + std::to_string(diff.count()/1000000.00) + " s.\n"};
         }
-        else 
+        else
         {
             std::cout << std::string{ phrase + " --> " + std::to_string(diff.count()) + " us ~ " + std::to_string(diff.count()/1000.00) + " ms ~ " + std::to_string(diff.count()/1000000.00) + " s."} << std::endl;
         }
@@ -289,15 +288,15 @@ size_t make_offset_page_aligned(size_t offset) noexcept
 }
 
 int main(int argc, char *argv[]) {
-  
+
 //    ScopedTimer timer{"\nTotal elapsed time"};
-    
+
     if(argc != 2 && argc != 3){
       std::cout << "Usage: d5 [num_threads] <file>";
       return 1;
     }
-    
-    int file;  
+
+    int file;
     int num_threads;
 
     if(argc == 3){
@@ -307,7 +306,7 @@ int main(int argc, char *argv[]) {
       num_threads = std::thread::hardware_concurrency();
       file = open64( argv[1], O_RDWR | O_NOATIME, 0644 );
     }
-  
+
     if(file < 0)
     {
         std::cout << "ERROR: invalid file path.";
@@ -317,11 +316,11 @@ int main(int argc, char *argv[]) {
     //get file size
     const size_t file_size = lseek64(file, 0, SEEK_END);
     lseek64(file, 0, SEEK_SET);
-    
+
     size_t offset{0};
     const int64_t aligned_offset = make_offset_page_aligned(offset);
     const int64_t length_to_map = offset - aligned_offset + file_size;
-    
+
     char* mapping_start = static_cast<char*>(
         ::mmap64(
             0,
@@ -332,12 +331,12 @@ int main(int argc, char *argv[]) {
             aligned_offset
         )
     );
-  
+
     std::vector<ThreadData> data(num_threads);
     std::vector<std::thread> threads(num_threads);
-    
+
     char *mmap_init = mapping_start + offset - aligned_offset;
-        
+
     size_t buffer_size = std::ceil(file_size / num_threads);
     size_t current_pos{0};
     size_t read_size{0};
@@ -368,18 +367,18 @@ int main(int argc, char *argv[]) {
         if(i < num_threads - 1){ threads[i] = std::thread(parse_json_chunk, &data[i]); }
         else { parse_json_chunk(&data[i]); }
     }
-    
+
     {
         //ScopedTimer t2{"timer waiting all threads end"};
         for(auto& thread : threads){
           if(thread.joinable()){ thread.join(); }
         }
     }
-    
+
     {
         //ScopedTimer t3{"\ntimer to join all results"};
         ThreadData &d = data[0];
-        
+
         {
         //ScopedTimer t4{"timer in join"};
         //join threads results
@@ -390,7 +389,7 @@ int main(int argc, char *argv[]) {
           d.total_salary += it->total_salary;
           join_name_list(it->min_names, d.min_names, it->min_salary, d.min_salary, true);
           join_name_list(it->max_names, d.max_names, it->max_salary, d.max_salary, false);
-          
+
           //areas
           for(auto iter = it->areas.begin(); iter != it->areas.end(); iter++){
             Area& area1 = d.areas[iter->first];
@@ -411,13 +410,13 @@ int main(int argc, char *argv[]) {
             join_name_list(surname2.max_names, surname1.max_names, surname2.max_salary, surname1.max_salary, false);
           }
         }
-        
+
         }
 
         std::ios_base::sync_with_stdio(false);
-        
+
         //write results
-        
+
         //global
         for(auto it = d.min_names.begin(); it != d.min_names.end(); it += 2){
           std::cout << "global_min|" << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)d.min_salary * 0.01) << '\n';
@@ -474,7 +473,7 @@ int main(int argc, char *argv[]) {
         }
         }
     }
-  
+
     ::munmap(const_cast<char*>(mapping_start), length_to_map);
     close(file);
 }
