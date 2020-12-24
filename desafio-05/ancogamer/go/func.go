@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 	"sync"
 
 	"github.com/jeffotoni/gconcat"
@@ -237,15 +236,18 @@ func main() {
 	wg.Wait()
 
 	str := gconcat.Build(GlobalMax, "\n", GlobalMin, "\n", "global_avg|", fmt.Sprintf("%.2f", mediaS/float64(c)), AreasMax, AreasMin, AvgA, MostEmploy, LeastEmploy, LastNameMax)
-	file, err := os.Create("result.txt")
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, err = file.Write([]byte(str))
-	if err != nil {
-		log.Fatal(err)
-	}
-	file.Close()
+	fmt.Println(str)
+	/*
+		file, err := os.Create("result.txt")
+		if err != nil {
+			log.Fatal(err)
+		}
+		_, err = file.Write([]byte(str))
+		if err != nil {
+			log.Fatal(err)
+		}
+		file.Close()
+	*/
 	fmt.Printf("%x", md5.Sum([]byte(str)))
 
 }
