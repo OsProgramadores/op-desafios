@@ -11,13 +11,16 @@ import (
 	"github.com/jeffotoni/gconcat"
 )
 
+//Func ..
 type Func struct {
-	Id        int     `json:"id"`
+	ID        int     `json:"id"`
 	Nome      string  `json:"nome"`
 	Sobrenome string  `json:"sobrenome"`
 	Salario   float64 `json:"salario"`
 	Area      string  `json:"area"`
 }
+
+// Area ..
 type Area struct {
 	Codigo       string `json:"codigo"`
 	Nome         string `json:"nome"`
@@ -31,6 +34,7 @@ type Area struct {
 	AreaMin string
 }
 
+//JSON ..
 type JSON struct {
 	Funcs []Func `json:"funcionarios"`
 	Areas []Area `json:"areas"`
