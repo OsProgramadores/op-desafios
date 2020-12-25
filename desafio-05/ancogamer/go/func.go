@@ -117,7 +117,6 @@ func main() {
 		log.Fatal(err)
 	}
 	var dat JSON
-
 	err = json.Unmarshal(ctx, &dat)
 	if err != nil {
 		log.Fatal(err)
