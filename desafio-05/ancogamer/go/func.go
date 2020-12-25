@@ -342,6 +342,7 @@ func main() {
 
 }
 
+//Build ..
 //Versão simplista da https://github.com/jeffotoni/gconcat/blob/master/main.go
 func Build(strs ...interface{}) string {
 	var sb strings.Builder
