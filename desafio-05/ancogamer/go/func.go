@@ -1,15 +1,30 @@
 package main
 
 import (
-	"crypto/md5"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
+	"strconv"
+	"strings"
 	"sync"
-
-	"github.com/jeffotoni/gconcat"
+	"time"
 )
+
+// Area ..
+type Area struct {
+	Codigo string `json:"codigo"`
+	Nome   string `json:"nome"`
+	Qtd    int
+	MediaS float64
+	MaiorS float64
+	MenorS float64
+	//MenorSFuncionarioPointer *Func
+
+	AreaMax string
+	AreaMin string
+}
 
 //Func ..
 type Func struct {
@@ -18,20 +33,6 @@ type Func struct {
 	Sobrenome string  `json:"sobrenome"`
 	Salario   float64 `json:"salario"`
 	Area      string  `json:"area"`
-}
-
-// Area ..
-type Area struct {
-	Codigo       string `json:"codigo"`
-	Nome         string `json:"nome"`
-	Qtd          int
-	MediaS       float64
-	MaiorS       float64
-	MenorS       float64
-	Funcionarios []*Func
-
-	AreaMax string
-	AreaMin string
 }
 
 //JSON ..
@@ -70,11 +71,11 @@ func X(bigSalaryByLastName *[]SobreS, dat JSON) {
 			if dat.Funcs[c].Salario > (*bigSalaryByLastName)[l].MaiorS {
 				(*bigSalaryByLastName)[l].MaiorS = dat.Funcs[c].Salario
 				(*bigSalaryByLastName)[l].LastNameMax = ""
-				(*bigSalaryByLastName)[l].LastNameMax = gconcat.Build((*bigSalaryByLastName)[l].LastNameMax, "\nlast_name_max|", dat.Funcs[c].Sobrenome, "|", dat.Funcs[c].Nome,
+				(*bigSalaryByLastName)[l].LastNameMax = Build((*bigSalaryByLastName)[l].LastNameMax, "\nlast_name_max|", dat.Funcs[c].Sobrenome, "|", dat.Funcs[c].Nome,
 					" ", dat.Funcs[c].Sobrenome, "|",
 					fmt.Sprintf("%.2f", dat.Funcs[c].Salario))
 			} else if dat.Funcs[c].Salario == (*bigSalaryByLastName)[l].MaiorS {
-				(*bigSalaryByLastName)[l].LastNameMax = gconcat.Build((*bigSalaryByLastName)[l].LastNameMax, "\nlast_name_max|", dat.Funcs[c].Sobrenome, "|", dat.Funcs[c].Nome,
+				(*bigSalaryByLastName)[l].LastNameMax = Build((*bigSalaryByLastName)[l].LastNameMax, "\nlast_name_max|", dat.Funcs[c].Sobrenome, "|", dat.Funcs[c].Nome,
 					" ", dat.Funcs[c].Sobrenome, "|",
 					fmt.Sprintf("%.2f", dat.Funcs[c].Salario))
 			}
@@ -82,7 +83,7 @@ func X(bigSalaryByLastName *[]SobreS, dat JSON) {
 		}
 	}
 	*bigSalaryByLastName = append(*bigSalaryByLastName, SobreS{
-		LastNameMax: gconcat.Build("\nlast_name_max|", dat.Funcs[c].Sobrenome, "|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", dat.Funcs[c].Salario)),
+		LastNameMax: Build("\nlast_name_max|", dat.Funcs[c].Sobrenome, "|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", dat.Funcs[c].Salario)),
 		MaiorS:      dat.Funcs[c].Salario,
 		SobreNome:   dat.Funcs[c].Sobrenome,
 	})
@@ -94,14 +95,24 @@ func X(bigSalaryByLastName *[]SobreS, dat JSON) {
 }
 
 func main() {
+	start := time.Now()
+	/*
+		var optCPUProfile string
 
-	var arquivo string
-	_, err := fmt.Scanf("%s", &arquivo)
-	if err != nil {
-		log.Fatal(err)
-	}
+		flag.StringVar(&optCPUProfile, "cpuprofile", "", "write cpu profile to file")
+		flag.Parse()
+		if optCPUProfile != "" {
+			println("to aqui")
+			f, err := os.Create(optCPUProfile)
+			if err != nil {
+				log.Fatal(err)
+			}
+			pprof.StartCPUProfile(f)
+			defer pprof.StopCPUProfile()
+		}
+	*/
 
-	ctx, err := ioutil.ReadFile(arquivo)
+	ctx, err := ioutil.ReadFile(os.Args[1])
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -129,6 +140,7 @@ func main() {
 	var sizeA int = len(dat.Areas)
 
 	var bigSalaryByLastName []SobreS
+
 	for c = 0; c < len(dat.Funcs); c++ {
 		//4
 		X(&bigSalaryByLastName, dat)
@@ -138,47 +150,99 @@ func main() {
 		case dat.Funcs[c].Salario > maiorValor:
 			GlobalMax = ""
 			maiorValor = dat.Funcs[c].Salario
-			GlobalMax = gconcat.Build("global_max|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", maiorValor))
+			GlobalMax = Build("global_max|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", maiorValor))
 		case dat.Funcs[c].Salario == maiorValor:
-			GlobalMax = gconcat.Build(GlobalMax, "\nglobal_max|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", maiorValor))
+			GlobalMax = Build(GlobalMax, "\nglobal_max|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", maiorValor))
 		}
 		switch {
 		case dat.Funcs[c].Salario < menorValor:
 			GlobalMin = ""
 			menorValor = dat.Funcs[c].Salario
-			GlobalMin = gconcat.Build("global_min|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", menorValor))
+			GlobalMin = Build("global_min|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", menorValor))
 		case dat.Funcs[c].Salario == menorValor:
-			GlobalMin = gconcat.Build(GlobalMin, "\nglobal_min|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", menorValor))
+			GlobalMin = Build(GlobalMin, "\nglobal_min|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", menorValor))
 		}
 		mediaS += dat.Funcs[c].Salario
 
 		for a := 0; a < sizeA; a++ {
 			if dat.Funcs[c].Area == dat.Areas[a].Codigo {
+				if dat.Areas[a].Qtd == 0 {
+					dat.Areas[a].MenorS = dat.Funcs[c].Salario
+				}
 				dat.Areas[a].Qtd++
-				dat.Areas[a].Funcionarios = append(dat.Areas[a].Funcionarios, &dat.Funcs[c])
 				//2
+				//calculo menor salario
+				if dat.Funcs[c].Salario < dat.Areas[a].MenorS {
+					dat.Areas[a].MenorS = dat.Funcs[c].Salario
+					dat.Areas[a].AreaMin = ""
+					var sb strings.Builder
+					sb.WriteString(dat.Areas[a].AreaMin)
+					sb.WriteString("\narea_min|")
+					sb.WriteString(dat.Areas[a].Nome)
+					sb.WriteString("|")
+					sb.WriteString(dat.Funcs[c].Nome)
+					sb.WriteString(" ")
+					sb.WriteString(dat.Funcs[c].Sobrenome)
+					sb.WriteString("|")
+					sb.WriteString(fmt.Sprintf("%.2f", dat.Funcs[c].Salario))
+					dat.Areas[a].AreaMin = sb.String()
+					//dat.Areas[a].AreaMin = Build(dat.Areas[a].AreaMin, "\narea_min|", dat.Areas[a].Nome, "|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", dat.Funcs[c].Salario))
+
+				}
+				if dat.Funcs[c].Salario == dat.Areas[a].MenorS {
+					var sb strings.Builder
+					sb.WriteString(dat.Areas[a].AreaMin)
+					sb.WriteString("\narea_min|")
+					sb.WriteString(dat.Areas[a].Nome)
+					sb.WriteString("|")
+					sb.WriteString(dat.Funcs[c].Nome)
+					sb.WriteString(" ")
+					sb.WriteString(dat.Funcs[c].Sobrenome)
+					sb.WriteString("|")
+					sb.WriteString(fmt.Sprintf("%.2f", dat.Funcs[c].Salario))
+					dat.Areas[a].AreaMin = sb.String()
+					//dat.Areas[a].AreaMin = Build(dat.Areas[a].AreaMin, "\narea_min|", dat.Areas[a].Nome, "|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|", fmt.Sprintf("%.2f", dat.Funcs[c].Salario))
+				}
+				//calculo maior salario
 				if dat.Funcs[c].Salario > dat.Areas[a].MaiorS {
 					dat.Areas[a].MaiorS = dat.Funcs[c].Salario
 					dat.Areas[a].AreaMax = ""
-					dat.Areas[a].AreaMax = gconcat.Build(dat.Areas[a].AreaMax, "\narea_max|", dat.Areas[a].Nome, "|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|",
+					dat.Areas[a].AreaMax = Build(dat.Areas[a].AreaMax, "\narea_max|", dat.Areas[a].Nome, "|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|",
 						fmt.Sprintf("%.2f", dat.Areas[a].MaiorS))
 
 				} else if dat.Funcs[c].Salario == dat.Areas[a].MaiorS {
-					dat.Areas[a].AreaMax = gconcat.Build(dat.Areas[a].AreaMax, "\narea_max|", dat.Areas[a].Nome, "|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|",
+					dat.Areas[a].AreaMax = Build(dat.Areas[a].AreaMax, "\narea_max|", dat.Areas[a].Nome, "|", dat.Funcs[c].Nome, " ", dat.Funcs[c].Sobrenome, "|",
 						fmt.Sprintf("%.2f", dat.Areas[a].MaiorS))
 				}
-				dat.Areas[a].MenorS = dat.Areas[a].MaiorS
 				dat.Areas[a].MediaS += dat.Funcs[c].Salario
 				//==================================================================
 				//3
+
 				if dat.Areas[a].Qtd > maiorArea {
+					a := a
+					var sb strings.Builder
 					maiorArea = dat.Areas[a].Qtd
 					MostEmploy = ""
-					MostEmploy = gconcat.Build(MostEmploy, "\nmost_employees|", dat.Areas[a].Nome, "|", dat.Areas[a].Qtd)
-				} else if dat.Areas[a].Qtd == maiorArea {
-					MostEmploy = gconcat.Build(MostEmploy, "\nmost_employees|", dat.Areas[a].Nome, "|", dat.Areas[a].Qtd)
 
+					sb.WriteString(MostEmploy)
+					sb.WriteString("\nmost_employees|")
+					sb.WriteString(dat.Areas[a].Nome)
+					sb.WriteString("|")
+					sb.WriteString(strconv.Itoa(dat.Areas[a].Qtd))
+					MostEmploy = sb.String()
+
+					//	MostEmploy = Build(MostEmploy, "\nmost_employees|", dat.Areas[a].Nome, "|", dat.Areas[a].Qtd)
+				} else if dat.Areas[a].Qtd == maiorArea {
+					var sb strings.Builder
+					sb.WriteString(MostEmploy)
+					sb.WriteString("\nmost_employees|")
+					sb.WriteString(dat.Areas[a].Nome)
+					sb.WriteString("|")
+					sb.WriteString(strconv.Itoa(dat.Areas[a].Qtd))
+					MostEmploy = sb.String()
+					//MostEmploy = Build(MostEmploy, "\nmost_employees|", dat.Areas[a].Nome, "|", dat.Areas[a].Qtd)
 				}
+
 				//==================================================================
 			}
 		}
@@ -187,71 +251,114 @@ func main() {
 
 	wg := sync.WaitGroup{}
 	wg.Add(2)
-	//2
-	go func() {
-		for a := 0; a < sizeA; a++ {
-			for k := 0; k < len(dat.Areas[a].Funcionarios); k++ {
-				if dat.Areas[a].Funcionarios[k].Salario < dat.Areas[a].MenorS {
-					dat.Areas[a].MenorS = dat.Areas[a].Funcionarios[k].Salario
-					dat.Areas[a].AreaMin = ""
-					dat.Areas[a].AreaMin = gconcat.Build(dat.Areas[a].AreaMin, "\narea_min|", dat.Areas[a].Nome, "|", dat.Areas[a].Funcionarios[k].Nome, " ",
-						dat.Areas[a].Funcionarios[k].Sobrenome, "|",
-						fmt.Sprintf("%.2f", dat.Areas[a].MenorS))
-				} else if dat.Areas[a].Funcionarios[k].Salario == dat.Areas[a].MenorS {
-					dat.Areas[a].AreaMin = gconcat.Build(dat.Areas[a].AreaMin, "\narea_min|", dat.Areas[a].Nome, "|", dat.Areas[a].Funcionarios[k].Nome, " ",
-						dat.Areas[a].Funcionarios[k].Sobrenome, "|",
-						fmt.Sprintf("%.2f", dat.Areas[a].MenorS))
-				}
-			}
-			//2
-			AreasMin = gconcat.Build(AreasMin, dat.Areas[a].AreaMin)
-			AreasMax = gconcat.Build(AreasMax, dat.Areas[a].AreaMax)
-			if dat.Areas[a].Qtd == 0 {
-
-			} else {
-				AvgA = gconcat.Build(AvgA, "\narea_avg|", dat.Areas[a].Nome, "|", fmt.Sprintf("%.2f", dat.Areas[a].MediaS/float64(dat.Areas[a].Qtd)))
-			}
-		}
-		wg.Done()
-	}()
 	go func() {
 		//3
 		menorArea = dat.Areas[0].Qtd
 		for a := 1; a < sizeA; a++ {
+			if dat.Areas[a].Qtd != 0 {
+				var sb strings.Builder
+				sb.WriteString(AvgA)
+				sb.WriteString("\narea_avg|")
+				sb.WriteString(dat.Areas[a].Nome)
+				sb.WriteString("|")
+				sb.WriteString(fmt.Sprintf("%.2f", dat.Areas[a].MediaS/float64(dat.Areas[a].Qtd)))
+				AvgA = sb.String()
+				/*	AvgA = Build(AvgA,
+					"\narea_avg|",
+					dat.Areas[a].Nome,
+					"|",
+					fmt.Sprintf("%.2f", dat.Areas[a].MediaS/float64(dat.Areas[a].Qtd)))*/
+			}
+			var sb strings.Builder
+			sb.WriteString(AreasMax)
+			sb.WriteString(dat.Areas[a].AreaMax)
+			AreasMax = sb.String()
+			sb.Reset()
+			//AreasMax = Build(AreasMax, dat.Areas[a].AreaMax)
+			sb.WriteString(AreasMin)
+			sb.WriteString(dat.Areas[a].AreaMin)
+			AreasMin = sb.String()
+			//AreasMin = Build(AreasMin, dat.Areas[a].AreaMin)
 			if dat.Areas[a].Qtd == 0 {
 			} else {
 				if dat.Areas[a].Qtd < menorArea {
 					LeastEmploy = ""
-					LeastEmploy = gconcat.Build(LeastEmploy, "\nleast_employees|", dat.Areas[a].Nome, "|", dat.Areas[a].Qtd)
+					LeastEmploy = Build(LeastEmploy, "\nleast_employees|", dat.Areas[a].Nome, "|", dat.Areas[a].Qtd)
 					menorArea = dat.Areas[a].Qtd
 				} else if dat.Areas[a].Qtd == menorArea {
 					menorArea = dat.Areas[a].Qtd
-					LeastEmploy = gconcat.Build(LeastEmploy, "\nleast_employees|", dat.Areas[a].Nome, "|", dat.Areas[a].Qtd)
+					LeastEmploy = Build(LeastEmploy, "\nleast_employees|", dat.Areas[a].Nome, "|", dat.Areas[a].Qtd)
 				}
 			}
 		}
 		wg.Done()
 	}()
+	go func() {
+		for i := 0; i < len(bigSalaryByLastName); i++ {
+			var sb strings.Builder
+			sb.WriteString(LastNameMax)
+			sb.WriteString(bigSalaryByLastName[i].LastNameMax)
+			LastNameMax = sb.String()
+			//LastNameMax = Build(LastNameMax, bigSalaryByLastName[i].LastNameMax)
+		}
+		wg.Done()
+	}()
 
-	for i := 0; i < len(bigSalaryByLastName); i++ {
-		LastNameMax = gconcat.Build(LastNameMax, bigSalaryByLastName[i].LastNameMax)
-	}
 	//exibição
 	wg.Wait()
+	var sb strings.Builder
 
-	str := gconcat.Build(GlobalMax, "\n", GlobalMin, "\n", "global_avg|", fmt.Sprintf("%.2f", mediaS/float64(c)), AreasMax, AreasMin, AvgA, MostEmploy, LeastEmploy, LastNameMax)
-	fmt.Println(str)
+	sb.Reset()
+	sb.WriteString(GlobalMax)
+	sb.WriteString("\n")
+	sb.WriteString(GlobalMin)
+	sb.WriteString("global_avg|")
+	sb.WriteString(fmt.Sprintf("%.2f", mediaS/float64(c)))
+	sb.WriteString(AreasMax)
+	sb.WriteString(AreasMin)
+	sb.WriteString(AvgA)
+	sb.WriteString(MostEmploy)
+	sb.WriteString(LeastEmploy)
+	sb.WriteString(LastNameMax)
+	sb.WriteString(AreasMax)
+	os.Stdout.WriteString(sb.String())
+
+	//os.Stdout.WriteString(Build(GlobalMax, "\n", GlobalMin, "\n", "global_avg|", fmt.Sprintf("%.2f", mediaS/float64(c)), AreasMax, AreasMin, AvgA, MostEmploy, LeastEmploy, LastNameMax))
+
+	fmt.Print("\n took ", time.Since(start))
+
 	/*
 		file, err := os.Create("result.txt")
 		if err != nil {
 			log.Fatal(err)
 		}
-		_, err = file.Write([]byte(str))
+		_, err = file.Write([]byte(sb.String()))
 		if err != nil {
 			log.Fatal(err)
 		}
 		file.Close()
-	*/
-	fmt.Printf("%x", md5.Sum([]byte(str)))
 
+	*/
+	//	fmt.Printf("%x", md5.Sum([]byte()))
+
+}
+
+//Versão simplista da https://github.com/jeffotoni/gconcat/blob/master/main.go
+func Build(strs ...interface{}) string {
+	var sb strings.Builder
+	for _, str := range strs {
+		sb.WriteString(buildStr(str))
+	}
+	return sb.String()
+}
+
+//buildStr monta a string
+func buildStr(str interface{}) string {
+	switch str.(type) {
+	case string:
+		return string(str.(string))
+	case int:
+		return strconv.Itoa(str.(int))
+	}
+	return ""
 }

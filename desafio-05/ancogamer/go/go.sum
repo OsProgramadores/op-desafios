@@ -1,2 +1,6 @@
 github.com/jeffotoni/gconcat v0.0.4 h1:D+QbAPkqNKcMik6rstOnsJVKgImE9t8GhHLLOL1hjW0=
 github.com/jeffotoni/gconcat v0.0.4/go.mod h1:GwfjoJwKzWUue/S4yZBTEgB+a77TM4wa2t5dNzXXs1c=
+github.com/larytet-go/procfs v0.0.0-20200120124712-efe9df9c0ce8 h1:Y8VTH+7OwX1AwIi/WWdUR/8hjdI7TVxoowjgtdwsN0Q=
+github.com/larytet-go/procfs v0.0.0-20200120124712-efe9df9c0ce8/go.mod h1:hgPofdmRE8ZbOfClQESUtqDaV7zUQLX087jFoG4PLnU=
+github.com/larytet/binlog v0.0.0-20200823182946-dc9b18a8d369 h1:/w72sdbTPmZCbSpfexGywD6+FXNDiYOf2hSTwTUDYVc=
+github.com/larytet/binlog v0.0.0-20200823182946-dc9b18a8d369/go.mod h1:PH7c16asX0nY3TM0QOoZNIAJqtQ9DlTQv0tlD/IUjRo=
