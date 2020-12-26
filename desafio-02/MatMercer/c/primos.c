@@ -22,20 +22,23 @@ int main() {
     return 0;
 }
 
-// espera um numero impar
+// espera um numero positivo impar maior que zero, podemos ignorar check para números pares
 int isPrimo(int numImpar) {
     if (numImpar % 3 == 0) {
-
         return 0;
     }
-    int c = 5;
 
-    while (c < numImpar) {
-        if (numImpar % c == 0) {
+    // 6k +- 1 check
+    // podemos parar em raiz de N
+    for (int k = 5; k * k <= numImpar; k += 6) {
+        if (
+                numImpar % k == 0 // 6k - 1 check
+                || numImpar % (k + 2) == 0 // 6k + 1 check
+           ) {
             return 0;
         }
-        c += 2;
     }
+
     return 1;
 }
 
