@@ -1,3 +1,6 @@
+"""Show all prime numbers between 1 and 1000"""
+
+
 def main():
     """Function main of the program"""
     inferior_limit = 1
