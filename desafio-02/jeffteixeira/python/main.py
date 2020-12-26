@@ -4,7 +4,7 @@
 def main():
     """Function main of the program"""
     inferior_limit = 1
-    superior_limit = 1000
+    superior_limit = 10000
     prime_numbers = get_prime_numbers(inferior_limit, superior_limit)
     show_numbers(prime_numbers)
 
