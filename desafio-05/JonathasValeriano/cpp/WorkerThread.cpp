@@ -10,14 +10,14 @@
 #include "TasksQueue.hpp"
 
 namespace TTasks
-{    
+{
     void WorkerThread::add_job(Task_Impl* jobFn)
     {
         active_task = jobFn;
         active_task->worker_thread = this;
         m_status.store(STATUS::HAVE_JOB, std::memory_order_release);
     }
-    
+
     void WorkerThread::loop(TasksQueue& tasksQueue)
     {
         jobsQueuePtr = &tasksQueue;
@@ -38,7 +38,7 @@ namespace TTasks
 
             STATUS s{STATUS::HAVE_JOB};
             if(!m_status.compare_exchange_strong(s, STATUS::WORKING, std::memory_order_release, std::memory_order_relaxed))
-            { 
+            {
                 if(m_status.load(std::memory_order_relaxed) == STATUS::FINISHED){ return; }
 
                 if(++idle_count >= 500)
@@ -51,9 +51,9 @@ namespace TTasks
             if(active_task && *active_task)
             {
                 active_task->run();
-                
+
                 active_task = nullptr;
-                
+
                 m_status.store(STATUS::IDLE, std::memory_order_release);
             }
         }

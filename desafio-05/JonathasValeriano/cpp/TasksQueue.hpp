@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-/* 
+/*
  * File:   TasksQueue.hpp
  * Author: Jonathas Valeriano
  *
@@ -21,22 +21,22 @@
 namespace TTasks
 {
     class Task_Impl;
-    
+
     class TasksQueue
     {
         std::vector< Task_Impl* > tasks_to_delete;
         std::list< Task_Impl* > tasks_list;
         std::mutex lk;
         std::atomic<uint> counter{0};
-        
+
         Task_Impl* try_pop_smallTask();
-        
+
         friend Task_Impl;
-        
+
     public:
-        
+
         TasksQueue() = default;
-        
+
         Task_Impl* push_back(Task_Impl* task);
         Task_Impl* try_push_back(Task_Impl* task);
         Task_Impl* pop_front();

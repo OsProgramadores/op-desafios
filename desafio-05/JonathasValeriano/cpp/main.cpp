@@ -143,27 +143,25 @@ public:
         }
         else if(hash_val > 0)
         {
-            if(int sz = b_msz-1)
+            int sz = b_msz-1;
+            size_t sn_h;
+            for(auto &sn: list)
             {
-                size_t sn_h;
-                for(auto &sn: list)
+                sn_h = sn.first;
+                if(sn_h == cur_hash)
                 {
-                    sn_h = sn.first;
-                    if(sn_h == cur_hash)
-                    {
-                        value = &sn.second;
-                        break;
-                    }
-                    else if(sn_h == 0)
-                    {
-                        value = &sn.second;
-                        sn.first = cur_hash;
-                        value->surname_str.str = key.str;
-                        value->surname_str.len = key.len;
-                        break;
-                    }
-                    else if(--sz == 0){ break; }
+                    value = &sn.second;
+                    break;
                 }
+                else if(sn_h == 0)
+                {
+                    value = &sn.second;
+                    sn.first = cur_hash;
+                    value->surname_str.str = key.str;
+                    value->surname_str.len = key.len;
+                    break;
+                }
+                else if(--sz == 0){ break; }
             }
         }
         else
@@ -182,15 +180,15 @@ public:
 
 struct ThreadData{
     char *buffer;
-    size_t total_salary = 0;
+    size_t total_salary{0};
     size_t buffer_len;
     size_t buffer_offset;
-    int total_employees = 0;
-    int min_salary = std::numeric_limits<int>::max(), max_salary = 0;
+    int total_employees{0};
+    int min_salary = std::numeric_limits<int>::max(), max_salary{0};
     std::vector<HString> min_names, max_names;
 
     MT_HMap<HString, Surname, HStringHash> *surnames{nullptr};
-    std::array<Area, 2> areas = { Area(), Area() };
+    std::array<Area, 2> areas{ Area(), Area() };
 };
 
 
@@ -571,8 +569,7 @@ void parse_json_chunk(ThreadData *data, TTasks::Task& task)
                     add_max_name(data->max_names, data->max_salary, name_str, surname_str, salary);
                 }
 
-                if(area_str.hash == 2064){ area = &data->areas[0]; }
-                else { area = &data->areas[1]; }
+                area = &data->areas[ !(area_str.hash == 2064) ];
 
                 ++area->total_employees;
                 area->total_salary += salary;
