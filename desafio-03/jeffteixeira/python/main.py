@@ -52,6 +52,8 @@ def is_palindrome(number):
 
 def get_inverted_number(number):
     """Function that returns a inverted number"""
+    if len(str(number)) == 1:
+        return number
     return int(str(number)[::-1])
 
 
