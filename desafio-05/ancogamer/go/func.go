@@ -51,39 +51,39 @@ type lastNameSal struct {
 	Funcionarios []string
 }
 
-//X , perdoa a falta de criatividade, a função X, calcula o maior salario por sobrenome, desconsiderando nomes + sobrenomes já existentes durante o calculo..
+// calcula o maior salario por sobrenome, desconsiderando nomes + sobrenomes já existentes durante o calculo..
 //exemplo: se João Vitor, já existir, o próximo João Vitor informado é desconsiderado.
-func X(bigSalaryByLastName *[]lastNameSal, dat JSON) {
-	var l int
-	for l = 0; l < len(*bigSalaryByLastName); l++ {
-		if dat.Funcs[c].Sobrenome == (*bigSalaryByLastName)[l].SobreNome {
-			for k := 0; k < len((*bigSalaryByLastName)[l].Funcionarios); k++ {
-				if dat.Funcs[c].Nome == (*bigSalaryByLastName)[l].Funcionarios[k] {
+func maxSalByLastName(bigSalaryByLastName *[]lastNameSal, dat JSON) {
+	var idx int
+	for idx = 0; idx < len(*bigSalaryByLastName); idx++ {
+		if dat.Funcs[c].Sobrenome == (*bigSalaryByLastName)[idx].SobreNome {
+			for k := 0; k < len((*bigSalaryByLastName)[idx].Funcionarios); k++ {
+				if dat.Funcs[c].Nome == (*bigSalaryByLastName)[idx].Funcionarios[k] {
 					return
 				}
 			}
-			if dat.Funcs[c].Salario > (*bigSalaryByLastName)[l].MaxSal {
-				(*bigSalaryByLastName)[l].MaxSal = dat.Funcs[c].Salario
-				(*bigSalaryByLastName)[l].LastNameMax.Reset()
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString("\nlast_name_max|")
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString("|")
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString(dat.Funcs[c].Nome)
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString(" ")
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString("|")
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
+			if dat.Funcs[c].Salario > (*bigSalaryByLastName)[idx].MaxSal {
+				(*bigSalaryByLastName)[idx].MaxSal = dat.Funcs[c].Salario
+				(*bigSalaryByLastName)[idx].LastNameMax.Reset()
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("\nlast_name_max|")
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Nome)
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(" ")
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
 				return
 			}
-			if dat.Funcs[c].Salario == (*bigSalaryByLastName)[l].MaxSal {
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString("\nlast_name_max|")
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString("|")
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString(dat.Funcs[c].Nome)
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString(" ")
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString("|")
-				(*bigSalaryByLastName)[l].LastNameMax.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
+			if dat.Funcs[c].Salario == (*bigSalaryByLastName)[idx].MaxSal {
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("\nlast_name_max|")
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Nome)
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(" ")
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
+				(*bigSalaryByLastName)[idz].LastNameMax.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
 				return
 			}
 		}
@@ -93,16 +93,16 @@ func X(bigSalaryByLastName *[]lastNameSal, dat JSON) {
 		SobreNome: dat.Funcs[c].Sobrenome,
 	})
 
-	(*bigSalaryByLastName)[l].LastNameMax.WriteString("\nlast_name_max|")
-	(*bigSalaryByLastName)[l].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-	(*bigSalaryByLastName)[l].LastNameMax.WriteString("|")
-	(*bigSalaryByLastName)[l].LastNameMax.WriteString(dat.Funcs[c].Nome)
-	(*bigSalaryByLastName)[l].LastNameMax.WriteString(" ")
-	(*bigSalaryByLastName)[l].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-	(*bigSalaryByLastName)[l].LastNameMax.WriteString("|")
-	(*bigSalaryByLastName)[l].LastNameMax.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
+	(*bigSalaryByLastName)[idx].LastNameMax.WriteString("\nlast_name_max|")
+	(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
+	(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
+	(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Nome)
+	(*bigSalaryByLastName)[idx].LastNameMax.WriteString(" ")
+	(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
+	(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
+	(*bigSalaryByLastName)[idx].LastNameMax.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
 	// appendando o funcionario novo ao array de funcionarios de mesmo sobrenome
-	(*bigSalaryByLastName)[l].Funcionarios = append((*bigSalaryByLastName)[l].Funcionarios, dat.Funcs[c].Nome)
+	(*bigSalaryByLastName)[idx].Funcionarios = append((*bigSalaryByLastName)[idx].Funcionarios, dat.Funcs[c].Nome)
 	return
 
 }
@@ -152,7 +152,7 @@ func main() {
 
 	for c = 0; c < len(dat.Funcs); c++ {
 		// Calculo elementos parte 4
-		X(&bigSalaryByLastName, dat)
+		maxSalByLastName(&bigSalaryByLastName, dat)
 
 		// Parte 1
 		if dat.Funcs[c].Salario > maiorValor {
