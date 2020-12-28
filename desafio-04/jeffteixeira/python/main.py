@@ -18,7 +18,14 @@ def main():
 
 def get_board():
     """Function that returns a filled matrix that represents the board"""
-    return [list(map(int, input('Line {} of the board: '.format(i + 1)).split())) for i in range(8)]
+    board = []
+    for i in range(8):
+        line = []
+        for j in range(8):
+            number = int(input('Line {} and column {}: '.format(i + 1, j + 1)))
+            line.append(number)
+        board.append(line)
+    return board
 
 
 def count_pieces(pieces, board):
@@ -30,6 +37,7 @@ def count_pieces(pieces, board):
 
 def show_pieces(pieces):
     """Function that shows the name and occurrences of each piece on the board"""
+    print()
     for piece in pieces.values():
         print('{}: {} peça(s)'.format(piece['name'], piece['quantity']))
 
