@@ -706,7 +706,7 @@ int main(int argc, char *argv[]) {
     if(filename.find_first_of("10K.json") != std::string::npos ||
        filename.find_first_of("50K.json") != std::string::npos){ num_threads = 1; }
     
-    int num_tasks = num_threads * 64;
+    int num_tasks = num_threads * 8;
     std::vector<ThreadData> data(num_tasks);
 
     char *mmap_init = mapping_start + offset - aligned_offset;
