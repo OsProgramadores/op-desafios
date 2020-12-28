@@ -85,12 +85,14 @@ func maxSalByLastName(bigSalaryByLastName *[]lastNameSal, dat JSON) {
 				return
 			}
 		}
-	}
+	} 
+//se não achar nada, então temos sobrenome novo, logo append
 	*bigSalaryByLastName = append(*bigSalaryByLastName, lastNameSal{
 		MaxSal:    dat.Funcs[c].Salario,
 		SobreNome: dat.Funcs[c].Sobrenome,
 	})
-
+//como idx foi incrementado até a última posição antes do último append, logo ele já tem a última posição incluindo o append(array comeca em 0 por, nessas terras)
+//dai uso o valor do idx como guia, para a última posição desse vetor e monto a string :)
 	(*bigSalaryByLastName)[idx].LastNameMax.WriteString("\nlast_name_max|")
 	(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
 	(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
