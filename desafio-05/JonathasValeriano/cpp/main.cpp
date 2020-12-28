@@ -462,10 +462,10 @@ struct cmp_sns
 {
     bool operator()(const SNS& a, const SNS& b) const
     {
-        if(b.surname.hash < b.surname.hash){ return true; }
-        else if(b.surname.hash == b.surname.hash)
+        if(a.surname.hash < b.surname.hash){ return true; }
+        else if(a.surname.hash == b.surname.hash)
         {
-            if(b.salary > b.salary){ return true; }
+            if(a.salary > b.salary){ return true; }
         }
 
         return false;
@@ -473,10 +473,10 @@ struct cmp_sns
 
     bool operator()(const SNS* a, const SNS* b) const
     {
-        if(b->surname.hash < b->surname.hash){ return true; }
-        else if(b->surname.hash == b->surname.hash)
+        if(a->surname.hash < b->surname.hash){ return true; }
+        else if(a->surname.hash == b->surname.hash)
         {
-            if(b->salary > b->salary){ return true; }
+            if(a->salary > b->salary){ return true; }
         }
 
         return false;
@@ -487,7 +487,7 @@ struct cmp_sns_less
 {
     bool operator()(const SNS& a, const SNS& b) const
     {
-        if(b.surname.hash < b.surname.hash){ return true; }
+        if(a.surname.hash < b.surname.hash){ return true; }
 
         return false;
     }
@@ -662,14 +662,17 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+    std::string filename;
     int file;
     int num_threads;
 
     if(argc == 3){
         num_threads = atoi(argv[1]);
+        filename = argv[2];
         file = open64( argv[2], O_RDWR | O_NOATIME, 0644 );
     }else{
         num_threads = std::thread::hardware_concurrency();
+        filename = argv[1];
         file = open64( argv[1], O_RDWR | O_NOATIME, 0644 );
     }
 
@@ -700,7 +703,10 @@ int main(int argc, char *argv[]) {
         )
     );
 
-    int num_tasks = num_threads * 8;
+    if(filename.find_first_of("10K.json") != std::string::npos ||
+       filename.find_first_of("50K.json") != std::string::npos){ num_threads = 1; }
+    
+    int num_tasks = num_threads * 64;
     std::vector<ThreadData> data(num_tasks);
 
     char *mmap_init = mapping_start + offset - aligned_offset;
