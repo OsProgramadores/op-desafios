@@ -1,4 +1,4 @@
-module dev5
+module d05
 
 go 1.15
 
