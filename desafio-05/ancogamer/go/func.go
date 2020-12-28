@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"math"
@@ -10,7 +9,6 @@ import (
 	"strconv"
 	"strings"
 	"sync"
-	"time"
 )
 
 // Area  struct da area, carregando campos extras para serem utilizados durante os calculos ..
@@ -83,7 +81,7 @@ func maxSalByLastName(bigSalaryByLastName *[]lastNameSal, dat JSON) {
 				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(" ")
 				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
 				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
-				(*bigSalaryByLastName)[idz].LastNameMax.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
+				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
 				return
 			}
 		}
