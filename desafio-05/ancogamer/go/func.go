@@ -108,7 +108,7 @@ func X(bigSalaryByLastName *[]lastNameSal, dat JSON) {
 }
 
 func main() {
-	start := time.Now()
+//	start := time.Now()
 	/*
 		var optCPUProfile string
 
@@ -338,6 +338,4 @@ func main() {
 	}()
 	//exibição
 	wg.Wait()
-
-	fmt.Print("\n took ", time.Since(start))
 }
