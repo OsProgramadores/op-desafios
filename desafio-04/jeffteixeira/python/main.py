@@ -18,7 +18,7 @@ def main():
 
 def get_board():
     """Function that returns a filled matrix that represents the board"""
-    return [list(map(int, input().split())) for i in range(8)]
+    return [list(map(int, input('Line {} of the board: '.format(i + 1)).split())) for i in range(8)]
 
 
 def count_pieces(pieces, board):
