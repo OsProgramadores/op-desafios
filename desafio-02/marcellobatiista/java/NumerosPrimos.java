@@ -12,7 +12,7 @@ public class NumerosPrimos {
                 //    break;
                 //}
              }
-             if (numero == 1 || qt_divisores == 2) {
+             if (qt_divisores == 2) {
                  System.out.printf("%d ", numero);
              }
         }
