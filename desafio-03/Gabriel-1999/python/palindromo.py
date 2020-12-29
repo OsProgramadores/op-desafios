@@ -1,3 +1,4 @@
+""" list of numbers """
 listNumber = []
 inicio = int(input("Numero Inicial: "))
 fim = int(input("Numero Final: "))
