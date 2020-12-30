@@ -8,9 +8,9 @@ public class NumerosPrimos {
                 if (numero % div == 0) {
                     qt_divisores += 1;
                 }
-                //if (qt_divisores > 2) {
-                //    break;
-                //}
+                if (qt_divisores > 2) {
+                    break;
+                }
              }
              if (qt_divisores == 2) {
                  System.out.printf("%d ", numero);
