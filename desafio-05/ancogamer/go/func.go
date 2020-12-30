@@ -2,12 +2,10 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io/ioutil"
 	"math"
 	"os"
-	"runtime/pprof"
 	"strconv"
 	"strings"
 	"sync"
@@ -83,27 +81,29 @@ func maxSalByLastName(bigSalaryByLastName *lastNameSal, dat JSON) {
 
 func main() {
 	start := time.Now()
-
-	var optCPUProfile string
-	fmt.Println(os.Args[len(os.Args)-1])
-	flag.StringVar(&optCPUProfile, "cpuprofile", "", "write cpu profile to file")
-	flag.Parse()
-	if optCPUProfile != "" {
-		println("to aqui")
-		f, err := os.Create(optCPUProfile)
-		if err != nil {
-			panic(err)
+	/*
+		var optCPUProfile string
+		fmt.Println(os.Args[len(os.Args)-1])
+		flag.StringVar(&optCPUProfile, "cpuprofile", "", "write cpu profile to file")
+		flag.Parse()
+		if optCPUProfile != "" {
+			println("to aqui")
+			f, err := os.Create(optCPUProfile)
+			if err != nil {
+				panic(err)
+			}
+			pprof.StartCPUProfile(f)
+			defer pprof.StopCPUProfile()
 		}
-		pprof.StartCPUProfile(f)
-		defer pprof.StopCPUProfile()
-	}
-
-	rawdata, err := ioutil.ReadFile(os.Args[len(os.Args)-1])
+	*/
+	rawdata, err := ioutil.ReadFile(os.Args[1])
 	if err != nil {
 		panic(err)
 	}
+
 	var dat JSON
 	err = json.Unmarshal(rawdata, &dat)
+
 	if err != nil {
 		panic(err)
 	}
@@ -136,14 +136,14 @@ func main() {
 			globalMax.WriteString(" ")
 			globalMax.WriteString(dat.Funcs[c].Sobrenome)
 			globalMax.WriteString("|")
-			globalMax.WriteString(strconv.FormatFloat(math.Round(maiorValor), 'f', 6, 64))
+			globalMax.WriteString(strconv.FormatFloat(math.Round(maiorValor), 'f', 2, 64))
 		} else if dat.Funcs[c].Salario == maiorValor {
 			globalMax.WriteString("\nglobal_max|")
 			globalMax.WriteString(dat.Funcs[c].Nome)
 			globalMax.WriteString(" ")
 			globalMax.WriteString(dat.Funcs[c].Sobrenome)
 			globalMax.WriteString("|")
-			globalMax.WriteString(strconv.FormatFloat(math.Round(maiorValor), 'f', 6, 64))
+			globalMax.WriteString(strconv.FormatFloat(math.Round(maiorValor), 'f', 2, 64))
 		}
 		if dat.Funcs[c].Salario < menorValor {
 			menorValor = dat.Funcs[c].Salario
@@ -153,14 +153,14 @@ func main() {
 			globalMin.WriteString(" ")
 			globalMin.WriteString(dat.Funcs[c].Sobrenome)
 			globalMin.WriteString("|")
-			globalMin.WriteString(strconv.FormatFloat(math.Round(menorValor), 'f', 6, 64))
+			globalMin.WriteString(strconv.FormatFloat(math.Round(menorValor), 'f', 2, 64))
 		} else if dat.Funcs[c].Salario == menorValor {
 			globalMin.WriteString("\nglobal_min|")
 			globalMin.WriteString(dat.Funcs[c].Nome)
 			globalMin.WriteString(" ")
 			globalMin.WriteString(dat.Funcs[c].Sobrenome)
 			globalMin.WriteString("|")
-			globalMin.WriteString(strconv.FormatFloat(math.Round(menorValor), 'f', 6, 64))
+			globalMin.WriteString(strconv.FormatFloat(math.Round(menorValor), 'f', 2, 64))
 		}
 
 		mediaGlobalSal += dat.Funcs[c].Salario
@@ -184,7 +184,7 @@ func main() {
 					dat.Areas[a].StrMinSal.WriteString(" ")
 					dat.Areas[a].StrMinSal.WriteString(dat.Funcs[c].Sobrenome)
 					dat.Areas[a].StrMinSal.WriteString("|")
-					dat.Areas[a].StrMinSal.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
+					dat.Areas[a].StrMinSal.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 2, 64))
 					break
 				case dat.Funcs[c].Salario == dat.Areas[a].MinSal:
 					dat.Areas[a].StrMinSal.Reset()
@@ -195,7 +195,7 @@ func main() {
 					dat.Areas[a].StrMinSal.WriteString(" ")
 					dat.Areas[a].StrMinSal.WriteString(dat.Funcs[c].Sobrenome)
 					dat.Areas[a].StrMinSal.WriteString("|")
-					dat.Areas[a].StrMinSal.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
+					dat.Areas[a].StrMinSal.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 2, 64))
 					break
 				}
 				// calculo maior salario
@@ -210,7 +210,7 @@ func main() {
 					dat.Areas[a].StrMaxSal.WriteString(" ")
 					dat.Areas[a].StrMaxSal.WriteString(dat.Funcs[c].Sobrenome)
 					dat.Areas[a].StrMaxSal.WriteString("|")
-					dat.Areas[a].StrMaxSal.WriteString(strconv.FormatFloat(math.Round(dat.Areas[a].MaxSal), 'f', 6, 64))
+					dat.Areas[a].StrMaxSal.WriteString(strconv.FormatFloat(math.Round(dat.Areas[a].MaxSal), 'f', 2, 64))
 					break
 				case dat.Funcs[c].Salario == dat.Areas[a].MaxSal:
 					dat.Areas[a].StrMaxSal.WriteString("\narea_max|")
@@ -220,7 +220,7 @@ func main() {
 					dat.Areas[a].StrMaxSal.WriteString(" ")
 					dat.Areas[a].StrMaxSal.WriteString(dat.Funcs[c].Sobrenome)
 					dat.Areas[a].StrMaxSal.WriteString("|")
-					dat.Areas[a].StrMaxSal.WriteString(strconv.FormatFloat(math.Round(dat.Areas[a].MaxSal), 'f', 6, 64))
+					dat.Areas[a].StrMaxSal.WriteString(strconv.FormatFloat(math.Round(dat.Areas[a].MaxSal), 'f', 2, 64))
 					break
 				}
 				dat.Areas[a].AvgSal += dat.Funcs[c].Salario
@@ -250,7 +250,7 @@ func main() {
 	os.Stdout.WriteString("\n")
 	os.Stdout.WriteString(globalMin.String())
 	os.Stdout.WriteString("global_avg|")
-	os.Stdout.WriteString(strconv.FormatFloat(math.Round(mediaGlobalSal/float64(c)), 'f', 6, 64))
+	os.Stdout.WriteString(strconv.FormatFloat(math.Round(mediaGlobalSal/float64(c)), 'f', 2, 64))
 
 	// exibindo os most_employees
 	os.Stdout.WriteString(mostAndLestEmploy.String())
@@ -267,7 +267,7 @@ func main() {
 				sb.WriteString("\narea_avg|")
 				sb.WriteString(dat.Areas[a].Nome)
 				sb.WriteString("|")
-				sb.WriteString(strconv.FormatFloat(math.Round(dat.Areas[a].AvgSal/float64(dat.Areas[a].Qtd)), 'f', 6, 64))
+				sb.WriteString(strconv.FormatFloat(math.Round(dat.Areas[a].AvgSal/float64(dat.Areas[a].Qtd)), 'f', 2, 64))
 				os.Stdout.WriteString(sb.String())
 			}
 
@@ -311,7 +311,7 @@ func main() {
 				sb.WriteString(" ")
 				sb.WriteString(sobreNome)
 				sb.WriteString("|")
-				sb.WriteString(strconv.FormatFloat(math.Round(arrayFuncs[idx].Salario), 'f', 6, 64))
+				sb.WriteString(strconv.FormatFloat(math.Round(arrayFuncs[idx].Salario), 'f', 2, 64))
 			}
 		}
 
