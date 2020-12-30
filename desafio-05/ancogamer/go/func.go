@@ -2,13 +2,16 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
+	"fmt"
 	"io/ioutil"
-	"log"
 	"math"
 	"os"
+	"runtime/pprof"
 	"strconv"
 	"strings"
 	"sync"
+	"time"
 )
 
 // Area  struct da area, carregando campos extras para serem utilizados durante os calculos ..
@@ -42,97 +45,67 @@ type JSON struct {
 var c int
 
 // lastNameSal ..
-type lastNameSal struct {
+type lastNameSal1 struct {
 	LastNameMax  strings.Builder
 	MaxSal       float64
 	SobreNome    string
 	Funcionarios []string
 }
+type lastNameSal map[string][]*Employee
 
-// calcula o maior salario por sobrenome, desconsiderando nomes + sobrenomes já existentes durante o calculo..
-//exemplo: se João Vitor, já existir, o próximo João Vitor informado é desconsiderado.
-func maxSalByLastName(bigSalaryByLastName *[]lastNameSal, dat JSON) {
-	var idx int
-	for idx = 0; idx < len(*bigSalaryByLastName); idx++ {
-		if dat.Funcs[c].Sobrenome == (*bigSalaryByLastName)[idx].SobreNome {
-			for k := 0; k < len((*bigSalaryByLastName)[idx].Funcionarios); k++ {
-				if dat.Funcs[c].Nome == (*bigSalaryByLastName)[idx].Funcionarios[k] {
-					return
-				}
-			}
-			if dat.Funcs[c].Salario > (*bigSalaryByLastName)[idx].MaxSal {
-				(*bigSalaryByLastName)[idx].MaxSal = dat.Funcs[c].Salario
-				(*bigSalaryByLastName)[idx].LastNameMax.Reset()
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("\nlast_name_max|")
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Nome)
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(" ")
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
+/*
+	calcula o maior salario por sobrenome,
+	desconsiderando nomes + sobrenomes
+	já existentes durante o calculo.
+	Exemplo: se João Vitor, já existir,
+	o próximo João Vitor informado é desconsiderado.
+*/
+func maxSalByLastName(bigSalaryByLastName *lastNameSal, dat JSON) {
+
+	slice, found := (*bigSalaryByLastName)[dat.Funcs[c].Sobrenome]
+	if found {
+		for _, value := range slice {
+			if dat.Funcs[c].Salario > value.Salario {
+				slice = ([]*Employee{&dat.Funcs[c]})
 				return
 			}
-			if dat.Funcs[c].Salario == (*bigSalaryByLastName)[idx].MaxSal {
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("\nlast_name_max|")
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Nome)
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(" ")
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
-				(*bigSalaryByLastName)[idx].LastNameMax.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
+			if dat.Funcs[c].Salario == value.Salario {
+				slice = append(slice, &dat.Funcs[c])
 				return
 			}
 		}
-	} 
-//se não achar nada, então temos sobrenome novo, logo append
-	*bigSalaryByLastName = append(*bigSalaryByLastName, lastNameSal{
-		MaxSal:    dat.Funcs[c].Salario,
-		SobreNome: dat.Funcs[c].Sobrenome,
-	})
-//como idx foi incrementado até a última posição antes do último append, logo ele já tem a última posição incluindo o append(array comeca em 0 por, nessas terras)
-//dai uso o valor do idx como guia, para a última posição desse vetor e monto a string :)
-	(*bigSalaryByLastName)[idx].LastNameMax.WriteString("\nlast_name_max|")
-	(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-	(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
-	(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Nome)
-	(*bigSalaryByLastName)[idx].LastNameMax.WriteString(" ")
-	(*bigSalaryByLastName)[idx].LastNameMax.WriteString(dat.Funcs[c].Sobrenome)
-	(*bigSalaryByLastName)[idx].LastNameMax.WriteString("|")
-	(*bigSalaryByLastName)[idx].LastNameMax.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 6, 64))
-	// appendando o funcionario novo ao array de funcionarios de mesmo sobrenome
-	(*bigSalaryByLastName)[idx].Funcionarios = append((*bigSalaryByLastName)[idx].Funcionarios, dat.Funcs[c].Nome)
+		return
+	}
+	(*bigSalaryByLastName)[dat.Funcs[c].Sobrenome] = []*Employee{&dat.Funcs[c]}
 	return
 
 }
 
 func main() {
-//	start := time.Now()
-	/*
-		var optCPUProfile string
+	start := time.Now()
 
-		flag.StringVar(&optCPUProfile, "cpuprofile", "", "write cpu profile to file")
-		flag.Parse()
-		if optCPUProfile != "" {
-			println("to aqui")
-			f, err := os.Create(optCPUProfile)
-			if err != nil {
-				log.Fatal(err)
-			}
-			pprof.StartCPUProfile(f)
-			defer pprof.StopCPUProfile()
+	var optCPUProfile string
+	fmt.Println(os.Args[len(os.Args)-1])
+	flag.StringVar(&optCPUProfile, "cpuprofile", "", "write cpu profile to file")
+	flag.Parse()
+	if optCPUProfile != "" {
+		println("to aqui")
+		f, err := os.Create(optCPUProfile)
+		if err != nil {
+			panic(err)
 		}
-	*/
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
 
 	rawdata, err := ioutil.ReadFile(os.Args[len(os.Args)-1])
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	var dat JSON
 	err = json.Unmarshal(rawdata, &dat)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 
 	var maiorValor float64 = dat.Funcs[0].Salario
@@ -148,7 +121,7 @@ func main() {
 
 	var sizeArea int = len(dat.Areas)
 
-	var bigSalaryByLastName []lastNameSal
+	bigSalaryByLastName := lastNameSal{}
 
 	for c = 0; c < len(dat.Funcs); c++ {
 		// Calculo elementos parte 4
@@ -329,13 +302,26 @@ func main() {
 
 	go func() {
 		var sb strings.Builder
-		for i := 0; i < len(bigSalaryByLastName); i++ {
-			sb.WriteString(bigSalaryByLastName[i].LastNameMax.String())
+		for sobreNome, arrayFuncs := range bigSalaryByLastName {
+			for idx := 0; idx < len(arrayFuncs); idx++ {
+				sb.WriteString("\nlast_name_max|")
+				sb.WriteString(sobreNome)
+				sb.WriteString("|")
+				sb.WriteString(arrayFuncs[idx].Nome)
+				sb.WriteString(" ")
+				sb.WriteString(sobreNome)
+				sb.WriteString("|")
+				sb.WriteString(strconv.FormatFloat(math.Round(arrayFuncs[idx].Salario), 'f', 6, 64))
+			}
 		}
+
 		// exibindo os last_name_max
 		os.Stdout.WriteString(sb.String())
 		wg.Done()
 	}()
+
 	//exibição
 	wg.Wait()
+
+	fmt.Println("\n", time.Since(start))
 }
