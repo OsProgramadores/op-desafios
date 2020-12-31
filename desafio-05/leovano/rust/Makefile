@@ -1,2 +1,2 @@
 build:
-	cargo +nightly build --release
+	cargo +nightly-2019-06-12 build --release
