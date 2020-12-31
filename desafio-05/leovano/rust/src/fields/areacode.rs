@@ -14,7 +14,6 @@ impl fmt::Debug for AreaCode {
 impl Eq for AreaCode {}
 
 impl From<[u8; 2]> for AreaCode {
-    #[inline]
     fn from(input: [u8; 2]) -> Self {
         AreaCode { inner: input }
     }

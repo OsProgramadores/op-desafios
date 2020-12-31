@@ -1,29 +1,28 @@
-use super::AreaCode;
+use super::{AreaCode, Text};
+use fnv::FnvBuildHasher;
 use std::ops::Index;
-use utils::FnvBuildHasher;
 
-use std::collections::hash_map::HashMap;
+// use std::collections::HashMap;
+use hashbrown::HashMap;
 
 type Map<K, V, H> = HashMap<K, V, H>;
 type BuildHasher = FnvBuildHasher;
 
 #[derive(Debug, Default)]
 pub struct Areas<'a> {
-    inner: Map<AreaCode, &'a [u8], BuildHasher>,
+    inner: Map<AreaCode, Text<'a>, BuildHasher>,
 }
 
 impl<'a> Areas<'a> {
-    #[inline]
-    pub fn insert(&mut self, codigo: [u8; 2], nome: &'a [u8]) {
+    pub fn insert(&mut self, codigo: [u8; 2], nome: Text<'a>) {
         self.inner.insert(AreaCode::from(codigo), nome);
     }
 }
 
 impl<'a, 'b> Index<&'b AreaCode> for Areas<'a> {
-    type Output = str;
+    type Output = Text<'a>;
 
-    #[inline]
-    fn index(&self, idx: &'b AreaCode) -> &str {
-        ::std::str::from_utf8(&self.inner[idx]).expect("Utf8Fail")
+    fn index(&self, idx: &'b AreaCode) -> &Text<'a> {
+        &self.inner[idx]
     }
 }

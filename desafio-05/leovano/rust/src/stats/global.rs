@@ -1,11 +1,11 @@
-use super::{Funcionario, Salary};
+use super::{Aoc, Funcionario, Salary};
+
 use std::sync::Arc;
 
-// Stats: Global
-#[derive(Debug, Default)]
+#[derive(Debug)]
 pub struct GlobalStats<'a> {
-    min: Salary,
-    max: Salary,
+    pub min: Salary,
+    pub max: Salary,
     pub list_min: Vec<Arc<Funcionario<'a>>>,
     pub list_max: Vec<Arc<Funcionario<'a>>>,
     pub sum: Salary,
@@ -13,44 +13,30 @@ pub struct GlobalStats<'a> {
 }
 
 impl<'a> GlobalStats<'a> {
-    pub fn from_single(input: Arc<Funcionario<'a>>) -> Self {
+    pub fn new(input: &mut Aoc<Funcionario<'a>>) -> Self {
         GlobalStats {
             min: input.salario,
             max: input.salario,
             sum: input.salario,
-            list_min: vec![Arc::clone(&input)],
-            list_max: vec![input],
+            list_min: vec![Aoc::share(input)],
+            list_max: vec![Aoc::share(input)],
             count: 1,
         }
     }
 
-    pub fn from_duo(
-        lhs: Arc<Funcionario<'a>>,
-        rhs: Arc<Funcionario<'a>>,
-    ) -> Self {
-        GlobalStats {
-            min: lhs.salario,
-            max: rhs.salario,
-            sum: lhs.salario + rhs.salario,
-            list_min: vec![lhs],
-            list_max: vec![rhs],
-            count: 2,
-        }
-    }
-
-    pub(super) fn update(&mut self, func: &Arc<Funcionario<'a>>) {
+    pub(super) fn update(&mut self, func: &mut Aoc<Funcionario<'a>>) {
         if func.salario < self.min {
             self.min = func.salario;
             self.list_min.clear();
-            self.list_min.push(Arc::clone(func));
+            self.list_min.push(Aoc::share(func));
         } else if func.salario > self.max {
             self.max = func.salario;
             self.list_max.clear();
-            self.list_max.push(Arc::clone(func));
+            self.list_max.push(Aoc::share(func));
         } else if func.salario == self.min {
-            self.list_min.push(Arc::clone(func));
+            self.list_min.push(Aoc::share(func));
         } else if func.salario == self.max {
-            self.list_max.push(Arc::clone(func));
+            self.list_max.push(Aoc::share(func));
         }
 
         self.sum += func.salario;
@@ -76,7 +62,6 @@ impl<'a> GlobalStats<'a> {
         self.count += other.count;
     }
 
-    #[inline]
     pub fn average(&self) -> Salary {
         self.sum / self.count
     }

@@ -1,39 +1,49 @@
-use super::{BuildHasher, Entry, Map};
-use super::{Funcionario, Salary};
-use fields::Text;
+use super::{Aoc, Entry, Funcionario, Map, Salary, Text};
 
 use std::sync::Arc;
 
-// Alias: MaxStats->Data
-#[allow(dead_code)]
-type MaxData<'a> = (usize, Salary, Vec<Arc<Funcionario<'a>>>);
+// MaxStats->Data
+#[derive(Debug)]
+struct MaxStatsData<'a> {
+    pub count: usize,
+    pub salary: Salary,
+    pub list: Vec<Arc<Funcionario<'a>>>,
+}
 
-// Alias: MaxStats->Iter
-#[allow(dead_code)]
-type MaxIter<'a> = (Text<'a>, Salary, Vec<Arc<Funcionario<'a>>>);
+// MaxStats->Iter
+#[derive(Debug)]
+pub struct MaxStatsIter<'a> {
+    pub surname: Text<'a>,
+    pub salary: Salary,
+    pub list: Vec<Arc<Funcionario<'a>>>,
+}
 
 // Stats: Max
 #[derive(Debug, Default)]
 pub struct MaxStats<'a> {
-    hash: Map<&'a [u8], MaxData<'a>, BuildHasher>,
+    hash: Map<Text<'a>, MaxStatsData<'a>>,
 }
 
 impl<'a> MaxStats<'a> {
-    pub(super) fn update(&mut self, func: &Arc<Funcionario<'a>>) {
-        match self.hash.entry(func.sobrenome) {
+    pub(super) fn update(&mut self, func: &mut Aoc<Funcionario<'a>>) {
+        match self.hash.entry(*func.nome.surname()) {
             Entry::Occupied(e) => {
                 let e = e.into_mut();
-                e.0 += 1;
-                if e.1 < func.salario {
-                    e.2.clear();
-                    e.1 = func.salario;
-                    e.2.push(Arc::clone(func));
-                } else if e.1 == func.salario {
-                    e.2.push(Arc::clone(func));
+                e.count += 1;
+                if e.salary < func.salario {
+                    e.salary = func.salario;
+                    e.list.clear();
+                    e.list.push(Aoc::share(func));
+                } else if e.salary == func.salario {
+                    e.list.push(Aoc::share(func));
                 }
             }
             Entry::Vacant(e) => {
-                e.insert((1, func.salario, vec![Arc::clone(func)]));
+                e.insert(MaxStatsData {
+                    count: 1,
+                    salary: func.salario,
+                    list: vec![Aoc::share(func)],
+                });
             }
         }
     }
@@ -43,12 +53,12 @@ impl<'a> MaxStats<'a> {
             match self.hash.entry(k) {
                 Entry::Occupied(e) => {
                     let e = e.into_mut();
-                    e.0 += v.0;
-                    if e.1 < v.1 {
-                        e.1 = v.1;
-                        e.2 = v.2;
-                    } else if e.1 == v.1 {
-                        e.2.append(&mut v.2);
+                    e.count += v.count;
+                    if e.salary < v.salary {
+                        e.salary = v.salary;
+                        e.list = v.list;
+                    } else if e.salary == v.salary {
+                        e.list.append(&mut v.list);
                     }
                 }
                 Entry::Vacant(e) => {
@@ -58,11 +68,14 @@ impl<'a> MaxStats<'a> {
         }
     }
 
-    #[inline]
-    pub fn into_iter(self) -> impl Iterator<Item = MaxIter<'a>> {
+    pub fn into_iter(self) -> impl Iterator<Item = MaxStatsIter<'a>> {
         self.hash
             .into_iter()
-            .filter(|(_, it)| it.0 > 1)
-            .map(|(ln, (_, b, c))| (Text(ln), b, c))
+            .filter(|(_, it)| it.count > 1)
+            .map(|(surname, data)| MaxStatsIter {
+                surname,
+                salary: data.salary,
+                list: data.list,
+            })
     }
 }

@@ -1,7 +1,2 @@
-mod fnv;
-mod parser;
-
-pub use self::{
-    fnv::{FnvBuildHasher, FnvHasher},
-    parser::Parser,
-};
+mod aoc;
+pub use aoc::Aoc;

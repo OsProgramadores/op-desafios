@@ -1,23 +1,25 @@
 use super::Text;
-use std::fmt;
+use std::fmt::{self, Debug, Display};
 
 pub struct Nome<'a>(Text<'a>, Text<'a>);
 
 impl<'a> Nome<'a> {
-    #[inline]
-    pub fn new(nome: &'a [u8], sobrenome: &'a [u8]) -> Nome<'a> {
-        Nome(Text(nome), Text(sobrenome))
+    pub fn new(nome: Text<'a>, sobrenome: Text<'a>) -> Nome<'a> {
+        Nome(nome, sobrenome)
+    }
+
+    pub fn surname(&self) -> &Text<'a> {
+        &self.1
     }
 }
 
-impl<'a> fmt::Debug for Nome<'a> {
+impl<'a> Debug for Nome<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self)
+        write!(f, "{:?} {:?}", self.0, self.1)
     }
 }
 
-impl<'a> fmt::Display for Nome<'a> {
-    #[inline]
+impl<'a> Display for Nome<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{} {}", self.0, self.1)
     }

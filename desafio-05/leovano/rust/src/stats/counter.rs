@@ -1,65 +1,64 @@
-use super::Funcionario;
-use super::{BuildHasher, Map};
+use super::{Aoc, AreaCode, Funcionario, Map};
 
-use fields::AreaCode;
-use std::sync::Arc;
+use std::cmp::Ordering;
 
-// Alias: Counter->MinMax
-type MinMax = ((Vec<AreaCode>, usize), (Vec<AreaCode>, usize));
+// Counter->MinMax
+pub struct CounterStatsMinMax {
+    pub min: usize,
+    pub max: usize,
+    pub list_min: Vec<AreaCode>,
+    pub list_max: Vec<AreaCode>,
+}
 
 // Stats: Counter
 #[derive(Debug, Default)]
 pub struct CounterStats {
-    hash: Map<AreaCode, usize, BuildHasher>,
+    hash: Map<AreaCode, usize>,
 }
 
 impl CounterStats {
-    #[inline]
-    pub(super) fn update<'a>(&mut self, func: &Arc<Funcionario<'a>>) {
+    pub(super) fn update<'a>(&mut self, func: &Aoc<Funcionario<'a>>) {
         *self.hash.entry(func.area).or_insert(0) += 1;
     }
 
-    #[inline]
     pub(super) fn merge(&mut self, other: CounterStats) {
         for (k, v) in other.hash {
             *self.hash.entry(k).or_insert(0) += v;
         }
     }
 
-    #[inline]
-    pub fn minmax(self) -> MinMax {
+    pub fn minmax(self) -> CounterStatsMinMax {
+        let size = self.hash.len();
         let mut hash = self.hash.into_iter();
 
-        let (mut min, mut max, mut list_min, mut list_max) = {
-            let fst = hash.next().unwrap();
+        if size == 0 {
+            unreachable!("entry must contain at least one employee");
+        }
 
-            if let Some(snd) = hash.next() {
-                if fst.1 > snd.1 {
-                    (snd.1, fst.1, vec![snd.0], vec![fst.0])
-                } else {
-                    (fst.1, snd.1, vec![fst.0], vec![snd.0])
-                }
-            } else {
-                return ((vec![fst.0], fst.1), (vec![fst.0], fst.1));
-            }
+        let fst = hash.next().unwrap();
+        let mut mm = CounterStatsMinMax {
+            min: fst.1,
+            max: fst.1,
+            list_min: vec![fst.0],
+            list_max: vec![fst.0],
         };
 
-        for (s, c) in hash {
-            if c < min {
-                min = c;
-                list_min.clear();
-                list_min.push(s);
-            } else if c > max {
-                max = c;
-                list_max.clear();
-                list_max.push(s);
-            } else if c == min {
-                list_min.push(s);
-            } else if c == max {
-                list_max.push(s);
+        for (stats, count) in hash {
+            if count < mm.min {
+                mm.min = count;
+                mm.list_min.clear();
+                mm.list_min.push(stats);
+            } else if count > mm.max {
+                mm.max = count;
+                mm.list_max.clear();
+                mm.list_max.push(stats);
+            } else if count == mm.min {
+                mm.list_min.push(stats);
+            } else if count == mm.max {
+                mm.list_max.push(stats);
             }
         }
 
-        ((list_min, min), (list_max, max))
+        mm
     }
 }

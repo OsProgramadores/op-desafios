@@ -1,22 +1,19 @@
-use super::GlobalStats;
-use super::{BuildHasher, Entry, Map, MapIter};
-use super::{Funcionario, Salary};
+use super::{Aoc, AreaCode, Entry, Funcionario, GlobalStats, Map, MapIter, Salary};
 
-use fields::AreaCode;
 use std::sync::Arc;
 
 // Stats: Specific
 #[derive(Debug, Default)]
 pub struct SpecStats<'a> {
-    hash: Map<AreaCode, GlobalStats<'a>, BuildHasher>,
+    hash: Map<AreaCode, GlobalStats<'a>>,
 }
 
 impl<'a> SpecStats<'a> {
-    pub(super) fn update(&mut self, func: &Arc<Funcionario<'a>>) {
+    pub(super) fn update(&mut self, func: &mut Aoc<Funcionario<'a>>) {
         match self.hash.entry(func.area) {
             Entry::Occupied(e) => e.into_mut().update(func),
             Entry::Vacant(e) => {
-                e.insert(GlobalStats::from_single(Arc::clone(func)));
+                e.insert(GlobalStats::new(func));
             }
         }
     }
@@ -32,12 +29,10 @@ impl<'a> SpecStats<'a> {
         }
     }
 
-    #[inline]
     pub fn iter(&self) -> MapIter<AreaCode, GlobalStats<'a>> {
         self.hash.iter()
     }
 
-    #[inline]
     pub fn average(&self, key: AreaCode) -> Salary {
         let res = &self.hash[&key];
         res.sum / res.count

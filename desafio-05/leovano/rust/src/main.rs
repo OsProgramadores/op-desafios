@@ -1,17 +1,17 @@
-extern crate desafio_05;
-
+use memmap::Mmap;
 use std::env;
-use std::fs;
+use std::fs::File;
 
 fn main() {
-    let json = env::args().nth(2).expect("Arg1");
+    let file = env::args().nth(2).expect("Arg1");
     let cpus = env::args()
         .nth(1)
         .expect("Arg2")
         .parse::<u32>()
         .expect("Arg2Fail");
-    let json = fs::read(json).expect("ReadFail");
-    let eprse = desafio_05::get_stats(&json, cpus).expect("ParseFail");
+    let file = File::open(file).expect("FileFail");
+    let data = unsafe { Mmap::map(&file).expect("MapFail") };
+    let eprse = desafio_05::get_stats(&data, cpus).expect("ParseFail");
 
     let stats = eprse.stats;
     let areas = eprse.areas;
@@ -23,47 +23,50 @@ fn main() {
 
     // Global
     for f in &global.list_max {
-        println!("global_max|{}|{}", f.nome(), f.salario);
+        println!("global_max|{}|{}", f.nome, global.max);
     }
 
     for f in &global.list_min {
-        println!("global_min|{}|{}", f.nome(), f.salario);
+        println!("global_min|{}|{}", f.nome, global.min);
     }
 
     println!("global_avg|{}", global.average());
 
     // Por Área
-    for (c, s) in by_area.iter() {
-        let cn = &areas[c];
+    for (code, astats) in by_area.iter() {
+        let area = &areas[code];
 
-        for f in &s.list_max {
-            println!("area_max|{}|{}|{}", cn, f.nome(), f.salario);
+        for f in &astats.list_max {
+            println!("area_max|{}|{}|{}", area, f.nome, astats.max);
         }
 
-        for f in &s.list_min {
-            println!("area_min|{}|{}|{}", cn, f.nome(), f.salario);
+        for f in &astats.list_min {
+            println!("area_min|{}|{}|{}", area, f.nome, astats.min);
         }
 
-        println!("area_avg|{}|{}", cn, s.average());
+        println!("area_avg|{}|{}", area, astats.average());
     }
 
     // Por Empregados
-    let (e_min, e_max) = by_employees.minmax();
+    let cstats = by_employees.minmax();
 
-    for a in &e_max.0 {
-        let an = &areas[a];
-        println!("most_employees|{}|{}", an, e_max.1);
+    for code in &cstats.list_max {
+        let an = &areas[code];
+        println!("most_employees|{}|{}", an, cstats.max);
     }
 
-    for a in &e_min.0 {
-        let an = &areas[a];
-        println!("least_employees|{}|{}", an, e_min.1);
+    for code in &cstats.list_min {
+        let an = &areas[code];
+        println!("least_employees|{}|{}", an, cstats.min);
     }
 
     // Por Sobrenome
-    for (ln, s, fs) in by_lastname.into_iter() {
-        for f in fs {
-            println!("last_name_max|{}|{}|{}", ln, f.nome(), s);
+    for mstats in by_lastname.into_iter() {
+        for f in mstats.list {
+            println!(
+                "last_name_max|{}|{}|{}",
+                mstats.surname, f.nome, mstats.salary
+            );
         }
     }
 }

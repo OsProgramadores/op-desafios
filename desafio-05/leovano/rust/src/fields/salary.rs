@@ -1,4 +1,4 @@
-use std::fmt;
+use std::fmt::{self, Debug, Display};
 use std::ops::{Add, AddAssign, Div};
 
 #[derive(Clone, Copy, Default, PartialEq, PartialOrd)]
@@ -7,20 +7,18 @@ pub struct Salary {
 }
 
 impl From<u64> for Salary {
-    #[inline]
     fn from(input: u64) -> Self {
         Salary { inner: input }
     }
 }
 
-impl fmt::Debug for Salary {
+impl Debug for Salary {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.inner)
+        Display::fmt(self, f)
     }
 }
 
-impl fmt::Display for Salary {
-    #[inline]
+impl Display for Salary {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}.{:02}", self.inner / 100, self.inner % 100)
     }
@@ -29,7 +27,6 @@ impl fmt::Display for Salary {
 impl Add for Salary {
     type Output = Salary;
 
-    #[inline]
     fn add(self, other: Salary) -> Salary {
         Salary::from(self.inner + other.inner)
     }
@@ -38,7 +35,6 @@ impl Add for Salary {
 impl Div<u64> for Salary {
     type Output = Salary;
 
-    #[inline]
     fn div(self, other: u64) -> Salary {
         let mut res = self.inner / other;
         if self.inner % other > other / 2 {
@@ -49,7 +45,6 @@ impl Div<u64> for Salary {
 }
 
 impl AddAssign for Salary {
-    #[inline]
     fn add_assign(&mut self, other: Salary) {
         self.inner += other.inner;
     }
