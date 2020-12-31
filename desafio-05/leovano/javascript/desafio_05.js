@@ -64,8 +64,8 @@ class Stats {
   /**
    * Atualiza as estatísticas por área.
    * Verifica se há uma entrada daquela área no objeto, instanciando uma
-   * pra ele caso negativo. Logo após, já tendo uma entrada, executa o método
-   * responsável por atualizá-lo.
+   * pra ele em caso negativo. Logo após, já tendo uma entrada, executa o
+   * método responsável por atualizá-la.
    *
    * @param {Funcionario} func - O funcionário a ser testado.
    */
@@ -80,7 +80,7 @@ class Stats {
 
   /**
    * Atualiza a estatística por quantidade de funcionários.
-   * Caso não houver entrada, este funcionário é o primeiro dela: Insira uma
+   * Caso não haja entrada, este funcionário é o primeiro dela: Insira uma
    contendo 1. Caso já haja, apenas incremente seu valor.
    *
    * @param {Funcionario} func - O funcionário a ser testado.
@@ -177,7 +177,7 @@ class Stats {
  * Classe responsável por coletar e armazenar as estatísticas globais dos
  * funcionários, como funcionários com menores e maiores salários, a soma
  * destes e sua quantidade total. Por serem os mesmos dados coletados nas
- * estatísticas por área, esta classe também é utilizada como valor neste.
+ * estatísticas por área, esta classe também é utilizada como valor nesta.
  */
 class GlobalStats {
   constructor() {
@@ -367,7 +367,7 @@ let min = stats.global.min.toFixed(2);
 for (let func of stats.global.list_min)
   console.log(`global_min|${func.nome} ${func.sobrenome}|${min}`);
 
-// Imprime salário médio dos funcionários
+// Imprime o salário médio dos funcionários
 console.log(`global_avg|${stats.global.average()}`);
 
 // === Area ===
@@ -419,7 +419,7 @@ for (let area of minmax.list_min) {
 }
 
 // === Sobrenome ===
-// Otera por cada sobrenome
+// Itera por cada sobrenome
 for (let lastname in stats.by_lastname) {
   // Obtém estatísticas
   let st = stats.by_lastname[lastname];
