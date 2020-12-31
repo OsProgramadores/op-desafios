@@ -1,46 +1,78 @@
 package main
 
 import (
-	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"math"
 	"os"
+	"runtime/pprof"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
+
+	jsoniter "github.com/json-iterator/go"
 )
 
 // Area  struct da area, carregando campos extras para serem utilizados durante os calculos ..
 type Area struct {
-	Codigo string `json:"codigo"`
-	Nome   string `json:"nome"`
-	Qtd    int
-	AvgSal float64
-	MaxSal float64
-	MinSal float64
-	//MenorSFuncionarioPointer *Employee
-	StrMinSal strings.Builder
-	StrMaxSal strings.Builder
+	Codigo       string `json:"codigo"`
+	Nome         string `json:"nome"`
+	Qtd          int
+	AvgSal       float64
+	MaxSal       float64
+	MinSal       float64
+	StrMinSal    *Employee
+	StrMaxSal    *Employee
+	MostAreaQTD  *Area
+	LeastAreaQTD *Area
 }
 
-//Employee , funcionario ..
+// Employee , funcionario ..
 type Employee struct {
-	ID        int     `json:"id"`
-	Nome      string  `json:"nome"`
-	Sobrenome string  `json:"sobrenome"`
-	Salario   float64 `json:"salario"`
-	Area      string  `json:"area"`
+	ID           int     `json:"id"`
+	Nome         string  `json:"nome"`
+	Sobrenome    string  `json:"sobrenome"`
+	Salario      float64 `json:"salario"`
+	Area         string  `json:"area"`
+	GlobalMaxSal *Employee
+	GlobalMinSal *Employee
+	AreaMaxSal   *Employee
+	AreaMinSal   *Employee
 }
 
-//JSON união dos 2 para unmarshal ..
+// JSON união dos 2 para unmarshal ..
 type JSON struct {
 	Funcs []Employee `json:"funcionarios"`
 	Areas []Area     `json:"areas"`
 }
 
-var c int
+// MaiorSal aonde é armazenado o maior valor glogal de salario
+type MaiorSal struct {
+	Salario float64
+	Worker  *Employee
+}
+
+// MenorSal aonde é armazenado o menor valor glogal de salario
+type MenorSal struct {
+	Salario float64
+	Worker  *Employee
+}
+
+// LeastAreaQtd (least_employee) aonde é armazenado a maior(es) area(s) por quantidade de funcionario
+type LeastAreaQtd struct {
+	QTD   int
+	Areas *Area
+}
+
+// MostAreaQtd (most_employee)aonde é armazenado a maior(es) area(s) por quantidade de funcionario
+type MostAreaQtd struct {
+	QTD   int
+	Areas *Area
+}
+
+var count int
 
 // lastNameSal ..
 type lastNameSal1 struct {
@@ -59,248 +91,318 @@ type lastNameSal map[string][]*Employee
 	o próximo João Vitor informado é desconsiderado.
 */
 func maxSalByLastName(bigSalaryByLastName *lastNameSal, dat JSON) {
-
-	slice, found := (*bigSalaryByLastName)[dat.Funcs[c].Sobrenome]
+	slice, found := (*bigSalaryByLastName)[dat.Funcs[count].Sobrenome]
 	if found {
 		for _, value := range slice {
-			if dat.Funcs[c].Salario > value.Salario {
-				slice = ([]*Employee{&dat.Funcs[c]})
+			if dat.Funcs[count].Salario > value.Salario {
+				slice = ([]*Employee{&dat.Funcs[count]})
 				return
 			}
-			if dat.Funcs[c].Salario == value.Salario {
-				slice = append(slice, &dat.Funcs[c])
+			if dat.Funcs[count].Salario == value.Salario {
+				slice = append(slice, &dat.Funcs[count])
 				return
 			}
 		}
 		return
 	}
-	(*bigSalaryByLastName)[dat.Funcs[c].Sobrenome] = []*Employee{&dat.Funcs[c]}
+	(*bigSalaryByLastName)[dat.Funcs[count].Sobrenome] = []*Employee{&dat.Funcs[count]}
 	return
-
 }
-
 func main() {
 	start := time.Now()
-	/*
-		var optCPUProfile string
-		fmt.Println(os.Args[len(os.Args)-1])
-		flag.StringVar(&optCPUProfile, "cpuprofile", "", "write cpu profile to file")
-		flag.Parse()
-		if optCPUProfile != "" {
-			println("to aqui")
-			f, err := os.Create(optCPUProfile)
-			if err != nil {
-				panic(err)
-			}
-			pprof.StartCPUProfile(f)
-			defer pprof.StopCPUProfile()
+
+	var optCPUProfile string
+	flag.StringVar(&optCPUProfile, "cpuprofile", "", "write cpu profile to file")
+	flag.Parse()
+	if optCPUProfile != "" {
+		f, err := os.Create(optCPUProfile)
+		if err != nil {
+			panic(err)
 		}
-	*/
-	rawdata, err := ioutil.ReadFile(os.Args[1])
+		pprof.StartCPUProfile(f)
+		defer pprof.StopCPUProfile()
+	}
+
+	rawdata, err := ioutil.ReadFile(os.Args[len(os.Args)-1])
 	if err != nil {
 		panic(err)
 	}
 
-	var dat JSON
-	err = json.Unmarshal(rawdata, &dat)
-
-	if err != nil {
+	dat := JSON{}
+	json := jsoniter.ConfigFastest
+	if err = json.Unmarshal(rawdata, &dat); err != nil {
 		panic(err)
 	}
-
-	var maiorValor float64 = dat.Funcs[0].Salario
-
-	var menorValor float64 = dat.Funcs[0].Salario
-
-	var maiorArea int
+	var sizeArea int = len(dat.Areas)
 
 	var mediaGlobalSal float64
 
-	var globalMax, globalMin strings.Builder
-	var mostAndLestEmploy strings.Builder
-
-	var sizeArea int = len(dat.Areas)
-
+	globalMaxSal := MaiorSal{}
+	globalMinSal := MenorSal{}
 	bigSalaryByLastName := lastNameSal{}
 
-	for c = 0; c < len(dat.Funcs); c++ {
-		// Calculo elementos parte 4
+	mostArea := MostAreaQtd{}
+	leastArea := LeastAreaQtd{}
+
+	for count = 0; count < len(dat.Funcs); count++ {
+		// calculo maior salario por sobrenome
 		maxSalByLastName(&bigSalaryByLastName, dat)
 
-		// Parte 1
-		if dat.Funcs[c].Salario > maiorValor {
-			maiorValor = dat.Funcs[c].Salario
-			globalMax.Reset()
-			globalMax.WriteString("global_max|")
-			globalMax.WriteString(dat.Funcs[c].Nome)
-			globalMax.WriteString(" ")
-			globalMax.WriteString(dat.Funcs[c].Sobrenome)
-			globalMax.WriteString("|")
-			globalMax.WriteString(strconv.FormatFloat(math.Round(maiorValor), 'f', 2, 64))
-		} else if dat.Funcs[c].Salario == maiorValor {
-			globalMax.WriteString("\nglobal_max|")
-			globalMax.WriteString(dat.Funcs[c].Nome)
-			globalMax.WriteString(" ")
-			globalMax.WriteString(dat.Funcs[c].Sobrenome)
-			globalMax.WriteString("|")
-			globalMax.WriteString(strconv.FormatFloat(math.Round(maiorValor), 'f', 2, 64))
+		// calculo global_max
+		if dat.Funcs[count].Salario > globalMaxSal.Salario {
+			globalMaxSal.Salario = dat.Funcs[count].Salario
+			globalMaxSal.Worker = &dat.Funcs[count]
+		} else if dat.Funcs[count].Salario == globalMaxSal.Salario {
+			globalMaxSal.Worker.GlobalMaxSal = &dat.Funcs[count]
 		}
-		if dat.Funcs[c].Salario < menorValor {
-			menorValor = dat.Funcs[c].Salario
-			globalMin.Reset()
-			globalMin.WriteString("global_min|")
-			globalMin.WriteString(dat.Funcs[c].Nome)
-			globalMin.WriteString(" ")
-			globalMin.WriteString(dat.Funcs[c].Sobrenome)
-			globalMin.WriteString("|")
-			globalMin.WriteString(strconv.FormatFloat(math.Round(menorValor), 'f', 2, 64))
-		} else if dat.Funcs[c].Salario == menorValor {
-			globalMin.WriteString("\nglobal_min|")
-			globalMin.WriteString(dat.Funcs[c].Nome)
-			globalMin.WriteString(" ")
-			globalMin.WriteString(dat.Funcs[c].Sobrenome)
-			globalMin.WriteString("|")
-			globalMin.WriteString(strconv.FormatFloat(math.Round(menorValor), 'f', 2, 64))
+		// calculo glogal_min
+		if count == 0 {
+			globalMinSal.Salario = dat.Funcs[count].Salario
+			globalMinSal.Worker = &dat.Funcs[count]
+		} else if dat.Funcs[count].Salario < globalMinSal.Salario {
+			globalMinSal.Salario = dat.Funcs[count].Salario
+			globalMinSal.Worker = &dat.Funcs[count]
+		} else if dat.Funcs[count].Salario == globalMinSal.Salario {
+			globalMinSal.Worker.GlobalMaxSal = &dat.Funcs[count]
 		}
 
-		mediaGlobalSal += dat.Funcs[c].Salario
+		mediaGlobalSal += dat.Funcs[count].Salario
 
 		for a := 0; a < sizeArea; a++ {
-			if dat.Funcs[c].Area == dat.Areas[a].Codigo {
-				if dat.Areas[a].Qtd == 0 {
-					dat.Areas[a].MinSal = dat.Funcs[c].Salario
-				}
-				dat.Areas[a].Qtd++
-				// parte 2
+			if dat.Funcs[count].Area == dat.Areas[a].Codigo {
 				// calculo menor salario
-				switch {
-				case dat.Funcs[c].Salario < dat.Areas[a].MinSal:
-					dat.Areas[a].MinSal = dat.Funcs[c].Salario
-					dat.Areas[a].StrMinSal.Reset()
-					dat.Areas[a].StrMinSal.WriteString("\narea_min|")
-					dat.Areas[a].StrMinSal.WriteString(dat.Areas[a].Nome)
-					dat.Areas[a].StrMinSal.WriteString("|")
-					dat.Areas[a].StrMinSal.WriteString(dat.Funcs[c].Nome)
-					dat.Areas[a].StrMinSal.WriteString(" ")
-					dat.Areas[a].StrMinSal.WriteString(dat.Funcs[c].Sobrenome)
-					dat.Areas[a].StrMinSal.WriteString("|")
-					dat.Areas[a].StrMinSal.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 2, 64))
-					break
-				case dat.Funcs[c].Salario == dat.Areas[a].MinSal:
-					dat.Areas[a].StrMinSal.Reset()
-					dat.Areas[a].StrMinSal.WriteString("\narea_min|")
-					dat.Areas[a].StrMinSal.WriteString(dat.Areas[a].Nome)
-					dat.Areas[a].StrMinSal.WriteString("|")
-					dat.Areas[a].StrMinSal.WriteString(dat.Funcs[c].Nome)
-					dat.Areas[a].StrMinSal.WriteString(" ")
-					dat.Areas[a].StrMinSal.WriteString(dat.Funcs[c].Sobrenome)
-					dat.Areas[a].StrMinSal.WriteString("|")
-					dat.Areas[a].StrMinSal.WriteString(strconv.FormatFloat(math.Round(dat.Funcs[c].Salario), 'f', 2, 64))
-					break
+				if dat.Areas[a].Qtd == 0 {
+					dat.Areas[a].MinSal = dat.Funcs[count].Salario
+					dat.Areas[a].StrMinSal = &dat.Funcs[count]
+				} else if dat.Funcs[count].Salario < dat.Areas[a].MinSal {
+					dat.Areas[a].MinSal = dat.Funcs[count].Salario
+					dat.Areas[a].StrMinSal = &dat.Funcs[count]
+				} else if dat.Funcs[count].Salario == dat.Areas[a].MinSal {
+					dat.Areas[a].StrMinSal.AreaMinSal = &dat.Funcs[count]
 				}
-				// calculo maior salario
-				switch {
-				case dat.Funcs[c].Salario > dat.Areas[a].MaxSal:
-					dat.Areas[a].MaxSal = dat.Funcs[c].Salario
-					dat.Areas[a].StrMaxSal.Reset()
-					dat.Areas[a].StrMaxSal.WriteString("\narea_max|")
-					dat.Areas[a].StrMaxSal.WriteString(dat.Areas[a].Nome)
-					dat.Areas[a].StrMaxSal.WriteString("|")
-					dat.Areas[a].StrMaxSal.WriteString(dat.Funcs[c].Nome)
-					dat.Areas[a].StrMaxSal.WriteString(" ")
-					dat.Areas[a].StrMaxSal.WriteString(dat.Funcs[c].Sobrenome)
-					dat.Areas[a].StrMaxSal.WriteString("|")
-					dat.Areas[a].StrMaxSal.WriteString(strconv.FormatFloat(math.Round(dat.Areas[a].MaxSal), 'f', 2, 64))
-					break
-				case dat.Funcs[c].Salario == dat.Areas[a].MaxSal:
-					dat.Areas[a].StrMaxSal.WriteString("\narea_max|")
-					dat.Areas[a].StrMaxSal.WriteString(dat.Areas[a].Nome)
-					dat.Areas[a].StrMaxSal.WriteString("|")
-					dat.Areas[a].StrMaxSal.WriteString(dat.Funcs[c].Nome)
-					dat.Areas[a].StrMaxSal.WriteString(" ")
-					dat.Areas[a].StrMaxSal.WriteString(dat.Funcs[c].Sobrenome)
-					dat.Areas[a].StrMaxSal.WriteString("|")
-					dat.Areas[a].StrMaxSal.WriteString(strconv.FormatFloat(math.Round(dat.Areas[a].MaxSal), 'f', 2, 64))
-					break
-				}
-				dat.Areas[a].AvgSal += dat.Funcs[c].Salario
 
-				// parte 3
-				switch {
-				case dat.Areas[a].Qtd > maiorArea:
-					maiorArea = dat.Areas[a].Qtd
-					mostAndLestEmploy.Reset()
-					mostAndLestEmploy.WriteString("\nmost_employees|")
-					mostAndLestEmploy.WriteString(dat.Areas[a].Nome)
-					mostAndLestEmploy.WriteString("|")
-					mostAndLestEmploy.WriteString(strconv.Itoa(dat.Areas[a].Qtd))
-				case dat.Areas[a].Qtd == maiorArea:
-					mostAndLestEmploy.Reset()
-					mostAndLestEmploy.WriteString("\nmost_employees|")
-					mostAndLestEmploy.WriteString(dat.Areas[a].Nome)
-					mostAndLestEmploy.WriteString("|")
-					mostAndLestEmploy.WriteString(strconv.Itoa(dat.Areas[a].Qtd))
+				dat.Areas[a].Qtd++
+
+				// calculo maior salario
+				if dat.Funcs[count].Salario == dat.Areas[a].MaxSal {
+					dat.Areas[a].StrMaxSal.AreaMaxSal = &dat.Funcs[count]
 				}
+				if dat.Funcs[count].Salario > dat.Areas[a].MaxSal {
+					dat.Areas[a].MaxSal = dat.Funcs[count].Salario
+					dat.Areas[a].StrMaxSal = &dat.Funcs[count]
+				}
+
+				dat.Areas[a].AvgSal += dat.Funcs[count].Salario
+
+				// calculo das areas most employee e least employee
+				if dat.Areas[a].Qtd == mostArea.QTD {
+					mostArea.Areas.MostAreaQTD = &dat.Areas[a]
+				}
+				if dat.Areas[a].Qtd > mostArea.QTD {
+					mostArea.QTD = dat.Areas[a].Qtd
+					mostArea.Areas = &dat.Areas[a]
+				}
+
 			}
 		}
 	}
-
-	// exibindo os global_max, global_min, global_avg
-	os.Stdout.WriteString(globalMax.String())
-	os.Stdout.WriteString("\n")
-	os.Stdout.WriteString(globalMin.String())
-	os.Stdout.WriteString("global_avg|")
-	os.Stdout.WriteString(strconv.FormatFloat(math.Round(mediaGlobalSal/float64(c)), 'f', 2, 64))
-
-	// exibindo os most_employees
-	os.Stdout.WriteString(mostAndLestEmploy.String())
-
 	wg := sync.WaitGroup{}
-	wg.Add(2)
+	wg.Add(9)
 
-	// parte 3
+	leastArea.QTD = mostArea.QTD
+	// area avg
 	go func() {
-		menorArea := dat.Areas[0].Qtd
-		for a := 1; a < sizeArea; a++ {
-			if dat.Areas[a].Qtd != 0 {
-				var sb strings.Builder
+		var sb strings.Builder
+		for contador := 0; contador < sizeArea; contador++ {
+			if dat.Areas[contador].Qtd != 0 {
 				sb.WriteString("\narea_avg|")
-				sb.WriteString(dat.Areas[a].Nome)
+				sb.WriteString(dat.Areas[contador].Nome)
 				sb.WriteString("|")
-				sb.WriteString(strconv.FormatFloat(math.Round(dat.Areas[a].AvgSal/float64(dat.Areas[a].Qtd)), 'f', 2, 64))
-				os.Stdout.WriteString(sb.String())
-			}
-
-			// exibindo o area_max
-			os.Stdout.WriteString(dat.Areas[a].StrMaxSal.String())
-			// exibindo o area_min
-			os.Stdout.WriteString(dat.Areas[a].StrMinSal.String())
-
-			if dat.Areas[a].Qtd == 0 {
-			} else {
-				if dat.Areas[a].Qtd < menorArea {
-					menorArea = dat.Areas[a].Qtd
-					mostAndLestEmploy.Reset()
-					mostAndLestEmploy.WriteString("\nleast_employees|")
-					mostAndLestEmploy.WriteString(dat.Areas[a].Nome)
-					mostAndLestEmploy.WriteString("|")
-					mostAndLestEmploy.WriteString(strconv.Itoa(dat.Areas[a].Qtd))
-				} else if dat.Areas[a].Qtd == menorArea {
-					menorArea = dat.Areas[a].Qtd
-					mostAndLestEmploy.Reset()
-					mostAndLestEmploy.WriteString("\nleast_employees|")
-					mostAndLestEmploy.WriteString(dat.Areas[a].Nome)
-					mostAndLestEmploy.WriteString("|")
-					mostAndLestEmploy.WriteString(strconv.Itoa(dat.Areas[a].Qtd))
-				}
+				sb.WriteString(strconv.FormatFloat(dat.Areas[contador].AvgSal/float64(dat.Areas[contador].Qtd), 'f', 2, 64))
 			}
 		}
-		// exibindo os least_employess
-		os.Stdout.WriteString(mostAndLestEmploy.String())
+		// exibindo o area_avg
+		os.Stdout.WriteString(sb.String())
 		wg.Done()
 	}()
 
+	// exibindo global_avg
 	go func() {
+		os.Stdout.WriteString("\nglobal_avg|")
+		os.Stdout.WriteString(strconv.FormatFloat(mediaGlobalSal/float64(count), 'f', 2, 64))
+		wg.Done()
+	}()
+	// exibindo glogal_max
+	go func() {
+		var sb strings.Builder
+		sb.WriteString("\nglobal_max|")
+		sb.WriteString(globalMaxSal.Worker.Sobrenome)
+		sb.WriteString("|")
+		sb.WriteString(globalMaxSal.Worker.Nome)
+		sb.WriteString(" ")
+		sb.WriteString(globalMaxSal.Worker.Sobrenome)
+		sb.WriteString("|")
+		sb.WriteString(strconv.FormatFloat(globalMaxSal.Worker.Salario, 'f', 2, 64))
+		for globalMaxSal.Worker.GlobalMaxSal != nil {
+			sb.WriteString("\nglobal_max|")
+			sb.WriteString(globalMaxSal.Worker.GlobalMaxSal.Sobrenome)
+			sb.WriteString("|")
+			sb.WriteString(globalMaxSal.Worker.GlobalMaxSal.Nome)
+			sb.WriteString(" ")
+			sb.WriteString(globalMaxSal.Worker.GlobalMaxSal.Sobrenome)
+			sb.WriteString("|")
+			sb.WriteString(strconv.FormatFloat(globalMaxSal.Worker.GlobalMaxSal.Salario, 'f', 2, 64))
+			globalMaxSal.Worker.GlobalMaxSal = globalMaxSal.Worker.GlobalMaxSal.GlobalMaxSal
+		}
+		os.Stdout.WriteString(sb.String())
+		wg.Done()
+	}()
+
+	// exibindo os glogal_min
+	go func() {
+		var sb strings.Builder
+		sb.WriteString("\nglobal_min|")
+		sb.WriteString(globalMinSal.Worker.Sobrenome)
+		sb.WriteString("|")
+		sb.WriteString(globalMinSal.Worker.Nome)
+		sb.WriteString(" ")
+		sb.WriteString(globalMinSal.Worker.Sobrenome)
+		sb.WriteString("|")
+		sb.WriteString(strconv.FormatFloat(globalMinSal.Worker.Salario, 'f', 2, 64))
+		for globalMinSal.Worker.GlobalMinSal != nil {
+			sb.WriteString("\nglobal_min|")
+			sb.WriteString(globalMinSal.Worker.GlobalMinSal.Sobrenome)
+			sb.WriteString("|")
+			sb.WriteString(globalMinSal.Worker.GlobalMinSal.Nome)
+			sb.WriteString(" ")
+			sb.WriteString(globalMinSal.Worker.GlobalMinSal.Sobrenome)
+			sb.WriteString("|")
+			sb.WriteString(strconv.FormatFloat(globalMinSal.Worker.GlobalMinSal.Salario, 'f', 2, 64))
+			globalMinSal.Worker.GlobalMaxSal = globalMinSal.Worker.GlobalMinSal.GlobalMinSal
+		}
+		os.Stdout.WriteString(sb.String())
+		wg.Done()
+	}()
+
+	// calculando os least_employe
+	go func() {
+		for contador := 1; contador < sizeArea; contador++ {
+			if dat.Areas[contador].Qtd != 0 {
+				if dat.Areas[contador].Qtd == leastArea.QTD {
+					leastArea.Areas.LeastAreaQTD = &dat.Areas[contador]
+				}
+				if dat.Areas[contador].Qtd < leastArea.QTD {
+					leastArea.QTD = dat.Areas[contador].Qtd
+					leastArea.Areas = &dat.Areas[contador]
+				}
+			}
+
+		}
+		// exibindo os least_employess
+		var sb strings.Builder
+		sb.WriteString("\nleast_employees|")
+		sb.WriteString(leastArea.Areas.Nome)
+		sb.WriteString("|")
+		sb.WriteString(strconv.Itoa(leastArea.QTD))
+		leastArea.Areas = leastArea.Areas.LeastAreaQTD
+		for leastArea.Areas != nil {
+			sb.WriteString("\nleast_employees|")
+			sb.WriteString(dat.Areas[0].Nome)
+			sb.WriteString("|")
+			sb.WriteString(strconv.Itoa(dat.Areas[0].Qtd))
+			leastArea.Areas = leastArea.Areas.LeastAreaQTD
+		}
+		os.Stdout.WriteString(sb.String())
+		wg.Done()
+	}()
+
+	// most_employees
+	go func() {
+		// montando a string
+		var sb strings.Builder
+		sb.WriteString("\nmost_employees|")
+		sb.WriteString(mostArea.Areas.Nome)
+		sb.WriteString("|")
+		sb.WriteString(strconv.Itoa(mostArea.QTD))
+		mostArea.Areas = mostArea.Areas.MostAreaQTD
+		for mostArea.Areas != nil {
+			sb.WriteString("\nmost_employees|")
+			sb.WriteString(mostArea.Areas.Nome)
+			sb.WriteString("|")
+			sb.WriteString(strconv.Itoa(mostArea.QTD))
+			mostArea.Areas = mostArea.Areas.MostAreaQTD
+		}
+		// exibindo
+		os.Stdout.WriteString(sb.String())
+		wg.Done()
+	}()
+
+	// area_max
+	go func() {
+		var sb strings.Builder
+		for contador := 0; contador < sizeArea; contador++ {
+			if dat.Areas[contador].Qtd != 0 {
+				sb.WriteString("\narea_max|")
+				sb.WriteString(dat.Areas[contador].Nome)
+				sb.WriteString("|")
+				sb.WriteString(dat.Areas[contador].StrMaxSal.Nome)
+				sb.WriteString(" ")
+				sb.WriteString(dat.Areas[contador].StrMaxSal.Sobrenome)
+				sb.WriteString("|")
+				sb.WriteString(strconv.FormatFloat(dat.Areas[contador].StrMaxSal.Salario, 'f', 2, 64))
+				dat.Areas[contador].StrMaxSal = dat.Areas[contador].StrMaxSal.AreaMaxSal
+				for dat.Areas[contador].StrMaxSal != nil {
+					sb.WriteString("\narea_max|")
+					sb.WriteString(dat.Areas[contador].Nome)
+					sb.WriteString("|")
+					sb.WriteString(dat.Areas[contador].StrMaxSal.Nome)
+					sb.WriteString(" ")
+					sb.WriteString(dat.Areas[contador].StrMaxSal.Sobrenome)
+					sb.WriteString("|")
+					sb.WriteString(strconv.FormatFloat(dat.Areas[contador].StrMaxSal.Salario, 'f', 2, 64))
+					dat.Areas[contador].StrMaxSal = dat.Areas[contador].StrMaxSal.AreaMaxSal
+				}
+			}
+		}
+		os.Stdout.WriteString(sb.String())
+		wg.Done()
+	}()
+
+	//  area_min
+	go func() {
+		// construindo a string
+		var sb strings.Builder
+		for contador := 0; contador < sizeArea; contador++ {
+			if dat.Areas[contador].Qtd != 0 {
+				sb.WriteString("\narea_min|")
+				sb.WriteString(dat.Areas[contador].Nome)
+				sb.WriteString("|")
+				sb.WriteString(dat.Areas[contador].StrMinSal.Nome)
+				sb.WriteString(" ")
+				sb.WriteString(dat.Areas[contador].StrMinSal.Sobrenome)
+				sb.WriteString("|")
+				sb.WriteString(strconv.FormatFloat(dat.Areas[contador].StrMinSal.Salario, 'f', 2, 64))
+				for dat.Areas[contador].StrMinSal != nil {
+					sb.WriteString("\narea_min|")
+					sb.WriteString(dat.Areas[contador].Nome)
+					sb.WriteString("|")
+					sb.WriteString(dat.Areas[contador].StrMinSal.Nome)
+					sb.WriteString(" ")
+					sb.WriteString(dat.Areas[contador].StrMinSal.Sobrenome)
+					sb.WriteString("|")
+					sb.WriteString(strconv.FormatFloat(dat.Areas[contador].StrMinSal.Salario, 'f', 2, 64))
+					dat.Areas[contador].StrMinSal = dat.Areas[contador].StrMinSal.AreaMinSal
+				}
+			}
+		}
+		// exibindo
+		os.Stdout.WriteString(sb.String())
+		wg.Done()
+	}()
+
+	// last_name_max
+	go func() {
+		// construindo a string
 		var sb strings.Builder
 		for sobreNome, arrayFuncs := range bigSalaryByLastName {
 			for idx := 0; idx < len(arrayFuncs); idx++ {
@@ -314,14 +416,12 @@ func main() {
 				sb.WriteString(strconv.FormatFloat(math.Round(arrayFuncs[idx].Salario), 'f', 2, 64))
 			}
 		}
-
-		// exibindo os last_name_max
+		// exibindo
 		os.Stdout.WriteString(sb.String())
 		wg.Done()
 	}()
 
 	//exibição
 	wg.Wait()
-
 	fmt.Println("\n", time.Since(start))
 }
