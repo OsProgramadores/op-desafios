@@ -708,6 +708,10 @@ int main(int argc, char *argv[]) {
     if(filename.find("10K") != std::string::npos ||
        filename.find("50K") != std::string::npos){ num_tasks = 1; }
     
+<<<<<<< HEAD
+=======
+    int num_tasks = num_threads * 8;
+>>>>>>> ce3ba99b8e0b11f3c687faf7a51f3bb567c00b49
     std::vector<ThreadData> data(num_tasks);
 
     char *mmap_init = mapping_start + offset - aligned_offset;
