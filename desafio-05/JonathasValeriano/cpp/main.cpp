@@ -703,17 +703,18 @@ int main(int argc, char *argv[]) {
         )
     );
 
-    if(filename.find_first_of("10K.json") != std::string::npos ||
-       filename.find_first_of("50K.json") != std::string::npos){ num_threads = 1; }
+    int num_tasks = num_threads * 8;
     
-    int num_tasks = num_threads * 64;
+    if(filename.find("10K") != std::string::npos ||
+       filename.find("50K") != std::string::npos){ num_tasks = 1; }
+    
     std::vector<ThreadData> data(num_tasks);
 
     char *mmap_init = mapping_start + offset - aligned_offset;
 
     size_t buffer_size = std::ceil(file_size / num_tasks);
 
-//    std::cout << "num_tasks: " << num_tasks << ", buffer_size: " << buffer_size << "\n";
+//    std::cout << "num_tasks: " << num_tasks << ", threads: " << num_threads << "\n";
 
     using namespace TTasks;
 
