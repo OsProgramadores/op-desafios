@@ -1,13 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"strconv"
 	"strings"
 	"sync"
-	"time"
 
 	jsoniter "github.com/json-iterator/go"
 )
@@ -105,7 +103,6 @@ func maxSalByLastName(bigSalaryByLastName *lastNameSal, dat JSON, count int) {
 }
 
 func main() {
-	start := time.Now()
 	/*
 		var optCPUProfile string
 		flag.StringVar(&optCPUProfile, "cpuprofile", "", "write cpu profile to file")
@@ -208,9 +205,15 @@ func main() {
 		}
 	}
 	wg := sync.WaitGroup{}
-	wg.Add(9)
+	wg.Add(8)
 
 	leastArea.QTD = mostArea.QTD
+
+	// exibindo global_avg
+
+	os.Stdout.WriteString("global_avg|")
+	os.Stdout.WriteString(strconv.FormatFloat(mediaGlobalSal/float64(count), 'f', 2, 64))
+
 	// area avg
 	// area_avg|<nome da área>|<salário médio>
 	go func() {
@@ -229,13 +232,6 @@ func main() {
 		wg.Done()
 	}()
 
-	// exibindo global_avg
-	go func() {
-		os.Stdout.WriteString("\nglobal_avg|")
-		os.Stdout.WriteString(strconv.FormatFloat(mediaGlobalSal/float64(count), 'f', 2, 64))
-
-		wg.Done()
-	}()
 	// glogal_max
 	// global_max|<Nome Completo>|<Salário>
 	go func() {
@@ -443,8 +439,6 @@ func main() {
 		wg.Done()
 	}()
 
-	// exibição
 	wg.Wait()
-
-	fmt.Println("\n", time.Since(start))
+	os.Stdout.WriteString("\n")
 }
