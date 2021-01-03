@@ -727,7 +727,7 @@ int main(int argc, char *argv[])
         )
     );
 
-    int num_tasks = num_threads * 8;
+    int num_tasks = num_threads;
 
     if(filename.find( "10K") != std::string::npos ||
        filename.find( "50K") != std::string::npos ||
