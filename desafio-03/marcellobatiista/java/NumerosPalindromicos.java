@@ -20,10 +20,7 @@ public class NumerosPalindromicos {
         for (; (numeroinicial <= numerofinal) && (numerofinal < max) && (condicao != 0); numeroinicial++) {
             if (ehPolindromo(numeroinicial)) {
                 palin.add(numeroinicial);
-                continue;
             }
-            long soma = numeroinicial+inverso(numeroinicial);
-            long polindromo = buscaPolindromo(soma);
         }
 
         if (palin.size() != 0) {
@@ -52,16 +49,5 @@ public class NumerosPalindromicos {
 
     static boolean ehPolindromo(long num) {
         return num == inverso(num);
-    }
-
-    static long buscaPolindromo(long soma) {
-        if (ehPolindromo(soma) == false) {
-            try {
-                buscaPolindromo(soma + inverso(soma));
-            } catch(Exception e) {
-                //Buscou tanto, que nao encontrou
-            }
-        }
-        return soma;
     }
 }
