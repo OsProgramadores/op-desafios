@@ -96,8 +96,26 @@ template<
 class MT_HMap
 {
     Row table[_map_size_max_];
-    std::mutex lk_bucket[_map_size_max_];
+//    std::mutex lk_bucket[_map_size_max_];
+    std::atomic<bool> lk_bucket[_map_size_max_]={false};
     Hash hash;
+
+    inline bool try_lk(int n)
+    {
+        bool expects{false};
+        while(!lk_bucket[n].compare_exchange_strong(expects, true, std::memory_order_release, std::memory_order_relaxed))
+        {
+            expects = false;
+            return false;
+        }
+
+        return true;
+    }
+
+    inline void unlk(int n)
+    {
+        lk_bucket[n].store(false, std::memory_order_release);
+    }
 
 public:
 
@@ -136,6 +154,7 @@ public:
         size_t &hash_val = pair.first;
 
 //        std::lock_guard<std::mutex> lock_guard( lk_bucket[n] );
+        retry:
 
         if(hash_val == cur_hash)
         {
@@ -166,12 +185,16 @@ public:
         }
         else
         {
+            if(!try_lk(n)){ goto retry; }
+
             auto &v = list[b_msz-1];
             v.first = cur_hash;
             value = &v.second;
             hash_val = cur_hash;
             value->surname_str.str = key.str;
             value->surname_str.len = key.len;
+
+            unlk(n);
         }
 
         return value;
@@ -239,6 +262,7 @@ template<typename Container>
 inline void join_name_list(const Container& source_list, Container& dest_list, int source_salary, int& dest_salary, bool keep_min)
 {
     if(source_salary == 0) return;
+
     if(source_salary == dest_salary){
         dest_list.insert(dest_list.end(), source_list.begin(), source_list.end());
     }
@@ -653,8 +677,8 @@ size_t make_offset_page_aligned(size_t offset) noexcept
     return offset / page_size_ * page_size_;
 }
 
-int main(int argc, char *argv[]) {
-
+int main(int argc, char *argv[])
+{
 //    ScopedTimer timer{"\nTotal elapsed time"};
 
     if(argc != 2 && argc != 3){
@@ -704,14 +728,11 @@ int main(int argc, char *argv[]) {
     );
 
     int num_tasks = num_threads * 8;
-    
-    if(filename.find("10K") != std::string::npos ||
-       filename.find("50K") != std::string::npos){ num_tasks = 1; }
-    
-<<<<<<< HEAD
-=======
-    int num_tasks = num_threads * 8;
->>>>>>> ce3ba99b8e0b11f3c687faf7a51f3bb567c00b49
+
+    if(filename.find( "10K") != std::string::npos ||
+       filename.find( "50K") != std::string::npos ||
+       filename.find("100K") != std::string::npos){ num_tasks = 1; }
+
     std::vector<ThreadData> data(num_tasks);
 
     char *mmap_init = mapping_start + offset - aligned_offset;
@@ -875,8 +896,6 @@ int main(int argc, char *argv[]) {
 
         {
 //            ScopedTimer timer{"time to write results"};
-//            std::ofstream fileout{"results.txt"};
-//            fileout << ss.rdbuf();
             std::cout << ss.rdbuf();
         }
     }
