@@ -59,7 +59,7 @@ public class NumerosPalindromicos {
             try {
                 buscaPolindromo(soma + inverso(soma));
             } catch(Exception e) {
-                //Buscou tanto, que não encontrou
+                //Buscou tanto, que nao encontrou
             }
         }
         return soma;
