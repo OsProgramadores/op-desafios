@@ -3,8 +3,8 @@ import java.util.Scanner;
 
 public class NumerosPalindromicos {
 
-	public static void main(String[] args) {
-    	long max = 1 << 64 - 1L; max = -1 * max;
+        public static void main(String[] args) {
+        long max = 1 << 64 - 1L; max = -1 * max;
 
         Scanner entrada = new Scanner(System.in);
 
@@ -27,14 +27,14 @@ public class NumerosPalindromicos {
         }
 
         if (palin.size() != 0) {
-	        System.out.println("\nOs números palindrômicos entre esse intervalo são:\n");
-	        for (Long long1 : palin) {
-	            System.out.println(long1);
-	        }
+	    System.out.println("\nOs números palindrômicos entre esse intervalo são:\n");
+	    for (Long long1 : palin) {
+	        System.out.println(long1);
+	    }
         } else if (condicao == 0) {
-	        System.out.println("\nNão é possível inserir números negativos...");
-	    } else {
-	        System.out.println("\nO número final ultrapassou o limite máximo de alcance: (1 << 64) - 1 (máximo unsigned int de 64 bits)...");
+	    System.out.println("\nNão é possível inserir números negativos...");
+	} else {
+	    System.out.println("\nO número final ultrapassou o limite máximo de alcance: (1 << 64) - 1 (máximo unsigned int de 64 bits)...");
         }
     }
 
