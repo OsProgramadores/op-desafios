@@ -13,7 +13,7 @@ public class NumerosPalindromicos {
         System.out.print("Digite um valor final: ");
         long numerofinal = entrada.nextLong();
 
-        int condicao = numeroinicial < 0 || numerofinal < 0 ? 0:1; 
+        int condicao = numeroinicial < 0 || numerofinal < 0 ? 0:1;
 
         ArrayList<Long> palin = new ArrayList<Long>();
 
