@@ -1,6 +1,6 @@
-public class Xadrez {
+﻿public class Xadrez {
     public static void main(String[] args) {
-        String tab = 
+        String tab =
                     "4 3 2 5 6 2 3 4"+
                     "1 1 1 1 1 1 1 1"+
                     "0 0 0 0 0 0 0 0"+
