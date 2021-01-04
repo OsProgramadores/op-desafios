@@ -2,13 +2,13 @@ public class Xadrez {
 
     public static void main(String[] args) {
     String tab = 
-                "4 3 2 5 6 2 3 4\r\n"+
-                "1 1 1 1 1 1 1 1\r\n"+
-                "0 0 0 0 0 0 0 0\r\n"+
-                "0 0 0 0 0 0 0 0\r\n"+
-                "0 0 0 0 0 0 0 0\r\n"+
-                "0 0 0 0 0 0 0 0\r\n"+
-                "1 1 1 1 1 1 1 1\r\n"+
+                "4 3 2 5 6 2 3 4"+
+                "1 1 1 1 1 1 1 1"+
+                "0 0 0 0 0 0 0 0"+
+                "0 0 0 0 0 0 0 0"+
+                "0 0 0 0 0 0 0 0"+
+                "0 0 0 0 0 0 0 0"+
+                "1 1 1 1 1 1 1 1"+
                 "4 3 2 5 6 2 3 4";
 		
                 String tipo[] = {"vazio" ,"Peao", "Bispo", "Cavalo", "Torre", "Rainha", "Rei"};
