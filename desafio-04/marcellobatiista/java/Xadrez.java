@@ -1,4 +1,3 @@
-
 public class Xadrez {
 
     public static void main(String[] args) {
@@ -13,7 +12,7 @@ public class Xadrez {
                      "4 3 2 5 6 2 3 4";
         
         String tipo[] = {"vazio" ,"Peao", "Bispo", "Cavalo", "Torre", "Rainha", "Rei"};
-        // pecas = {vazio, peao, bispo, cavalo, torre, rainha, rei}
+        //pecas = {vazio, peao, bispo, cavalo, torre, rainha, rei}
         int quant[] = {0, 0, 0, 0, 0, 0, 0};
         
         int i = 0;
@@ -31,5 +30,4 @@ public class Xadrez {
             System.out.println(tipo[j]+": "+quant[j]+" peças(s)");
         }
     }
-
 }
