@@ -55,10 +55,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DECLTYPE(x) (__typeof(x))
 #define DECLTYPE_ASSIGN(dst, src) (dst) = (__typeof(dst))(src);
 
-#ifndef HASH_KEYCMP
-#define HASH_KEYCMP(a, b, n) memcmp(a, b, n)
-#endif
-
 /* initial number of buckets */
 #define HASH_INITIAL_NUM_BUCKETS 2048U    /* initial number of buckets        */
 #define HASH_INITIAL_NUM_BUCKETS_LOG2 11U /* lg2 of initial number of buckets */
@@ -73,12 +69,45 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #define HASH_TO_BKT(hashv, num_bkts, bkt) bkt = ((hashv) & ((num_bkts)-1U));
 
-#define HASH_FIND_BYHASHVALUE(hh, head, keyptr, keylen, hashval, out)                                         \
-    do {                                                                                                      \
-        unsigned _hf_bkt;                                                                                     \
-        HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _hf_bkt);                                           \
-        HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[_hf_bkt], keyptr, keylen, hashval, out); \
-    } while (0)
+/* iterate over items in a known bucket to find desired item */
+#define HASH_FIND_IN_BKT(tbl, hh, head, keylen_in, hashval, out)                   \
+    {                                                                              \
+        if ((head).hh_head != NULL) {                                              \
+            DECLTYPE_ASSIGN(out, ELMT_FROM_HH(tbl, (head).hh_head));               \
+        } else {                                                                   \
+            (out) = NULL;                                                          \
+        }                                                                          \
+        while ((out) != NULL) {                                                    \
+            if ((out)->hh.hashv == (hashval) && (out)->hh.keylen == (keylen_in)) { \
+                break;                                                             \
+            }                                                                      \
+            if ((out)->hh.hh_next != NULL) {                                       \
+                DECLTYPE_ASSIGN(out, ELMT_FROM_HH(tbl, (out)->hh.hh_next));        \
+            } else {                                                               \
+                (out) = NULL;                                                      \
+                break;                                                             \
+            }                                                                      \
+        }                                                                          \
+    }
+
+/* add an item to a bucket  */
+#define HASH_ADD_TO_BKT(head, hh, addhh)           \
+    {                                              \
+        (&(head))->count++;                        \
+        (addhh)->hh_next = (&(head))->hh_head;     \
+        (addhh)->hh_prev = NULL;                   \
+        if ((&(head))->hh_head != NULL) {          \
+            (&(head))->hh_head->hh_prev = (addhh); \
+        }                                          \
+        (&(head))->hh_head = (addhh);              \
+    }
+
+#define HASH_FIND_BYHASHVALUE(hh, head, keyptr, keylen, hashval, out)                                 \
+    {                                                                                                 \
+        unsigned _hf_bkt;                                                                             \
+        HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _hf_bkt);                                   \
+        HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[_hf_bkt], keylen, hashval, out); \
+    }
 
 #define HASH_MAKE_TABLE(hh, head)                                           \
     {                                                                       \
@@ -91,32 +120,18 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             HASH_INITIAL_NUM_BUCKETS, sizeof(struct UT_hash_bucket));       \
     }
 
-#define HASH_ADD_TO_TABLE(hh, head, keyptr, keylen_in, hashval, add)       \
-    do {                                                                   \
-        unsigned _ha_bkt;                                                  \
-        (head)->hh.tbl->num_items++;                                       \
-        HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);        \
-        HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], hh, &(add)->hh); \
-    } while (0)
-
-#define HASH_ADD_KEYPTR_BYHASHVALUE(hh, head, keyptr, keylen_in, hashval, add) \
-    do {                                                                       \
-        unsigned _ha_bkt;                                                      \
-        (add)->hh.hashv = (hashval);                                           \
-        (add)->hh.key = (const void *)(keyptr);                                \
-        (add)->hh.keylen = (unsigned char)(keylen_in);                         \
-        (add)->hh.tbl = (head)->hh.tbl;                                        \
-        (add)->hh.next = NULL;                                                 \
-        (add)->hh.prev = ELMT_FROM_HH((head)->hh.tbl, (head)->hh.tbl->tail);   \
-        (head)->hh.tbl->tail->next = (add);                                    \
-        (head)->hh.tbl->tail = &((add)->hh);                                   \
-        (head)->hh.tbl->num_items++;                                           \
-        HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);            \
-        HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], hh, &(add)->hh);     \
-    } while (0)
-
-#define HASH_ADD_BYHASHVALUE(hh, head, fieldname, keylen_in, hashval, add) \
-    HASH_ADD_KEYPTR_BYHASHVALUE(hh, head, &((add)->fieldname), keylen_in, hashval, add)
+#define HASH_ADD_BYHASHVALUE(hh, head, hashval, add)                         \
+    {                                                                        \
+        unsigned _ha_bkt;                                                    \
+        (add)->hh.tbl = (head)->hh.tbl;                                      \
+        (add)->hh.prev = ELMT_FROM_HH((head)->hh.tbl, (head)->hh.tbl->tail); \
+        (add)->hh.next = NULL;                                               \
+        (head)->hh.tbl->tail->next = (add);                                  \
+        (head)->hh.tbl->tail = &((add)->hh);                                 \
+        (head)->hh.tbl->num_items++;                                         \
+        HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);          \
+        HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], hh, &(add)->hh);   \
+    }
 
 #define HASH_FCN HASH_JEN
 
@@ -152,7 +167,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     }
 
 #define HASH_JEN(key, keylen, hashv)                                                                                             \
-    do {                                                                                                                         \
+    {                                                                                                                            \
         unsigned _hj_i, _hj_j, _hj_k;                                                                                            \
         unsigned const char *_hj_key = (unsigned const char *)(key);                                                             \
         hashv = 0xfeedbeefu;                                                                                                     \
@@ -194,41 +209,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             _hj_i += _hj_key[0];                                                                                                 \
         }                                                                                                                        \
         HASH_JEN_MIX(_hj_i, _hj_j, hashv);                                                                                       \
-    } while (0)
-
-/* iterate over items in a known bucket to find desired item */
-#define HASH_FIND_IN_BKT(tbl, hh, head, keyptr, keylen_in, hashval, out)           \
-    {                                                                              \
-        if ((head).hh_head != NULL) {                                              \
-            DECLTYPE_ASSIGN(out, ELMT_FROM_HH(tbl, (head).hh_head));               \
-        } else {                                                                   \
-            (out) = NULL;                                                          \
-            break;                                                                 \
-        }                                                                          \
-        while ((out) != NULL) {                                                    \
-            if ((out)->hh.hashv == (hashval) && (out)->hh.keylen == (keylen_in) && \
-                HASH_KEYCMP((out)->hh.key, keyptr, keylen_in) == 0) {              \
-                break;                                                             \
-            }                                                                      \
-            if ((out)->hh.hh_next != NULL) {                                       \
-                DECLTYPE_ASSIGN(out, ELMT_FROM_HH(tbl, (out)->hh.hh_next));        \
-            } else {                                                               \
-                (out) = NULL;                                                      \
-                break;                                                             \
-            }                                                                      \
-        }                                                                          \
-    }
-
-/* add an item to a bucket  */
-#define HASH_ADD_TO_BKT(head, hh, addhh)           \
-    {                                              \
-        (&(head))->count++;                        \
-        (addhh)->hh_next = (&(head))->hh_head;     \
-        (addhh)->hh_prev = NULL;                   \
-        if ((&(head))->hh_head != NULL) {          \
-            (&(head))->hh_head->hh_prev = (addhh); \
-        }                                          \
-        (&(head))->hh_head = (addhh);              \
     }
 
 typedef struct UT_hash_bucket {
@@ -250,7 +230,7 @@ typedef struct UT_hash_handle {
     void *next;                     /* next element in app order      */
     struct UT_hash_handle *hh_prev; /* previous hh in bucket order    */
     struct UT_hash_handle *hh_next; /* next hh in bucket order        */
-    const void *key;                /* ptr to enclosing struct's key  */
+    const char *key;                /* ptr to enclosing struct's key  */
     unsigned char keylen;           /* enclosing struct's key len     */
     unsigned hashv;                 /* result of hash-fcn(key)        */
 } UT_hash_handle;

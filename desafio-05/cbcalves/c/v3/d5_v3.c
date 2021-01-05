@@ -63,9 +63,7 @@ typedef struct
  */
 typedef struct
 {
-    char *sobrenome;
     UT_hash_handle hh; // hash table
-    unsigned char sobrenome_size;
     unsigned total;
     unsigned max_salario;
     nome_t max[4]; //lista de max
@@ -101,7 +99,6 @@ typedef struct
  */
 global_t global;
 processar_t *threads; // processo das threads
-char init_surname[] = "Abaine";
 
 /**
  * Processar os sobrenomes e guardando os maiores salários
@@ -112,13 +109,14 @@ char init_surname[] = "Abaine";
         HASH_FIND_BYHASHVALUE(hh, _sobrenomes, _funcionario.sobrenome, _funcionario.sobrenome_size, _hashv, _index); \
         if (!_index) {                                                                                               \
             _index = &_sobrenomes[sobrenomes_size++];                                                                \
-            _index->sobrenome = _funcionario.sobrenome;                                                              \
-            _index->sobrenome_size = _funcionario.sobrenome_size;                                                    \
+            _index->hh.key = (const char *)(_funcionario.sobrenome);                                                 \
+            _index->hh.keylen = _funcionario.sobrenome_size;                                                         \
+            _index->hh.hashv = _hashv;                                                                               \
             _index->total = 1;                                                                                       \
             _index->max_salario = _salario;                                                                          \
             memcpy(&_index->max[0], (nome_t *)(&_funcionario), sizeof(nome_t));                                      \
             _index->max_pos = 1;                                                                                     \
-            HASH_ADD_BYHASHVALUE(hh, _sobrenomes, sobrenome[0], _index->sobrenome_size, _hashv, _index);             \
+            HASH_ADD_BYHASHVALUE(hh, _sobrenomes, _hashv, _index);                                                   \
         } else {                                                                                                     \
             _index->total++;                                                                                         \
             if (_index->max_salario <= _salario) {                                                                   \
@@ -134,97 +132,98 @@ char init_surname[] = "Abaine";
 /**
  * Processando as áreas e guardando os maiores e menores salários
  */
-#define areas_process(_areas, _funcionario, _salario, _cod)                                          \
-    {                                                                                                \
-        _areas[_cod].custo += _salario;                                                              \
-        _areas[_cod].total++;                                                                        \
-                                                                                                     \
-        if (_areas[_cod].max_salario <= _salario) {                                                  \
-            if (_areas[_cod].max_salario < _salario) {                                               \
-                _areas[_cod].max_salario = _salario;                                                 \
-                _areas[_cod].max_pos = 0;                                                            \
-            }                                                                                        \
-            memcpy(&_areas[_cod].max[areas[_cod].max_pos++], &_funcionario, sizeof(funcionario_t));  \
-        } else if (_areas[_cod].min_salario >= _salario) {                                           \
-            if (_areas[_cod].min_salario > _salario) {                                               \
-                _areas[_cod].min_salario = _salario;                                                 \
-                _areas[_cod].min_pos = 0;                                                            \
-            }                                                                                        \
-            memcpy(&_areas[_cod].min[_areas[_cod].min_pos++], &_funcionario, sizeof(funcionario_t)); \
-        }                                                                                            \
+#define areas_process(_areas, _funcionario, _salario, _cod)                                      \
+    {                                                                                            \
+        areaAtual = _areas + _cod;                                                               \
+        areaAtual->custo += _salario;                                                            \
+        areaAtual->total++;                                                                      \
+                                                                                                 \
+        if (areaAtual->max_salario <= _salario) {                                                \
+            if (areaAtual->max_salario < _salario) {                                             \
+                areaAtual->max_salario = _salario;                                               \
+                areaAtual->max_pos = 0;                                                          \
+            }                                                                                    \
+            memcpy(&areaAtual->max[areaAtual->max_pos++], &_funcionario, sizeof(funcionario_t)); \
+        } else if (areaAtual->min_salario >= _salario) {                                         \
+            if (areaAtual->min_salario > _salario) {                                             \
+                areaAtual->min_salario = _salario;                                               \
+                areaAtual->min_pos = 0;                                                          \
+            }                                                                                    \
+            memcpy(&areaAtual->min[areaAtual->min_pos++], &_funcionario, sizeof(funcionario_t)); \
+        }                                                                                        \
     }
 
 /**
  * Após terminar o processamento as threads devem juntar os resultados em um só local
  * Este é para as áreas
  */
-#define merge_areas(index)                                                                                 \
-    for (j = 0; j < MAX_AREAS; j++) {                                                                      \
-        int cod;                                                                                           \
-        cod = j;                                                                                           \
-                                                                                                           \
-        if (threads[index].areas[j].nome) {                                                                \
-            threads[0].areas[cod].nome = threads[index].areas[j].nome;                                     \
-            threads[0].areas[cod].nome_size = threads[index].areas[j].nome_size;                           \
-        }                                                                                                  \
-                                                                                                           \
-        threads[0].areas[cod].total += threads[index].areas[j].total;                                      \
-        threads[0].areas[cod].custo += threads[index].areas[j].custo;                                      \
-                                                                                                           \
-        if (threads[0].areas[cod].max_salario <= threads[index].areas[j].max_salario) {                    \
-            if (threads[0].areas[cod].max_salario < threads[index].areas[j].max_salario) {                 \
-                if (global.max_salario < threads[index].areas[j].max_salario)                              \
-                    global.max_salario = threads[index].areas[j].max_salario;                              \
-                threads[0].areas[cod].max_salario = threads[index].areas[j].max_salario;                   \
-                threads[0].areas[cod].max_pos = 0;                                                         \
-            }                                                                                              \
-            memcpy(&threads[0].areas[cod].max[threads[0].areas[cod].max_pos], threads[index].areas[j].max, \
-                   (size_t)threads[index].areas[j].max_pos * sizeof(funcionario_t));                       \
-            threads[0].areas[cod].max_pos += threads[index].areas[j].max_pos;                              \
-        }                                                                                                  \
-        if (threads[0].areas[cod].min_salario >= threads[index].areas[j].min_salario) {                    \
-            if (threads[0].areas[cod].min_salario > threads[index].areas[j].min_salario) {                 \
-                if (global.min_salario > threads[index].areas[j].min_salario)                              \
-                    global.min_salario = threads[index].areas[j].min_salario;                              \
-                threads[0].areas[cod].min_salario = threads[index].areas[j].min_salario;                   \
-                threads[0].areas[cod].min_pos = 0;                                                         \
-            }                                                                                              \
-            memcpy(&threads[0].areas[cod].min[threads[0].areas[cod].min_pos], threads[index].areas[j].min, \
-                   (size_t)threads[index].areas[j].min_pos * sizeof(funcionario_t));                       \
-            threads[0].areas[cod].min_pos += threads[index].areas[j].min_pos;                              \
-        }                                                                                                  \
+#define merge_areas(index)                                              \
+    for (j = 0; j < MAX_AREAS; j++) {                                   \
+        areas = threads[0].areas + j;                                   \
+        area_t *old_areas = threads[index].areas + j;                   \
+                                                                        \
+        if (old_areas->nome) {                                          \
+            areas->nome = old_areas->nome;                              \
+            areas->nome_size = old_areas->nome_size;                    \
+        }                                                               \
+                                                                        \
+        areas->total += old_areas->total;                               \
+        areas->custo += old_areas->custo;                               \
+                                                                        \
+        if (areas->max_salario <= old_areas->max_salario) {             \
+            if (areas->max_salario < old_areas->max_salario) {          \
+                if (global.max_salario < old_areas->max_salario)        \
+                    global.max_salario = old_areas->max_salario;        \
+                areas->max_salario = old_areas->max_salario;            \
+                areas->max_pos = 0;                                     \
+            }                                                           \
+            memcpy(areas->max + areas->max_pos, old_areas->max,         \
+                   (size_t)old_areas->max_pos * sizeof(funcionario_t)); \
+            areas->max_pos += old_areas->max_pos;                       \
+        }                                                               \
+        if (areas->min_salario >= old_areas->min_salario) {             \
+            if (areas->min_salario > old_areas->min_salario) {          \
+                if (global.min_salario > old_areas->min_salario)        \
+                    global.min_salario = old_areas->min_salario;        \
+                areas->min_salario = old_areas->min_salario;            \
+                areas->min_pos = 0;                                     \
+            }                                                           \
+            memcpy(areas->min + areas->min_pos, old_areas->min,         \
+                   (size_t)old_areas->min_pos * sizeof(funcionario_t)); \
+            areas->min_pos += old_areas->min_pos;                       \
+        }                                                               \
     }
 
 /**
  * Após terminar o processamento as threads devem juntar os resultados em um só local
  * Este é para os sobrenomes
  */
-#define merge_sobrenomes(index)                                                                                                                       \
-    {                                                                                                                                                 \
-        head = threads[index].sobrenomes;                                                                                                             \
-        while (head) {                                                                                                                                \
-            sobrenome_t *registroAtual;                                                                                                               \
-            HASH_FIND_BYHASHVALUE(hh, threads[0].sobrenomes, head->sobrenome, head->sobrenome_size, head->hh.hashv, registroAtual);                   \
-            if (!registroAtual) {                                                                                                                     \
-                registroAtual = &threads[0].sobrenomes[threads[0].sobrenomes_size++];                                                                 \
-                memcpy(registroAtual, head, sizeof(sobrenome_t));                                                                                     \
-                HASH_ADD_BYHASHVALUE(hh, threads[0].sobrenomes, sobrenome[0], registroAtual->sobrenome_size, registroAtual->hh.hashv, registroAtual); \
-                head = head->hh.next;                                                                                                                 \
-                continue;                                                                                                                             \
-            }                                                                                                                                         \
-                                                                                                                                                      \
-            registroAtual->total += head->total;                                                                                                      \
-                                                                                                                                                      \
-            if (registroAtual->max_salario <= head->max_salario) {                                                                                    \
-                if (registroAtual->max_salario < head->max_salario) {                                                                                 \
-                    registroAtual->max_salario = head->max_salario;                                                                                   \
-                    registroAtual->max_pos = 0;                                                                                                       \
-                }                                                                                                                                     \
-                memcpy(&registroAtual->max[registroAtual->max_pos], head->max, (size_t)head->max_pos * sizeof(nome_t));                               \
-                registroAtual->max_pos += head->max_pos;                                                                                              \
-            }                                                                                                                                         \
-            head = head->hh.next;                                                                                                                     \
-        }                                                                                                                                             \
+#define merge_sobrenomes(index)                                                                                   \
+    {                                                                                                             \
+        head = threads[index].sobrenomes;                                                                         \
+        sobrenomes = threads[0].sobrenomes;                                                                       \
+        while (head) {                                                                                            \
+            sobrenome_t *snomeAtual;                                                                              \
+            HASH_FIND_BYHASHVALUE(hh, sobrenomes, head->hh.key, head->hh.keylen, head->hh.hashv, snomeAtual);     \
+            if (!snomeAtual) {                                                                                    \
+                snomeAtual = head;                                                                                \
+                head = head->hh.next;                                                                             \
+                HASH_ADD_BYHASHVALUE(hh, sobrenomes, snomeAtual->hh.hashv, snomeAtual);                           \
+                continue;                                                                                         \
+            }                                                                                                     \
+                                                                                                                  \
+            snomeAtual->total += head->total;                                                                     \
+                                                                                                                  \
+            if (snomeAtual->max_salario <= head->max_salario) {                                                   \
+                if (snomeAtual->max_salario < head->max_salario) {                                                \
+                    snomeAtual->max_salario = head->max_salario;                                                  \
+                    snomeAtual->max_pos = 0;                                                                      \
+                }                                                                                                 \
+                memcpy(snomeAtual->max + snomeAtual->max_pos, head->max, (size_t)head->max_pos * sizeof(nome_t)); \
+                snomeAtual->max_pos += head->max_pos;                                                             \
+            }                                                                                                     \
+            head = head->hh.next;                                                                                 \
+        }                                                                                                         \
     }
 
 /**
@@ -240,33 +239,25 @@ void *processar(void *processos)
     char *end = ((processar_t *)processos)->buffer_end;
 
     // inicialização das areas
-    area_t *areas = (area_t *)malloc(sizeof(area_t) * MAX_AREAS);
+    area_t *areaAtual;
+    area_t *areas = ((processar_t *)processos)->areas;
     for (cod = 0; cod < MAX_AREAS; cod++) {
-        areas[cod].codigo = NULL;
-        areas[cod].nome = NULL;
-        areas[cod].nome_size = 0;
-        areas[cod].total = 0;
-        areas[cod].custo = 0;
-        areas[cod].max_pos = 0;
-        areas[cod].min_pos = 0;
-        areas[cod].min_salario = INT_MAX;
-        areas[cod].max_salario = 0;
+        areaAtual = areas + cod;
+        areaAtual->codigo = NULL;
+        areaAtual->nome = NULL;
+        areaAtual->total = 0;
+        areaAtual->custo = 0;
+        areaAtual->min_salario = INT_MAX;
+        areaAtual->max_salario = 0;
     }
     // inicialização de sobrenomes
     unsigned hashv;
     sobrenome_t *sobrenomeAtual;
-    sobrenome_t *sobrenomes = (sobrenome_t *)malloc(sizeof(sobrenome_t) * MAX_SOBRENOMES);
-    unsigned sobrenomes_size = 1;
-    sobrenomes->sobrenome = init_surname;
-    sobrenomes->sobrenome_size = 6;
-    sobrenomes->total = 0;
-    sobrenomes->max_salario = 0;
-    sobrenomes->max_pos = 0;
+    sobrenome_t *sobrenomes = ((processar_t *)processos)->sobrenomes;
+    unsigned sobrenomes_size = 0;
     sobrenomes->hh.next = NULL;
     sobrenomes->hh.prev = NULL;
     HASH_MAKE_TABLE(hh, sobrenomes);
-    HASH_VALUE(&sobrenomes->sobrenome[0], sobrenomes->sobrenome_size, sobrenomes->hh.hashv);
-    HASH_ADD_TO_TABLE(hh, sobrenomes, sobrenome[0], sobrenomes->sobrenome_size, sobrenomes->hh.hashv, sobrenomes);
 
     while (p < end) {
         while (p < end && *p != '{')
@@ -321,12 +312,7 @@ void *processar(void *processos)
             codigo = p;
             p += 3;
 
-            // if (codigo[0] == 'A' && (codigo[1] == '1' || codigo[1] == '2')) { // nada aqui, circulando
             cod = codigo[1] - '1';
-            // } else {
-            //     areas_get(areas, areas_size, codigo, 1, cod);
-            // }
-
             areas_process(areas, funcionario, salario, cod);
             sobrenomes_process(sobrenomes, funcionario, salario, hashv, sobrenomeAtual);
         } else if (*p == 'c') {
@@ -337,21 +323,17 @@ void *processar(void *processos)
                 p++;
             p += 8;
 
-            if (codigo[0] == 'A' && (codigo[1] == '1' || codigo[1] == '2')) { // nada aqui, circulando
+            if (codigo[0] == 'A' && (codigo[1] == '1' || codigo[1] == '2')) {
                 cod = codigo[1] - '1';
-            } else {
-                // areas_get(areas, areas_size, codigo, 0, cod);
-                // if (cod == -1) {
-                p += 9;
-                continue;
-                // }
-            }
-            areas[cod].nome = p;
-            p += 7;
-            while (*p != '"')
+                areas[cod].nome = p;
+                p += 7;
+                while (*p != '"')
+                    p++;
+                areas[cod].nome_size = (unsigned char)(p - areas[cod].nome);
                 p++;
-            areas[cod].nome_size = (unsigned char)(p - areas[cod].nome);
-            p++;
+            } else {
+                p += 9;
+            }
         }
     }
     ((processar_t *)processos)->areas = areas;
@@ -364,82 +346,85 @@ void *processar(void *processos)
 /**
  * Mostrar áreas com mais e menos funcionários e médias da área e globais
  */
-#define show_area(areas)                                                                                   \
-    do {                                                                                                   \
-        double salariof;                                                                                   \
-        area_t *most_emp = &areas[0];                                                                      \
-        area_t *least_emp = &areas[0];                                                                     \
-        int j;                                                                                             \
-                                                                                                           \
-        for (i = 0; i < MAX_AREAS; i++) {                                                                  \
-            salariof = (double)areas[i].max_salario / 100.F;                                               \
-            for (j = 0; j < areas[i].max_pos; j++) {                                                       \
-                printf("area_max|%.*s|%.*s %.*s|%.2f\n", areas[i].nome_size, areas[i].nome,                \
-                       areas[i].max[j].nome_size, areas[i].max[j].nome,                                    \
-                       areas[i].max[j].sobrenome_size, areas[i].max[j].sobrenome, salariof);               \
-                if (areas[i].max_salario == global.max_salario) {                                          \
-                    printf("global_max|%.*s %.*s|%.2f\n", areas[i].max[j].nome_size, areas[i].max[j].nome, \
-                           areas[i].max[j].sobrenome_size, areas[i].max[j].sobrenome, salariof);           \
-                }                                                                                          \
-            }                                                                                              \
-            salariof = (double)areas[i].min_salario / 100.F;                                               \
-            for (j = 0; j < areas[i].min_pos; j++) {                                                       \
-                printf("area_min|%.*s|%.*s %.*s|%.2f\n", areas[i].nome_size, areas[i].nome,                \
-                       areas[i].min[j].nome_size, areas[i].min[j].nome,                                    \
-                       areas[i].min[j].sobrenome_size, areas[i].min[j].sobrenome, salariof);               \
-                if (areas[i].min_salario == global.min_salario) {                                          \
-                    printf("global_min|%.*s %.*s|%.2f\n", areas[i].min[j].nome_size, areas[i].min[j].nome, \
-                           areas[i].min[j].sobrenome_size, areas[i].min[j].sobrenome, salariof);           \
-                }                                                                                          \
-            }                                                                                              \
-                                                                                                           \
-            global.total += areas[i].total;                                                                \
-            global.custo += areas[i].custo;                                                                \
-                                                                                                           \
-            salariof = ((double)areas[i].custo / 100.F) / (double)areas[i].total;                          \
-            printf("area_avg|%.*s|%.2f\n", areas[i].nome_size, areas[i].nome, salariof);                   \
-                                                                                                           \
-            if (areas[i].total > most_emp->total) {                                                        \
-                most_emp = &areas[i];                                                                      \
-            }                                                                                              \
-            if (areas[i].total < least_emp->total) {                                                       \
-                least_emp = &areas[i];                                                                     \
-            }                                                                                              \
-        }                                                                                                  \
-        salariof = ((double)global.custo / 100.F) / (double)global.total;                                  \
-        printf("global_avg|%.2f\n", salariof);                                                             \
-                                                                                                           \
-        printf("most_employees|%.*s|%u\n", most_emp->nome_size, most_emp->nome, most_emp->total);          \
-        printf("least_employees|%.*s|%u\n", least_emp->nome_size, least_emp->nome, least_emp->total);      \
-    } while (0)
+#define show_area(index)                                                                               \
+    {                                                                                                  \
+        areas = threads[index].areas;                                                                  \
+        double salariof;                                                                               \
+        area_t *most_emp = areas;                                                                      \
+        area_t *least_emp = areas;                                                                     \
+        int j;                                                                                         \
+                                                                                                       \
+        for (i = 0; i < MAX_AREAS; i++) {                                                              \
+            salariof = (double)areas->max_salario / 100.F;                                             \
+            for (j = 0; j < areas->max_pos; j++) {                                                     \
+                printf("area_max|%.*s|%.*s %.*s|%.2f\n", areas->nome_size, areas->nome,                \
+                       areas->max[j].nome_size, areas->max[j].nome,                                    \
+                       areas->max[j].sobrenome_size, areas->max[j].sobrenome, salariof);               \
+                if (areas->max_salario == global.max_salario) {                                        \
+                    printf("global_max|%.*s %.*s|%.2f\n", areas->max[j].nome_size, areas->max[j].nome, \
+                           areas->max[j].sobrenome_size, areas->max[j].sobrenome, salariof);           \
+                }                                                                                      \
+            }                                                                                          \
+            salariof = (double)areas->min_salario / 100.F;                                             \
+            for (j = 0; j < areas->min_pos; j++) {                                                     \
+                printf("area_min|%.*s|%.*s %.*s|%.2f\n", areas->nome_size, areas->nome,                \
+                       areas->min[j].nome_size, areas->min[j].nome,                                    \
+                       areas->min[j].sobrenome_size, areas->min[j].sobrenome, salariof);               \
+                if (areas->min_salario == global.min_salario) {                                        \
+                    printf("global_min|%.*s %.*s|%.2f\n", areas->min[j].nome_size, areas->min[j].nome, \
+                           areas->min[j].sobrenome_size, areas->min[j].sobrenome, salariof);           \
+                }                                                                                      \
+            }                                                                                          \
+                                                                                                       \
+            global.total += areas->total;                                                              \
+            global.custo += areas->custo;                                                              \
+                                                                                                       \
+            salariof = ((double)areas->custo / 100.F) / (double)areas->total;                          \
+            printf("area_avg|%.*s|%.2f\n", areas->nome_size, areas->nome, salariof);                   \
+                                                                                                       \
+            if (areas->total > most_emp->total) {                                                      \
+                most_emp = areas;                                                                      \
+            }                                                                                          \
+            if (areas->total < least_emp->total) {                                                     \
+                least_emp = areas;                                                                     \
+            }                                                                                          \
+            areas++;                                                                                   \
+        }                                                                                              \
+        salariof = ((double)global.custo / 100.F) / (double)global.total;                              \
+        printf("global_avg|%.2f\n", salariof);                                                         \
+                                                                                                       \
+        printf("most_employees|%.*s|%u\n", most_emp->nome_size, most_emp->nome, most_emp->total);      \
+        printf("least_employees|%.*s|%u\n", least_emp->nome_size, least_emp->nome, least_emp->total);  \
+    }
 
 /**
  * Mostrar todos os sobrenomes com 2 ou mais nomes
  */
-#define show_sobrenomes(index)                                                                 \
-    while (index) {                                                                            \
-        if (index->total > 1) {                                                                \
-            double salariof = (double)index->max_salario / 100.F;                              \
-            for (int i = 0; i < index->max_pos; i++) {                                         \
-                printf("last_name_max|%.*s|%.*s %.*s|%.2f\n",                                  \
-                       index->sobrenome_size, index->sobrenome, index->max[i].nome_size,       \
-                       index->max[i].nome, index->sobrenome_size, index->sobrenome, salariof); \
-            }                                                                                  \
-        }                                                                                      \
-        index = index->hh.next;                                                                \
+#define show_sobrenomes(index)                                                      \
+    head = threads[index].sobrenomes;                                               \
+    while (head) {                                                                  \
+        if (head->total > 1) {                                                      \
+            double salariof = (double)head->max_salario / 100.F;                    \
+            for (int i = 0; i < head->max_pos; i++) {                               \
+                printf("last_name_max|%.*s|%.*s %.*s|%.2f\n",                       \
+                       head->hh.keylen, head->hh.key, head->max[i].nome_size,       \
+                       head->max[i].nome, head->hh.keylen, head->hh.key, salariof); \
+            }                                                                       \
+        }                                                                           \
+        head = head->hh.next;                                                       \
     }
 
 /**
  * Apagar os sobrenomes (simplificação do processo original)
  * No processo original era excluido cada ficha antes de excluir
  * a tabela e os buckets, simplifiquei excluindo tabela e buckets
- * no local que ficam guardados e a array de sobrenomes.
+ * no local que ficam guardados.
  */
-#define freeSobrenomes(sobrenomes)         \
-    {                                      \
-        free(sobrenomes->hh.tbl->buckets); \
-        free(sobrenomes->hh.tbl);          \
-        free(sobrenomes);                  \
+#define freeSobrenomes(index)                   \
+    {                                           \
+        sobrenomes = threads[index].sobrenomes; \
+        free(sobrenomes->hh.tbl->buckets);      \
+        free(sobrenomes->hh.tbl);               \
     }
 
 int main(int argc, char *argv[])
@@ -450,7 +435,9 @@ int main(int argc, char *argv[])
     struct stat f;
     char *buffer;
     size_t buffer_max;
+    sobrenome_t *sobrenomes;
     sobrenome_t *head;
+    area_t *areas;
 
     if (argc < 2) {
         printf("Uso: %s <arquivo json>\n", argv[0]);
@@ -468,12 +455,6 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    // inicialização das variaveis do global
-    global.custo = 0;
-    global.total = 0;
-    global.max_salario = 0;
-    global.min_salario = INT_MAX;
-
     // inicialização do controle de threads
     unsigned threads_max = sysconf(_SC_NPROCESSORS_ONLN); // numero de processadores (* o numero de threads em cada);
     if (threads_max < 2)
@@ -481,49 +462,64 @@ int main(int argc, char *argv[])
     threads = (processar_t *)malloc(sizeof(processar_t) * threads_max);
     buffer_max = (f.st_size / threads_max) + 1; // somo 1 pois a divisão pode não ser exata
 
+    unsigned myMemoryPos = threads_max * (sizeof(area_t) * MAX_AREAS + sizeof(sobrenome_t) * MAX_SOBRENOMES);
+    void *myMemory = (void *)mmap(0, myMemoryPos, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+
     // criação das threads
     j = 0; // funciona como o resto que devia ter sido processado mas não foi na thread anterior
+    myMemoryPos = 0;
     size_t buffer_end = 0;
     for (i = 0; i < threads_max; i++) {
-        threads[i].buffer = &buffer[buffer_end];
+        threads[i].buffer = buffer + buffer_end;
         buffer_end += buffer_max + j;
         j = 0;
         while (buffer[buffer_end - j] != '}') {
             j++;
         }
-        threads[i].buffer_end = &buffer[buffer_end - j];
+        threads[i].buffer_end = buffer + (buffer_end - j);
+
+        threads[i].areas = (area_t *)(myMemory + myMemoryPos);
+        myMemoryPos += sizeof(area_t) * MAX_AREAS;
+        threads[i].sobrenomes = (sobrenome_t *)(myMemory + myMemoryPos);
+
         pthread_create(&threads[i].id, NULL, processar, &threads[i]);
-        buffer_end = threads[i].buffer_end - buffer + 1;
+        myMemoryPos += sizeof(sobrenome_t) * MAX_SOBRENOMES;
+        buffer_end = (threads[i].buffer_end - buffer) + 1;
     }
+    // fechamento do arquivo
+    close(fjson);
+
+    // inicialização das variaveis do global
+    global.custo = 0;
+    global.total = 0;
+    global.max_salario = 0;
+    global.min_salario = INT_MAX;
 
     // encerramento das threads
     pthread_join(threads[0].id, NULL);
     for (i = 0; i < MAX_AREAS; i++) {
-        if (global.max_salario < threads[0].areas[i].max_salario)
-            global.max_salario = threads[0].areas[i].max_salario;
-        if (global.min_salario > threads[0].areas[i].min_salario)
-            global.min_salario = threads[0].areas[i].min_salario;
+        areas = threads[0].areas + i;
+        if (global.max_salario < areas->max_salario)
+            global.max_salario = areas->max_salario;
+        if (global.min_salario > areas->min_salario)
+            global.min_salario = areas->min_salario;
     }
     for (i = 1; i < threads_max; i++) {
         pthread_join(threads[i].id, NULL);
         merge_areas(i);
+        freeSobrenomes(i);
         merge_sobrenomes(i);
-        freeSobrenomes(threads[i].sobrenomes);
-        free(threads[i].areas);
     }
-    head = threads[0].sobrenomes;
 
     // Mostrando resultado
-    show_area(threads[0].areas);
-    show_sobrenomes(head);
+    show_area(0);
+    show_sobrenomes(0);
 
     //liberar toda a memória ainda alocada
-    freeSobrenomes(threads[0].sobrenomes);
-    free(threads[0].areas);
+    freeSobrenomes(0);
     free(threads);
-
     munmap(buffer, f.st_size);
-    close(fjson);
+    munmap(myMemory, myMemoryPos);
 
     return EXIT_SUCCESS;
 }
