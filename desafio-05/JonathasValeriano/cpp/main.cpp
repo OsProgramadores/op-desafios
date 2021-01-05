@@ -1,6 +1,6 @@
 /* Desafio 5 em C++ por Jonathas Valeriano
  * Para compilar(gcc):
- * g++ -m64 -std=c++11 -pthread -Ofast -ftree-vectorize -funroll-loops -faggressive-loop-optimizations -o d5 -Ithird_part *.cpp
+ * g++ -m64 -std=c++14 -pthread -Ofast -ftree-vectorize -funroll-loops -faggressive-loop-optimizations -o d5 -Ithird_part *.cpp
  *
  * Obs!: fork do source da solução C++ feita por Elias Correa.
  * Todos os créditos dos algoritmos e estruturas de dados para o dev original desta solução.
@@ -45,7 +45,7 @@ inline std::ostream& operator << (std::ostream& os, const HString& hs)
 
 struct HStringHash
 {
-    inline size_t operator () (const HString& hs) const
+    inline size_t operator() (const HString& hs) const
     {
         return hs.hash;
     }
@@ -74,7 +74,8 @@ struct Surname
     }
 };
 
-struct Area{
+struct Area
+{
     std::vector<HString> min_names, max_names;
     HString name;
     long long int total_salary{0};
@@ -96,7 +97,6 @@ template<
 class MT_HMap
 {
     Row table[_map_size_max_];
-//    std::mutex lk_bucket[_map_size_max_];
     std::atomic<bool> lk_bucket[_map_size_max_]={false};
     Hash hash;
 
@@ -105,13 +105,21 @@ class MT_HMap
         bool expects{false};
         while(!lk_bucket[n].compare_exchange_strong(expects, true, std::memory_order_release, std::memory_order_relaxed))
         {
-            expects = false;
             return false;
         }
 
         return true;
     }
 
+    inline void lk(int n)
+    {
+        bool expects{false};
+        while(!lk_bucket[n].compare_exchange_strong(expects, true, std::memory_order_release, std::memory_order_relaxed))
+        {
+            expects = false;
+        }
+    }
+    
     inline void unlk(int n)
     {
         lk_bucket[n].store(false, std::memory_order_release);
@@ -153,7 +161,6 @@ public:
         auto &list = pair.second;
         size_t &hash_val = pair.first;
 
-//        std::lock_guard<std::mutex> lock_guard( lk_bucket[n] );
         retry:
 
         if(hash_val == cur_hash)
@@ -163,10 +170,12 @@ public:
         else if(hash_val > 0)
         {
             int sz = b_msz-1;
-            size_t sn_h;
             for(auto &sn: list)
             {
-                sn_h = sn.first;
+                size_t &sn_h = sn.first;
+                
+                retry2:
+                
                 if(sn_h == cur_hash)
                 {
                     value = &sn.second;
@@ -174,10 +183,15 @@ public:
                 }
                 else if(sn_h == 0)
                 {
-                    value = &sn.second;
-                    sn.first = cur_hash;
-                    value->surname_str.str = key.str;
-                    value->surname_str.len = key.len;
+                    if(!try_lk(n)){ goto retry2; }
+                    if(sn_h != 0){ unlk(n); goto retry2; }
+                    
+                        value = &sn.second;
+                        value->surname_str.str = key.str;
+                        value->surname_str.len = key.len;
+                        sn_h = cur_hash;
+                        
+                    unlk(n);
                     break;
                 }
                 else if(--sz == 0){ break; }
@@ -185,14 +199,15 @@ public:
         }
         else
         {
-            if(!try_lk(n)){ goto retry; }
-
+            if(!try_lk(n)){  goto retry;  }
+            if(hash_val != 0){ unlk(n); goto retry; }
+            
             auto &v = list[b_msz-1];
             v.first = cur_hash;
             value = &v.second;
-            hash_val = cur_hash;
             value->surname_str.str = key.str;
             value->surname_str.len = key.len;
+            hash_val = cur_hash;
 
             unlk(n);
         }
@@ -201,7 +216,8 @@ public:
     }
 };
 
-struct ThreadData{
+struct ThreadData
+{
     char *buffer;
     size_t total_salary{0};
     size_t buffer_len;
@@ -211,18 +227,20 @@ struct ThreadData{
     std::vector<HString> min_names, max_names;
 
     MT_HMap<HString, Surname, HStringHash> *surnames{nullptr};
-    std::array<Area, 2> areas{ Area(), Area() };
+    Area areas[2]{ Area() };
 };
 
 
 template<typename Container>
 inline void add_min_name(Container& list, int& list_salary, const HString& name, const HString& surname, int salary)
 {
-    if(list_salary == salary){
+    if(list_salary == salary)
+    {
         list.emplace_back(std::move(name));
         list.emplace_back(std::move(surname));
     }
-    else if(list_salary == 0 || salary < list_salary){
+    else if(list_salary == 0 || salary < list_salary)
+    {
         list_salary = salary;
         list.clear();
         list.emplace_back(std::move(name));
@@ -233,11 +251,13 @@ inline void add_min_name(Container& list, int& list_salary, const HString& name,
 template<typename Container>
 inline void add_max_name(Container& list, int& list_salary, const HString& name, const HString& surname, int salary)
 {
-    if(list_salary == salary){
+    if(list_salary == salary)
+    {
         list.emplace_back(std::move(name));
         list.emplace_back(std::move(surname));
     }
-    else if(list_salary == 0 || salary > list_salary){
+    else if(list_salary == 0 || salary > list_salary)
+    {
         list_salary = salary;
         list.clear();
         list.emplace_back(std::move(name));
@@ -248,10 +268,12 @@ inline void add_max_name(Container& list, int& list_salary, const HString& name,
 template<typename Container>
 inline void add_max_surname(Container& list, int& list_salary, const HString& name, int salary)
 {
-    if(list_salary == salary){
+    if(list_salary == salary)
+    {
         list.emplace_back(std::move(name));
     }
-    else if(salary > list_salary || list_salary == 0){
+    else if(salary > list_salary || list_salary == 0)
+    {
         list_salary = salary;
         list.clear();
         list.emplace_back(std::move(name));
@@ -263,25 +285,30 @@ inline void join_name_list(const Container& source_list, Container& dest_list, i
 {
     if(source_salary == 0) return;
 
-    if(source_salary == dest_salary){
+    if(source_salary == dest_salary)
+    {
         dest_list.insert(dest_list.end(), source_list.begin(), source_list.end());
     }
     else if(dest_salary == 0 ||
             (keep_min && source_salary < dest_salary) ||
-            (!keep_min && source_salary > dest_salary)){
+            (!keep_min && source_salary > dest_salary))
+    {
         dest_salary = source_salary;
         dest_list = source_list;
     }
 }
 
-inline char *get_string(char *c, HString& hs, bool recycle = false){
+inline char *get_string(char *c, HString& hs, bool recycle = false)
+{
     while(*c != ':') ++c;
     c += 2;
     char *start = c;
-    if(recycle && *(c + hs.len) == '"' && *(c + hs.len + 1) == ','){
+    if(recycle && *(c + hs.len) == '"' && *(c + hs.len + 1) == ',')
+    {
         c += hs.len;
     }
-    else{
+    else
+    {
         c+=2;
         while(*c != '"') ++c;
     }
@@ -298,7 +325,8 @@ inline char* get_hashed(char* c, unsigned salt, HString& hs)
     char *start = c;
 
     unsigned h = salt;
-    while (*c != '"'){
+    while (*c != '"')
+    {
         h = h * 101 + (unsigned char) *c++;
     }
 
@@ -317,7 +345,8 @@ inline char* get_string_hashed(char *c, HString& hs, size_t salt = 0)
 
     //calc X31 hash while reading
     size_t h{salt};
-    for(; *c != '"'; ++c){
+    for(; *c != '"'; ++c)
+    {
         h = (h << 5) - h + *c;
     }
 
@@ -336,7 +365,8 @@ inline char *get_string_hashed(char *c, HString& hs, int max, int jump)
 
     //calc X31 hash while reading
     size_t h{1};
-    for(h = 0; *c != '"'; ++c){
+    for(h = 0; *c != '"'; ++c)
+    {
         h = (h << 5) - h + *c;
         if(--max == 0){ break; }
     }
@@ -361,13 +391,15 @@ inline char *get_string_hashed_n(char *c, HString& hs, int n = 0)
     if(n >= 6)
     {
         int i=0;
-        for(h = 0; *c != '"'; ++c){
+        for(h = 0; *c != '"'; ++c)
+        {
             if(i++ < n){ h = (h << 5) - h + *c; }
         }
     }
     else
     {
-        for(h = 0; *c != '"'; ++c){
+        for(h = 0; *c != '"'; ++c)
+        {
             h = (h << 5) - h + *c;
         }
     }
@@ -393,7 +425,8 @@ static inline char* meiyan_hash(char *key, HString& hs)
 
     typedef uint32_t* P;
     uint32_t h = 0x811c9dc5;
-    while (count >= 8) {
+    while (count >= 8) 
+    {
         h = (h ^ ((((*(P)c) << 5) | ((*(P)c) >> 27)) ^ *(P)(c + 4))) * 0xad3e7;
         count -= 8;
         c += 8;
@@ -448,7 +481,8 @@ char* crc32c(uint32_t crc, char *c, HString& hs)
     int k;
 
     crc = ~crc;
-    while (*c != '"') {
+    while (*c != '"') 
+    {
         crc ^= *c++;
         for (k = 0; k < 8; k++)
             crc = crc & 1 ? (crc >> 1) ^ POLY : crc >> 1;
@@ -462,7 +496,8 @@ char* crc32c(uint32_t crc, char *c, HString& hs)
     return ++c;
 }
 
-inline char *get_number(char *c, int& num){
+inline char *get_number(char *c, int& num)
+{
     while(*c != ':') ++c;
     ++c;
     for(num = 0; *c != '.'; ++c)
@@ -546,14 +581,16 @@ void parse_json_chunk(ThreadData *data, TTasks::Task& task)
                 //ignore id
                 c += 4;
                 const char* s = c;
-                if(id_offset == 0){
+                if(id_offset == 0)
+                {
                     while(*c != ',')
                     {
                         ++id_offset;
                         ++c;
                     }
                 }
-                else {
+                else 
+                {
                     if(*(c + id_offset) == ',')
                     {
                         c += id_offset;
@@ -597,8 +634,7 @@ void parse_json_chunk(ThreadData *data, TTasks::Task& task)
 
                 ++area->total_employees;
                 area->total_salary += salary;
-//                add_min_name(area->min_names, area->min_salary, name_str, surname_str, salary);
-//                add_max_name(area->max_names, area->max_salary, name_str, surname_str, salary);
+                
                 if(salary <= area->min_salary)
                 {
                     add_min_name(area->min_names, area->min_salary, name_str, surname_str, salary);
@@ -690,11 +726,14 @@ int main(int argc, char *argv[])
     int file;
     int num_threads;
 
-    if(argc == 3){
+    if(argc == 3)
+    {
         num_threads = atoi(argv[1]);
         filename = argv[2];
         file = open64( argv[2], O_RDWR | O_NOATIME, 0644 );
-    }else{
+    }
+    else
+    {
         num_threads = std::thread::hardware_concurrency();
         filename = argv[1];
         file = open64( argv[1], O_RDWR | O_NOATIME, 0644 );
@@ -727,7 +766,7 @@ int main(int argc, char *argv[])
         )
     );
 
-    int num_tasks = num_threads;
+    int num_tasks = num_threads * 8;
 
     if(filename.find( "10K") != std::string::npos ||
        filename.find( "50K") != std::string::npos ||
@@ -803,7 +842,8 @@ int main(int argc, char *argv[])
             join_name_list(it->max_names, d.max_names, it->max_salary, d.max_salary, false);
 
             //areas
-            for(int i=0; i<2; i++){
+            for(int i=0; i<2; i++)
+            {
                 Area& area1 = d.areas[i];
                 Area& area2 = it->areas[i];
 
@@ -826,11 +866,13 @@ int main(int argc, char *argv[])
         std::stringstream ss;
 
         //global
-        for(auto it = d.min_names.begin(); it != d.min_names.end(); it += 2){
+        for(auto it = d.min_names.begin(); it != d.min_names.end(); it += 2)
+        {
             ss << "global_min|" << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)d.min_salary * 0.01) << '\n';
         }
 
-        for(auto it = d.max_names.begin(); it != d.max_names.end(); it += 2){
+        for(auto it = d.max_names.begin(); it != d.max_names.end(); it += 2)
+        {
             ss << "global_max|" << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)d.max_salary * 0.01) << '\n';
         }
 
@@ -842,22 +884,27 @@ int main(int argc, char *argv[])
 
         for(Area &area : d.areas)
         {
-            if(area.total_employees > 0){
+            if(area.total_employees > 0)
+            {
                 ss << "area_avg|" << area.name << '|' << std::fixed << std::setprecision(2) << (double)((double)area.total_salary * 0.01 / area.total_employees) << '\n';
 
-                for(auto it = area.min_names.begin(); it != area.min_names.end(); it += 2){
+                for(auto it = area.min_names.begin(); it != area.min_names.end(); it += 2)
+                {
                     ss << "area_min|" << area.name << '|' << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)area.min_salary * 0.01) << '\n';
                 }
 
-                for(auto it = area.max_names.begin(); it != area.max_names.end(); it += 2){
+                for(auto it = area.max_names.begin(); it != area.max_names.end(); it += 2)
+                {
                     ss << "area_max|" << area.name << '|' << *it << ' ' << *(it + 1) << '|' << std::fixed << std::setprecision(2) << (double)((double)area.max_salary * 0.01) << '\n';
                 }
 
-                if(most_employees == nullptr || area.total_employees > most_employees->total_employees){
+                if(most_employees == nullptr || area.total_employees > most_employees->total_employees)
+                {
                     most_employees = &area;
                 }
 
-                if(least_employees == nullptr || area.total_employees < least_employees->total_employees){
+                if(least_employees == nullptr || area.total_employees < least_employees->total_employees)
+                {
                     least_employees = &area;
                 }
             }
