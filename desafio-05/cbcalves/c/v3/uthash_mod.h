@@ -56,9 +56,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define DECLTYPE_ASSIGN(dst, src) (dst) = (__typeof(dst))(src);
 
 /* initial number of buckets */
-#define HASH_INITIAL_NUM_BUCKETS 2048U    /* initial number of buckets        */
-#define HASH_INITIAL_NUM_BUCKETS_LOG2 11U /* lg2 of initial number of buckets */
-#define HASH_BKT_CAPACITY_THRESH 10U      /* expand when bucket count reaches */
+#define HASH_INITIAL_NUM_BUCKETS 4096U /* initial number of buckets        */
+// #define HASH_INITIAL_NUM_BUCKETS 2048U    /* initial number of buckets        */
 
 /* calculate the element whose hash handle address is hhp */
 #define ELMT_FROM_HH(tbl, hhp) ((void *)(((char *)(hhp)) - ((tbl)->hho)))
@@ -70,24 +69,24 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #define HASH_TO_BKT(hashv, num_bkts, bkt) bkt = ((hashv) & ((num_bkts)-1U));
 
 /* iterate over items in a known bucket to find desired item */
-#define HASH_FIND_IN_BKT(tbl, hh, head, keylen_in, hashval, out)                   \
-    {                                                                              \
-        if ((head).hh_head != NULL) {                                              \
-            DECLTYPE_ASSIGN(out, ELMT_FROM_HH(tbl, (head).hh_head));               \
-        } else {                                                                   \
-            (out) = NULL;                                                          \
-        }                                                                          \
-        while ((out) != NULL) {                                                    \
-            if ((out)->hh.hashv == (hashval) && (out)->hh.keylen == (keylen_in)) { \
-                break;                                                             \
-            }                                                                      \
-            if ((out)->hh.hh_next != NULL) {                                       \
-                DECLTYPE_ASSIGN(out, ELMT_FROM_HH(tbl, (out)->hh.hh_next));        \
-            } else {                                                               \
-                (out) = NULL;                                                      \
-                break;                                                             \
-            }                                                                      \
-        }                                                                          \
+#define HASH_FIND_IN_BKT(tbl, hh, head, keylen_in, hashval, out)            \
+    {                                                                       \
+        if ((head).hh_head != NULL) {                                       \
+            DECLTYPE_ASSIGN(out, ELMT_FROM_HH(tbl, (head).hh_head));        \
+        } else {                                                            \
+            (out) = NULL;                                                   \
+        }                                                                   \
+        while ((out) != NULL) {                                             \
+            if ((out)->hh.hashv == (hashval)) {                             \
+                break;                                                      \
+            }                                                               \
+            if ((out)->hh.hh_next != NULL) {                                \
+                DECLTYPE_ASSIGN(out, ELMT_FROM_HH(tbl, (out)->hh.hh_next)); \
+            } else {                                                        \
+                (out) = NULL;                                               \
+                break;                                                      \
+            }                                                               \
+        }                                                                   \
     }
 
 /* add an item to a bucket  */
@@ -109,15 +108,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         HASH_FIND_IN_BKT((head)->hh.tbl, hh, (head)->hh.tbl->buckets[_hf_bkt], keylen, hashval, out); \
     }
 
-#define HASH_MAKE_TABLE(hh, head)                                           \
-    {                                                                       \
-        (head)->hh.tbl = (UT_hash_table *)calloc(1, sizeof(UT_hash_table)); \
-        (head)->hh.tbl->tail = &((head)->hh);                               \
-        (head)->hh.tbl->num_buckets = HASH_INITIAL_NUM_BUCKETS;             \
-        (head)->hh.tbl->log2_num_buckets = HASH_INITIAL_NUM_BUCKETS_LOG2;   \
-        (head)->hh.tbl->hho = (char *)(&(head)->hh) - (char *)(head);       \
-        (head)->hh.tbl->buckets = (UT_hash_bucket *)calloc(                 \
-            HASH_INITIAL_NUM_BUCKETS, sizeof(struct UT_hash_bucket));       \
+#define HASH_MAKE_TABLE(hh, head)                                                              \
+    {                                                                                          \
+        (head)->hh.next = NULL;                                                                \
+        (head)->hh.prev = NULL;                                                                \
+        (head)->hh.tbl = (UT_hash_table *)(void *)((head) + MAX_SOBRENOMES);                   \
+        (head)->hh.tbl->buckets = (UT_hash_bucket *)(void *)((head)->hh.tbl + 1);              \
+        memset((head)->hh.tbl->buckets, 0, HASH_INITIAL_NUM_BUCKETS * sizeof(UT_hash_bucket)); \
+        (head)->hh.tbl->tail = &((head)->hh);                                                  \
+        (head)->hh.tbl->num_buckets = HASH_INITIAL_NUM_BUCKETS;                                \
+        (head)->hh.tbl->num_items = 0;                                                         \
+        (head)->hh.tbl->hho = (char *)(&(head)->hh) - (char *)(head);                          \
     }
 
 #define HASH_ADD_BYHASHVALUE(hh, head, hashval, add)                         \
@@ -218,7 +219,7 @@ typedef struct UT_hash_bucket {
 
 typedef struct UT_hash_table {
     UT_hash_bucket *buckets;
-    unsigned num_buckets, log2_num_buckets;
+    unsigned num_buckets;
     unsigned num_items;
     struct UT_hash_handle *tail; /* tail hh in app order, for fast append    */
     ptrdiff_t hho;               /* hash handle offset (byte pos of hash handle in element */

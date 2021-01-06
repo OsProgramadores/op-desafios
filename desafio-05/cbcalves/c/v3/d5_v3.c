@@ -1,5 +1,5 @@
 #define _LARGEFILE64_SOURCE
-#define _DEFAULT_SOURCE
+#define _GNU_SOURCE
 
 #include <sys/mman.h>
 #include <sys/stat.h>
@@ -256,8 +256,6 @@ void *processar(void *processos)
     sobrenome_t *sobrenomeAtual;
     sobrenome_t *sobrenomes = ((processar_t *)processos)->sobrenomes;
     unsigned sobrenomes_size = 0;
-    sobrenomes->hh.next = NULL;
-    sobrenomes->hh.prev = NULL;
     HASH_MAKE_TABLE(hh, sobrenomes);
 
     while (p < end) {
@@ -415,19 +413,6 @@ void *processar(void *processos)
         head = head->hh.next;                                                       \
     }
 
-/**
- * Apagar os sobrenomes (simplificação do processo original)
- * No processo original era excluido cada ficha antes de excluir
- * a tabela e os buckets, simplifiquei excluindo tabela e buckets
- * no local que ficam guardados.
- */
-#define freeSobrenomes(index)                   \
-    {                                           \
-        sobrenomes = threads[index].sobrenomes; \
-        free(sobrenomes->hh.tbl->buckets);      \
-        free(sobrenomes->hh.tbl);               \
-    }
-
 int main(int argc, char *argv[])
 {
     int fjson;
@@ -444,7 +429,7 @@ int main(int argc, char *argv[])
         printf("Uso: %s <arquivo json>\n", argv[0]);
         return 0;
     }
-    fjson = open(argv[1], O_RDONLY | __O_NOATIME | O_LARGEFILE);
+    fjson = open(argv[1], O_RDONLY | O_NOATIME | O_LARGEFILE);
     if (fjson < 0) {
         printf("Arquivo não encontrado\n");
         exit(EXIT_FAILURE);
@@ -456,15 +441,20 @@ int main(int argc, char *argv[])
         exit(EXIT_FAILURE);
     }
 
-    // inicialização do controle de threads
-    unsigned threads_max = sysconf(_SC_NPROCESSORS_ONLN); // numero de processadores (* o numero de threads em cada);
+    // Inicialização do controle de threads
+    // definindo numero de threads
+    unsigned threads_max = sysconf(_SC_NPROCESSORS_ONLN);
     if (threads_max < 2)
         threads_max = 2;
-    threads = (processar_t *)malloc(sizeof(processar_t) * threads_max);
-    buffer_max = (f.st_size / threads_max) + 1; // somo 1 pois a divisão pode não ser exata
 
-    unsigned myMemoryPos = threads_max * (sizeof(area_t) * MAX_AREAS + sizeof(sobrenome_t) * MAX_SOBRENOMES);
+    // Tamanho da alocação para cada thread, somo 1 pois a divisão pode não ser exata
+    buffer_max = (f.st_size / threads_max) + 1;
 
+    // inicialização da memória
+    unsigned myMemoryPos = threads_max * (sizeof(processar_t) + sizeof(area_t) * MAX_AREAS + sizeof(sobrenome_t) * MAX_SOBRENOMES +
+                                          sizeof(UT_hash_table) + HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket));
+
+    // Se não puder abrir a memória, abrir o arquivo do sistema
 #ifdef MAP_ANONYMOUS
     void *myMemory = (void *)mmap(0, myMemoryPos, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
 #else
@@ -474,8 +464,9 @@ int main(int argc, char *argv[])
 #endif
 
     // criação das threads
+    threads = myMemory;
+    myMemoryPos = sizeof(processar_t) * threads_max;
     j = 0; // funciona como o resto que devia ter sido processado mas não foi na thread anterior
-    myMemoryPos = 0;
     size_t buffer_end = 0;
     for (i = 0; i < threads_max; i++) {
         threads[i].buffer = buffer + buffer_end;
@@ -491,7 +482,8 @@ int main(int argc, char *argv[])
         threads[i].sobrenomes = (sobrenome_t *)(myMemory + myMemoryPos);
 
         pthread_create(&threads[i].id, NULL, processar, &threads[i]);
-        myMemoryPos += sizeof(sobrenome_t) * MAX_SOBRENOMES;
+        myMemoryPos += sizeof(sobrenome_t) * MAX_SOBRENOMES + sizeof(UT_hash_table) +
+                       HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket);
         buffer_end = (threads[i].buffer_end - buffer) + 1;
     }
     // fechamento do arquivo
@@ -515,7 +507,6 @@ int main(int argc, char *argv[])
     for (i = 1; i < threads_max; i++) {
         pthread_join(threads[i].id, NULL);
         merge_areas(i);
-        freeSobrenomes(i);
         merge_sobrenomes(i);
     }
 
@@ -524,8 +515,6 @@ int main(int argc, char *argv[])
     show_sobrenomes(0);
 
     //liberar toda a memória ainda alocada
-    freeSobrenomes(0);
-    free(threads);
     munmap(buffer, f.st_size);
     munmap(myMemory, myMemoryPos);
 
