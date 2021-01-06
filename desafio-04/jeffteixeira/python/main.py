@@ -4,6 +4,7 @@
 from os import system
 from time import sleep
 
+
 def main():
     """Function main of the program"""
     pieces = get_pieces()
