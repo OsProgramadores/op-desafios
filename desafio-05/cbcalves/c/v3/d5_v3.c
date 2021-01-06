@@ -21,8 +21,7 @@
  * Estrutura usada para guardar o nome e sobrenome
  * dos funcionários de maior e menor salário
  */
-typedef struct
-{
+typedef struct funcionario_t {
     char *nome;
     unsigned char nome_size;
     char *sobrenome;
@@ -33,8 +32,7 @@ typedef struct
  * Estrutura usada para guardar o nome
  * dos sobrenomes de maior salário
  */
-typedef struct
-{
+typedef struct nome_t {
     char *nome;
     unsigned char nome_size;
 } nome_t;
@@ -43,17 +41,15 @@ typedef struct
  * Estrutura usada para guardar os dados sobre
  * as áreas
  */
-typedef struct
-{
-    char *codigo;
+typedef struct area_t {
     char *nome;
     unsigned char nome_size;
+    unsigned max_salario;
     funcionario_t max[5]; // lista de max
     unsigned char max_pos;
-    unsigned max_salario;
+    unsigned min_salario;
     funcionario_t min[5]; // lista de min
     unsigned char min_pos;
-    unsigned min_salario;
     size_t custo;
     unsigned total;
 } area_t;
@@ -62,8 +58,7 @@ typedef struct
  * Estrutura usada para guardar os dados de maiores
  * salários para os sobrenomes
  */
-typedef struct
-{
+typedef struct sobrenome_t {
     UT_hash_handle hh; // hash table
     unsigned total;
     unsigned max_salario;
@@ -74,8 +69,7 @@ typedef struct
 /**
  * Estrutura global de máximo, mínimo e média de salário total
  */
-typedef struct
-{
+typedef struct global_t {
     unsigned max_salario;
     unsigned min_salario;
     unsigned total;
@@ -85,14 +79,12 @@ typedef struct
 /**
  * Controle de Threads, com as informações necessárias
  */
-typedef struct
-{
+typedef struct processar_t {
     pthread_t id; // id da thread
     char *buffer; // buffer para processar
     char *buffer_end;
     area_t *areas;
     sobrenome_t *sobrenomes;
-    unsigned sobrenomes_size;
 } processar_t;
 
 /**
@@ -131,7 +123,7 @@ processar_t *threads; // processo das threads
     }
 
 /**
- * Processando as áreas e guardando os maiores e menores salários
+ * Processar as áreas e guardando os maiores e menores salários
  */
 #define areas_process(_areas, _funcionario, _salario, _cod)                                      \
     {                                                                                            \
@@ -152,6 +144,19 @@ processar_t *threads; // processo das threads
             }                                                                                    \
             memcpy(&areaAtual->min[areaAtual->min_pos++], &_funcionario, sizeof(funcionario_t)); \
         }                                                                                        \
+    }
+
+/**
+ * Inicializar as áreas
+ */
+#define areas_init(_areas)                  \
+    for (cod = 0; cod < MAX_AREAS; cod++) { \
+        areaAtual = _areas + cod;           \
+        areaAtual->nome = NULL;             \
+        areaAtual->total = 0;               \
+        areaAtual->custo = 0;               \
+        areaAtual->min_salario = INT_MAX;   \
+        areaAtual->max_salario = 0;         \
     }
 
 /**
@@ -228,6 +233,14 @@ processar_t *threads; // processo das threads
     }
 
 /**
+ * Navegação do ponteiro até o próximo char igual _c
+ */
+#define findNext(_p, _c) \
+    while (*_p != _c) {  \
+        _p++;            \
+    }
+
+/**
  * Processar o que leu do disco separando os nomes, sobrenomes, salários e áreas para processar
  */
 void *processar(void *processos)
@@ -242,15 +255,8 @@ void *processar(void *processos)
     // inicialização das areas
     area_t *areaAtual;
     area_t *areas = ((processar_t *)processos)->areas;
-    for (cod = 0; cod < MAX_AREAS; cod++) {
-        areaAtual = areas + cod;
-        areaAtual->codigo = NULL;
-        areaAtual->nome = NULL;
-        areaAtual->total = 0;
-        areaAtual->custo = 0;
-        areaAtual->min_salario = INT_MAX;
-        areaAtual->max_salario = 0;
-    }
+    areas_init(areas);
+
     // inicialização de sobrenomes
     unsigned hashv;
     sobrenome_t *sobrenomeAtual;
@@ -263,35 +269,29 @@ void *processar(void *processos)
             p++;
         if (p >= end)
             break;
-        while (*p != '"')
-            p++;
+        findNext(p, '"');
         p++;
         if (*p == 'i') {
             // nome
             p += 4;
-            while (*p != '"')
-                p++;
+            findNext(p, '"');
             p += 8;
             funcionario.nome = p;
             p += 2;
-            while (*p != '"')
-                p++;
+            findNext(p, '"');
             funcionario.nome_size = (unsigned char)(p - funcionario.nome);
 
             // sobrenome
             p += 2;
-            while (*p != '"')
-                p++;
+            findNext(p, '"');
             p += 13;
             funcionario.sobrenome = p;
-            while (*p != '"')
-                p++;
+            findNext(p, '"');
             funcionario.sobrenome_size = (unsigned char)(p - funcionario.sobrenome);
 
             // salário
             p += 2;
-            while (*p != '"')
-                p++;
+            findNext(p, '"');
             p += 10;
             salario = *p - '0';
             p++;
@@ -305,8 +305,7 @@ void *processar(void *processos)
             salario = salario * 10 + *p - '0';
 
             // código
-            while (*p != '"')
-                p++;
+            findNext(p, '"');
             p += 8;
             codigo = p;
             p += 3;
@@ -318,18 +317,16 @@ void *processar(void *processos)
             p += 9;
             codigo = p;
             p += 4;
-            while (*p != '"')
-                p++;
+            findNext(p, '"');
             p += 8;
 
             if (codigo[0] == 'A' && (codigo[1] == '1' || codigo[1] == '2')) {
                 cod = codigo[1] - '1';
                 areas[cod].nome = p;
                 p += 7;
-                while (*p != '"')
-                    p++;
+                findNext(p, '"');
                 areas[cod].nome_size = (unsigned char)(p - areas[cod].nome);
-                p++;
+                p += 2;
             } else {
                 p += 9;
             }
@@ -337,7 +334,6 @@ void *processar(void *processos)
     }
     ((processar_t *)processos)->areas = areas;
     ((processar_t *)processos)->sobrenomes = sobrenomes;
-    ((processar_t *)processos)->sobrenomes_size = sobrenomes_size;
 
     return NULL;
 }
@@ -450,7 +446,7 @@ int main(int argc, char *argv[])
     // Tamanho da alocação para cada thread, somo 1 pois a divisão pode não ser exata
     buffer_max = (f.st_size / threads_max) + 1;
 
-    // inicialização da memória
+    // Inicialização da memória
     unsigned myMemoryPos = threads_max * (sizeof(processar_t) + sizeof(area_t) * MAX_AREAS + sizeof(sobrenome_t) * MAX_SOBRENOMES +
                                           sizeof(UT_hash_table) + HASH_INITIAL_NUM_BUCKETS * sizeof(struct UT_hash_bucket));
 
@@ -464,7 +460,7 @@ int main(int argc, char *argv[])
 #endif
 
     // criação das threads
-    threads = myMemory;
+    threads = (processar_t *)myMemory;
     myMemoryPos = sizeof(processar_t) * threads_max;
     j = 0; // funciona como o resto que devia ter sido processado mas não foi na thread anterior
     size_t buffer_end = 0;
@@ -477,9 +473,9 @@ int main(int argc, char *argv[])
         }
         threads[i].buffer_end = buffer + (buffer_end - j);
 
-        threads[i].areas = (area_t *)(myMemory + myMemoryPos);
+        threads[i].areas = (area_t *)((char *)myMemory + myMemoryPos);
         myMemoryPos += sizeof(area_t) * MAX_AREAS;
-        threads[i].sobrenomes = (sobrenome_t *)(myMemory + myMemoryPos);
+        threads[i].sobrenomes = (sobrenome_t *)((char *)myMemory + myMemoryPos);
 
         pthread_create(&threads[i].id, NULL, processar, &threads[i]);
         myMemoryPos += sizeof(sobrenome_t) * MAX_SOBRENOMES + sizeof(UT_hash_table) +
@@ -514,7 +510,7 @@ int main(int argc, char *argv[])
     show_area(0);
     show_sobrenomes(0);
 
-    //liberar toda a memória ainda alocada
+    //liberar toda a memória alocada
     munmap(buffer, f.st_size);
     munmap(myMemory, myMemoryPos);
 

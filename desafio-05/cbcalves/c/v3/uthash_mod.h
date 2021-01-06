@@ -92,7 +92,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 /* add an item to a bucket  */
 #define HASH_ADD_TO_BKT(head, hh, addhh)           \
     {                                              \
-        (&(head))->count++;                        \
         (addhh)->hh_next = (&(head))->hh_head;     \
         (addhh)->hh_prev = NULL;                   \
         if ((&(head))->hh_head != NULL) {          \
@@ -112,12 +111,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     {                                                                                          \
         (head)->hh.next = NULL;                                                                \
         (head)->hh.prev = NULL;                                                                \
-        (head)->hh.tbl = (UT_hash_table *)(void *)((head) + MAX_SOBRENOMES);                   \
-        (head)->hh.tbl->buckets = (UT_hash_bucket *)(void *)((head)->hh.tbl + 1);              \
+        (head)->hh.tbl = (UT_hash_table *)((head) + MAX_SOBRENOMES);                           \
+        (head)->hh.tbl->buckets = (UT_hash_bucket *)((head)->hh.tbl + 1);                      \
         memset((head)->hh.tbl->buckets, 0, HASH_INITIAL_NUM_BUCKETS * sizeof(UT_hash_bucket)); \
         (head)->hh.tbl->tail = &((head)->hh);                                                  \
         (head)->hh.tbl->num_buckets = HASH_INITIAL_NUM_BUCKETS;                                \
-        (head)->hh.tbl->num_items = 0;                                                         \
         (head)->hh.tbl->hho = (char *)(&(head)->hh) - (char *)(head);                          \
     }
 
@@ -129,7 +127,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
         (add)->hh.next = NULL;                                               \
         (head)->hh.tbl->tail->next = (add);                                  \
         (head)->hh.tbl->tail = &((add)->hh);                                 \
-        (head)->hh.tbl->num_items++;                                         \
         HASH_TO_BKT(hashval, (head)->hh.tbl->num_buckets, _ha_bkt);          \
         HASH_ADD_TO_BKT((head)->hh.tbl->buckets[_ha_bkt], hh, &(add)->hh);   \
     }
@@ -214,13 +211,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 typedef struct UT_hash_bucket {
     struct UT_hash_handle *hh_head;
-    unsigned count;
 } UT_hash_bucket;
 
 typedef struct UT_hash_table {
     UT_hash_bucket *buckets;
     unsigned num_buckets;
-    unsigned num_items;
     struct UT_hash_handle *tail; /* tail hh in app order, for fast append    */
     ptrdiff_t hho;               /* hash handle offset (byte pos of hash handle in element */
 } UT_hash_table;
