@@ -150,7 +150,13 @@ func main() {
 			globalMaxSal.Salario = dat.EmployeesPointer[count].Salario
 			globalMaxSal.EmployeePointer = &dat.EmployeesPointer[count]
 		} else if dat.EmployeesPointer[count].Salario == globalMaxSal.Salario {
-			globalMaxSal.EmployeePointer.GlobalMaxSalEmployeePointer = &dat.EmployeesPointer[count]
+
+			temp := globalMaxSal.EmployeePointer
+			for temp.GlobalMaxSalEmployeePointer != nil {
+				temp = temp.GlobalMaxSalEmployeePointer
+			}
+
+			temp.GlobalMaxSalEmployeePointer = &dat.EmployeesPointer[count]
 		}
 
 		// calculo glogal_min
@@ -159,7 +165,12 @@ func main() {
 			globalMinSal.EmployeePointer = &dat.EmployeesPointer[count]
 
 		} else if dat.EmployeesPointer[count].Salario == globalMinSal.Salario {
-			globalMinSal.EmployeePointer.GlobalMinSalEmployeePointer = &dat.EmployeesPointer[count]
+
+			temp := globalMinSal.EmployeePointer
+			for temp.GlobalMinSalEmployeePointer != nil {
+				temp = temp.GlobalMinSalEmployeePointer
+			}
+			temp.GlobalMinSalEmployeePointer = &dat.EmployeesPointer[count]
 
 		} else if dat.EmployeesPointer[count].Salario < globalMinSal.Salario {
 			globalMinSal.Salario = dat.EmployeesPointer[count].Salario
@@ -175,8 +186,15 @@ func main() {
 				if dat.AreasPointer[areaCount].QTD == 0 {
 					dat.AreasPointer[areaCount].MinSal = dat.EmployeesPointer[count].Salario
 					dat.AreasPointer[areaCount].AreaMinFuncPointer = &dat.EmployeesPointer[count]
+
 				} else if dat.EmployeesPointer[count].Salario == dat.AreasPointer[areaCount].MinSal {
-					dat.AreasPointer[areaCount].AreaMinFuncPointer.AreaMinSalEmployeePointer = &dat.EmployeesPointer[count]
+
+					temp := dat.AreasPointer[areaCount].AreaMinFuncPointer
+					for temp.AreaMinSalEmployeePointer != nil {
+						temp = temp.AreaMinSalEmployeePointer
+					}
+					temp.AreaMinSalEmployeePointer = &dat.EmployeesPointer[count]
+
 				}
 
 				if dat.EmployeesPointer[count].Salario < dat.AreasPointer[areaCount].MinSal {
@@ -188,7 +206,13 @@ func main() {
 
 				// calculo maior salario
 				if dat.EmployeesPointer[count].Salario == dat.AreasPointer[areaCount].MaxSal {
-					dat.AreasPointer[areaCount].AreaMaxFuncPointer.AreaMaxSalEmployeePointer = &dat.EmployeesPointer[count]
+
+					temp := dat.AreasPointer[areaCount].AreaMaxFuncPointer
+					for temp.AreaMaxSalEmployeePointer != nil {
+						temp = temp.AreaMaxSalEmployeePointer
+					}
+					temp.AreaMaxSalEmployeePointer = &dat.EmployeesPointer[count]
+
 				}
 				if dat.EmployeesPointer[count].Salario > dat.AreasPointer[areaCount].MaxSal {
 					dat.AreasPointer[areaCount].MaxSal = dat.EmployeesPointer[count].Salario
@@ -199,7 +223,11 @@ func main() {
 
 				// calculo das areas most employee
 				if dat.AreasPointer[areaCount].QTD == mostArea.QTD {
-					mostArea.AreasPointer.MostAreaQTD = &dat.AreasPointer[areaCount]
+					temp := mostArea.AreasPointer
+					for temp.MostAreaQTD != nil {
+						temp = temp.MostAreaQTD
+					}
+					temp.MostAreaQTD = &dat.AreasPointer[areaCount]
 				}
 				if dat.AreasPointer[areaCount].QTD > mostArea.QTD {
 					mostArea.QTD = dat.AreasPointer[areaCount].QTD
@@ -300,7 +328,11 @@ func main() {
 		for contador := 1; contador < sizeArea; contador++ {
 			if dat.AreasPointer[contador].QTD != 0 {
 				if dat.AreasPointer[contador].QTD == leastArea.QTD {
-					leastArea.AreasPointer.LeastAreaQTD = &dat.AreasPointer[contador]
+					temp := leastArea.AreasPointer
+					for temp.LeastAreaQTD != nil {
+						temp = temp.LeastAreaQTD
+					}
+					temp.LeastAreaQTD = &dat.AreasPointer[contador]
 				}
 				if dat.AreasPointer[contador].QTD < leastArea.QTD {
 					leastArea.QTD = dat.AreasPointer[contador].QTD
