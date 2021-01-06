@@ -1,4 +1,5 @@
 #define _LARGEFILE64_SOURCE
+#define _DEFAULT_SOURCE
 
 #include <sys/mman.h>
 #include <sys/stat.h>
@@ -463,7 +464,14 @@ int main(int argc, char *argv[])
     buffer_max = (f.st_size / threads_max) + 1; // somo 1 pois a divisão pode não ser exata
 
     unsigned myMemoryPos = threads_max * (sizeof(area_t) * MAX_AREAS + sizeof(sobrenome_t) * MAX_SOBRENOMES);
+
+#ifdef MAP_ANONYMOUS
     void *myMemory = (void *)mmap(0, myMemoryPos, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+#else
+    int fd = open("/dev/zero", O_RDWR);
+    void *myMemory = (void *)mmap(0, myMemoryPos, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    close(fd);
+#endif
 
     // criação das threads
     j = 0; // funciona como o resto que devia ter sido processado mas não foi na thread anterior
