@@ -119,7 +119,7 @@ class MT_HMap
             expects = false;
         }
     }
-    
+
     inline void unlk(int n)
     {
         lk_bucket[n].store(false, std::memory_order_release);
@@ -173,9 +173,9 @@ public:
             for(auto &sn: list)
             {
                 size_t &sn_h = sn.first;
-                
+
                 retry2:
-                
+
                 if(sn_h == cur_hash)
                 {
                     value = &sn.second;
@@ -185,12 +185,12 @@ public:
                 {
                     if(!try_lk(n)){ goto retry2; }
                     if(sn_h != 0){ unlk(n); goto retry2; }
-                    
+
                         value = &sn.second;
                         value->surname_str.str = key.str;
                         value->surname_str.len = key.len;
                         sn_h = cur_hash;
-                        
+
                     unlk(n);
                     break;
                 }
@@ -201,7 +201,7 @@ public:
         {
             if(!try_lk(n)){  goto retry;  }
             if(hash_val != 0){ unlk(n); goto retry; }
-            
+
             auto &v = list[b_msz-1];
             v.first = cur_hash;
             value = &v.second;
@@ -425,7 +425,7 @@ static inline char* meiyan_hash(char *key, HString& hs)
 
     typedef uint32_t* P;
     uint32_t h = 0x811c9dc5;
-    while (count >= 8) 
+    while (count >= 8)
     {
         h = (h ^ ((((*(P)c) << 5) | ((*(P)c) >> 27)) ^ *(P)(c + 4))) * 0xad3e7;
         count -= 8;
@@ -481,7 +481,7 @@ char* crc32c(uint32_t crc, char *c, HString& hs)
     int k;
 
     crc = ~crc;
-    while (*c != '"') 
+    while (*c != '"')
     {
         crc ^= *c++;
         for (k = 0; k < 8; k++)
@@ -589,7 +589,7 @@ void parse_json_chunk(ThreadData *data, TTasks::Task& task)
                         ++c;
                     }
                 }
-                else 
+                else
                 {
                     if(*(c + id_offset) == ',')
                     {
@@ -634,7 +634,7 @@ void parse_json_chunk(ThreadData *data, TTasks::Task& task)
 
                 ++area->total_employees;
                 area->total_salary += salary;
-                
+
                 if(salary <= area->min_salary)
                 {
                     add_min_name(area->min_names, area->min_salary, name_str, surname_str, salary);
