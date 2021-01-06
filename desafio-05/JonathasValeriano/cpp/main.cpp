@@ -672,6 +672,7 @@ void parse_json_chunk(ThreadData *data, TTasks::Task& task)
             }
         }
     }
+
 }
 
 class ScopedTimer
@@ -750,7 +751,6 @@ int main(int argc, char *argv[])
     lseek64(file, 0, SEEK_SET);
 
     posix_fadvise64(file, 0, file_size, POSIX_FADV_SEQUENTIAL | POSIX_FADV_WILLNEED);
-
     size_t offset{0};
     const int64_t aligned_offset = make_offset_page_aligned(offset);
     const int64_t length_to_map = offset - aligned_offset + file_size;
@@ -856,6 +856,7 @@ int main(int argc, char *argv[])
             }
         }
 
+
     }
 
     std::ios_base::sync_with_stdio(false);
@@ -944,6 +945,7 @@ int main(int argc, char *argv[])
         {
 //            ScopedTimer timer{"time to write results"};
             std::cout << ss.rdbuf();
+
         }
     }
 
