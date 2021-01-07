@@ -347,7 +347,6 @@ void *processar(void *processos)
         double salariof;                                                                               \
         area_t *most_emp = areas;                                                                      \
         area_t *least_emp = areas;                                                                     \
-        int j;                                                                                         \
                                                                                                        \
         for (i = 0; i < MAX_AREAS; i++) {                                                              \
             salariof = (double)areas->max_salario / 100.F;                                             \
@@ -400,7 +399,7 @@ void *processar(void *processos)
     while (head) {                                                                  \
         if (head->total > 1) {                                                      \
             double salariof = (double)head->max_salario / 100.F;                    \
-            for (int i = 0; i < head->max_pos; i++) {                               \
+            for (i = 0; i < head->max_pos; i++) {                                   \
                 printf("last_name_max|%.*s|%.*s %.*s|%.2f\n",                       \
                        head->hh.keylen, head->hh.key, head->max[i].nome_size,       \
                        head->max[i].nome, head->hh.keylen, head->hh.key, salariof); \
@@ -422,10 +421,17 @@ int main(int argc, char *argv[])
     area_t *areas;
 
     if (argc < 2) {
-        printf("Uso: %s <arquivo json>\n", argv[0]);
+        printf("Uso: %s <threds> <arquivo json>\n", argv[0]);
+        printf("  ou %s <arquivo json>\n", argv[0]);
+        printf("\nGNU_STD Compiled Version %ld\n", __STDC_VERSION__);
         return 0;
     }
-    fjson = open(argv[1], O_RDONLY | O_NOATIME | O_LARGEFILE);
+    if (argc == 2) {
+        buffer = argv[1];
+    } else {
+        buffer = argv[2];
+    }
+    fjson = open(buffer, O_RDONLY | O_NOATIME | O_LARGEFILE);
     if (fjson < 0) {
         printf("Arquivo não encontrado\n");
         exit(EXIT_FAILURE);
@@ -439,7 +445,12 @@ int main(int argc, char *argv[])
 
     // Inicialização do controle de threads
     // definindo numero de threads
-    unsigned threads_max = sysconf(_SC_NPROCESSORS_ONLN);
+    unsigned threads_max;
+    if (argc == 2) {
+        threads_max = sysconf(_SC_NPROCESSORS_ONLN);
+    } else {
+        threads_max = atoi(argv[1]);
+    }
     if (threads_max < 2)
         threads_max = 2;
 

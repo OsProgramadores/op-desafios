@@ -3,7 +3,8 @@ CC=gcc
 CFLAGS=-I. -flto -funroll-loops -pthread -lm -ftree-vectorize
 LFLAGS=-I. -flto -funroll-loops -pthread -lm -ftree-vectorize
 OBJ=obj/d5_v3.o
-DBG=-Ofast
+DBG=-Ofast -std=gnu17
+#DBG=-Ofast -std=gnu11
 
 obj/%.o: ./%.c
 	@echo "    CC      $<"
