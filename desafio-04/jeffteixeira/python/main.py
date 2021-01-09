@@ -74,7 +74,13 @@ class Board:
             Piece(code=5, name='Rainha', quantity=2),
             Piece(code=6, name='Rei', quantity=2)
         ]
-        self.__fields = [[Field() for j in range(self.__columns)] for i in range(self.__lines)]
+        self.__fields = [[Field() for j in range(self.get_columns())] for i in range(self.get_lines())]
+
+    def get_lines(self):
+        return self.__lines
+    
+    def get_columns(self):
+        return self.__columns
 
     def get_fields(self):
         '''Returns the fields of the board'''
@@ -97,8 +103,8 @@ class Board:
     def get_valid_positions(self):
         '''Returns tha valid positions of the board'''
         positions = []
-        for i in range(self.__lines):
-            for j in range(self.__columns):
+        for i in range(self.get_lines()):
+            for j in range(self.get_columns()):
                 position = (i, j)
                 field = self.get_field(position)
                 if not field.is_filled():
