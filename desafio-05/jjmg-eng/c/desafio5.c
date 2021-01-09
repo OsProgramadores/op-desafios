@@ -131,7 +131,7 @@ snomes_t *searchSnome(snomes_t **a, char *sobrenome)
 {
     snomes_t *aux = *a;
     for(;aux != NULL; aux = aux->next)
-        if(!strcmp(aux->sobrenome, sobrenome)) break; 
+        if(!strcmp(aux->sobrenome, sobrenome)) break;
     if(aux ==  NULL) {
         aux = (snomes_t *)malloc(SIZESNOME);
         memset(aux, 0, SIZESNOME);
@@ -164,7 +164,7 @@ areas_t *searchArea(areas_t **a, char *codigo)
 {
     areas_t *aux = *a;
     for(;aux != NULL; aux = aux->next)
-        if(!strcmp(aux->codigo, codigo)) break; 
+        if(!strcmp(aux->codigo, codigo)) break;
     if(aux ==  NULL) {
         aux = (areas_t *)malloc(SIZEAREA);
         memset(aux, 0, SIZEAREA);
@@ -209,7 +209,7 @@ int main(int argc, char *argv[])
              *p_s             = NULL,
              *p0              = NULL;
     nomes_t  *nome_new        = NULL;
-  
+
     char *p;
     int nfunc = 0, i, j, k, l;
     unsigned long somaSalarios = 0;
@@ -230,9 +230,9 @@ int main(int argc, char *argv[])
                 *p = 0;
                 memmove(tok, tok+1, 31);
             }
-            // LISTA DE FUNCIONÁRIOS 
+            // LISTA DE FUNCIONÁRIOS
             if(!regArea) switch(regFunc) {
-            case ID : 
+            case ID :
                     if(!strcmp(tok,"id")) {
                         if(global_new == NULL) global_new = (func_t *)malloc(SIZEFUNC);
                         nfunc++;
@@ -255,7 +255,7 @@ int main(int argc, char *argv[])
 
                     if(nome_new == NULL) nome_new = (nomes_t *)malloc(SIZENOME);
                     strcpy(nome_new->nome, global_new->nome);
-                    
+
                     if(p_s->list == NULL) {
                         InsertNodeNome(&p_s->list, &nome_new);
                         p_s->salario = global_new->salario;
@@ -263,7 +263,7 @@ int main(int argc, char *argv[])
                     else {
                         if(p_s->salario < global_new->salario) {
                             FreeNome(&(p_s->list));
-                            p_s->salario = global_new->salario;   
+                            p_s->salario = global_new->salario;
                         }
                         p_s->nfunc++;
                         if(p_s->salario <= global_new->salario) InsertNodeNome(&p_s->list, &nome_new);
@@ -324,7 +324,7 @@ int main(int argc, char *argv[])
         if(auxArea != NULL) _free(auxArea);
     }
     FreeArea(&areas);
-    
+
     for(p_a = most_employees; p_a != NULL; p_a = p_a->next)
         printf("most_employees|%s|%d\n", p_a->nome, p_a->nfunc);
     FreeArea(&most_employees);
