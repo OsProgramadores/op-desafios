@@ -1,0 +1,51 @@
+#!/usr/bin/a68g --script
+##########################################################
+# https://jmvdveer.home.xs4all.nl/en.algol-68-genie.html #
+#                                                        #
+# Instalação em distribuições Linux baseadas em Debian:  #
+# $sudo apt-get install algol68g                         #
+#                                                        #
+# Para executar este programa:                           #
+# $chmod +x xadrez.a68                                   #
+# $./xadrez.a68                                          #
+# $./xadrez.a68 ex1.txt                                  #
+#                                                        #
+# João J.M. Gonçalves - Janeiro 2021                     #
+##########################################################
+
+[] STRING nome da peca = ("Peão  :","Bispo :","Cavalo:","Torre :","Raínha:","Rei   :");
+[6] INT q := (0,0,0,0,0,0);
+    INT i,p;
+FILE inf;
+STRING input file name;
+STRING line;
+
+IF argc < 4 THEN
+    print("Nome do arquivo:");
+    input file name := read string
+ELSE
+    input file name := argv(4)
+FI;
+
+open(inf, input file name, stand in channel);
+BOOL finished reading := FALSE;
+on logical file end (inf, (REF FILE inf) BOOL: finished reading := TRUE);
+
+WHILE
+    get(inf,(line, new line));
+    NOT finished reading
+DO
+    FOR i TO UPB line
+    DO
+        p := ABS line[i] - 48;
+        IF p > 0 THEN q[p] +:= 1
+        FI
+    OD
+OD;
+close(inf);
+
+print(new line);
+FOR i TO 6
+DO
+    print((nome da peca[i], q[i], " peça(s)", new line))
+OD
