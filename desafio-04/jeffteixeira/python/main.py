@@ -48,11 +48,9 @@ class Field:
         '''Returns the piece that is in the field or None if the field is empty'''
         return self.__piece
 
-
     def set_piece(self, piece):
         '''Sets a piece in the field'''
         self.__piece = piece
-
 
     def is_filled(self):
         '''Checks if the field is filled or not'''
