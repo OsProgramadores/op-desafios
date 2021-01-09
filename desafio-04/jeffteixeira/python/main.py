@@ -74,12 +74,16 @@ class Board:
             Piece(code=5, name='Rainha', quantity=2),
             Piece(code=6, name='Rei', quantity=2)
         ]
-        self.__fields = [[Field() for j in range(self.get_columns())] for i in range(self.get_lines())]
+        self.__fields = [
+            [Field() for j in range(self.get_columns())] for i in range(self.get_lines())
+        ]
 
     def get_lines(self):
+        '''Returns the quantity of lines of the board'''
         return self.__lines
-    
+
     def get_columns(self):
+        '''Returns the quantity de columns of the board'''
         return self.__columns
 
     def get_fields(self):
