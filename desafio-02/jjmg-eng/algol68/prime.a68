@@ -18,4 +18,4 @@ DO
     print((6 * n - 1, 6 * n + 1));
     IF (n + 1) MOD 3 = 0 THEN print(newline)
     FI
-OD 
+OD
