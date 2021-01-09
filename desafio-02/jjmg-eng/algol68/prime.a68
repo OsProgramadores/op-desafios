@@ -14,7 +14,7 @@
 PROC check = (INT n) BOOL:
     BEGIN
         BOOL is prime := TRUE;
-        IF n>31 THEN
+        IF n>23 THEN
             IF (n MOD 2) * (n MOD 3) /= 0 THEN
                 INT i := 5;
                 WHILE i * i <= n AND is prime
