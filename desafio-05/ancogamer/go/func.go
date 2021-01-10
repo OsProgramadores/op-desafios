@@ -115,8 +115,9 @@ func main() {
 			pprof.StartCPUProfile(f)
 			defer pprof.StopCPUProfile()
 		}
+
+		rawdata, err := ioutil.ReadFile(os.Args[len(os.Args)-1])
 	*/
-	//rawdata, err := ioutil.ReadFile(os.Args[len(os.Args)-1])
 	rawdata, err := ioutil.ReadFile(os.Args[1])
 	if err != nil {
 		panic(err)
@@ -149,17 +150,32 @@ func main() {
 			globalMaxSal.Salario = dat.EmployeesPointer[count].Salario
 			globalMaxSal.EmployeePointer = &dat.EmployeesPointer[count]
 		} else if dat.EmployeesPointer[count].Salario == globalMaxSal.Salario {
-			globalMaxSal.EmployeePointer.GlobalMaxSalEmployeePointer = &dat.EmployeesPointer[count]
+
+			temp := globalMaxSal.EmployeePointer
+			for temp.GlobalMaxSalEmployeePointer != nil {
+				temp = temp.GlobalMaxSalEmployeePointer
+			}
+
+			temp.GlobalMaxSalEmployeePointer = &dat.EmployeesPointer[count]
 		}
+
 		// calculo glogal_min
 		if count == 0 {
 			globalMinSal.Salario = dat.EmployeesPointer[count].Salario
 			globalMinSal.EmployeePointer = &dat.EmployeesPointer[count]
+
+		} else if dat.EmployeesPointer[count].Salario == globalMinSal.Salario {
+
+			temp := globalMinSal.EmployeePointer
+			for temp.GlobalMinSalEmployeePointer != nil {
+				temp = temp.GlobalMinSalEmployeePointer
+			}
+			temp.GlobalMinSalEmployeePointer = &dat.EmployeesPointer[count]
+
 		} else if dat.EmployeesPointer[count].Salario < globalMinSal.Salario {
 			globalMinSal.Salario = dat.EmployeesPointer[count].Salario
 			globalMinSal.EmployeePointer = &dat.EmployeesPointer[count]
-		} else if dat.EmployeesPointer[count].Salario == globalMinSal.Salario {
-			globalMinSal.EmployeePointer.GlobalMaxSalEmployeePointer = &dat.EmployeesPointer[count]
+
 		}
 
 		mediaGlobalSal += dat.EmployeesPointer[count].Salario
@@ -170,8 +186,15 @@ func main() {
 				if dat.AreasPointer[areaCount].QTD == 0 {
 					dat.AreasPointer[areaCount].MinSal = dat.EmployeesPointer[count].Salario
 					dat.AreasPointer[areaCount].AreaMinFuncPointer = &dat.EmployeesPointer[count]
+
 				} else if dat.EmployeesPointer[count].Salario == dat.AreasPointer[areaCount].MinSal {
-					dat.AreasPointer[areaCount].AreaMinFuncPointer.AreaMinSalEmployeePointer = &dat.EmployeesPointer[count]
+
+					temp := dat.AreasPointer[areaCount].AreaMinFuncPointer
+					for temp.AreaMinSalEmployeePointer != nil {
+						temp = temp.AreaMinSalEmployeePointer
+					}
+					temp.AreaMinSalEmployeePointer = &dat.EmployeesPointer[count]
+
 				}
 
 				if dat.EmployeesPointer[count].Salario < dat.AreasPointer[areaCount].MinSal {
@@ -183,7 +206,13 @@ func main() {
 
 				// calculo maior salario
 				if dat.EmployeesPointer[count].Salario == dat.AreasPointer[areaCount].MaxSal {
-					dat.AreasPointer[areaCount].AreaMaxFuncPointer.AreaMaxSalEmployeePointer = &dat.EmployeesPointer[count]
+
+					temp := dat.AreasPointer[areaCount].AreaMaxFuncPointer
+					for temp.AreaMaxSalEmployeePointer != nil {
+						temp = temp.AreaMaxSalEmployeePointer
+					}
+					temp.AreaMaxSalEmployeePointer = &dat.EmployeesPointer[count]
+
 				}
 				if dat.EmployeesPointer[count].Salario > dat.AreasPointer[areaCount].MaxSal {
 					dat.AreasPointer[areaCount].MaxSal = dat.EmployeesPointer[count].Salario
@@ -192,9 +221,13 @@ func main() {
 
 				dat.AreasPointer[areaCount].AvgSal += dat.EmployeesPointer[count].Salario
 
-				// calculo das areas most employee e least employee
+				// calculo das areas most employee
 				if dat.AreasPointer[areaCount].QTD == mostArea.QTD {
-					mostArea.AreasPointer.MostAreaQTD = &dat.AreasPointer[areaCount]
+					temp := mostArea.AreasPointer
+					for temp.MostAreaQTD != nil {
+						temp = temp.MostAreaQTD
+					}
+					temp.MostAreaQTD = &dat.AreasPointer[areaCount]
 				}
 				if dat.AreasPointer[areaCount].QTD > mostArea.QTD {
 					mostArea.QTD = dat.AreasPointer[areaCount].QTD
@@ -204,6 +237,7 @@ func main() {
 			}
 		}
 	}
+
 	wg := sync.WaitGroup{}
 	wg.Add(8)
 
@@ -270,15 +304,16 @@ func main() {
 		sb.WriteString(globalMinSal.EmployeePointer.Sobrenome)
 		sb.WriteString("|")
 		sb.WriteString(strconv.FormatFloat(globalMinSal.EmployeePointer.Salario, 'f', 2, 64))
-		for globalMinSal.EmployeePointer.GlobalMinSalEmployeePointer != nil {
+		globalMinSal.EmployeePointer = globalMinSal.EmployeePointer.GlobalMinSalEmployeePointer
+
+		for globalMinSal.EmployeePointer != nil {
 			sb.WriteString("\nglobal_min|")
-			sb.WriteString(globalMinSal.EmployeePointer.GlobalMinSalEmployeePointer.Nome)
+			sb.WriteString(globalMinSal.EmployeePointer.Nome)
 			sb.WriteString(" ")
-			sb.WriteString(globalMinSal.EmployeePointer.GlobalMinSalEmployeePointer.Sobrenome)
+			sb.WriteString(globalMinSal.EmployeePointer.Sobrenome)
 			sb.WriteString("|")
-			sb.WriteString(strconv.FormatFloat(globalMinSal.EmployeePointer.GlobalMinSalEmployeePointer.Salario, 'f', 2, 64))
-			globalMinSal.EmployeePointer.GlobalMaxSalEmployeePointer =
-				globalMinSal.EmployeePointer.GlobalMinSalEmployeePointer.GlobalMinSalEmployeePointer
+			sb.WriteString(strconv.FormatFloat(globalMinSal.EmployeePointer.Salario, 'f', 2, 64))
+			globalMinSal.EmployeePointer = globalMinSal.EmployeePointer.GlobalMinSalEmployeePointer
 		}
 		// exibindo
 		os.Stdout.WriteString(sb.String())
@@ -293,7 +328,11 @@ func main() {
 		for contador := 1; contador < sizeArea; contador++ {
 			if dat.AreasPointer[contador].QTD != 0 {
 				if dat.AreasPointer[contador].QTD == leastArea.QTD {
-					leastArea.AreasPointer.LeastAreaQTD = &dat.AreasPointer[contador]
+					temp := leastArea.AreasPointer
+					for temp.LeastAreaQTD != nil {
+						temp = temp.LeastAreaQTD
+					}
+					temp.LeastAreaQTD = &dat.AreasPointer[contador]
 				}
 				if dat.AreasPointer[contador].QTD < leastArea.QTD {
 					leastArea.QTD = dat.AreasPointer[contador].QTD
@@ -441,4 +480,5 @@ func main() {
 
 	wg.Wait()
 	os.Stdout.WriteString("\n")
+
 }
