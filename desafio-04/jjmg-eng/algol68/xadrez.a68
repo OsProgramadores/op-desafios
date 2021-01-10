@@ -19,6 +19,8 @@
 FILE inf;
 STRING input file name;
 STRING line;
+BOOL open error := FALSE;
+BOOL finished reading := FALSE;
 
 IF argc < 4 THEN
     print("Nome do arquivo:");
@@ -26,10 +28,9 @@ IF argc < 4 THEN
 ELSE
     input file name := argv(4)
 FI;
-
 open(inf, input file name, stand in channel);
-BOOL finished reading := FALSE;
 on logical file end (inf, (REF FILE inf) BOOL: finished reading := TRUE);
+on open error (inf, (REF FILE inf) BOOL: open error := TRUE);
 
 WHILE
     get(inf,(line, new line));
@@ -44,8 +45,12 @@ DO
 OD;
 close(inf);
 
-print(new line);
-FOR i TO 6
-DO
-    print((nome da peca[i], q[i], " peça(s)", new line))
-OD
+IF open error THEN
+    print("Erro na abertura do arquivo")
+ELSE
+    print(new line);
+    FOR i TO 6
+    DO
+        print((nome da peca[i], q[i], " peça(s)", new line))
+    OD
+FI
