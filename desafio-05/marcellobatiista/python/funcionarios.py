@@ -3,7 +3,7 @@
 
 import json
 import sys
-#import time#
+#import time
 
 class Empresa:
 
@@ -143,7 +143,7 @@ class Empresa:
         fun = {}
         for funcio in self.funcionarios['fun']:
             try:
-                fun[funcio['sobrenome']].append(funcio) 
+                fun[funcio['sobrenome']].append(funcio)
             except:
                 fun[funcio['sobrenome']] = [funcio]
 
