@@ -3,16 +3,15 @@
 
 import json
 import sys
-#import time
 
 class Empresa:
 
     dados = None
-    
+
     #Funcionarios | Areas | Quantidade
     funcionarios = {'fun':None, 'area':None, 'quant':0}
     fun_por_area = {}
-    
+
     def __init__(self, path = None):
         caminho = ''
         if (path == None):
@@ -25,7 +24,7 @@ class Empresa:
         f = time.time() - i
         print('\nTempo: %.2f' % f)
         '''
-        
+
     def abrir(self, caminho):
         print('[!] Abrindo arquivo...')
         with open(caminho, 'r', encoding='utf-8-sig') as arquivo:
@@ -56,10 +55,10 @@ class Empresa:
         for area in self.fun_por_area:
             #print('')
             self.quemMaisMenosRecebeMaisMedia(self.ordenarSalario(self.fun_por_area[area]), 2)
-            
+
     def ordenarSalario(self, funcionarios):
         tmp = [funcionarios[0]]
-        
+
         i = 0
         while (i < len(funcionarios)-1):
             if (funcionarios[i+1]['salario'] > tmp[0]['salario']):
@@ -76,10 +75,10 @@ class Empresa:
             i += 1
 
         return tmp
-    
+
     def quemMaisMenosRecebeMaisMedia(self, funcionarios, questao):
         ordem = self.ordenarSalario(funcionarios)
-        
+
         MAX = ordem[0]['salario']
         for fun_max in ordem:
             if (fun_max['salario'] == MAX):
@@ -107,7 +106,7 @@ class Empresa:
                             break
             else:
                 break
-            
+
         SOMA = 0
         for fun in ordem:
             SOMA += fun['salario']
@@ -133,7 +132,7 @@ class Empresa:
             if (quant[area] == MAX):
                 print('most_employees|'+area+'|'+str(quant[area]))
 
-        
+
         MIN = quant[MINMAX[0]]
         for area in MINMAX:
             if (quant[area] == MIN):
@@ -151,5 +150,5 @@ class Empresa:
             if (len(fun[sobrenome]) > 1):
                 ordem = self.ordenarSalario(fun[sobrenome])
                 self.quemMaisMenosRecebeMaisMedia(ordem, 3)
-        
+
 Empresa()
