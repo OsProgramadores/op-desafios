@@ -1,0 +1,92 @@
+#!/usr/bin/a68g --script
+##########################################################
+# https://jmvdveer.home.xs4all.nl/en.algol-68-genie.html #
+#                                                        #
+# Instalação em distribuições Linux baseadas em Debian:  #
+# $sudo apt-get install algol68g                         #
+#                                                        #
+# Para executar este programa:                           #
+# $chmod +x pot2.a68                                     #
+# $./pot2.a68                                            #
+# $./pot2.a68 ex1.txt                                    #
+#                                                        #
+# João J.M. Gonçalves - Janeiro 2021                     #
+##########################################################
+
+PROC atoi = (REF STRING s) INT:
+    BEGIN
+        FILE f; INT i;
+        associate(f, s);
+        get(f,i);
+        close(f);
+        i
+    END;
+
+PROC big number = (REF []INT n, REF INT count) VOID:
+    BEGIN
+        INT i := 1;
+        INT b;
+        WHILE n[i] > 0 AND i < 512
+            DO
+                #words(n[i],b);#
+                b := n[i] % 65536;
+                n[i] := n[i] MOD 65536;
+                i +:= 1;
+                n[i] +:= b
+            OD;
+        IF i > count THEN count := i FI
+    END;
+
+FILE inf;
+STRING input file name;
+STRING line;
+BOOL finished reading := FALSE;
+
+IF argc < 4 THEN
+    print("Nome do arquivo:");
+    input file name := read string
+ELSE
+    input file name := argv(4)
+FI;
+INT open error := open(inf, input file name, stand in channel);
+on logical file end (inf, (REF FILE inf) BOOL: finished reading := TRUE);
+IF open error /= 0 THEN print(("Erro na abertura do arquivo. Arquivo inexistente.", newline))
+ELSE
+    [512]INT n;
+    INT i, j, k, c;
+    WHILE
+        get(inf,(line, new line));
+        NOT finished reading
+    DO
+        STRING s := line;
+        FOR i TO 512 DO n[i] := 0 OD;
+        c := 1;
+        j := 0;
+
+        WHILE j < UPB s
+        DO
+            i := j + 1;
+            j := i + 3;
+            IF j > UPB s THEN j := UPB s FI;
+            STRING s1 := s[i:j];
+            FOR k TO c DO n[k] *:= 10 ** UPB s1 OD;
+            n[1] +:= atoi(s1);
+            big number(n, c)
+        OD;
+        IF n[c] = 0 THEN c -:=1 FI;
+
+        i := 1;
+        WHILE n[i] = 0 AND i < c DO i +:= 1 OD;
+        print((s, space));
+        IF i = c THEN
+            j := ENTIER(ln(n[c])/ln(2));
+            IF 2 ** j = n[c] THEN print(("true ", whole((c-1)*16+j, 0)))
+            ELSE print("false")
+            FI
+        ELSE
+            print("false")
+        FI;
+        print(newline)
+    OD;
+    close(inf)
+FI
