@@ -1,188 +1,93 @@
 #include <cmath>
 #include <iostream>
+#include <vector>
+#include <string>
+#include <climits>
 
-enum OPERACAO
-{
-    REGISTRA = 0,
-    ESPACO = 1,
-    ABRE = 2,
-    FECHA = 3,
-    POTENCIA = 4,
-    MULTIPLICA = 8,
-    DIVIDE = 16,
-    SOMA = 32,
-    SUBTRAI = 64
+/**
+ * Operações matemáticas suportadas
+ * EXPONENCIAR, MULTIPLICAR, DIVIDIR, SOMAR e SUBTRAIR
+ */
+enum OPERACAO {
+    REGISTRAR   = 0,
+    EXPONENCIAR = 1 << 0,
+    MULTIPLICAR = 1 << 1,
+    DIVIDIR     = 1 << 2,
+    SOMAR       = 1 << 3,
+    SUBTRAIR    = 1 << 4
 };
 
-struct EXPRESSAO
-{
+/**
+ * Estrutura para gardar o numero e a operação associada
+ */
+struct expressao_t {
     int numero;
-    OPERACAO op;
-    EXPRESSAO *abre;
-    EXPRESSAO *anterior;
-    EXPRESSAO *proxima;
-    EXPRESSAO() : numero(0), op(REGISTRA), abre(nullptr), anterior(nullptr), proxima(nullptr) {}
-    ~EXPRESSAO()
-    { // limpeza de memória
-        if (abre)
-        {
-            abre->anterior = nullptr;
-            delete abre;
-            abre = nullptr;
-        }
-        if (proxima)
-        {
-            proxima->anterior = nullptr;
-            delete proxima;
-            proxima = nullptr;
-        }
-        if (anterior)
-        {
-            delete anterior;
-            anterior = nullptr;
-        }
-    }
+    OPERACAO operacao;
+    inline expressao_t(int n, OPERACAO op) : numero(n), operacao(op) {}
 };
 
+/**
+ * Classe para resolver a expressão
+ */
 class Expressao
 {
 private:
-    EXPRESSAO *_exp_inicio;
-    EXPRESSAO *atual;
-    int parenteses;
-    bool push(int numero, OPERACAO op)
+    std::vector<expressao_t> _expressao;
+    int _pos;
+
+    /**
+     * Auxiliar para preenchimento do vetor
+     */
+    inline void push(int numero, OPERACAO op)
     {
-        if (atual == nullptr)
-        {
-            atual = new EXPRESSAO;
-        }
-        else
-        {
-            if (atual->op >= POTENCIA && op >= POTENCIA)
-                return false;
-            if (atual->op == ABRE && atual->abre == nullptr)
-            {
-                atual->abre = new EXPRESSAO;
-                atual->abre->anterior = atual;
-                atual = atual->abre;
-            }
-            else
-            {
-                atual->proxima = new EXPRESSAO;
-                atual->proxima->anterior = atual;
-                atual = atual->proxima;
-            }
-        }
-        if (_exp_inicio == nullptr)
-            _exp_inicio = atual;
-
-        if (op == REGISTRA)
-            atual->numero = numero;
-        else
-            atual->op = op;
-
-        if (op == FECHA)
-        {
-            while (atual->abre == nullptr)
-            {
-                atual = atual->anterior;
-                if (atual->abre != nullptr && atual->proxima != nullptr)
-                    atual = atual->anterior;
-            }
-        }
-        return true;
+        _expressao.push_back(expressao_t(numero, op));
     }
-    void resume(EXPRESSAO *inicio)
-    {
-        EXPRESSAO *tmp;
-        int op_this[] = {POTENCIA, MULTIPLICA | DIVIDE, SOMA | SUBTRAI};
-        while (inicio->op != ABRE && inicio->anterior != nullptr)
-            inicio = inicio->anterior;
 
-        for (auto &i : op_this)
-        {
-            atual = inicio;
-            while (atual->proxima != nullptr || atual->abre != nullptr)
-            {
-                if ((int)atual->op & i)
-                {
-                    atual->anterior->numero = operacao(atual->anterior->numero, atual->proxima->numero, atual->op);
-                    atual->anterior->proxima = atual->proxima->proxima;
-                    if (atual->proxima->proxima != nullptr)
-                        atual->proxima->proxima->anterior = atual->anterior;
-
-                    apagar(atual->proxima);
-                    tmp = atual->anterior;
-                    apagar(atual);
-
-                    atual = tmp;
-                    if (atual->proxima == nullptr)
-                        continue;
-                }
-                if (atual->op == ABRE)
-                    atual = atual->abre;
-                else
-                    atual = atual->proxima;
-            }
-        }
-    }
+    /**
+     * Realiza a operação matemática
+     */
     int operacao(int a, int b, OPERACAO op)
     {
-        if (a == INT32_MAX || b == INT32_MAX)
-            return INT32_MAX;
+        if (a == INT_MAX || b == INT_MAX) {
+            return INT_MAX;
+        }
 
-        switch (op)
-        {
-        case POTENCIA:
-            return pow(a, b);
-        case MULTIPLICA:
-            return a * b;
-        case DIVIDE:
-            if (b == 0)
-                return INT32_MAX;
+        switch (op) {
+        case EXPONENCIAR: return pow(a, b);
+        case MULTIPLICAR: return a * b;
+        case SOMAR:       return a + b;
+        case SUBTRAIR:    return a - b;
+        case DIVIDIR:
+            if (b == 0) {
+                return INT_MAX;
+            }
             return a / b;
-        case SOMA:
-            return a + b;
-        case SUBTRAI:
-            return a - b;
-        default:
-            return 0;
+
+        default: return 0;
         }
     }
-    void apagar(EXPRESSAO *no)
+
+    /**
+     * Auxiliar para retorno de posição ao resolver expressões
+     * paralelas entre parenteses
+     */
+    inline int getPos()
     {
-        //isolar o nó para apagar sem sair
-        //apagando toda a memória.
-        no->abre = nullptr;
-        no->anterior = nullptr;
-        no->proxima = nullptr;
-        delete no;
+        return _pos;
     }
 
-public:
-    Expressao() : _exp_inicio(nullptr), atual(nullptr), parenteses(0) {}
-    ~Expressao() { clear(); }
-    void clear()
+    /**
+     * Processar a string contendo a expressão matemática
+     * decompondo em um vetor de operações
+     */
+    bool processar(const std::string &str, bool state)
     {
-        parenteses = 0;
-        atual = _exp_inicio;
-        if (atual)
-            delete atual;
-        _exp_inicio = nullptr;
-        atual = nullptr;
-    }
-    bool processar(const std::string &s)
-    {
-        int numero = 0, abre = 0;
-        bool n_in = false;
-        if (_exp_inicio != nullptr)
-            clear();
-        atual = nullptr;
-        OPERACAO op = REGISTRA;
-        for (auto &i : s)
-        {
-            switch (i)
-            {
+        Expressao temp;
+        int numero = 0;
+        bool args = true;
+
+        for (int i = 0; i < (int)str.size(); i++) {
+            switch (str[i]) {
             case '0':
             case '1':
             case '2':
@@ -193,108 +98,125 @@ public:
             case '7':
             case '8':
             case '9':
-                numero = numero * 10 + (i - '0');
-                n_in = true;
+                numero = numero * 10 + (str[i] - '0');
+                args = false;
                 break;
             case '^':
-                op = POTENCIA;
-                break;
+                push(numero, EXPONENCIAR);
+                goto commonPoint;
             case '*':
-                op = MULTIPLICA;
-                break;
+                push(numero, MULTIPLICAR);
+                goto commonPoint;
             case '/':
-                op = DIVIDE;
-                break;
+                push(numero, DIVIDIR);
+                goto commonPoint;
             case '+':
-                op = SOMA;
-                break;
+                push(numero, SOMAR);
+                goto commonPoint;
             case '-':
-                op = SUBTRAI;
+                push(numero, SUBTRAIR);
+
+            commonPoint:
+                if (args) {
+                    return false;
+                }
+                numero = 0;
+                args = true;
                 break;
             case '(':
-                op = ABRE;
-                abre++;
-                parenteses++;
+                if (!args) {
+                    return false;
+                }
+
+                // Em caso de abertura de parentese, cria uma nova
+                // instância e processando o parentese.
+                temp.clear();
+                if (temp.processar(str.substr(i + 1), false)) {
+                    return false;
+                }
+                numero = temp.calcular();
+                args = false;
+                i += temp.getPos();
                 break;
             case ')':
-                op = FECHA;
-                abre--;
-                if (abre < 0)
-                    return false;
-                break;
-            case ' ':
-                op = ESPACO;
-                break;
-            }
-            if (op != REGISTRA)
-            {
-                if (n_in)
-                {
-                    if (!push(numero, REGISTRA))
-                        return false;
-                    n_in = false;
-                }
-                if (op != ESPACO && !push(0, op))
-                    return false;
-
-                numero = 0;
-                op = REGISTRA;
+                push(numero, REGISTRAR);
+                _pos = i + 1;
+                return false;
             }
         }
-        if (abre != 0)
-            return false;
-        if (n_in)
-            push(numero, REGISTRA);
-        return true;
+        push(numero, REGISTRAR);
+
+        return state;
     }
+
+public:
+    Expressao() : _pos(0){};
+
+    /**
+     * Limpar todas as variáveis da classe
+     */
+    void clear()
+    {
+        _expressao.clear();
+        _pos = 0;
+    }
+
+    /**
+     * Processar a string contendo a expressão matemática
+     * decompondo em um vetor de operações
+     */
+    bool processar(const std::string &str)
+    {
+        return processar(str, true);
+    }
+
+    /**
+     * Calcula o vetor gerado pela decomposição da string
+     */
     int calcular()
     {
-        atual = _exp_inicio;
-        if (_exp_inicio == nullptr)
-            return 0;
-        while (parenteses > 0) // resolve os parenteses primeiro
-        {
-            atual = _exp_inicio;
-            while (atual->op != FECHA)
-            {
-                if (atual->op == ABRE)
-                    atual = atual->abre;
-                else
-                    atual = atual->proxima;
+        int op_precedencia[] = {EXPONENCIAR, MULTIPLICAR | DIVIDIR, SOMAR | SUBTRAIR};
+        for (auto &op : op_precedencia) {
+            for (auto i = _expressao.begin(); i < _expressao.end() - 1; i++) {
+                while ((i->operacao & op) > 0) {
+                    i->numero = operacao(i->numero, (i + 1)->numero, i->operacao);
+                    i->operacao = (i + 1)->operacao;
+                    if (i->numero == INT_MAX) {
+                        return INT_MAX;
+                    }
+                    _expressao.erase(i + 1);
+                }
             }
-            resume(atual);
-            atual->anterior->anterior->op = REGISTRA;
-            atual->anterior->anterior->numero = atual->anterior->numero;
-            atual = atual->anterior->anterior;
-
-            apagar(atual->abre->proxima);
-            apagar(atual->abre);
-
-            atual->abre = nullptr;
-            parenteses--;
         }
-        // todos os dados estão no mesmo nível, sem parenteses
-        atual = _exp_inicio;
-        resume(atual);
-        return atual->numero;
+        return _expressao[0].numero;
     }
 };
 
 int main()
 {
     std::string entrada;
-    Expressao MyExp;
-    int resp = 0;
+    Expressao myExpression;
 
-    while (std::getline(std::cin, entrada))
-    {
-        if (!MyExp.processar(entrada))
-        {
+    // Remover os espaços da string
+    auto removeSpace = [](std::string &str) {
+        for (auto i = str.begin(); i < str.end(); i++) {
+            if (*i == ' ') {
+                str.erase(i);
+            }
+        }
+    };
+
+    while (std::getline(std::cin, entrada)) {
+        myExpression.clear();
+        removeSpace(entrada);
+
+        if (!myExpression.processar(entrada)) {
             std::cout << "ERR SYNTAX" << std::endl;
             continue;
         }
-        if ((resp = MyExp.calcular()) == INT32_MAX)
-        {
+
+        int resp;
+        if ((resp = myExpression.calcular()) == INT_MAX) {
             std::cout << "ERR DIVBYZERO" << std::endl;
             continue;
         }
