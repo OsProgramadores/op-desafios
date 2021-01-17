@@ -2,7 +2,6 @@
 
 
 from os import system
-from time import sleep
 
 
 PIECES = [
@@ -86,13 +85,13 @@ def get_valid_code():
                 name = piece.get('name')
                 print('\nPiece with code {} and name {} has reached its limit of {} occurrences!'.
                 format(code, name, quantity))
-                sleep(4)
+                input('\nPress ENTER to continue... ')
             else:
                 print('\nInvalid code!')
-                sleep(3)
+                input('\nPress ENTER to continue... ')
         except ValueError:
             print('\nOnly numbers are acepted!')
-            sleep(3)
+            input('\nPress ENTER to continue... ')
     return code
 
 
@@ -108,13 +107,13 @@ def get_valid_line(code):
                 if not the_line_is_filled(line):
                     break
                 print('\nThe line {} is filled!'.format(line))
-                sleep(3)
+                input('\nPress ENTER to continue... ')
             else:
                 print('\nInvalid line!')
-                sleep(3)
+                input('\nPress ENTER to continue... ')
         except ValueError:
             print('\nOnly numbers are acepted!')
-            sleep(3)
+            input('\nPress ENTER to continue... ')
     return line
 
 
@@ -131,13 +130,13 @@ def get_valid_column(code, line):
                 if board[line][column] == 0:
                     break
                 print('\nThe line {} and column {} is filled!'.format(line, column))
-                sleep(3)
+                input('\nPress ENTER to continue... ')
             else:
                 print('\nInvalid column!')
-                sleep(3)
+                input('\nPress ENTER to continue... ')
         except ValueError:
             print('\nOnly numbers are acepted!')
-            sleep(3)
+            input('\nPress ENTER to continue... ')
     return column
 
 
@@ -180,11 +179,16 @@ def main():
     while True:
         try:
             if the_board_is_filled():
+                print('\nThe board is filled!')
+                input('\nPress ENTER to continue... ')
                 break
             system('clear')
             print_board()
             print('1 - Insert piece on the bord\n2 - End program\n\nOption: ', end='')
             option = int(input())
+            if option < 1 or option > 2:
+                print('\nInvalid option!')
+                input('\nPress ENTER to continue... ')
             if option == 2:
                 break
             if option == 1:
@@ -192,9 +196,11 @@ def main():
                 line = get_valid_line(code)
                 column = get_valid_column(code, line)
                 board[line][column] = code
+                print('\nPiece inserted successfully!')
+                input('\nPress ENTER to continue... ')
         except ValueError:
-            print('Only numbers are acepted!')
-            sleep(3)
+            print('\nOnly numbers are acepted!')
+            input('\nPress ENTER to continue... ')
     show_pieces_name_and_occurrences()
 
 
