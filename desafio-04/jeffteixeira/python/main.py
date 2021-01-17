@@ -1,196 +1,201 @@
-'''Counts pieces in the board'''
-
-class Piece:
-    '''A class that represents a piece of the board'''
-
-    def __init__(self, code, name, quantity):
-        ''''Constructs all the necessary atributes for the piece object'''
-        self.set_code(code)
-        self.set_name(name)
-        self.set_quantity(quantity)
-
-    def get_code(self):
-        '''Returns the piece code'''
-        return self.__code
-
-    def set_code(self, code):
-        '''Sets the piece code'''
-        self.__code = code
-
-    def get_name(self):
-        '''Returns the piece name'''
-        return self.__name
-
-    def set_name(self, name):
-        '''Sets the piece name'''
-        self.__name = name
-
-    def get_quantity(self):
-        '''Returns the max quantity of the piece'''
-        return self.__quantity
-
-    def set_quantity(self, quantity):
-        '''Sets the max quantity of the piece'''
-        self.__quantity = quantity
-
-    def __eq__(self, piece):
-        return self.get_name() == piece.get_name() and self.get_code() == piece.get_code()
+'''Count the occurrences of each piece on the board'''
 
 
-class Field:
-    '''A class that represents a field of the board'''
-
-    def __init__(self, piece=None):
-        '''Constructs all the necessary atributes for the field object'''
-        self.set_piece(piece)
-
-    def get_piece(self):
-        '''Returns the piece that is in the field or None if the field is empty'''
-        return self.__piece
-
-    def set_piece(self, piece):
-        '''Sets a piece in the field'''
-        self.__piece = piece
-
-    def is_filled(self):
-        '''Checks if the field is filled or not'''
-        return self.get_piece() is not None
+from os import system
+from time import sleep
 
 
-class Board:
-    '''A class that represents a board'''
+PIECES = [
+    {'code': 1, 'name': 'Peão', 'quantity': 16},
+    {'code': 2, 'name': 'Bispo', 'quantity': 4},
+    {'code': 3, 'name': 'Cavalo', 'quantity': 4},
+    {'code': 4, 'name': 'Torre', 'quantity': 4},
+    {'code': 5, 'name': 'Rainha', 'quantity': 2},
+    {'code': 6, 'name': 'Rei', 'quantity': 2}
+]
 
-    def __init__(self):
-        '''Constructs all the necessary atributes for the board object'''
-        self.__lines = 8
-        self.__columns = 8
-        self.__pieces = [
-            Piece(code=1, name='Peão', quantity=16),
-            Piece(code=2, name='Bispo', quantity=4),
-            Piece(code=3, name='Cavalo', quantity=4),
-            Piece(code=4, name='Torre', quantity=4),
-            Piece(code=5, name='Rainha', quantity=2),
-            Piece(code=6, name='Rei', quantity=2)
-        ]
-        self.__fields = [
-            [Field() for j in range(self.get_columns())] for i in range(self.get_lines())
-        ]
 
-    def get_lines(self):
-        '''Returns the quantity of lines of the board'''
-        return self.__lines
+board = [
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0, 0]
+]
 
-    def get_columns(self):
-        '''Returns the quantity de columns of the board'''
-        return self.__columns
 
-    def get_fields(self):
-        '''Returns the fields of the board'''
-        return self.__fields
+def count_code(code):
+    '''Returns the number of occurrences of a code on the board'''
+    counter = 0
+    for row in board:
+        counter += row.count(code)
+    return counter
 
-    def get_field(self, position):
-        '''Returns a field of the board'''
-        line = position[0]
-        column = position[1]
-        return self.get_fields()[line][column]
 
-    def get_pieces(self):
-        '''Returns the pieces of the board'''
-        return self.__pieces
+def get_piece_codes():
+    '''Returns a list with the codes of the pieces'''
+    codes = [piece.get('code') for piece in PIECES]
+    return codes
 
-    def get_piece(self, code):
-        '''Returns a pice of the board'''
-        return self.get_pieces()[code - 1]
 
-    def get_valid_positions(self):
-        '''Returns tha valid positions of the board'''
-        positions = []
-        for i in range(self.get_lines()):
-            for j in range(self.get_columns()):
-                position = (i, j)
-                field = self.get_field(position)
-                if not field.is_filled():
-                    positions.append(position)
-        return positions
+def get_piece(code):
+    '''Returns the piece that has the code passed as a parameter'''
+    piece = PIECES[code - 1]
+    return piece
 
-    def add_piece(self, code, line, column):
-        '''Adds a piece on the board'''
-        codes = [piece.get_code() for piece in self.get_pieces()]
-        position = (line, column)
-        if code in codes:
-            if position in self.get_valid_positions():
-                field = self.get_field(position)
-                piece = self.get_piece(code)
-                occurrences = self.count_piece(piece)
-                max_quantity = piece.get_quantity()
-                if occurrences < max_quantity:
-                    field.set_piece(piece)
-                else:
-                    print('\nPiece with code {} has reached its limit of {} occurrences!'.
-                    format(piece.get_code(), occurrences))
+
+def the_board_is_filled():
+    '''Returns True if the board is filled. Otherwise, returns False'''
+    for piece in PIECES:
+        code = piece.get('code')
+        max_quantity = piece.get('quantity')
+        current_quantity = count_code(code)
+        if current_quantity < max_quantity:
+            return False
+    return True
+
+
+def the_line_is_filled(line):
+    '''Returns True if a line of the board is filled. Otherwise, returns False'''
+    for code in board[line]:
+        if code == 0:
+            return False
+    return True
+
+
+def get_valid_code():
+    '''Returns a valid code of a piece'''
+    while True:
+        try:
+            system('clear')
+            print_board()
+            show_pieces_code_and_name()
+            code = int(input('\nCode: '))
+            codes = get_piece_codes()
+            if code in codes:
+                piece = get_piece(code)
+                current_quantity = count_code(code)
+                max_quantity = piece.get('quantity')
+                if current_quantity < max_quantity:
+                    break
+                piece = get_piece(code)
+                quantity = piece.get('quantity')
+                name = piece.get('name')
+                print('\nPiece with code {} and name {} has reached its limit of {} occurrences!'.
+                format(code, name, quantity))
+                sleep(4)
             else:
-                print('\nPosition ({}, {}) is invalid or is already filled!'.format(
-                    position[0], position[1])
-                )
-        else:
-            print('\nCode {} being inserted in position ({}, {}) is invalid!'.format(
-                code, position[0], position[1])
-            )
+                print('\nInvalid code!')
+                sleep(3)
+        except ValueError:
+            print('\nOnly numbers are acepted!')
+            sleep(3)
+    return code
 
-    def count_piece(self, piece):
-        '''Counts the occurrences of a piece on the board'''
-        quantity = 0
-        if piece in self.get_pieces():
-            for line in self.get_fields():
-                for field in line:
-                    if field.is_filled() and field.get_piece() == piece:
-                        quantity += 1
-        return quantity
 
-    def __str__(self):
-        result = ''
-        for piece in self.__pieces:
-            result += '\n{}: {} peça(s)'.format(piece.get_name(), self.count_piece(piece))
-        return result
+def get_valid_line(code):
+    '''Returns a valid line of the board'''
+    while True:
+        try:
+            system('clear')
+            print_board()
+            print('Code: {}\n'.format(code))
+            line = int(input('Line: '))
+            if line in range(8):
+                if not the_line_is_filled(line):
+                    break
+                print('\nThe line {} is filled!'.format(line))
+                sleep(3)
+            else:
+                print('\nInvalid line!')
+                sleep(3)
+        except ValueError:
+            print('\nOnly numbers are acepted!')
+            sleep(3)
+    return line
+
+
+def get_valid_column(code, line):
+    '''Returns a valid column of the board'''
+    while True:
+        try:
+            system('clear')
+            print_board()
+            print('Code: {}\n'.format(code))
+            print('Line: {}\n'.format(line))
+            column = int(input('Column: '))
+            if column in range(8):
+                if board[line][column] == 0:
+                    break
+                print('\nThe line {} and column {} is filled!'.format(line, column))
+                sleep(3)
+            else:
+                print('\nInvalid column!')
+                sleep(3)
+        except ValueError:
+            print('\nOnly numbers are acepted!')
+            sleep(3)
+    return column
+
+
+def print_board():
+    '''Show the board'''
+    print('     _______________________________')
+    print(' ___|_0_|_1_|_2_|_3_|_4_|_5_|_6_|_7_|')
+    for i, row in enumerate(board):
+        print('|_{}_|'.format(i), end='')
+        for j, code in enumerate(row):
+            if j == len(row) - 1:
+                print('_{}_|'.format(code))
+            else:
+                print('_{}_|'.format(code), end='')
+    print()
+
+
+def show_pieces_code_and_name():
+    '''Show the code and name of each piece'''
+    for piece in PIECES:
+        code = piece.get('code')
+        name = piece.get('name')
+        if count_code(code) < piece.get('quantity'):
+            print('{}: {}'.format(code, name))
+
+
+def show_pieces_name_and_occurrences():
+    '''Show the name and the number of occurrences of each piece on the board'''
+    system('clear')
+    for piece in PIECES:
+        code = piece.get('code')
+        name = piece.get('name')
+        occurrences = count_code(code)
+        print('{}: {} peça(s)'.format(name, occurrences))
 
 
 def main():
     '''Function main of the program'''
-
-    b = Board()
-    b.add_piece(code=4, line=0, column=0)
-    b.add_piece(code=3, line=0, column=1)
-    b.add_piece(code=2, line=0, column=2)
-    b.add_piece(code=5, line=0, column=3)
-    b.add_piece(code=6, line=0, column=4)
-    b.add_piece(code=2, line=0, column=5)
-    b.add_piece(code=3, line=0, column=6)
-    b.add_piece(code=4, line=0, column=7)
-    b.add_piece(code=1, line=1, column=0)
-    b.add_piece(code=1, line=1, column=1)
-    b.add_piece(code=1, line=1, column=2)
-    b.add_piece(code=1, line=1, column=3)
-    b.add_piece(code=1, line=1, column=4)
-    b.add_piece(code=1, line=1, column=5)
-    b.add_piece(code=1, line=1, column=6)
-    b.add_piece(code=1, line=1, column=7)
-    b.add_piece(code=1, line=6, column=0)
-    b.add_piece(code=1, line=6, column=1)
-    b.add_piece(code=1, line=6, column=2)
-    b.add_piece(code=1, line=6, column=3)
-    b.add_piece(code=1, line=6, column=4)
-    b.add_piece(code=1, line=6, column=5)
-    b.add_piece(code=1, line=6, column=6)
-    b.add_piece(code=1, line=6, column=7)
-    b.add_piece(code=4, line=7, column=0)
-    b.add_piece(code=3, line=7, column=1)
-    b.add_piece(code=2, line=7, column=2)
-    b.add_piece(code=5, line=7, column=3)
-    b.add_piece(code=6, line=7, column=4)
-    b.add_piece(code=2, line=7, column=5)
-    b.add_piece(code=3, line=7, column=6)
-    b.add_piece(code=4, line=7, column=7)
-    print(b)
+    system('clear')
+    while True:
+        try:
+            if the_board_is_filled():
+                break
+            system('clear')
+            print_board()
+            print('1 - Insert piece on the bord\n2 - End program\n\nOption: ', end='')
+            option = int(input())
+            if option == 2:
+                break
+            if option == 1:
+                code = get_valid_code()
+                line = get_valid_line(code)
+                column = get_valid_column(code, line)
+                board[line][column] = code
+        except ValueError:
+            print('Only numbers are acepted!')
+            sleep(3)
+    show_pieces_name_and_occurrences()
 
 
 if __name__ == '__main__':
