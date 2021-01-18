@@ -28,7 +28,6 @@ PROC big number = (REF []INT n, REF INT count) VOID:
         INT b;
         WHILE n[i] > 0 AND i < 512
             DO
-                #words(n[i],b);#
                 b := n[i] % 65536;
                 n[i] := n[i] MOD 65536;
                 i +:= 1;
