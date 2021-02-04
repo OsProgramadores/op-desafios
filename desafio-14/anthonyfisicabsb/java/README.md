@@ -14,4 +14,4 @@ necessárias a serem executadas.
 
 ---
 Para dúvidas acerca do
-Antlr4, [este link é uma ótima referência](https://tomassetti.me/antlr-mega-tutorial/) 
+Antlr4, [este link é uma ótima referência](https://tomassetti.me/antlr-mega-tutorial/)
