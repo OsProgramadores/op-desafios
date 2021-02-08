@@ -19,7 +19,6 @@
 FILE inf;
 STRING input file name;
 STRING line;
-BOOL open error := FALSE;
 BOOL finished reading := FALSE;
 
 IF argc < 4 THEN
@@ -28,26 +27,23 @@ IF argc < 4 THEN
 ELSE
     input file name := argv(4)
 FI;
-open(inf, input file name, stand in channel);
+INT open error := open(inf, input file name, stand in channel);
 on logical file end (inf, (REF FILE inf) BOOL: finished reading := TRUE);
-on open error (inf, (REF FILE inf) BOOL: open error := TRUE);
-
-WHILE
-    get(inf,(line, new line));
-    NOT finished reading
-DO
-    FOR i TO UPB line
-    DO
-        p := ABS line[i] - 48;
-        IF p > 0 THEN q[p] +:= 1
-        FI
-    OD
-OD;
-close(inf);
-
-IF open error THEN
-    print("Erro na abertura do arquivo")
+IF open error /= 0 THEN print(("O arquivo não existe.", newline))
 ELSE
+    WHILE
+        get(inf,(line, new line));
+        NOT finished reading
+    DO
+        FOR i TO UPB line
+        DO
+            p := ABS line[i] - 48;
+            IF p > 0 THEN q[p] +:= 1
+            FI
+        OD
+    OD;
+    close(inf);
+
     print(new line);
     FOR i TO 6
     DO
