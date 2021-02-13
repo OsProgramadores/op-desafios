@@ -1,6 +1,6 @@
 //
 //  primos.swift
-//  
+//
 //
 //  Created by Bernardo Campos on 13/02/21.
 //
