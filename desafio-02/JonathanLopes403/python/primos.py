@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-# Esse progama mostra todos os números primos entre um número e outro
+""" Solução do desafio 02 - osprogramadores.com."""
 
 def num_primos(inicio, fim):
     npmqd = [2, 3, 5, 7]    # npmqd = Números primos menor que dez
