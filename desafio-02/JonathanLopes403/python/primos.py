@@ -13,7 +13,7 @@ def num_primos(inicio, fim):
             if calculo not in npmqd:
                 if calculo < fim:
                     multiplos.add(calculo)
-    # Adiciona no conjunto "primos" somente os números que estão no npmqd e que NÃO estão no conjunto "multiplos"
+    # Adiciona os números que estão em "npmqd" e que não estão em "multiplos"
     for i in range(inicio, fim):
         if i < 10 and i in npmqd:
             primos.add(i)
