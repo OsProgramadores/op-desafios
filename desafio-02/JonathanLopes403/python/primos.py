@@ -21,8 +21,8 @@ def num_primos(inicio, fim):
             primos.add(i)
     return primos
 
-primos = num_primos(0, 10000)
+num_primos = num_primos(0, 10000)
 # Colocando em Ordem Crescente
-primos_ord = list(primos)
+primos_ord = list(num_primos)
 primos_ord.sort()
 print(primos_ord)
