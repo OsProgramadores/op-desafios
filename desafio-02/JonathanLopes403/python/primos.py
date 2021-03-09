@@ -2,6 +2,7 @@
 """ Solução do desafio 02 - osprogramadores.com."""
 
 def num_primos(inicio, fim):
+    """ Mostra todos os números primos entre "Inicio" e "Fim" """
     npmqd = [2, 3, 5, 7]    # npmqd = Números primos menor que dez
     multiplos = set()
     primos = set()
