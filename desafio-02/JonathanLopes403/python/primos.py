@@ -23,6 +23,6 @@ def num_primos(inicio, fim):
 
 primos = num_primos(0, 10000)
 # Colocando em Ordem Crescente
-primos = list(primos)
-primos.sort()
-print(primos)
+primos_ord = list(primos)
+primos_ord.sort()
+print(primos_ord)
