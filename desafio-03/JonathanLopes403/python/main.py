@@ -4,7 +4,8 @@ Esse progama mostrar todos os números palindrômicos entre um número e outro
 import sys
 
 def num_palindromicos(inicio, fim):
-    # Conjunto dos números que são palindrômicos
+    """ Essa função é responsavel por gerar os números palindrômicos """
+    #Conjunto dos números que são palindrômicos
     palindromicos = set()
     # Verifica se fim é menor que inicio e se o número é maior que um unsigned int de 64 bits
     if inicio > 18446744073709551615 or fim > 18446744073709551615:
