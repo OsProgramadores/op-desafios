@@ -1,6 +1,7 @@
 """
 Esse progama mostrar todos os números palindrômicos entre um número e outro
 """
+from sys import exit
 
 def num_palindromicos(inicio, fim):
     # Conjunto dos números que são palindrômicos
