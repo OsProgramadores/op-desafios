@@ -1,7 +1,7 @@
 """
 Esse progama mostrar todos os números palindrômicos entre um número e outro
 """
-from sys import exit
+import sys
 
 def num_palindromicos(inicio, fim):
     # Conjunto dos números que são palindrômicos
@@ -9,14 +9,14 @@ def num_palindromicos(inicio, fim):
     # Verifica se fim é menor que inicio e se o número é maior que um unsigned int de 64 bits
     if inicio > 18446744073709551615 or fim > 18446744073709551615:
         print("Os números passados devem ser menor que 18446744073709551615!")
-        exit(1)
+        sys.exit(1)
     elif fim < inicio:
         print ("Número de fim é menor que o do inicio!")
-        exit(1)
+        sys.exit(1)
     # Verifica se os números passados são positivos:
     if inicio < 0 or fim < 0:
         print("Só devem ser passado números positivos!")
-        exit(1)
+        sys.exit(1)
     # Printa os números palindrômicos
     for numero in range(inicio, fim+1):
         # Convertendo o número para string para verificar se é palindrômico
