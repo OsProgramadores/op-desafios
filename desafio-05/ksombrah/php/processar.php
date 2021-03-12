@@ -181,7 +181,7 @@ global_avg|'.number_format($avg,2,'.',''));
 			}
 		if ($least > 0)
 			{
-			$q = 0;
+			$q=0;
 			foreach($areaq as $am)
 				{
 				if ($am['qtd'] == $least)
