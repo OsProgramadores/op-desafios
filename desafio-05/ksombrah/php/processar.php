@@ -13,12 +13,10 @@
  * @link https://osprogramadores.com/desafios/d05/ Desafio #5
  *
  */
- 
-ini_set('error_reporting', 0);
-ini_set('memory_limit', -1);
-ini_set('zend.enable_gc', 0);
+ini_set('error_reporting',0);
+ini_set('memory_limit',-1);
+ini_set('zend.enable_gc',0);
 set_time_limit(0);
- 
 if ($argc >= 2)
   {
   $arq = $argv[1];
