@@ -24,7 +24,7 @@ if ($argc >= 2)
   $arq = $argv[1];
   if (file_exists($arq))
     {
-    $response=file_get_contents($arq); 
+    $response=file_get_contents($arq);
     $response=str_replace('},]',"}]",$response);
     $data=json_decode($response);
     /* Global Max e Min - Quem recebe mais */
@@ -206,3 +206,4 @@ else
   {
   echo ("Usage: php processar.php <arquivo.json>\n");
   }
+?>
