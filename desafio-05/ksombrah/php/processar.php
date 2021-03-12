@@ -26,11 +26,7 @@ if ($argc >= 2)
 	if (file_exists($arq))
 		{
 		$response=file_get_contents($arq); 
-		$response=str_replace('},
-
-	]',"}
-
-	]",$response);
+		$response=str_replace('},]',"}]",$response);
 		$data=json_decode($response);
 		/* Global Max e Min - Quem recebe mais */
 		$max=0.0;
