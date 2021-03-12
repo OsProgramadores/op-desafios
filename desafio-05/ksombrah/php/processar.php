@@ -206,4 +206,3 @@ else
 	{
 	echo ("Usage: php processar.php <arquivo.json>\n");
 	}
-?>
