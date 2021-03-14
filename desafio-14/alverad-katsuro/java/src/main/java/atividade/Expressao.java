@@ -14,7 +14,7 @@ import groovy.lang.GroovyShell;
 
 public class Expressao {
     public static void main(String[] args) throws IOException {
-        expressao("./entradas_prog/d14.txt");
+        expressao("./java/entradas_prog/d14.txt");
     }
 
     public static void expressao (String path) throws IOException{

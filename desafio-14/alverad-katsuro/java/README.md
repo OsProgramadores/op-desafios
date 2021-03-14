@@ -21,7 +21,7 @@ WARNING: All illegal access operations will be denied in a future release"
 
 2. Abra o Terminal/CMD.
 
-3. Digite "java -jar alverad_katsuro.jar".
+3. Digite "java -jar expressao.jar d14.txt".
 
 # Instruções para testes usando Bytecodes.
 
