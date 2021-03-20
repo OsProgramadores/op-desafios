@@ -1,6 +1,5 @@
 # Desafio 02 - Números primos
 
-
 ## Rodar
 
 **Node Modules**

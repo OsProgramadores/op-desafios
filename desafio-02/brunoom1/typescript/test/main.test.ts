@@ -15,7 +15,6 @@ test('Testar com numeros primos como entrada', () => {
 
 });
 
-
 test('Testar com numeros não primos como entrada', () => {
 
   expect(ePrimo(0)).toBeFalsy();
