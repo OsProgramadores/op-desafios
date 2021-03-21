@@ -10,5 +10,5 @@ import { ePrimo } from './e-primo';
     }
     i++;
   }
-  console.log(primos);
+  console.log(primos.join(', '));
 })();
