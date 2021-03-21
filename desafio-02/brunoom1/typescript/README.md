@@ -7,7 +7,7 @@
 yarn install
 ```
 
-**Test:** 
+**Test:**
 ```bash
   yarn test
 ```
