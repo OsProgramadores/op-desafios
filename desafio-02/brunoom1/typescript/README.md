@@ -12,7 +12,7 @@ yarn install
   yarn test
 ```
 
-**Star:** 
+**Star:**
 ```bash
   yarn start
 ```
