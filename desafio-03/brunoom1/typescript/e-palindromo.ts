@@ -7,7 +7,7 @@ export const ePalindromo = (n: string | number): boolean => {
   } else if (typeof(n) === 'string') {
     s = n;
   }
-  
+
   if (s.indexOf('-') !== -1) {
     s = s.substring(1, s.length);
   }

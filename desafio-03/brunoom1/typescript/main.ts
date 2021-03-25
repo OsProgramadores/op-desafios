@@ -4,7 +4,7 @@ import { ePalindromo } from './e-palindromo';
 
   const inicial:number = 0;
   const final:number = 99999;
-  
+
   let x = inicial;
 
   while(x < final) {
