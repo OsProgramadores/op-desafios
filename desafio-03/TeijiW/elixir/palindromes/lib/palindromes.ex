@@ -1,7 +1,7 @@
 defmodule Palindromes do
   def main() do
-    starting = input("Start ")
-    ending = input("End ")
+    starting = input("Enter the start number of the period: ")
+    ending = input("Enter the end number of the period: ")
 
     get_palindromes_list(starting, ending)
     |> IO.inspect(limit: :infinity)
