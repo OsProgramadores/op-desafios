@@ -12,7 +12,7 @@ import { PecaEnum, countPartsFromVector } from './chess';
   0 0 0 0 0 0 0 0
   1 1 1 1 1 1 1 1
   4 3 2 5 6 2 3 4`;
-  
+
   const vetor = sToVec(strVetor);
   const arrcounted = countPartsFromVector(vetor);
 

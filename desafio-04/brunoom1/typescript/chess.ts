@@ -6,7 +6,7 @@ export enum PecaEnum {
   TORRE,
   RAINHA,
   REI
-}; 
+};
 
 export const countPartsFromVector = (vector:any) => {
   const result = [0,0,0,0,0,0,0];
