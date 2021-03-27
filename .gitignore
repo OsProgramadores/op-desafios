@@ -4,3 +4,10 @@
 *.swp
 .DS_Store
 *.jar
+desafio-14/alverad-katsuro/java/.settings/org.eclipse.jdt.core.prefs
+.gitignore
+desafio-14/alverad-katsuro/java/.settings/org.eclipse.jdt.apt.core.prefs
+desafio-14/alverad-katsuro/java/.settings/org.eclipse.core.resources.prefs
+.gitignore
+desafio-14/alverad-katsuro/java/.classpath
+desafio-14/alverad-katsuro/java/.project
