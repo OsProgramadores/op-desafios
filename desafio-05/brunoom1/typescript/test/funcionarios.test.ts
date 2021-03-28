@@ -9,20 +9,20 @@ import {
   lerArquivoFuncionarios
 } from './../lib/arquivos';
 
-import { 
-  funcionariosComMaiorSalario, 
+import {
+  funcionariosComMaiorSalario,
   funcionariosComMenorSalario,
   funcionariosComMaiorSalarioPorArea,
   funcionariosComMenorSalarioPorArea,
   funcionariosMaiorSalarioPorSobrenome,
-  calcularSalarioMedio, 
+  calcularSalarioMedio,
   calcularSalarioMedioPorArea,
   areaComMaiorNumeroDeFuncionarios,
   areaComMenorNumeroDeFuncionarios,
   listarSobrenomes,
   listarMaioresSalariosPorSobrenome,
   totalDeFuncionariosPorSobrenome,
-  formataSalario, 
+  formataSalario,
 } from './../lib/funcionario';
 
 import {
@@ -48,7 +48,7 @@ describe("Função funcionario com maior salário", () => {
 
   test('Testar um funcionario com menor salario', () => {
     expect<Funcionario>(
-      funcionariosComMenorSalario(getListaFuncionarios())[0]      
+      funcionariosComMenorSalario(getListaFuncionarios())[0]
     ).toMatchObject({
       "id":2,
       "nome":"Sergio",
@@ -175,13 +175,13 @@ describe ("Sobrenomes", () => {
       "Farias",
       "Campos",
       "Souza",
-      "Oliveira"    
+      "Oliveira"
     ];
 
     expect(listarSobrenomes(getListaFuncionarios()))
       .toEqual(sobrenomes);
   });
-  
+
   test("Testar contagem de funcionários por sobrenome", () => {
     expect(totalDeFuncionariosPorSobrenome(getListaFuncionarios(), 'Farias'))
       .toEqual(3);
@@ -218,11 +218,8 @@ describe ("Sobrenomes", () => {
         ]
       }
     ]);
-
-
   })
 });
-
 
 describe ("Testar banco de funcionarios", () => {
 
@@ -239,9 +236,8 @@ describe ("Testar banco de funcionarios", () => {
 
 });
 
-
 test('Testar prints dos dados de usuários', () => {
-  const result = 
+  const result =
 `global_max|Bernardo Costa|3700.00
 global_min|Sergio Pinheiro|2450.00
 global_min|Letícia Farias|2450.00
@@ -252,7 +248,7 @@ global_avg|2731.82`;
 });
 
 test('Testar prints de dados gerais', () => {
-  const templ = 
+  const templ =
 `global_max|Bernardo Costa|3700.00
 global_min|Sergio Pinheiro|2450.00
 global_min|Letícia Farias|2450.00

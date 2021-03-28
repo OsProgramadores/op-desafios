@@ -2,7 +2,7 @@ import {
   lerArquivoFuncionarios
 } from './lib/arquivos';
 
-import { 
+import {
   printGeral,
 } from './lib/print';
 
@@ -19,6 +19,6 @@ const param = process.argv[count];
     }
   } catch (e) {
     console.log(`Error: ${fileName} ${e.message}`);
-  } 
+  }
 
 })(param);

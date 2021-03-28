@@ -130,7 +130,7 @@ export const listarMaioresSalariosPorSobrenome = (funcionarios: Funcionario[]): 
         funcionarios: funcionariosMaiorSalarioPorSobrenome(funcionarios, sobrenome)
       })
     }
-  });  
+  });
 
   return maiores;
 }
