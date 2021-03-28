@@ -33,11 +33,6 @@
     <dependencies>
         <!-- Dependencies -->
 
-        <dependency>
-            <groupId>groovy</groupId>
-            <artifactId>groovy-all-1.0-jsr</artifactId>
-            <version>06</version>
-        </dependency>
 
         <!-- Testing dependencies-->
         <dependency>
