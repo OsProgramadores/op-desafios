@@ -161,11 +161,11 @@ describe ("Sobrenomes", () => {
   test('Testar funcação maior salário com o mesmo sobrenome', () => {
     const funcs = getListaFuncionarios();
     const maiores = funcionariosMaiorSalarioPorSobrenome(funcs, 'Oliveira');
-  
+
     expect(maiores.length).toBe(1);
     expect(maiores[0].nome).toEqual("Clederson");
   });
-  
+
   test("Testar funcao de busca dos sobrenomes", () => {
     const sobrenomes = [
       "Silva",
@@ -186,7 +186,7 @@ describe ("Sobrenomes", () => {
     expect(totalDeFuncionariosPorSobrenome(getListaFuncionarios(), 'Farias'))
       .toEqual(3);
   });
-  
+
   test("Testar maiores valores por sobrenome", () => {
 
     const sobreNomes = listarMaioresSalariosPorSobrenome(getListaFuncionarios());

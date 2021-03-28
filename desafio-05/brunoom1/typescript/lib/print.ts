@@ -31,8 +31,8 @@ export const printInfos = (funcs: Funcionario[]): string => {
     ...menores.map(func => `global_min|${printNome(func)}|${formataSalario(func.salario)}`),
     `global_avg|${media}`
   ];
-  
-  return prints.join("\n"); 
+
+  return prints.join("\n");
 }
 
 export const printGeral = (data: FuncionariosDB): string => {
@@ -50,7 +50,7 @@ export const printGeral = (data: FuncionariosDB): string => {
     printInfos(data.funcionarios),
 
     data.areas.map(area => {
-    
+
       const maior_salario_por_area = funcionariosComMaiorSalarioPorArea(data.funcionarios, area.codigo);
       const menor_salario_por_area = funcionariosComMenorSalarioPorArea(data.funcionarios, area.codigo);
       const area_avg = calcularSalarioMedioPorArea(data.funcionarios, area.codigo);
