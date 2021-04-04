@@ -28,7 +28,10 @@ def processar(filename):
     areas = doc['areas']
 
     areas_descr = {x['codigo']: x['nome'] for x in areas}
-    gmaior, gmenor, gsoma, gqtde = 0, 0, 0, 0
+    gmaior = None
+    gmenor = None
+    gsoma = 0
+    gqtde = 0
     fmais, fmenos = [], []
     ais = {}  # área info's
     sis = {}  # sobrenome info's
@@ -44,7 +47,7 @@ def processar(filename):
                 fmais.append(func)
             elif sal == gmaior:
                 fmais.append(func)
-        except KeyError:
+        except (KeyError, TypeError):
             gmaior = sal
             fmais.append(func)
 
@@ -55,7 +58,7 @@ def processar(filename):
                 fmenos.append(func)
             elif sal == gmenor:
                 fmenos.append(func)
-        except KeyError:
+        except (KeyError, TypeError):
             gmenor = sal
             fmenos.append(func)
 
@@ -99,7 +102,7 @@ def processar(filename):
             # maior, qtde, funcs que ganham mais
             sis[sob] = [sal, 1, [func]]
 
-    gmedia = (gsoma / gqtde)
+    gmedia = gsoma / gqtde
 
     return areas_descr, gmedia, fmais, fmenos, ais, sis
 
