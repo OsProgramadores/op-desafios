@@ -28,7 +28,7 @@ def processar(filename):
     areas = doc['areas']
 
     areas_descr = {x['codigo']: x['nome'] for x in areas}
-    gmaior, gmenor, gsoma, gqtde = None, None, 0, 0
+    gmaior, gmenor, gsoma, gqtde = 0, 0, 0, 0
     fmais, fmenos = [], []
     ais = {}  # área info's
     sis = {}  # sobrenome info's
