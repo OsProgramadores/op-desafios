@@ -9,4 +9,4 @@ for i in range(2,10001):
                 break
 
 for k in range(len(primos_list)):
-    print(primos_list[k])  
+    print(primos_list[k])
