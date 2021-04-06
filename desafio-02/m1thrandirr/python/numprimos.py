@@ -1,13 +1,5 @@
-primos = []
-
-for i in range(2,10001):
-    for j in range(2,i+1):
-        if i%j==0:
-            if i==j:
-                primos.append(i)
-            else:
-                break
-
-for k in range(len(primos)):
-    print(primos[k])
-    
+for i in range(1001):
+    if i in (2,3,5):
+        print(i)
+    if i%2!=0 and i%3!=0 and i%5!=0:
+        print(i)
