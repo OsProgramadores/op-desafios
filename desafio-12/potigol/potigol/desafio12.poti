@@ -1,0 +1,12 @@
+zero = BigInt(0)
+var entrada = leia_texto
+enquanto entrada <> None.orNull faça
+  n = BigInt(entrada)
+  var pos = 0
+  enquanto zero.setBit(pos) < n faça
+    pos := pos + 1
+  fim
+  head = zero.setBit(pos)
+  escreva "{n} {se head==n então "true {pos}" senão "false" fim}"
+  entrada := leia_texto
+fim

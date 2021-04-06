@@ -1,0 +1,19 @@
+mdc(a, b: Inteiro): Inteiro = se a == 0 então b senão mdc(b mod a, a) fim
+
+simplificar(a, b: Inteiro): Texto
+  c, d = a div b, a mod b
+  m = mdc(d, b)
+  q = se c == 0 então "" senão "{c} " fim
+  r = se d == 0 então "" senão "{d div m}/{b div m}" fim
+  retorne q + r
+fim
+
+var entrada = leia()
+enquanto (entrada <> None.orNull) faça
+  escreva escolha entrada.divida("/").mapeie(_.inteiro)
+    caso [a]    => a
+    caso [a, 0] => "ERR"
+    caso [a, b] => simplificar(a, b)
+  fim
+  entrada := leia()
+fim
