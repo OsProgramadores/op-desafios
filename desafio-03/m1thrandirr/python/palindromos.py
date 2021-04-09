@@ -14,10 +14,9 @@ while True:
             palind = str(i)             # palind recebe o iterador em string.
             if int(palind[::-1]) == i:  # condição que compara se i é palindromo.
                 palind_lista.append(i)  # adiciona i em palind_lista.
-                
+
         print(palind_lista) # imprime todos os palindromos do intervalo.
         break
-
 
     else:
         print("Por favor, insira 2 números inteiros.")
