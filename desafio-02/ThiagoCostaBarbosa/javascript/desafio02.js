@@ -1,11 +1,17 @@
 function primeNumbers(x) {
-  var arr = []
-  for (let n = 2; n <= x; n++) {
+  parseInt(x)
+  var arr = [2]
+  for (let n = 3; n <= x; n++) {
     count = 0
-    for (let i = 2; i < n; i++) n % i ? '' : (count++, count > 0 ? i = n : '')
+    arr.map(a => n % a ? '' : count++)
     count === 0 ? arr.push(n) : ''
   }
   return arr
 }
 
-console.log(primeNumbers(10000))
+// Alternativa um pouco mais funcional
+function prime2(max, arr = [2], n = 3) {
+  parseInt(max)
+  let p = arr.map(i => n % i ? true : false).includes(false)
+  return n == max ? arr : prime2(max, (p ? arr: arr.concat([n])), n + 1)
+}
