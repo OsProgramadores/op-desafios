@@ -13,5 +13,5 @@ function primeNumbers(x) {
 function prime2(max, arr = [2], n = 3) {
   parseInt(max)
   let p = arr.map(i => n % i ? true : false).includes(false)
-  return n == max ? arr : prime2(max, (p ? arr: arr.concat([n])), n + 1)
+  return n == max ? arr : prime2(max, (p ? arr : arr.concat([n])), n + 1)
 }
