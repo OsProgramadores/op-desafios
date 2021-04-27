@@ -21,4 +21,6 @@ function prime2(max, arr = [2], n = 3) {
   return n == max ? arr : prime2(max, (arr.map(i => n % i ? true : false).includes(false) ? arr : arr.concat([n])), n + 1)
 }
 
-console.log(prime(10000))
+function main() {
+  console.log(prime(10000))
+}
