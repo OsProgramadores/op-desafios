@@ -17,6 +17,5 @@ function palindromos2(max, arr = [], min = 1) {
     return min <= max ? min == parseInt(min.toString().split('').reverse().join('')) ? palindromos2(max, arr.concat(min), min + 1) : palindromos2(max, arr, min + 1) : arr
 }
 
-function main() {
 console.log(palindromos(3010, 3000))
-}
+
