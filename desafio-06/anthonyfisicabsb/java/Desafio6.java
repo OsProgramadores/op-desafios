@@ -97,7 +97,7 @@ class PalavrasValidas {
 
   PalavrasValidas(final String caminhoArquivoPalavrasValidas) {
     if (caminhoArquivoPalavrasValidas == null){
-      throw new RuntimeException("Voce deve definir a variavel de ambiente CAMINHO_PALAVRAS_VALIDAS" + 
+      throw new RuntimeException("Voce deve definir a variavel de ambiente CAMINHO_PALAVRAS_VALIDAS" +
           " com o path para o arquivo com as palavras validas.");
     }
 
