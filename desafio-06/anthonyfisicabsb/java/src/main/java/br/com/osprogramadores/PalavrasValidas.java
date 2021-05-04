@@ -73,7 +73,7 @@ public class PalavrasValidas {
     for (final var caractereQtd : mapaPalavraValida.keyValuesView()) {
       final var caractere = caractereQtd.getOne();
       final var qtd = caractereQtd.getTwo();
-      
+
       final var qtdFinal = mapaAtualdaString.get(caractere) - qtd;
 
       if (qtdFinal < 0) {
