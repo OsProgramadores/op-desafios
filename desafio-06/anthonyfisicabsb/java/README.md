@@ -20,7 +20,7 @@ java -Xmx[tamanho-maximo-heap-em-giga] -Xmx[tamanho-minimo-heap-em-giga] -jar ta
 
 ## Detalhes implementação
 ### Versão 1
-Primeira tentativa, utilizando apenas as bibliotecas padrões do Java, sem utilziar multicore.
+Primeira tentativa, utilizando apenas as bibliotecas padrões do Java, sem utilizar multicore.
 
 ### Versão 2
 - Utiliza-se a `Eclipse Collections API`, que possui implementações mais performáticas para se trabalhar com valores primitivos, como `char` e `int`.
