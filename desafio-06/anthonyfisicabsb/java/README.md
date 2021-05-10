@@ -9,5 +9,20 @@ $ export CAMINHO_PALAVRAS_VALIDAS=\path-para-arquivo\words.txt
 ```
 
 ## Compilando e Executando
-1. Entrar no repositório e rodar o comando `javac Desafio6.java`
-2. Rodar o comando para executar o programa `java Desafio6`
+1. Entrar na raiz da pasta com o desafio e rodar o comando `mvn clean package`. É necessário ter instalado pelo menos a versão 3 do Maven.
+2. Rodar o comando para executar o programa:
+```sh
+java -Xmx[tamanho-maximo-heap-em-giga] -Xmx[tamanho-minimo-heap-em-giga] -jar target/Desafio6-2-0.jar [lista-de-palavras]
+```
+3. Para strings com o tamanho sugerido no desafio de 16 caracteres, como `ICONIC PANAMA GARB`, recomenda-se uma heap de pelo menos 7G.
+
+---
+
+## Detalhes implementação
+### Versão 1
+Primeira tentativa, utilizando apenas as bibliotecas padrões do Java, sem utilizar multicore.
+
+### Versão 2
+- Utiliza-se a `Eclipse Collections API`, que possui implementações mais performáticas para se trabalhar com valores primitivos, como `char` e `int`.
+- Adicionou-se o processamento em multithread através da API do `ForkJoinPool` e `ExecutorService`
+- Utilizou-se o `BufferedOutputWriter` no lugar do `System.out.println` para se printar os anagramas no terminal em batch e reduzir a quantidade de `I\O` utilizada.
