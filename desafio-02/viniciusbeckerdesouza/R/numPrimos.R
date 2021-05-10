@@ -1,18 +1,20 @@
 
 is.prime <- function(num) {
-  if (num == 2) {
+  if (num == 2) { #único número par que é primo
     TRUE
-  } else if (any(num %% 2:(num-1) == 0)) {
+  } else if (any(num %% 2:(num-1) == 0)) { #verifica a quantidade de divisores do númeor
     FALSE
   } else {
     TRUE
   }
 }
 
-x <- c()
+resultado <- c()
 for (i in 1:10000){
-  if (is.prime(i)){
-    x <- append(x, i)
+  if (is.prime(i)){ #aplica a funão no vetor
+    resultado <- append(x, i)
   }
 }
-x
+
+length(resultado)
+print(resultado)
