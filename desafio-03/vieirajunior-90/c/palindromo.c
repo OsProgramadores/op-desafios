@@ -5,14 +5,13 @@ int palindromo_1e2digitos(int x, int y);
 int palindromo_3digitos(int x, int y);
 int palindromo_4digitos(int x, int y);
 
-int main(void){   
+int main(void){
     int inicio, final;
     /*O usuario vai digitar o numero de inicio e fim do intervalo para
     detectar os palindromos.*/
     printf("\n\n\t==== D E T E C T O R   D E   P A L I N D R O M O S ====\n\n");
     printf("Abaixo, digite o inicio e fim do intervalo.\n");
     printf("OBS: o fim do intervalo deve ser de no maximo n <= 10000\n\n");
-    
     /*Duas verificacoes com DO para que o usuario nao digite um valor fora do intervalo permitido*/
     do{
         printf("Inicio do intervalo: ");
@@ -23,7 +22,6 @@ int main(void){
         }
     }
     while(inicio >= 9999);
-    
     do{
         printf("Fim do intervalo: ");
         scanf("%i",&final);
@@ -33,7 +31,6 @@ int main(void){
         }
     }
     while(final >= 10000);
-    
     printf("\n\n\t==== P A L I N D R O M O S entre [%i] e [%i] ====\n\n",inicio, final);
     /*Funcoes para verificar os palindromos*/
     palindromo_1e2digitos(inicio, final);
@@ -47,7 +44,6 @@ int palindromo_1e2digitos(int x, int y){
     int array[100];
     int mod[100];
     int div[100];
-    
     for(int i = 0; i <= 100; i++){
         array[i] = i;
         if(array[i] < 10 && array[i] >= x && array[i] <= y)
