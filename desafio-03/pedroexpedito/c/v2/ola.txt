@@ -1,0 +1,78 @@
+the idea is to receive a file with chess pieces being represented as an example.
+
+input:
+
+`4 3 2 5 6 2 3 4
+1 1 1 1 1 1 1 1
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+1 1 1 1 1 1 1 1
+4 3 2 5 6 2 3 4
+`
+
+output:
+
+Pawn: 16 piece (s)
+Bishop: 4 piece (s)
+Horse: 4 piece (s)
+Tower: 4 piece (s)
+Queen: 2 piece (s)
+King: 2 piece (s)
+
+complete code:
+
+`
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+void countAndPrintPeaces(char *table) {
+  const char *pieceNames[7] = { "Empty", "Pawn", "Bishop",
+    "Horse", "Tower", "Queen", "King" };
+
+  int pieceCounts[7] = {};
+  for ( int i =0; i < 64; i++ ) {
+      ++pieceCounts[table[i] - '0'];
+  }
+
+  for ( int i = 1; i < 7;i++) {
+    printf("%s: %d piece(s)\n", pieceNames[i], pieceCounts[i]);
+  }
+}
+int main(int argc, char **argv) {
+  if(! *++argv) {
+    fprintf(stderr,"piecesCount <file>\n");
+    exit(1);
+  }
+  FILE *fp;
+
+  fp = fopen(*argv, "r");
+
+  if(fp == NULL) {
+    perror("error open file");
+    exit(1);
+  }
+
+
+  char table[65];
+
+  char ch = getc(fp);
+  int i = 0;
+
+  while(ch != EOF) {
+    if(isdigit(ch)) {
+      table[i] = ch;
+      i++;
+    }
+    ch = getc(fp);
+  }
+  table[i] = '\0';
+
+  countAndPrintPeaces(table);
+
+  return 0;
+}
+`
+
