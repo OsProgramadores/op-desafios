@@ -1,0 +1,6 @@
+C:\Users\Jeziel\RiderProjects\numerosPrimos\numerosPrimos\bin\Debug\numerosPrimos.exe
+C:\Users\Jeziel\RiderProjects\numerosPrimos\numerosPrimos\bin\Debug\numerosPrimos.pdb
+C:\Users\Jeziel\RiderProjects\numerosPrimos\numerosPrimos\obj\Debug\numerosPrimos.csprojAssemblyReference.cache
+C:\Users\Jeziel\RiderProjects\numerosPrimos\numerosPrimos\obj\Debug\numerosPrimos.csproj.CoreCompileInputs.cache
+C:\Users\Jeziel\RiderProjects\numerosPrimos\numerosPrimos\obj\Debug\numerosPrimos.exe
+C:\Users\Jeziel\RiderProjects\numerosPrimos\numerosPrimos\obj\Debug\numerosPrimos.pdb
