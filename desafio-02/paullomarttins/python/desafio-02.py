@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 '''
-Desafio 02, listando números primos de 1 até 10000
-Para otimizar o loop e não percorrer todos os números do range utilizei um while
+Desafio 02, listando números primos de 1 até 10000.
+Para otimizar o loop e não percorrer todos os números do range utilizei um while.
 Optimized School Method [6n + 1 or 6n – 1]
 '''
 
