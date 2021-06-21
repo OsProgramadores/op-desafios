@@ -29,4 +29,4 @@ FILES=$(cat $HOME/changed_files.txt)
 
 # Run the java code formatter
 # The --set-exit-if-changed will throw an error if the code is not following the patterns
-java -jar .cache/google-java-format-"${FORMATTER_VERSION}"-all-deps.jar --set-exit-if-changed ${FILES[@]}
+java -jar ${CACHE_DIR}/google-java-format-"${FORMATTER_VERSION}"-all-deps.jar --set-exit-if-changed ${FILES[@]}
