@@ -17,7 +17,7 @@ mkdir -p "${CACHE_DIR}"
 pushd "${CACHE_DIR}"
 if [ ! -f google-java-format-"${FORMATTER_VERSION}"-all-deps.jar ]
 then
-    curl -LJO "https://github.com/google/google-java-format/releases/download/google-java-format-${FORMATTER_VERSION}/google-java-format-${FORMATTER_VERSION}-all-deps.jar"
+    curl -LJO "https://github.com/google/google-java-format/releases/download/v${FORMATTER_VERSION}/google-java-format-${FORMATTER_VERSION}-all-deps.jar"
     chmod 755 google-java-format-"${FORMATTER_VERSION}"-all-deps.jar
 fi
 popd
