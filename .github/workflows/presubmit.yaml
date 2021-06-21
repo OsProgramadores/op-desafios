@@ -15,7 +15,7 @@ jobs:
           python-version: '3.x'
 
       - name: Install Java 11
-        uses: actions/actions/setup-java@v2
+        uses: actions/setup-java@v2
         with:
           distribution: 'adopt'
           java-version: '11'
