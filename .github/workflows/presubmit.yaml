@@ -14,6 +14,12 @@ jobs:
         with:
           python-version: '3.x'
 
+      - name: Install Java 11
+        uses: actions/actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '11'
+
       - name: Checkout code
         uses: actions/checkout@v2
         with:
@@ -52,6 +58,10 @@ jobs:
       - name: Check Go code
         run: |
           ./ci/gocheck.sh
+
+      - name: Check Java code
+        run: |
+          ./ci/javacheck.sh
 
       - name: Check Validator code
         run: |
