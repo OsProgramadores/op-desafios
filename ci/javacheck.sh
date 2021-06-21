@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
+echo
+echo "======================"
+echo "Java code check"
+echo "======================"
+
+set -e
 
 FORMATTER_VERSION=1.10.0
 
 # Download the repository to check the Java code style
+echo
+echo "Downloading the Google Java Formatter jar..."
+
 CACHE_DIR=$HOME/.cache
 mkdir -p "${CACHE_DIR}"
 pushd "${CACHE_DIR}"
@@ -13,6 +22,8 @@ then
 fi
 popd
 
+echo
+echo "Checking the Java code format..."
 # Get all changed files
 FILES=$(cat $HOME/changed_files.txt)
 
