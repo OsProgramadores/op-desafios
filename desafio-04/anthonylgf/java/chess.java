@@ -10,7 +10,7 @@ class Main {
     int i=0;
     int j=0;
 
-    int numPeao = 0;
+        int numPeao = 0;
     int numRei = 0;
     int numDama = 0;
     int numBispo = 0;
