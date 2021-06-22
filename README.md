@@ -79,7 +79,7 @@ desafio-02/
 
 ## Java
 
-1. O código deve ser feito utilizando o [estilo de desenvolvimento do Google](https://google.github.io/styleguide/javaguide.html).
+1. O código deve ser formatado utilizando o [estilo de desenvolvimento do Google](https://google.github.io/styleguide/javaguide.html).
 
 1. O código será testado utilizando a OpenJDK VM na última versão **LTS** disponível.
 
