@@ -92,6 +92,8 @@ desafio-02/
    $ java -jar <caminho-para-o-jar-baixado>/google-java-format-1.10.0-all-deps.jar --replace <lista-arquivos-java>
    ```
 
-1. Pull Requests contendo código em Java serão automaticamente verificados pela biblioteca indicada. Ao submeter um PR, observe a tela do PR e verifique se a integração falhou. Em caso de erro, clique no link e verifique as mensagens de erro. Corrija o código, faça outro submit e push.
+1. Pull Requests contendo código em Java serão automaticamente verificados pela biblioteca indicada. Ao submeter um PR, observe a tela do PR e verifique se a integração falhou. Em caso de erro, clique no link e verifique as mensagens de erro. 
+
+1. Se precisar realizar alguma correção,faça no **mesmo PR** em que criou a solução original, não precisa abrir outro.
 
 Em caso de problemas ou dúvidas, entre em contato com um dos administradores.
