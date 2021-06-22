@@ -72,9 +72,26 @@ desafio-02/
 1. Cheque o seu código com o [pylint](http://pylint.org) antes de enviar. O arquivo de configuração usado pelo depo está em `travis-ci/pylint3.rc`. Para checar o seu programa, rode:
 
    ```
-   $ pylint --rcfile=<diretorio_do_seu_repo>/travis-ci/pylint3.rc <nome_do_seu_arquivo.py>
+   $ pylint --rcfile=<diretorio_do_seu_repo>/ci/pylint3.rc <nome_do_seu_arquivo.py>
    ```
 
 1. Pull Requests contendo código em Python serão automaticamente verificados pelo pylint. Ao submeter um PR, observe a tela do PR e verifique se a integração falhou. Em caso de erro, clique no link e verifique as mensagens de erro do pylint. Corrija o código, faça outro submit e push.
+
+## Java
+
+1. O código deve ser feito utilizando o [estilo de desenvolvimento do Google](https://google.github.io/styleguide/javaguide.html).
+
+1. O código será testado utilizando a OpenJDK VM na última versão **LTS** disponível.
+
+1. Utilizamos uma [biblioteca open-source disponibilizada pelo Google](https://github.com/google/google-java-format) para verificar a formatação do código. Dentro do repositório dela há mais informações sobre como integrá-la com ferramentas como Maven e Gradle caso deseje. A versão utilizada atualmente é a 1.10.0.
+
+1. Para formatar os arquivos de acordo com o padrão utilizado, basta seguir os seguintes passos:
+
+   ```shell
+   $ curl -LJO "https://github.com/google/google-java-format/releases/download/v1.10.0/google-java-format-1.10.0-all-deps.jar"
+   $ java -jar <caminho-para-o-jar-baixado>/google-java-format-1.10.0-all-deps.jar --replace <lista-arquivos-java>
+   ```
+
+1. Pull Requests contendo código em Java serão automaticamente verificados pela biblioteca indicada. Ao submeter um PR, observe a tela do PR e verifique se a integração falhou. Em caso de erro, clique no link e verifique as mensagens de erro. Corrija o código, faça outro submit e push.
 
 Em caso de problemas ou dúvidas, entre em contato com um dos administradores.
