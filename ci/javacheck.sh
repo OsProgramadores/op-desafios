@@ -8,13 +8,12 @@ set -e
 
 echo
 echo "Checking if some Java file was modified..."
-FILES=$(cat $HOME/changed_files.txt | grep ".*java$")
+FILES=$(cat ${HOME}/changed_files.txt | grep ".*java$" || [[ $? == 1 ]])
 
-if [ ${#FILES[@]} -eq 0 ]; then
+if [ -z ${FILES} ]; then
     echo "Skiping checking, no Java file was modified..."
     exit 0
 fi
-
 
 FORMATTER_VERSION=1.10.0
 
