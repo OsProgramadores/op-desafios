@@ -6,6 +6,16 @@ echo "======================"
 
 set -e
 
+echo
+echo "Checking if some Java file was modified..."
+FILES=$(cat $HOME/changed_files.txt | grep ".*java$")
+
+if [ ${#FILES[@]} -eq 0 ]; then
+    echo "Skiping checking, no Java file was modified..."
+    exit 0
+fi
+
+
 FORMATTER_VERSION=1.10.0
 
 # Download the repository to check the Java code style
@@ -25,12 +35,6 @@ popd
 echo
 echo "Checking the Java code format..."
 
-# Only Added and modified files are checked.
-cat $HOME/changed_files.txt | while read fname; do
-  ext="${fname##*.}"
-  if [[ "$ext" == "java" ]]; then
-    echo "* Checking ${fname}"
-    # The --set-exit-if-changed will throw an error if the code is not following the patterns
-    java -jar ${CACHE_DIR}/google-java-format-"${FORMATTER_VERSION}"-all-deps.jar --set-exit-if-changed "${fname}"
-  fi
-done
+# The --set-exit-if-changed will throw an error if the code is not following the patterns
+# The -n option will display all files that not follows the desired patterns
+java -jar ${CACHE_DIR}/google-java-format-"${FORMATTER_VERSION}"-all-deps.jar -n --set-exit-if-changed ${FILES[@]}
