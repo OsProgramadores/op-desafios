@@ -22,11 +22,17 @@ then
 fi
 popd
 
+# Get all changed java files
+FILES=$(cat $HOME/changed_files.txt | grep ".*java$")
+
 echo
 echo "Checking the Java code format..."
-# Get all changed files
-FILES=$(cat $HOME/changed_files.txt)
 
-# Run the java code formatter
-# The --set-exit-if-changed will throw an error if the code is not following the patterns
-java -jar ${CACHE_DIR}/google-java-format-"${FORMATTER_VERSION}"-all-deps.jar --set-exit-if-changed ${FILES[@]}
+# Run the java code formatter in each changed file
+for file in "${FILES[@]}"; do
+    echo
+    echo "Checking the ${file} file..."
+
+    # The --set-exit-if-changed will throw an error if the code is not following the patterns
+    java -jar ${CACHE_DIR}/google-java-format-"${FORMATTER_VERSION}"-all-deps.jar --set-exit-if-changed ${file}
+done
