@@ -37,4 +37,11 @@ echo "Checking the Java code format..."
 
 # The --set-exit-if-changed will throw an error if the code is not following the patterns
 # The -n option will display all files that not follows the desired patterns
-java -jar ${CACHE_DIR}/google-java-format-"${FORMATTER_VERSION}"-all-deps.jar -n --set-exit-if-changed ${FILES[@]}
+# The --add-exports options are to avoid some warnings raised by the JVM
+java \
+  --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
+  --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
+  --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
+  --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
+  --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+  -jar ${CACHE_DIR}/google-java-format-"${FORMATTER_VERSION}"-all-deps.jar -n --set-exit-if-changed ${FILES[@]}
