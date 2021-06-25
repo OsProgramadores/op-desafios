@@ -1,46 +1,39 @@
 import java.util.Scanner;
 
 public class Chess {
-  public static void main(String[] args) {
 
-    Scanner in = new Scanner(System.in); //leitor
+  private static final int TAMANHO_TABULEIRO = 8;
 
-    int tabuleiro[][] = new int[8][8];// tabuleiro
+  public static void main(final String[] args) {
 
-    int i=0;
-    int j=0;
+    final int[][] tabuleiro = fillBoard();
 
-    int numPeao = 0;
-    int numRei = 0;
-    int numDama = 0;
-    int numBispo = 0;
-    int numTorre = 0;
-    int numCavalo = 0;
-
-    /*Código para preencher tabuleiro*/
-    for(i=0; i<8; i++){
-      for(j=0; j<8; j++){
-        tabuleiro[i][j] = in.nextInt();
+    for(int i=0; i<TAMANHO_TABULEIRO; i++){
+      for(int j=0; j<TAMANHO_TABULEIRO; j++){
+        // Recupera  a peca pelo codigo inserido pelo usuario
+        // e incrementa a quantidade da peca inserida
+        Piece.getPieceByCode(tabuleiro[i][j])
+          .incrementNumberPiece();
       }
     }
 
-    /*Somando num das peças usando operador ternário*/
-    for(i=0; i<8; i++){
-      for(j=0; j<8; j++){
-        numCavalo = tabuleiro[i][j] == 3 ? ++numCavalo:numCavalo;
-        numPeao = tabuleiro[i][j] == 1 ? ++numPeao:numPeao;
-        numBispo = tabuleiro[i][j] == 2 ? ++numBispo:numBispo;
-        numTorre = tabuleiro[i][j] == 4 ? ++numTorre:numTorre;
-        numDama = tabuleiro[i][j] == 5 ? ++numCavalo:numDama;
-        numRei = tabuleiro[i][j] == 6 ? ++numRei:numRei;
+    Piece.printQtyPieces();
+  }
+
+  private static int[][] fillBoard(){
+    final var tabuleiro = new int[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];
+
+    try(final var in = new Scanner(System.in)){
+      // Código para preencher tabuleiro
+      // O usuário ira inserir individualmente cada numero de cada
+      // peca do tabuleiro
+      for(int i=0; i<TAMANHO_TABULEIRO; i++){
+        for(int j=0; j<TAMANHO_TABULEIRO; j++){
+          tabuleiro[i][j] = in.nextInt();
+        }
       }
     }
 
-    System.out.println("Peao: " + numPeao + " peça(s)");
-    System.out.println("Bispo: " + numBispo + " peça(s)");
-    System.out.println("Cavalo: " + numCavalo + " peça(s)");
-    System.out.println("Torre: " + numTorre + " peça(s)");
-    System.out.println("Dama: " + numDama + " peça(s)");
-    System.out.println("Rei: " + numRei + " peça(s)");
+    return tabuleiro;
   }
 }

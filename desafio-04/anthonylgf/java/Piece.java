@@ -1,5 +1,6 @@
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 public enum Piece {
 
@@ -43,14 +44,27 @@ public enum Piece {
 
     public static Piece getPieceByCode(final int pieceCode) {
         return Optional.ofNullable(CODE_TO_PIECE.get(pieceCode))
-            .orThrow(() -> new RuntimeException(String.format("Codigo de peca invalido: %d", pieceCode)));
+            .orElseThrow(() -> new RuntimeException(String.format("Codigo de peca invalido: %d", pieceCode)));
+    }
+
+    public static void printQtyPieces(){
+        final var filteredPieces = CODE_TO_PIECE.values()
+            .stream()
+            .filter(p -> p.getPieceCode() > 0)
+            .collect(Collectors.toList()); 
+
+        for(final Piece piece : filteredPieces){
+            final var stringToPrint = String.format("%s: %d peca(s)", piece.getNamePiece(), 
+            piece.getQtyPieces());
+            System.out.println(stringToPrint);
+        }
     }
 
     public String getNamePiece(){
         return this.namePiece;
     }
 
-    public String getQtyPieces(){
+    public int getQtyPieces(){
         return this.qtyPieces;
     }
 
