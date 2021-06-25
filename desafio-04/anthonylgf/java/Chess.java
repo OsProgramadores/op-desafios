@@ -8,27 +8,26 @@ public class Chess {
 
     final int[][] tabuleiro = fillBoard();
 
-    for(int i=0; i<TAMANHO_TABULEIRO; i++){
-      for(int j=0; j<TAMANHO_TABULEIRO; j++){
+    for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+      for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
         // Recupera  a peca pelo codigo inserido pelo usuario
         // e incrementa a quantidade da peca inserida
-        Piece.getPieceByCode(tabuleiro[i][j])
-          .incrementNumberPiece();
+        Pieces.getPieceByCode(tabuleiro[i][j]).incrementNumberPiece();
       }
     }
 
-    Piece.printQtyPieces();
+    Pieces.printQtyPieces();
   }
 
-  private static int[][] fillBoard(){
+  private static int[][] fillBoard() {
     final var tabuleiro = new int[TAMANHO_TABULEIRO][TAMANHO_TABULEIRO];
 
-    try(final var in = new Scanner(System.in)){
+    try (final var in = new Scanner(System.in)) {
       // Código para preencher tabuleiro
       // O usuário ira inserir individualmente cada numero de cada
       // peca do tabuleiro
-      for(int i=0; i<TAMANHO_TABULEIRO; i++){
-        for(int j=0; j<TAMANHO_TABULEIRO; j++){
+      for (int i = 0; i < TAMANHO_TABULEIRO; i++) {
+        for (int j = 0; j < TAMANHO_TABULEIRO; j++) {
           tabuleiro[i][j] = in.nextInt();
         }
       }
