@@ -28,7 +28,7 @@ jobs:
       - name: Compute changed files
         run: |
           URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
-          curl -s -X GET -G $URL | jq -r '.[] | .filename' > $HOME/changed_files.txt
+          curl -s -X GET -G $URL | jq -r '.[] | select(.status != "removed") | .filename' > $HOME/changed_files.txt
 
       - name: Install & build dependencies
         run: |
