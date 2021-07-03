@@ -7,23 +7,21 @@ function listaPrimo(numeroInicio, numeroFim) {
 
 /* Função "verificaPrimo()"" irá verificar se o número é primo, a verificação é feita 
 com base na premissa que todo número primo irá ter apenas dois divisores, 
-o número 1 e ele próprio, então caso o número de divisores sejam 2 será primo.*/
-function verificaPrimo(numeroInicio, numeroFim) {
+o número 1 e ele próprio.*/
+function verificaPrimo(numeroInicio) {
   let divisor = 0
 
-  for (let count = 1; count <= numeroInicio; count++) {
+  for (let count = 1; count <= numeroInicio / 2; count++) {
     if (numeroInicio % count == 0) {
       divisor++
     }
-    if (divisor > 2) {
-      return divisor
-    }
-    if (numeroInicio <= numeroFim / 2) {
+
+    if (divisor > 1) {
       return divisor
     }
   }
 
-  if (divisor == 2) {
+  if (divisor == 1) {
     console.log(numeroInicio + ' é primo')
   }
 }
