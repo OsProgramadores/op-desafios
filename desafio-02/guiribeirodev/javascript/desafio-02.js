@@ -17,7 +17,7 @@ function verificaPrimo(numeroInicio) {
     }
 
     if (divisor > 1) {
-      return divisor
+      break
     }
   }
 
