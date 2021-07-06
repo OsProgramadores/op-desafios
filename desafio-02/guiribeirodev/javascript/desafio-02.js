@@ -5,7 +5,8 @@ function listaPrimo(numeroInicio, numeroFim) {
   }
 }
 
-/* Função "verificaPrimo()"" irá verificar se o número é primo, a verificação é feita com base na premissa que todo número primo irá ter apenas dois divisores, o número 1 e ele próprio.*/
+/* Função "verificaPrimo()"" irá verificar se o número é primo, a verificação é feita com base na
+premissa que todo número primo irá ter apenas dois divisores, o número 1 e ele próprio.*/
 function verificaPrimo(numeroInicio) {
   let divisor = 0
 
