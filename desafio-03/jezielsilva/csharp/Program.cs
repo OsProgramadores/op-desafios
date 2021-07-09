@@ -27,24 +27,17 @@ class MainClass
 
     public static int palindromo(int numero)
     {
+        int divisaoPorOnze = numero % 11;
 
-        int numeroInvertido, i, aux, resto;
-        numeroInvertido = 0;
-        aux = numero;
-        do
+        if (numero >= 1 && numero <= 9)
         {
-            resto = numero % 10;
-            numeroInvertido = numeroInvertido * 10 + resto;
-            aux /= 10;
-        } while (aux > 0);
-
-        if (numero == numeroInvertido)
-        {
-            Console.WriteLine(numeroInvertido + " é um palíndromo");
+            Console.WriteLine(numero + " é um palíndromo");
         }
-
+        else if (divisaoPorOnze == 0)
+        {
+            Console.WriteLine(numero + " é um palíndromo");
+        }
         return 0;
     }
 
 }
-
