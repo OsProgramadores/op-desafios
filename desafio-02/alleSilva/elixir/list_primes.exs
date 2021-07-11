@@ -1,12 +1,11 @@
 defmodule ListPrimes do
   def call() do
-    1..10_000
+    2..10_000
     |> Enum.filter(&is_prime/1)
     |> Enum.each(&IO.inspect/1)
   end
 
-  def is_prime(num) when num > 0,
-    do: verify_rem(num, 1)
+  def is_prime(num) when num > 0, do: verify_rem(num, 1)
 
   defp verify_rem(n, n), do: true
 
