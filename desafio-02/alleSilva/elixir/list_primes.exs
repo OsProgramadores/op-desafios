@@ -6,6 +6,7 @@ defmodule ListPrimes do
   end
 
   def is_prime(num) when num > 0, do: verify_rem(num, 1)
+
   defp verify_rem(n, n), do: true
 
   defp verify_rem(n, acc) do
