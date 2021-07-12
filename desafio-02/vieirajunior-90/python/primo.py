@@ -30,7 +30,5 @@ def search_primes(n):
     # Função recursiva, chamando ela mesma como número sendo incrementado +1.
     search_primes(n + 1)        
         
-
 if __name__ == '__main__':
     search_primes(1)
-    print()
