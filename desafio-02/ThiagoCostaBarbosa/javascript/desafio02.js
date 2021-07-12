@@ -29,4 +29,4 @@ function prime(max) {
   return array;
 }
 
-console.log(prime(10000));
+prime(10000).forEach( i => { console.log(i) });
