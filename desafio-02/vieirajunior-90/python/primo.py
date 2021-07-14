@@ -1,4 +1,7 @@
 def prime(end=10000):
+    """
+    função para buscar números primos
+    """
     n = 1
     while n <= end:
         div = 0
