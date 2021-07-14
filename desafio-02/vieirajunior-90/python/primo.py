@@ -1,6 +1,10 @@
+"""
+Solução do Desafio 02 em Python por Junior Vieira
+"""
 def prime(end=10000):
     """
-    função para buscar números primos
+    Função que procura por números primos
+    Coloquei como padrão um parâmetro no valor de 10000
     """
     n = 1
     while n <= end:
