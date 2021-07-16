@@ -6,10 +6,11 @@ int main() {
 int num, x, resultado;
 char naoprimo = ' ';
 
-    for(num = 1; num <= 10000; num++) {
+    for(num = 2; num <= 10000; num++) {
         resultado = 0;
 
         for(x = 1; x <= num; x++)
+
         if((num % x) == 0)
             resultado++;
 
