@@ -1,26 +1,32 @@
 function prime(max) {
-  if (parseInt(max) && max > 1) {
-    parseInt(max)
-  } else {
-    arr = []
-    n = 1
-    max = 1
+  max = parseInt(max)
+  if (max < 2) {
+    return [];
   }
-  var arr = [2]
-  for (let n = 3; n <= max; n++) {
-    count = 0
-    arr.map(i => n % i ? '' : count++)
-    count === 0 ? arr.push(n) : ''
+  var number,
+      array = [2],
+      prime_lenght,
+      check_prime,
+      iterator;
+
+  for (number = 3; number <= max; number++) {
+    prime_lenght = array.length;
+    check_prime = 0;
+
+    //check if divide by prime number
+    for (iterator = 0; iterator < prime_lenght; iterator++) {
+      if (!(number % array[iterator])) {
+        check_prime++;
+        iterator = prime_lenght;
+      }
+    }
+    //add prime number to array of primes
+    if (check_prime === 0) {
+      array.push(number);
+    }
+    number++;
   }
-  return arr
+  return array;
 }
 
-// Alternativa um pouco mais funcional
-function prime2(max, arr = [2], n = 3) {
-  (parseInt(max) && max > 1) || (arr = [], n = 1, max = 1)
-  return n == max ? arr : prime2(max, (arr.map(i => n % i ? true : false).includes(false) ? arr : arr.concat([n])), n + 1)
-}
-
-function main() {
-  console.log(prime(10000))
-}
+prime(10000).forEach( i => { console.log(i) });
