@@ -9,19 +9,19 @@ int num, invertido, aux;
 
 	for(num = 1; num <= 100000; num++) {
 
-		// Declaração da variável invertido com o valor zero. Essa variável será utilizada no cálculo de cada número junto de uma váriavel auxiliar (aux).
+		// DeclaraÃ§Ã£o da variÃ¡vel invertido com valor zero. Essa variÃ¡vel serÃ¡ utilizada no cÃ¡lculo de cada nÃºmero junto de uma vÃ¡riavel auxiliar (aux).
 		invertido = 0;
 
-		// Como devemos verifcar os valores dos números que são palíndromos, devemos preservar a variável num[] e utilizar a variável aux nos cálculos.
+		// Como devemos verifcar os valores dos nÃºmeros que sÃ£o palÃ­ndromos, deve-se preservar a variÃ¡vel num e utilizar a variÃ¡vel aux nos cÃ¡lculos.
 		aux = num;
 
-		/* Cálculo do número invertido */
+		/* CÃ¡lculo do nÃºmero invertido */
 		while (aux > 0) {
 			invertido = (invertido * 10) + (aux % 10);
 			aux = aux / 10;
 		}
 
-		// Números palíndrômicos entre 1 e 100000.
+		// NÃºmeros palÃ­ndrÃ´micos entre 1 e 100000.
 		if (num == invertido) {
 			printf("%d\t", num);
 		}
