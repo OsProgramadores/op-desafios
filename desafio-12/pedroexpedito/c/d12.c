@@ -3,7 +3,7 @@
 #include <string.h>
 #include <gmp.h>
 
-/* DEPENDENCIAS 
+/* DEPENDENCIAS
  *
  * libgmp-dev
  *
@@ -16,10 +16,10 @@
  * COMPILACAO
  *
  * gcc d12.c -lgmp -o d12
- * 
+ *
  */
 
-// retorna -1 caso não for potencia de 2 
+// retorna -1 caso não for potencia de 2
 // ou N > -1  a potencia ex:
 // n = 1; return 0
 // n = 128; return 7;
@@ -30,7 +30,7 @@ long long isPotentenciaDeDois(mpz_t num) {
     return 0;
   }
   mpz_t div;
-  mpz_init(div); 
+  mpz_init(div);
   mpz_set_ui(div, 2);
 
   unsigned long vezes = 0;
@@ -61,7 +61,7 @@ void usage() {
 
 int main(int argc, char *argv[]) {
   mpz_t num;
-  mpz_init(num); 
+  mpz_init(num);
 
   if(argc < 2) {
     usage();
