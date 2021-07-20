@@ -19,13 +19,12 @@ def exemplo_1():
     peao = bispo = cavalo = torre = rainha = rei = 0
     for linha in tabuleiro:
         print(f'{linha} ')
-        for valor in linha:
-            peao += 1 if valor == 1 else 0
-            bispo += 1 if valor == 2 else 0
-            cavalo += 1 if valor == 3 else 0
-            torre += 1 if valor == 4 else 0
-            rainha += 1 if valor == 5 else 0
-            rei += 1 if valor == 6 else 0
+        peao += linha.count(1)
+        bispo += linha.count(2)
+        cavalo += linha.count(3)
+        torre += linha.count(4)
+        rainha += linha.count(5)
+        rei += linha.count(6)
     print()
     print(f'Peão: {peao} peça(s)')
     print(f'Bispo: {bispo} peça(s)')
@@ -52,13 +51,12 @@ def exemplo_2():
     peao = bispo = cavalo = torre = rainha = rei = 0
     for linha in tabuleiro:
         print(f'{linha} ')
-        for valor in linha:
-            peao += 1 if valor == 1 else 0
-            bispo += 1 if valor == 2 else 0
-            cavalo += 1 if valor == 3 else 0
-            torre += 1 if valor == 4 else 0
-            rainha += 1 if valor == 5 else 0
-            rei += 1 if valor == 6 else 0
+        peao += linha.count(1)
+        bispo += linha.count(2)
+        cavalo += linha.count(3)
+        torre += linha.count(4)
+        rainha += linha.count(5)
+        rei += linha.count(6)
     print()
     print(f'Peão: {peao} peça(s)')
     print(f'Bispo: {bispo} peça(s)')
