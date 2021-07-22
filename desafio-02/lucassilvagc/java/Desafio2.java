@@ -1,4 +1,14 @@
-package com.company;
+/*
+Desafio 02 - Os Programadores
+Lucas Silva - github.com/lucassilvagc
+
+Instruções para Execução:
+
+1) javac -d . Desafio2.java
+2) java br.lucassilvagc.Desafio2
+*/
+
+package br.lucassilvagc;
 
 public class Desafio2 {
 
