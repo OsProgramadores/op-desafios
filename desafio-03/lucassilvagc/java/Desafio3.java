@@ -24,7 +24,7 @@ public class Desafio3 {
     long inicio, fim;
     inicio = verifyNumber(scanner.next());
     System.out.println(
-        "Insira o número inicial. Ele deverá ser maior que 0 e menor que " + Long.MAX_VALUE + ": ");
+        "Insira o número final. Ele deverá ser maior que 0 e menor que " + Long.MAX_VALUE + ": ");
     fim = verifyEndingNumber(inicio, verifyNumber(scanner.next()));
     System.out.println(
         "Os números detectados são aceitáveis e serão utilizados para a geração da lista.");
@@ -37,19 +37,19 @@ public class Desafio3 {
             + returnPalindromeList(inicio, fim));
   }
 
-  public static List<Long> returnPalindromeList(long inicio, long fim) {
+  private static List<Long> returnPalindromeList(long inicio, long fim) {
     System.out.println("Gerando lista de palíndromos...");
     List<Long> palindromeList = new ArrayList<>();
     System.out.println("Processando lista de palíndromos...");
     for (long i = inicio; i <= fim; i++) {
       String num = String.valueOf(i);
-      String numeroReverso = "";
+      StringBuilder stringBuilder = new StringBuilder();
       int j = num.length() - 1;
       do {
-        numeroReverso = numeroReverso + num.charAt(j);
+        stringBuilder.append(num.charAt(j));
         j--;
       } while (j >= 0);
-      if (num.equals(numeroReverso)) palindromeList.add(i);
+      if (num.equals(stringBuilder.toString())) palindromeList.add(i);
     }
     System.out.println(
         "Lista de palíndromos processada com sucesso. Total de palíndromos encontrados: "
@@ -57,20 +57,20 @@ public class Desafio3 {
     return palindromeList;
   }
 
-  public static long verifyEndingNumber(long inicio, long fim) {
+  private static long verifyEndingNumber(long inicio, long fim) {
     while (inicio > fim) {
       System.out.println(
           "O número inicial que você enviou ("
               + inicio
-              + ") é maior que o número final que você inseriu("
+              + ") é maior que o número final enviado ("
               + fim
               + "). Insira um novo número para continuar: ");
-      fim = scanner.nextLong();
+      fim = verifyNumber(scanner.next());
     }
     return fim;
   }
 
-  public static long verifyNumber(String number) {
+  private static long verifyNumber(String number) {
     long numberVerifier = 0;
     boolean passed = false;
     while (!passed) {
@@ -82,7 +82,8 @@ public class Desafio3 {
           System.out.println(
               "O número que você enviou ("
                   + number
-                  + ") não é aceitável (está menor que zero). Ele deve ser maior que 0 e menor que "
+                  + ") não é aceitável (está menor ou igual a zero). Ele deve ser maior que 0 e"
+                  + " menor que "
                   + Long.MAX_VALUE
                   + ". Insira um novo número para continuar: ");
           number = scanner.next();
