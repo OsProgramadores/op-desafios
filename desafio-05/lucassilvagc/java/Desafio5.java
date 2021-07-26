@@ -4,7 +4,7 @@ Lucas Silva - github.com/lucassilvagc
 
 Instruções para Execução:
 
-1) javac -d . -cp "lib/*" Desafio5.java
+1) javac -d . Desafio5.java
 2) java br.lucassilvagc.Desafio5 [path_para_json]
 */
 
@@ -117,54 +117,58 @@ public class Desafio5 {
   private static void areaSalary() {
     DecimalFormat df = new DecimalFormat("#.00");
     for (Area area : areas) {
-      Double min =
-          funcionarios.stream()
-              .filter(f -> (f.getArea()).equals(area.getCodigo()))
-              .min(Comparator.comparingDouble(Funcionario::getSalario))
-              .orElseThrow(NoSuchElementException::new)
-              .getSalario();
-      Double max =
-          funcionarios.stream()
-              .filter(f -> (f.getArea()).equals(area.getCodigo()))
-              .max(Comparator.comparingDouble(Funcionario::getSalario))
-              .orElseThrow(NoSuchElementException::new)
-              .getSalario();
-      funcionarios.stream()
-          .filter(f -> (f.getArea()).equals(area.getCodigo()))
-          .filter(f -> (f.getSalario().equals(max)))
-          .forEach(
-              f ->
-                  System.out.println(
-                      "area_max|"
-                          + area.getNome()
-                          + "|"
-                          + f.getNome()
-                          + " "
-                          + f.getSobrenome()
-                          + "|"
-                          + df.format(f.getSalario())));
-      funcionarios.stream()
-          .filter(f -> (f.getArea()).equals(area.getCodigo()))
-          .filter(f -> (f.getSalario().equals(min)))
-          .forEach(
-              f ->
-                  System.out.println(
-                      "area_min|"
-                          + area.getNome()
-                          + "|"
-                          + f.getNome()
-                          + " "
-                          + f.getSobrenome()
-                          + "|"
-                          + df.format(f.getSalario())));
+      if (funcionarios.stream().filter(f -> (f.getArea()).equals(area.getCodigo())).count() > 0) {
+        Double min =
+            Objects.requireNonNull(
+                    funcionarios.stream()
+                        .filter(f -> (f.getArea()).equals(area.getCodigo()))
+                        .min(Comparator.comparingDouble(Funcionario::getSalario))
+                        .orElse(null))
+                .getSalario();
+        Double max =
+            Objects.requireNonNull(
+                    funcionarios.stream()
+                        .filter(f -> (f.getArea()).equals(area.getCodigo()))
+                        .max(Comparator.comparingDouble(Funcionario::getSalario))
+                        .orElse(null))
+                .getSalario();
+        funcionarios.stream()
+            .filter(f -> (f.getArea()).equals(area.getCodigo()))
+            .filter(f -> (f.getSalario().equals(max)))
+            .forEach(
+                f ->
+                    System.out.println(
+                        "area_max|"
+                            + area.getNome()
+                            + "|"
+                            + f.getNome()
+                            + " "
+                            + f.getSobrenome()
+                            + "|"
+                            + df.format(f.getSalario())));
+        funcionarios.stream()
+            .filter(f -> (f.getArea()).equals(area.getCodigo()))
+            .filter(f -> (f.getSalario().equals(min)))
+            .forEach(
+                f ->
+                    System.out.println(
+                        "area_min|"
+                            + area.getNome()
+                            + "|"
+                            + f.getNome()
+                            + " "
+                            + f.getSobrenome()
+                            + "|"
+                            + df.format(f.getSalario())));
 
-      System.out.println(
-          "area_avg|"
-              + df.format(
-                  funcionarios.stream()
-                      .mapToDouble(Funcionario::getSalario)
-                      .average()
-                      .orElseThrow(NoSuchElementException::new)));
+        System.out.println(
+            "area_avg|"
+                + df.format(
+                    funcionarios.stream()
+                        .mapToDouble(Funcionario::getSalario)
+                        .average()
+                        .orElseThrow(NoSuchElementException::new)));
+      }
     }
   }
 
