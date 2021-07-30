@@ -1,15 +1,25 @@
-function concat_subarray(arr) {
-  return arr.reduce((acc, curr) => acc.concat(curr), [])
-}
 
-function count_in_array(arr, num) {
-  return arr.filter((value) => value === num).length
-}
+function Chess_count(array) {
 
-function print_singvsplur(num, arr) {
-  return arr[(num != 1) * 1]
-}
+  pieces = ["Peão", "Bispo", "Cavalo", "Torre", "Rainha", "Rei"]
+  values = [0, 0, 0, 0, 0, 0, 0]
+  
+  //Remove Subarray
+  array = array.flat();
 
+  //Count number of pieces
+  for (element in array) {
+    values[array[element]] += 1;
+  }
+  //Remove empty values
+  values.shift()
+
+  //Print the quantity of every piece
+  console.log('\nQuantidade de peças:')
+  for (let element in values) {
+    console.log(`${pieces[element]}: ${values[element]} peça(s)`)
+  }
+}
 
 let tabuleiro = [
   [0, 0, 0, 0, 0, 0, 0, 0],
@@ -31,20 +41,5 @@ let tabuleiro2 = [
   [1, 1, 1, 1, 1, 1, 1, 1],
   [4, 3, 2, 5, 6, 2, 3, 4]]
 
-let types = [
-  [1, "Peão"],
-  [2, "Bispo"],
-  [3, "Cavalo"],
-  [4, "Torre"],
-  [5, "Rainha"],
-  [6, "Rei"]]
-
-let nomenclatura = ["peça", "peças"]
-
-let arr1 = concat_subarray(tabuleiro)
-types.map(el => console.log(`${el[1]}: ${count_in_array(arr1, el[0])} ${print_singvsplur(count_in_array(arr1, el[0]), nomenclatura)}`))
-
-let arr2 = concat_subarray(tabuleiro2)
-types.map(el => console.log(`${el[1]}: ${count_in_array(arr2, el[0])} ${print_singvsplur(count_in_array(arr2, el[0]), nomenclatura)}`))
-
-
+Chess_count(tabuleiro)
+Chess_count(tabuleiro2)
