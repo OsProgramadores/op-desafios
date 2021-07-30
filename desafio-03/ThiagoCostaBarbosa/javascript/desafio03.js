@@ -6,7 +6,7 @@ function palindrome(max, min = 1)
 
   //check the type of parameters
   if (typeof max != 'number' ||
-      typeof max != 'number')
+      typeof min != 'number')
   {
     return [];
   }
