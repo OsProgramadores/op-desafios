@@ -1,21 +1,29 @@
-function palindromos(max, min = 1) {
-    if (parseInt(max) && max > 0) {
-        parseInt(max)
-    } else {
-        max = 0
+function palindrome(max, min = 1)
+{
+  let array = [];
+  max = parseInt(max);
+  min = parseInt(min);
+
+  //check the type of parameters
+  if (typeof max != 'number' ||
+      typeof min != 'number')
+  {
+    return [];
+  }
+  //go through interval
+  for (min; min <= max; min++)
+  {
+    //check if it's palindrome
+    if (min == min.toString()
+                  .split('')
+                  .reverse()
+                  .join(''))
+    {
+      //add palindrome number to array of palindromes
+      array.push(min);
     }
-    let arr = []
-    for (min; min <= max; min++) {
-        if (min == parseInt(min.toString().split('').reverse().join(''))) arr.push(min)
-    }
-    return arr
+  }
+  return array;
 }
 
-// Alternativa um pouco mais funcional
-function palindromos2(max, arr = [], min = 1) {
-    (parseInt(max) && max > 0) || (max = 0)
-    return min <= max ? min == parseInt(min.toString().split('').reverse().join('')) ? palindromos2(max, arr.concat(min), min + 1) : palindromos2(max, arr, min + 1) : arr
-}
-
-console.log(palindromos(3010, 3000))
-
+palindrome(100000).forEach( i => { console.log(i) });
