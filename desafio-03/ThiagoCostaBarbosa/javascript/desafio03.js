@@ -26,4 +26,4 @@ function palindrome(max, min = 1)
   return array;
 }
 
-palindrome(3010, 3000).forEach( i => { console.log(i) });
+palindrome(100000).forEach( i => { console.log(i) });
