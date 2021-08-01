@@ -1,4 +1,3 @@
-
 let tabuleiro = [
     [0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0],
@@ -38,8 +37,7 @@ let r = [array,
     ["peça", "peças"],
     //r[4] Result
     "Quantidade de peças:\n"
-    ],
-    
+    ],    
     //Remove Subarrays
 v = [r[0].flat()
         //Count quantity of every piece
