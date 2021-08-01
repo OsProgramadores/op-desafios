@@ -36,8 +36,7 @@ let r = [array,
     //r[3]Noun
     ["peça", "peças"],
     //r[4] Result
-    "Quantidade de peças:\n"
-    ],    
+    "Quantidade de peças:\n"],    
     //Remove Subarrays
 v = [r[0].flat()
         //Count quantity of every piece
