@@ -89,7 +89,7 @@ class Company:
     def area_main(self):
         '''areas payouts'''
         areas = self.group
-        for area in areas:
+        for area in list(areas):
             order = self.order(areas[area]['F'])
 
             if len(order) <= 0: #Area not found
@@ -103,7 +103,7 @@ class Company:
         '''cont_employees'''
         areas = self.group
         area_list = []
-        for area in areas:
+        for area in list(areas):
             if len(areas[area]['F']) < 1: #Area not found
                 continue
             area_list.append({'area':areas[area]['nome'], 'quant':len(areas[area]['F'])})
