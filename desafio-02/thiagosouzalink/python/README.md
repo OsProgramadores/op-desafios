@@ -8,7 +8,7 @@ Escreva um programa para listar todos os números primos entre 1 e 10000.
 
 <br>
 
-# Tecnologias utilizadas: 
+# Tecnologias utilizadas:
 - Python
 - unittest (Framework Python) para testes unitários.
 
