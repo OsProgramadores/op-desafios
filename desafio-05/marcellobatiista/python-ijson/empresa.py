@@ -22,7 +22,7 @@ import ijson
 class Stream:
     """Classe Stream"""
 
-    queue = deque(maxlen=20)
+    queue = deque(maxlen=40)
     queue_area = {}
     queue_sobre = {}
 
@@ -124,7 +124,7 @@ class Empresa:
             self.global_sum(dic, question=2)
             self.init_queue(queue_area[dic['area']], dic)
         else:
-            queue_area[dic['area']] = deque(maxlen=20)
+            queue_area[dic['area']] = deque(maxlen=40)
             queue_area[dic['area']].append(dic)
             value = {'cod': dic['area'], 'sum_avg': dic['salario'], 'cont_fun': 1}
             self.ctsum_area[dic['area']] = value
@@ -135,7 +135,7 @@ class Empresa:
         if dic['sobrenome'] in queue_sobre.keys():
             self.init_queue(queue_sobre[dic['sobrenome']], dic)
         else:
-            queue_sobre[dic['sobrenome']] = deque(maxlen=20)
+            queue_sobre[dic['sobrenome']] = deque(maxlen=40)
             queue_sobre[dic['sobrenome']].append(dic)
 
     def init_queue(self, queue, dic):
