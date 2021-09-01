@@ -1,6 +1,7 @@
 package main
 
 import "fmt"
+
 //funcao que inverte o numero
 func inverte(numero int) (numeroInvertido int) {
 	for ; numero > 0; numero = numero / 10 {
