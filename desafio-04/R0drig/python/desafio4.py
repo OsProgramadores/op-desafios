@@ -1,9 +1,9 @@
 "programa que conta peças do tabuleiro de xadrez "
 def le_peao(matriz):
     "conta peao"
-    count =0
+    count = 0
     for i in matriz:
-        while i ==1:
+        while i == 1:
             count +=1
             break
     return count
@@ -13,22 +13,22 @@ def le_rei(matriz):
     count =0
     for i in matriz:
         while i == 6:
-            count +=1
+            count += 1
             break
     return count
 
 def le_rainha(matriz):
     "conta rainha"
-    count =0
+    count = 0
     for i in matriz:
         while i == 5:
-            count +=1
+            count += 1
             break
     return count
 
 def le_torre(matriz):
     "conta torre"
-    count =0
+    count = 0
     for i in matriz:
         while i == 4:
             count +=1
@@ -39,29 +39,22 @@ def le_bispo(matriz):
     "conta bispo"
     count =0
     for i in matriz:
-        while i==2:
-            count +=1
+        while i == 2:
+            count += 1
             break
     return count
 
 def le_cavalo(matriz):
     "conta cavalo"
-    count =0
+    count = 0
     for i in matriz:
-        while i==3:
-            count +=1
+        while i == 3:
+            count += 1
             break
     return count
 
 def main():
-    """B=[0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 1, 1, 0, 0, 0,
-    0, 0, 0, 1, 1, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 0, 0, 0, 0, 0, 0]"""
+    "Função main do programa"
     tabuleiro= [4, 3, 2, 5, 6, 2, 3, 4,
     1,1, 1, 1, 1, 1, 1, 1,
     0, 0, 0, 0, 0, 0, 0, 0,
