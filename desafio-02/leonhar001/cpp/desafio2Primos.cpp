@@ -1,8 +1,6 @@
 	#include <stdio.h>
 	#define LIMITE 10000 //quantidade de números para testar
-	
 	int main(){
-		
 		int i=2;
 		int div=2;
 		int total=0;
