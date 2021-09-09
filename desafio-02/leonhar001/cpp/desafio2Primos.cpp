@@ -13,7 +13,7 @@
 					isPrimo=false;
 				div++;
 			}
-			if(isPrimo){	
+			if(isPrimo){
 				printf("[%d]",i);
 				total++;
 			}
