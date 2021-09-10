@@ -14,7 +14,7 @@
 				div++;
 			}
 			if(isPrimo){
-				printf("[%d]",i);
+				printf("%d\n",i);
 				total++;
 			}
 			i++;
