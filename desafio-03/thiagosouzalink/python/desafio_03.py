@@ -45,7 +45,7 @@ def palindromo(num):
         num: Número a ser verificado.
 
     Returns:
-        Valor booleano verificando se é ou não palíndromo.
+        Valor booleano verificando se o número é ou não palíndromo.
 
     Ocorrerá uma exceção caso o parâmetro recebido não seja um número inteiro.
     """
