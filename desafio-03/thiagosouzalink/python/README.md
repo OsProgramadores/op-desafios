@@ -8,7 +8,7 @@ Imprimir todos os números palindrômicos entre dois outros números.
 
 <br>
 
-# Tecnologias utilizadas: 
+# Tecnologias utilizadas:
 - Python
 - Unittest (Framework Python) para testes unitários.
 
