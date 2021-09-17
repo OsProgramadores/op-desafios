@@ -10,7 +10,7 @@ Imprimir todos os números palindrômicos entre dois outros números.
 
 # Tecnologias utilizadas: 
 - Python
-- unittest (Framework Python) para testes unitários.
+- Unittest (Framework Python) para testes unitários.
 
 <br>
 
