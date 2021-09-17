@@ -77,4 +77,3 @@ if __name__ == "__main__":
         for n in range(num1, num2+1):
             if palindromo(n):
                 print(n)
-    
