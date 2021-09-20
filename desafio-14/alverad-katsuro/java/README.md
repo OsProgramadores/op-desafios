@@ -9,8 +9,11 @@ Esta folha do repositorio tem como objetivo armazenar a solução do desafio 14.
 3. VSCODE com "Extension Pack for Java".
 
 # Instruções para teste usando JAR.
+1. Abra a pasta "JAVA" no VSCODE
 
-1. Para executar de forma simples, vá para pasta "entradas_prog".
+2. Compile o jar
+
+1. Mova o jar par a pasta entradas_prog
 
 2. Abra o Terminal/CMD.
 
