@@ -1,11 +1,9 @@
 //Programa que lista todos números primos entre 1 e 10000
 
-//Array com os primeiros números primos da lista
-let primos = [2, 3, 5, 7, 11]
-//Imprime os primeiros números primos da lista
-for (let c in primos) {
-  console.log(primos[c])
-}
+//Declarado o array que receberá os números primos verificados e em seguida imprime o array
+let primos = [2]
+console.log(2)
+
 //Insere os números entre 2 a 10000 a serem verificados na função
 for (let i = 2; i < 10000; i++) {
   verificadorPrimo(i)
@@ -21,6 +19,6 @@ function verificadorPrimo(num) {
     } else if (pos == primos.length - 1) {
         console.log(num)
         primos.push(num)
-      }
+    }
   }
 }
