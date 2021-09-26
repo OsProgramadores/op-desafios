@@ -5,7 +5,7 @@ bool isPalindrome(int number){
 	int original=number;
 	while(number>0){
 		int LastDigit=number%10;
-		pal = (pal*10)+LastDigit;	
+		pal = (pal*10)+LastDigit;
 		number= number/10;
 	}
 	return original==pal ? true:false;
