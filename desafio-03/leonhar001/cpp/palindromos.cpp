@@ -8,7 +8,7 @@ bool isPalindrome(int number){
 		pal = (pal*10)+LastDigit;
 		number= number/10;
 	}
-	return original==pal ? true:false;
+	return original==pal;
 }
 int main(){
 	int init,fin;
