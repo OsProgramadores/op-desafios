@@ -11,7 +11,7 @@ bool isPalindrome(int number){
 	return original==pal ? true:false;
 }
 int main(){
-	int init,final;
+	int init,fin;
 
 	printf(".:Enter a range (positive integer):.\n");
 	printf("Start: ");
