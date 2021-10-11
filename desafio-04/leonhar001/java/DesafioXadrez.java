@@ -6,8 +6,7 @@ public class DesafioXadrez {
 
 	public static void main(String[] args) {
 
-		List<Integer> board = Arrays.asList
-				(4,3,2,5,6,2,3,4,
+		List<Integer> board = Arrays.asList(4,3,2,5,6,2,3,4,
 				1,1,1,1,1,1,1,1,
 				0,0,0,0,0,0,0,0,
 				0,0,0,0,0,0,0,0,
