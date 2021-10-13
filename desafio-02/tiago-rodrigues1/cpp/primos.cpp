@@ -4,13 +4,10 @@ using namespace std;
 
 int main()
 {
-    for (int i = 1; i <= 10000; i++)
-    {
-        if (i == 2)
-        {
-            cout << i << "\n";
-        }
+    cout << 2 << "\n";
 
+    for (int i = 3; i <= 10000; i++)
+    {
         if (i % 2 != 0)
         {
             if (sqrt(i) != floor(sqrt(i)))
