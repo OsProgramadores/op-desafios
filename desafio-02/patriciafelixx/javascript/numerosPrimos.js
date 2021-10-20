@@ -6,8 +6,8 @@ const numerosPrimos = (x, y) => {
                 c++;
             }
         }
-        c <= 2 && console.log(n);
+        c == 2 && console.log(n);
     }
 }
 
-numerosPrimos(1, 10000);
+numerosPrimos(1, 100);
