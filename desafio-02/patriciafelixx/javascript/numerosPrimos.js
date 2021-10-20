@@ -10,4 +10,4 @@ const numerosPrimos = (x, y) => {
     }
 }
 
-numerosPrimos(1, 100);
+numerosPrimos(1, 10000);
