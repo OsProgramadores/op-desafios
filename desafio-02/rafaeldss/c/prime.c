@@ -6,7 +6,7 @@ bool is_prime(int number);
 
 
 int main(void) {
-    for (int i = 1; i<= 10000; i+=2) {
+    for (int i = 1; i<= 10000; i++) {
         if (is_prime(i)) {
             printf("%d\n", i);
         }
