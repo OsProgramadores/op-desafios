@@ -18,7 +18,7 @@ fi
 # Download the repository to check the Java code style
 echo "✔️  Downloading the Google Java Formatter jar..."
 if [[ ! -f "${JAVA_FORMATTER_FILE}" ]]; then
-    curl -LJO --show-error "${JAVA_FORMATTER_URL}" -o "${JAVA_FORMATTER_FILE}"
+    curl -s -LJ "${JAVA_FORMATTER_URL}" -o "${JAVA_FORMATTER_FILE}"
     chmod 755 "${JAVA_FORMATTER_FILE}"
 fi
 
