@@ -12,6 +12,6 @@ from sys import argv
 from fraction import Fraction
 
 if __name__ == '__main__':
-    with open(argv[1]) as fp:
+    with open(argv[1], 'r') as fp:
         for line in fp:
             print(Fraction(line).extract_whole().reduce())
