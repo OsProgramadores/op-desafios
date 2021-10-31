@@ -8,4 +8,3 @@ for i in range(1,10002):
             resp +=1
     if resp == 2:
         print (i)
-        
