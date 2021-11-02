@@ -6,13 +6,12 @@ int main(void)
   int i, j;
   int max = 10000;
   int primes[max + 1];
-  
+
   // adding natural numbers to array
   for (i = 2; i<=max; i++){
     primes[i] = i;
   }
-    
-
+  
   i = 2;
   while ((i * i) <= max) {
     if (primes[i] != 0) {
