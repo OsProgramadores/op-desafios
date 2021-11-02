@@ -8,10 +8,10 @@ int main(void)
   int primes[max + 1];
 
   // adding natural numbers to array
-  for (i = 2; i<=max; i++){
+  for (i = 2; i<=max; i++) {
     primes[i] = i;
   }
-  
+
   i = 2;
   while ((i * i) <= max) {
     if (primes[i] != 0) {
