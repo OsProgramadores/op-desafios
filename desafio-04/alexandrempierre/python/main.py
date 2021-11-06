@@ -18,13 +18,12 @@ def readboard(lines=8):
         for piece in readline():
             yield piece
 
-if __name__ == '__main__':
-    piece_names = [
-        'VAZIO', 'Peão', 'Bispo', 'Cavalo', 'Torre', 'Rainha', 'Rei']
-    piece_count = [0, 0, 0, 0, 0, 0, 0]
-    for p in readboard():
-        piece_count[p] += 1
-    piece_names.pop(0)
-    piece_count.pop(0)
-    for name, qtty in zip(piece_names, piece_count):
-        print(f'{name}: {qtty} peça(s)')
+piece_names = [
+    'VAZIO', 'Peão', 'Bispo', 'Cavalo', 'Torre', 'Rainha', 'Rei']
+piece_count = [0, 0, 0, 0, 0, 0, 0]
+for p in readboard():
+    piece_count[p] += 1
+piece_names.pop(0)
+piece_count.pop(0)
+for name, qtty in zip(piece_names, piece_count):
+    print(f'{name}: {qtty} peça(s)')
