@@ -48,4 +48,4 @@ if __name__ == '__main__':
             num = int(line[:-1])
             x0, x1 = find_interval(num)
             is_power, exp = bissect(num, x0, x1)
-            print(f'{num}', f'true {exp}' if is_power else f'false', sep=' ')
+            print(f'{num}', f'true {exp}' if is_power else 'false', sep=' ')
