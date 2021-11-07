@@ -43,7 +43,7 @@ def bissect(n, min_exp, max_exp):
 
 
 if __name__ == '__main__':
-    with open(argv[1]) as fp:
+    with open(argv[1], 'r', encoding='ASCII') as fp:
         for line in fp:
             num = int(line[:-1])
             x0, x1 = find_interval(num)
