@@ -10,25 +10,42 @@ def verifica_string(numero):
                    no padrão correto.
     :return: retorna um número no padrão.
     """
+    contador_de_erros = 0
     dicionario = {1: numero.isnumeric(), 2: len(numero) == 8,
                   3: '7' not in numero and '8' not in numero and '9' not in numero}
     if False in dicionario.values():
         while False in dicionario.values():
+            contador_de_erros += 1
+            avisodado = False
+            if contador_de_erros % 3 == 0:
+                avisodado = True
+                aviso()
             if not dicionario[3]:
-                print('Digite somente algarismos menores que 7.')
-                numero = input()
+                if avisodado is False:
+                    print('*Só pode haver dígito menor que 7')
+                numero = input(f'Linha {contador}- ')
             elif not dicionario[1]:
-                print('Digite somente números.')
-                numero = input()
+                if avisodado is False:
+                    print('*Somente números são aceitos')
+                numero = input(f'Linha {contador}- ')
             elif not dicionario[2]:
-                print('Digite 8 algarismos.')
-                numero = input()
+                if avisodado is False:
+                    print('*As linhas precisam ter 8 dígitos')
+                numero = input(f'Linha {contador}- ')
             dicionario[1] = numero.isnumeric()
             dicionario[2] = len(numero) == 8
             dicionario[3] = '7' not in numero and '8' not in numero\
                             and '9' not in numero
     return numero
 
+def aviso():
+    """
+    Um aviso sobre o que deve ser preenchido nas linhas.
+    """
+    print('ATENÇÃO:\n-As linhas precisam ter 8 dígitos')
+    print('-Só pode haver dígito menor que 7')
+    print('-Somente números são aceitos')
+aviso()
 lista = []
 for contador in range(1, 9):
     for string in [input(f'Linha {contador}- ')]:
