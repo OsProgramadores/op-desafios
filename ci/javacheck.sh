@@ -5,42 +5,50 @@ echo "Java code check"
 echo "======================"
 
 set -e
+readonly FORMATTER_VERSION="1.10.0"
+readonly JAVA_FORMATTER_FILE="/tmp/google-java-format-${FORMATTER_VERSION}-all-deps.jar"
+readonly JAVA_FORMATTER_URL="https://github.com/google/google-java-format/releases/download/v${FORMATTER_VERSION}/${JAVA_FORMATTER_FILE##*/}"
 
-echo
-echo "Checking if some Java file was modified..."
-FILES=$(cat ${HOME}/changed_files.txt | grep ".*java$" || [[ $? == 1 ]])
-
-if [ -z ${FILES} ]; then
-    echo "Skiping checking, no Java file was modified..."
+FILES="$(grep "\.*java$" < "${HOME}/changed_files.txt" || [[ $? == 1 ]])"
+if [[ -z "${FILES}" ]]; then
+    echo "Skiping checking, no Java files modified."
     exit 0
 fi
 
-FORMATTER_VERSION=1.10.0
-
 # Download the repository to check the Java code style
-echo
-echo "Downloading the Google Java Formatter jar..."
-
-CACHE_DIR=$HOME/.cache
-mkdir -p "${CACHE_DIR}"
-pushd "${CACHE_DIR}"
-if [ ! -f google-java-format-"${FORMATTER_VERSION}"-all-deps.jar ]
-then
-    curl -LJO "https://github.com/google/google-java-format/releases/download/v${FORMATTER_VERSION}/google-java-format-${FORMATTER_VERSION}-all-deps.jar"
-    chmod 755 google-java-format-"${FORMATTER_VERSION}"-all-deps.jar
+echo "✔️  Downloading the Google Java Formatter jar..."
+if [[ ! -f "${JAVA_FORMATTER_FILE}" ]]; then
+    curl -s -LJ "${JAVA_FORMATTER_URL}" -o "${JAVA_FORMATTER_FILE}"
+    chmod 755 "${JAVA_FORMATTER_FILE}"
 fi
-popd
 
-echo
-echo "Checking the Java code format..."
+echo "✔️  Checking the Java code format..."
 
-# The --set-exit-if-changed will throw an error if the code is not following the patterns
-# The -n option will display all files that not follows the desired patterns
-# The --add-exports options are to avoid some warnings raised by the JVM
-java \
+
+# Check all java files.
+exitcode=0
+for fname in "${FILES[@]}"; do
+  echo "✔️  Checking file: ${fname}"
+
+  output="/tmp/${fname##*/}_corrected.java"
+  # The --add-exports options are to avoid some warnings raised by the JVM.
+  java \
   --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
   --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
   --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
   --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
   --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
-  -jar ${CACHE_DIR}/google-java-format-"${FORMATTER_VERSION}"-all-deps.jar -n --set-exit-if-changed ${FILES[@]}
+    -jar "${JAVA_FORMATTER_FILE}" "${fname}" > "${output}"
+
+    # For some reason, --set-exit-if-changed seems to do always return 1
+    # even  when there's no difference. In this case, we check the diffs
+    # manually.
+    if ! diff --unified "${fname}" "${output}"; then
+      echo "❌ Error: Differences found for ${fname}. Please check the output and correct."
+      echo "--------------------------------------------------------------------------------"
+      exitcode=1
+    fi
+    rm -f "${output}"
+done
+
+exit "${exitcode}"
