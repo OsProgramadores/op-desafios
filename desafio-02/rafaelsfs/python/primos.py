@@ -11,7 +11,7 @@ Listando números primos entre 1 e 10000.
 """
 
 i = 1
-while i <= 100:
+while i <= 10000:
     if i == 2:
         print(f"{i}")
     if i == 3:
