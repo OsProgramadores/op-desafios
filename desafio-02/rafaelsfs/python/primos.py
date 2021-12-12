@@ -25,3 +25,4 @@ while i <= 10000:
         if x == i:
             print(f"{x}")
     i += 1
+
