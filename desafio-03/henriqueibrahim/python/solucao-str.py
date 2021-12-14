@@ -7,4 +7,4 @@ numbersList = list(range(input1, input2 + 1)) # +1 para poder incluir o último 
 for n in numbersList:
     number = str(n) # [::-1] Não inverte int, por isso transforma em str
     if number == number[::-1]: # Confere se a string inicial é igual a string invertida.
-        print(number)
+        print(number, end=" ")

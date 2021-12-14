@@ -1,4 +1,4 @@
-'''Check for palindrome numbers'''
+'''Desafio 03 - Números Palíndromos'''
 input1 = int(input())
 input2 = int(input())
 
@@ -12,5 +12,5 @@ for n in numbers:
         reverseNum = reverseNum * 10 + lastDigit # Add o último dígito para o lado esquerdo do n
         n = n // 10 # Divide para deixar o último dígito
     if temp == reverseNum:
-        print(reverseNum)
+        print(reverseNum, end=" ")
 
