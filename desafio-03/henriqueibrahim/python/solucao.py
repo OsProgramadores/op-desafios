@@ -1,3 +1,4 @@
+"""Check for palindrome numbers"""
 input1 = int(input())
 input2 = int(input())
 
