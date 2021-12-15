@@ -9,9 +9,11 @@ def verifica_primo(numero):
     for inc in range(1, numero+1):
         if numero%inc == 0:
             numero_divisoes += 1
-    if numero_divisoes==2:
+            if(numero_divisoes > 2):
+                return False
+
+    if(numero_divisoes==2):
         return True
-    return False
 
 def listar_primos(primos, numero_teto):
     """
