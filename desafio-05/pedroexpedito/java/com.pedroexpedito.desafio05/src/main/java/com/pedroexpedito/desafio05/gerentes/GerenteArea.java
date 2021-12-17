@@ -7,7 +7,7 @@ import com.pedroexpedito.desafio05.models.Area;
 import com.pedroexpedito.desafio05.models.Funcionario;
 
 public class GerenteArea {
-	
+
 	static Set<AreaData> areasData = new HashSet<AreaData>();
 
 	public void push(Funcionario f) {
@@ -28,18 +28,18 @@ public class GerenteArea {
 		for (AreaData areaData : areasData) {
 			if(areaData.areaCode.equals(areaCode)) {
 				areaData.setAreaNome(area.getNome());
-				return; 
+				return;
 			}
 		}
 	}
-	
+
 	public void print_areas() {
 		for (AreaData areaData : areasData) {
 			areaData.print_area();
 		}
-		
+
 	}
-	
+
 
 
 	private class AreaData {
@@ -67,7 +67,7 @@ public class GerenteArea {
 		long funcionarios = 0;
 
 		double soma_salarios_total = 0;
-		
+
 		public double get_area_avg() {
 			return soma_salarios_total / funcionarios;
 		}
@@ -102,15 +102,15 @@ public class GerenteArea {
 			for (Funcionario f : f_area_max) {
 				System.out.printf("area_max|%s|%s %s|%.2f\n", getAreaNome(), f.getNome(), f.getSobrenome(), f.getSalario());
 			}
-			
+
 			for (Funcionario f : f_area_min) {
 				System.out.printf("area_min|%s|%s %s|%.2f\n", getAreaNome(), f.getNome(), f.getSobrenome(), f.getSalario());
 
 			}
 			System.out.printf("area_avg|%s|%.2f\n",getAreaNome(), get_area_avg());
 		}
-		
-		
+
+
 
 	}
 

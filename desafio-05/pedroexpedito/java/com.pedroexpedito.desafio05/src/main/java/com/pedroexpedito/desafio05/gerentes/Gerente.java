@@ -4,12 +4,12 @@ import com.pedroexpedito.desafio05.models.Area;
 import com.pedroexpedito.desafio05.models.Funcionario;
 
 public class Gerente {
-	
+
 	static GerenteArea gerenteArea = new GerenteArea();
 	static GerenteEmployees gerenteEmployees = new GerenteEmployees();
 	static GerenteLastName gerenteLastName = new GerenteLastName();
 	static GerenteGlobal gerenteGlobal = new GerenteGlobal();
-	
+
 	static public void push(Funcionario f) {
 		gerenteGlobal.push(f);
 		gerenteArea.push(f);

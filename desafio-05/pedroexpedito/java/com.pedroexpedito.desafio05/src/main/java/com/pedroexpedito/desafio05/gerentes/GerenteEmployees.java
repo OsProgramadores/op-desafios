@@ -11,10 +11,10 @@ public class GerenteEmployees {
 	Set<EmployeesData> Areas = new HashSet<EmployeesData>();
 	Set<EmployeesData> most = new HashSet<EmployeesData>();
 	Set<EmployeesData> least = new HashSet<EmployeesData>();
-	
+
 	long most_employees = Long.MIN_VALUE;
 	long least_employess = Long.MAX_VALUE;
-	
+
 	public void print_employees() {
 		push_least();
 		push_most();
@@ -25,7 +25,7 @@ public class GerenteEmployees {
 			System.out.printf("least_employees|%s|%d\n", eD.getAreaNome(), eD.getFuncionarios());
 		}
 	}
-	
+
 	void push_most() {
 		for (EmployeesData employeesData : Areas) {
 			if(employeesData.getFuncionarios() > most_employees) {
@@ -60,7 +60,7 @@ public class GerenteEmployees {
 		employeesData.incrementarFuncionarios();
 		Areas.add(employeesData);
 	}
-	
+
 	void push(Area area) {
 		for (EmployeesData employeesData : Areas ) {
 			if(employeesData.getAreaCode().equals(area.getCodigo())) {
@@ -69,12 +69,12 @@ public class GerenteEmployees {
 			}
 		}
 	}
-	
+
 	private class EmployeesData {
 		private long funcionarios = 0;
 		private String areaNome;
 		private String areaCode;
-		
+
 		public long getFuncionarios() {
 			return funcionarios;
 		}
@@ -82,7 +82,7 @@ public class GerenteEmployees {
 		public EmployeesData(String areaCode) {
 			this.areaCode = areaCode;
 		}
-		
+
 		public String getAreaCode() {
 			return areaCode;
 		}

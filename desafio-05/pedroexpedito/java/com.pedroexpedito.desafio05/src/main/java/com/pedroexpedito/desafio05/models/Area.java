@@ -7,7 +7,7 @@ public class Area {
 	private String codigo;
 	@Expose
 	private String nome;
-	
+
 	public Area() {}
 
 	public String getCodigo() {

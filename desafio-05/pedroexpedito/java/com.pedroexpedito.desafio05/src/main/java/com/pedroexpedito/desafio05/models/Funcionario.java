@@ -17,7 +17,7 @@ public class Funcionario {
 	@Expose
 	@SerializedName("area")
 	private String area;
-	
+
 	public long getId() {
 		return id;
 	}
@@ -59,7 +59,7 @@ public class Funcionario {
 	}
 
 	public Funcionario() {}
-	
+
 
 	@Override
 	public String toString() {
@@ -69,8 +69,8 @@ public class Funcionario {
 		sb.append(", sobrenome: " + sobrenome);
 		sb.append(", salario: " + salario);
 		sb.append(", area: " + area);
-		
+
 		return sb.toString();
-		
+
 	}
 }

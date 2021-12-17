@@ -23,7 +23,7 @@ public class Main {
 		try {
 			String path = args[0];
 			InputStream inputStream = new FileInputStream(path);
-			
+
 			readJsonStream(inputStream);
 
 			Gerente.printAll();
@@ -57,7 +57,7 @@ public class Main {
 		}
 		reader.endArray();
 		reader.close();
-		
+
 	}
 
 }

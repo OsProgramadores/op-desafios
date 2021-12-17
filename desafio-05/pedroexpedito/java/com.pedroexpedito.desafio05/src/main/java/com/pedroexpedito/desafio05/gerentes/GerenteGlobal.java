@@ -24,7 +24,7 @@ public class GerenteGlobal {
 		for (Funcionario f : f_global_max) {
 			System.out.printf("global_max|%s %s|%.2f\n", f.getNome(), f.getSobrenome(), f.getSalario());
 		}
-		
+
 		for (Funcionario f : f_global_min) {
 			System.out.printf("global_min|%s %s|%.2f\n", f.getNome(), f.getSobrenome(), f.getSalario());
 
@@ -62,6 +62,6 @@ public class GerenteGlobal {
 			f_global_min.add(f);
 		}
 	}
-	
+
 
 }
