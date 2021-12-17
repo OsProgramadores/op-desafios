@@ -4,73 +4,75 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Funcionario {
-	private long id;
-	@Expose
-	@SerializedName("nome")
-	private String nome;
-	@Expose
-	@SerializedName("sobrenome")
-	private String sobrenome;
-	@Expose
-	@SerializedName("salario")
-	private double salario;
-	@Expose
-	@SerializedName("area")
-	private String area;
+  private long id;
 
-	public long getId() {
-		return id;
-	}
+  @Expose
+  @SerializedName("nome")
+  private String nome;
 
-	public void setId(long id) {
-		this.id = id;
-	}
+  @Expose
+  @SerializedName("sobrenome")
+  private String sobrenome;
 
-	public String getNome() {
-		return nome;
-	}
+  @Expose
+  @SerializedName("salario")
+  private double salario;
 
-	public void setNome(String nome) {
-		this.nome = nome;
-	}
+  @Expose
+  @SerializedName("area")
+  private String area;
 
-	public String getSobrenome() {
-		return sobrenome;
-	}
+  public long getId() {
+    return id;
+  }
 
-	public void setSobrenome(String sobrenome) {
-		this.sobrenome = sobrenome;
-	}
+  public void setId(long id) {
+    this.id = id;
+  }
 
-	public double getSalario() {
-		return salario;
-	}
+  public String getNome() {
+    return nome;
+  }
 
-	public void setSalario(double salario) {
-		this.salario = salario;
-	}
+  public void setNome(String nome) {
+    this.nome = nome;
+  }
 
-	public String getArea() {
-		return area;
-	}
+  public String getSobrenome() {
+    return sobrenome;
+  }
 
-	public void setArea(String area) {
-		this.area = area;
-	}
+  public void setSobrenome(String sobrenome) {
+    this.sobrenome = sobrenome;
+  }
 
-	public Funcionario() {}
+  public double getSalario() {
+    return salario;
+  }
 
+  public void setSalario(double salario) {
+    this.salario = salario;
+  }
 
-	@Override
-	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("id: " + id);
-		sb.append(", nome: " + nome);
-		sb.append(", sobrenome: " + sobrenome);
-		sb.append(", salario: " + salario);
-		sb.append(", area: " + area);
+  public String getArea() {
+    return area;
+  }
 
-		return sb.toString();
+  public void setArea(String area) {
+    this.area = area;
+  }
 
-	}
+  public Funcionario() {}
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("id: " + id);
+    sb.append(", nome: " + nome);
+    sb.append(", sobrenome: " + sobrenome);
+    sb.append(", salario: " + salario);
+    sb.append(", area: " + area);
+
+    return sb.toString();
+  }
 }
