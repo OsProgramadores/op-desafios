@@ -27,17 +27,17 @@ echo "✔️  Checking the Java code format..."
 
 # Check all java files.
 exitcode=0
-for fname in "${FILES[@]}"; do
+for fname in ${FILES[@]}; do
   echo "✔️  Checking file: ${fname}"
 
   output="/tmp/${fname##*/}_corrected.java"
   # The --add-exports options are to avoid some warnings raised by the JVM.
   java \
-  --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
-  --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
-  --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
-  --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
-  --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
+    --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED \
+    --add-exports jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED \
+    --add-exports jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED \
+    --add-exports jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED \
+    --add-exports jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED \
     -jar "${JAVA_FORMATTER_FILE}" "${fname}" > "${output}"
 
     # For some reason, --set-exit-if-changed seems to do always return 1
