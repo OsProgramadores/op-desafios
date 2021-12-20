@@ -24,4 +24,4 @@ pieces = (
     )
 
 for name, value, in pieces:
-    print("{name}: {total} peça(s)".format(name=name, total=counter[value]))
+    print(f"{name}: {counter[value]} peça(s)")
