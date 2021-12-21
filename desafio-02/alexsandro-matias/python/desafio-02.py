@@ -5,8 +5,8 @@ def verifica_primo(numero):
         if numero % i == 0:
             contador = contador + 1
 
-if contador == 2:
-    print(numero)
+    if contador == 2:
+        print(numero)
 
 for i in range(10000):
     verifica_primo(i)
