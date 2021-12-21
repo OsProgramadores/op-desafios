@@ -6,7 +6,7 @@ def percorre_intervalo(inicio, fim):
         imprime_palindromo(numero)
 
 def imprime_palindromo(numero_original):
-    """ Função que verifica se o número é palíndromo ou não. """
+    """ Função que verifica se o número é palíndromo ou não."""
     numero_original = str(numero_original)
     invertido = numero_original[::-1]
     if numero_original == invertido:
