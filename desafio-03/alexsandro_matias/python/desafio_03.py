@@ -12,5 +12,5 @@ def imprime_palindromo(numero_original):
     if numero_original == invertido:
         print(numero_original)
 
-# início do programa
+# início do programa.
 percorre_intervalo(3000, 3010)
