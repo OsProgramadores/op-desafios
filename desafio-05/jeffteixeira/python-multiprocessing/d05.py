@@ -8,7 +8,7 @@ from multiprocessing import Pool, cpu_count
 
 
 def get_chunks(mmap_obj, num_chunks, start, end):
-    """Generate the file chunks."""
+    """Generates the file chunks."""
     chunk_size = (end - start + 1) // num_chunks
     mmap_obj.seek(start)
     for i in range(num_chunks):
@@ -24,7 +24,7 @@ def get_chunks(mmap_obj, num_chunks, start, end):
 
 
 def get_employees(chunk):
-    """Generate the employees data."""
+    """Generates the employees data."""
     employee = {}
     start = chunk.find(b'{')
     while start != -1:
@@ -53,7 +53,7 @@ def get_employees(chunk):
 
 
 def process_chunk(chunk):
-    """Process the file chunk and return the processing result."""
+    """Process a file chunk and returns the processing result."""
     result = {
         'min_salary': sys.float_info.max,
         'min_full_names': [],
@@ -129,7 +129,7 @@ def process_chunk(chunk):
 
 
 def get_area_names(chunk):
-    """Return a dictionary with the area names and the area codes."""
+    """Returns a dictionary with the area names and the area codes."""
     area_names = {}
     start = chunk.find(b'{',)
     while start != -1:
@@ -149,7 +149,7 @@ def get_area_names(chunk):
 
 
 def join_results(result_1, result_2):
-    """Join result_1 into result_2 and return result_2."""
+    """Joins result_1 into result_2 and returns result_2."""
     result_2['num_employees'] += result_1['num_employees']
     result_2['sum_salary'] += result_1['sum_salary']
 
@@ -212,7 +212,7 @@ def join_results(result_1, result_2):
 
 
 def show_result(result):
-    """Show result information."""
+    """Shows result information."""
     for full_name in result['min_full_names']:
         print(f'global_min|{full_name}|{result["min_salary"]:.2f}')
     for full_name in result['max_full_names']:
@@ -261,7 +261,7 @@ def show_result(result):
 
 
 def main():
-    """Represent the entry point of script."""
+    """Represents the entry point of script."""
     try:
         json_file = sys.argv[1]
     except IndexError:
