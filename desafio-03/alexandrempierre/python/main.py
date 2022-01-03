@@ -101,14 +101,9 @@ def minmaxall(iterable:Iterable[int]) -> Tuple[int, int]:
     return min_val, max_val, all_pal
 
 if __name__ == '__main__':
-    #import time
     lower_bound, upper_bound = int(argv[1]), int(argv[2])
     digits = digitsrange(lower_bound, upper_bound)
     basis = list(map(palindromic_basis, digits))
-    #start = time.time()
     palindromes = combinations(basis, lower_bound, upper_bound)
     ans = bounded_palindromes(palindromes, lower_bound, upper_bound)
     print(*ans, sep=', ')
-    #print('Min and Max and All palindromes between: ', end='')
-    #print(*minmaxall(ans), sep=', ')
-    #print(f'finished in {time.time() - start:.3f} seconds')
