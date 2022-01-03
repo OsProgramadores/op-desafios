@@ -6,26 +6,23 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 
-/**
- * @see http://www.rgagnon.com/javadetails/java-0603.html
- */
+/** @see http://www.rgagnon.com/javadetails/java-0603.html */
 public class CustomWriter extends BufferedWriter {
 
-    private static final int BUFFER_SIZE = 512;
-    private static final String LINE_SEPARATOR = System.lineSeparator();
+  private static final int BUFFER_SIZE = 512;
+  private static final String LINE_SEPARATOR = System.lineSeparator();
 
-    public CustomWriter() throws IOException {
-        super(new OutputStreamWriter(new FileOutputStream(FileDescriptor.out)), BUFFER_SIZE);
-    }
+  public CustomWriter() throws IOException {
+    super(new OutputStreamWriter(new FileOutputStream(FileDescriptor.out)), BUFFER_SIZE);
+  }
 
-    public void writeln(String s) throws IOException {
-        write(s + LINE_SEPARATOR);
-    }
+  public void writeln(String s) throws IOException {
+    write(s + LINE_SEPARATOR);
+  }
 
-    @Override
-    public void close() throws IOException {
-        flush();
-        super.close();
-    }
-
+  @Override
+  public void close() throws IOException {
+    flush();
+    super.close();
+  }
 }
