@@ -9,22 +9,23 @@ __author__ = 'Alexandre Pierre'
 
 from sys import argv
 from math import ceil, log10
-from typing import Set, Tuple, Iterable
+from typing import Set, Tuple, Iterable, Callable
 from functools import reduce
 from operator import or_
 
 
 def is_palindrome(number:int) -> bool:
+    '''Checks whether a number is a palindrome.'''
     str_number = str(number)
     return str_number == str_number[::-1]
 
-def palindromic_basis(digits: int) -> Tuple[int]:
+def palindromic_basis(number_of_digits: int) -> Tuple[int]:
     '''Returns a tuple with palindromes that for a basis-like structure (like
 in Linear Algebra) for all the palindromes with a certain number of digits.'''
-    binary_palindromes = set((10**exp10 + 10**(digits - 1 - exp10)
-                              if exp10 != digits - 1 - exp10
+    binary_palindromes = set((10**exp10 + 10**(number_of_digits - 1 - exp10)
+                              if exp10 != number_of_digits - 1 - exp10
                               else 10**exp10
-                              for exp10 in range(digits//2 + 1)))
+                              for exp10 in range(number_of_digits//2 + 1)))
     return tuple(sorted(binary_palindromes, reverse=True))
 
 def coeff_bounds(basis:Tuple[int], lower_bound:int, upper_bound:int) -> range:
@@ -41,14 +42,14 @@ number of computations a little'''
 def fixed_length_combinations(basis:Tuple[int], lower_bound:int,
                               upper_bound:int) -> Set[int]:
     '''Calculates the combinations with a fixed number of digits'''
-    coeffs = ([coeff_bounds(basis, lower_bound, upper_bound)] + 
+    coeffs = ([coeff_bounds(basis, lower_bound, upper_bound)] +
               [range(1,10)]*(len(basis) - 1))
-    palindromes = set(basis[0] * coeff for coeff in coeffs[0])
+    palindromes_set = set(basis[0] * coeff for coeff in coeffs[0])
     for basis_number, coeff_list in zip(basis[1:], coeffs[1:]):
-        palindromes |= set(basis_number * coeff + pal 
-                           for coeff in coeff_list 
-                           for pal in palindromes)
-    return palindromes
+        palindromes_set |= set(basis_number * coeff + pal
+                           for coeff in coeff_list
+                           for pal in palindromes_set)
+    return palindromes_set
 
 def combinations(basis_iter:Iterable[Tuple[int]], lower_bound:int,
                  upper_bound:int) -> Set[int]:
@@ -57,12 +58,13 @@ def combinations(basis_iter:Iterable[Tuple[int]], lower_bound:int,
                   (fixed_length_combinations(basis, lower_bound, upper_bound)
                    for basis in basis_iter))
 
-def bound_filter_fn(lower, upper):
+def bound_filter_fn(lower:int, upper:int) -> Callable[[int], bool]:
     '''Returns a functions that takes a number and checks whether it's in the
 desired open interval'''
     return lambda number: lower < number < upper
 
-def bounded_palindromes(palindromes, lower_bound, upper_bound):
+def bounded_palindromes(palindromes:set, lower_bound:int,
+                        upper_bound:int) -> filter:
     '''Returns the palindromes bounded by lower_bound and upper_bound'''
     return filter(bound_filter_fn(lower_bound, upper_bound), palindromes)
 
@@ -89,21 +91,12 @@ def digitsrange(lower_bound:int, upper_bound:int) -> range:
         return closedrange(start, upper_exp + 1)
     return closedrange(start, upper_exp + 2)
 
-def minmaxall(iterable:Iterable[int]) -> Tuple[int, int]:
-    ''' '''
-    min_val, max_val, all_pal = float('inf'), float('-inf'), True
-    for value in iterable:
-        all_pal = all_pal and is_palindrome(value)
-        if value > max_val:
-            max_val = value
-        if value < min_val:
-            min_val = value
-    return min_val, max_val, all_pal
-
 if __name__ == '__main__':
-    lower_bound, upper_bound = int(argv[1]), int(argv[2])
-    digits = digitsrange(lower_bound, upper_bound)
-    basis = list(map(palindromic_basis, digits))
-    palindromes = combinations(basis, lower_bound, upper_bound)
-    ans = bounded_palindromes(palindromes, lower_bound, upper_bound)
+    lower_bound_palindromes, upper_bound_palindromes = int(argv[1]), int(argv[2])
+    digits = digitsrange(lower_bound_palindromes, upper_bound_palindromes)
+    curr_basis = list(map(palindromic_basis, digits))
+    digits_palindromes = combinations(curr_basis, lower_bound_palindromes,
+                               upper_bound_palindromes)
+    ans = bounded_palindromes(digits_palindromes, lower_bound_palindromes,
+                              upper_bound_palindromes)
     print(*ans, sep=', ')
