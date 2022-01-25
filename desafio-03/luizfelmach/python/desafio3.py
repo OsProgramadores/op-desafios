@@ -1,3 +1,4 @@
+# Python 3.9.9
 """System module."""
 [min_in, max_in] = input('').split(' ')
 result = []
