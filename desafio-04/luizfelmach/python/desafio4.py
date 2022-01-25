@@ -1,6 +1,6 @@
 # Python 3.9.9
 """System module."""
-board = [input().split(' ') for i in range(1)]
+board = [input().split(' ') for i in range(8)]
 
 [pawn, bishop, horse, rook, queen, king] = [[
     row.count('1'),
