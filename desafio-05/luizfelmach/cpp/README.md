@@ -1,6 +1,6 @@
 # Como rodar este código
 
-- **Baixe** a dependência de parser do JSON no **mesmo path** que o arquivo que será compilado com o nome `json.hpp`. Rode o comando abaixo:
+- **Baixe** a dependência de parser do JSON no **mesmo path** onde o arquivo será compilado com o nome `json.hpp`. Rode o comando abaixo:
 ```properties
 curl -o json.hpp https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
 ```
