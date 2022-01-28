@@ -10,5 +10,5 @@ curl -o json.hpp https://raw.githubusercontent.com/nlohmann/json/develop/single_
 
 ```properties
 g++ -o desafio5 desafio5.cpp
-./desafio5 <path-to-json> 
+./desafio5 <path-to-json>
 ```
