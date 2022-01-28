@@ -1,4 +1,4 @@
-#include "json/single_include/nlohmann/json.hpp"
+#include "json.hpp"
 #include <algorithm>
 #include <fstream>
 #include <iostream>
