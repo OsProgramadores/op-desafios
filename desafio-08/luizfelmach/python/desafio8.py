@@ -36,6 +36,6 @@ def parser(line):
     newNumerator = numerator%denominator
     return f"{first} {newNumerator}/{denominator}"
 
-with open("frac.txt", "r") as file:
+with open("frac.txt", "r", encoding='utf-8') as file:
     for l in file:
         print(parser(l))
