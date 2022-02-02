@@ -75,6 +75,20 @@ impl Token {
     }
 }
 
+/// Tokenizes the input string into a vector of [`Token`]s.
+/// 
+/// Any integer values are parsed and a conversion to an i32 is tried. If this
+/// conversion fails, it is considered a syntax error. Stray characters (that
+/// is, one that is not either a number, a parenthesis - left or right - or an
+/// operation - '+', '-', '/', '*' and '^') are also considered a syntax error.
+/// 
+/// No attempt is made to validate any other aspect of the expression, this is
+/// delegated to the [`shunt`] and [`compute`] functions.
+/// 
+/// # Examples
+/// ```
+/// let tokens = scan("1 * (2 + 3)").unwrap();
+/// ```
 fn scan(expression: &str) -> Result<Vec<Token>, &'static str> {
     let mut tokens: Vec<Token> = Vec::new();
     let mut sequence = String::new();
@@ -313,7 +327,7 @@ fn compute(tokens: Vec<Token>) -> Result<i64, &'static str> {
             Procedure::Pow => stack.push(lhs.wrapping_pow(rhs as u32)),
         }
     }
-    // at the end of the computation, we should have only the result keft on the
+    // at the end of the computation, we should have only the result left on the
     // stack, if not it means we have a malformed mathematical expression
     if stack.len() != 1 {
         return Err("ERR SYNTAX");
