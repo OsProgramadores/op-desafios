@@ -293,20 +293,37 @@ fn main() {
         "((1 + 2) ^ 3 * 4) + 5",
         "((1 + 2) ^ 3 * 4) * 5",
         "(((1 + 2) ^ 3 * 4) ^ 5)",
+        "1 + 3",
+        "2 - 3 * 2",
+        "2 ^ 3 / 4",
+        "0 * 5 * (4 + 1)",
+        "5 + 5 / 0",
+        "5 + + 1",
+        "5 + ( 465 + 1",
     ];
 
     for expr in expressions {
-        println!("----- begin expression -----");
-        println!("Scanned expression:");
-        let parsed = scan(expr).unwrap();
-        for par in &parsed {
-            println!("{:?}", par);
+        let res_parsed = scan(expr);
+        let parsed = match res_parsed {
+            Ok(_) => {
+                println!("parseable");
+                res_parsed.unwrap()
+            },
+            Err(e) => {
+                println!("{}", e);
+                continue;
+            }
+        };
+        let res_shunted = shunt(parsed);
+        match res_shunted {
+            Ok(_) => {
+                println!("shuntable");
+            }
+            Err(e) => {
+                println!("{}", e);
+                continue;
+            }
         }
-        println!("\nShunted expression:");
-        let shunted = shunt(parsed).unwrap();
-        for shu in shunted {
-            println!("{:?}", shu);
-        }
-        println!("------ end expression ------\n\n");
+        println!("");
     }
 }
