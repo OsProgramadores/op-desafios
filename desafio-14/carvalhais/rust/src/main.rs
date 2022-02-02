@@ -48,13 +48,13 @@ impl Procedure {
 
 #[derive(Debug)]
 enum Token {
-    Value(u64),
+    Value(i64),
     Oper(Procedure),
     Paren(Direction),
 }
 
 impl Token {
-    fn unwrap_value(&self) -> u64 {
+    fn unwrap_value(&self) -> i64 {
         match self {
             Token::Value(v) => *v,
             _ => panic!("expected Token::Value variant")
@@ -96,7 +96,7 @@ fn scan(expression: &str) -> Result<Vec<Token>, &'static str> {
                 seq_flag = false;
                 // try to convert the sequence into a number and reset sequence
                 // state; if the conversion fails, we've got a syntax error
-                match u64::from_str_radix(&sequence, 10) {
+                match i64::from_str_radix(&sequence, 10) {
                     Ok(num) => {
                         tokens.push(Token::Value(num));
                         sequence.clear();
@@ -138,7 +138,7 @@ fn scan(expression: &str) -> Result<Vec<Token>, &'static str> {
     // so we check this now and push the value; so we push this value if the
     // sequence is not empty
     if !sequence.is_empty() {
-        match u64::from_str_radix(&sequence, 10) {
+        match i64::from_str_radix(&sequence, 10) {
             Ok(num) => tokens.push(Token::Value(num)),
             Err(_) => return Err("ERR SYNTAX"),
         }
