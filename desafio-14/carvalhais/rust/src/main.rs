@@ -85,7 +85,7 @@ impl Token {
 /// No attempt is made to validate any other aspect of the expression, this is
 /// delegated to the [`shunt`] and [`compute`] functions.
 /// 
-/// # Examples
+/// # Example
 /// ```
 /// let tokens = scan("1 * (2 + 3)").unwrap();
 /// ```
@@ -159,6 +159,22 @@ fn scan(expression: &str) -> Result<Vec<Token>, &'static str> {
     Ok(tokens)
 }
 
+/// Implements Dijkstra's shuting-yard algorithm over the [`Token`]s vector.
+/// 
+/// The shunting-yard algorithm takes a token vector representing a regular 
+/// mathematical expression and rearrange it into a postfix notation (sometimes
+/// also called Reverse Polish Notation) which is directly computable by a 
+/// computer program. The rearranged expression is also given in termos of a
+///  [`Token`]s  vector.
+/// 
+/// This implementation is based on the algorithm description summarized in
+/// http://mathcenter.oxford.emory.edu/site/cs171/shuntingYardAlgorithm/.
+/// 
+/// # Example
+/// ```
+/// let tokens = scan("1 * (2 + 3)").unwrap();
+/// let postfix = shunt(tokens).unwrap();
+/// ```
 fn shunt(tokens: Vec<Token>) -> Result<Vec<Token>, &'static str> {
     let mut output: Vec<Token> = Vec::new();
     let mut stack: Vec<Token> = Vec::new();
