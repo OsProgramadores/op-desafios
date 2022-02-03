@@ -94,14 +94,14 @@ void Query2(json funcionarios, json areas) {
                                   s["sobrenome"].get<string>();
 
                 cout << "area_max|" << areaName << "|" << fullName << "|"
-                     << setprecision(2) << fixed << s["salario"] << endl;
+                     << setprecision(2) << fixed << s["salario"].get<float>() << endl;
 
             } else if (s["salario"] == (*min)["salario"]) {
                 string fullName = s["nome"].get<string>() + " " +
                                   s["sobrenome"].get<string>();
 
                 cout << "area_min|" << areaName << "|" << fullName << "|"
-                     << setprecision(2) << fixed << s["salario"] << endl;
+                     << setprecision(2) << fixed << s["salario"].get<float>() << endl;
             }
         }
         cout << "area_avg|" << areaName << "|" << fixed << setprecision(2)
