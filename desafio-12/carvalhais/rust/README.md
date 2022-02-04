@@ -33,5 +33,5 @@ cargo build
 Executar o binário gerado:
 
 ```bash
-./target/debug/pwr
+./target/debug/pwr filename.txt
 ```
