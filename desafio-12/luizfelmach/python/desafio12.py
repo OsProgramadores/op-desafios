@@ -8,10 +8,10 @@ def existsPot(number):
     while not finalized:
         if (number % 2 == 1 or number == 0) and number != 1:
             finalized = True
-            print(f"{initialNumber} false")
+            print(f"Number: {initialNumber}\nIs power of 2: false\n")
         if number == 1:
             finalized = True
-            print(f"{initialNumber} true {count}")
+            print(f"Number: {initialNumber}\nIs power of 2: true\nExponent: {count}\n")
         number //= 2
         count += 1
 
