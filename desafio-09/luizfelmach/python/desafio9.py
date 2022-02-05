@@ -1,4 +1,5 @@
 """ Convert bases. """
+import sys
 
 digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
 
@@ -68,15 +69,19 @@ def verify(base_in, base_out, number):
         return False
     return True
 
-with open("./baseconv.txt", "r", encoding="utf-8") as file:
-    for l in file:
-        line = l.split(" ")
-        b_i = int(line[0])
-        b_o = int(line[1])
-        n = line[2].replace("\n", "")
-        if verify(b_i, b_o, n):
-            dec = to_decimal(b_i, n)
-            converted = decimal_to_base(b_o, dec)
-            print(converted)
-        else:
-            print("???")
+try:
+    filePath = sys.argv[1] if len(sys.argv) == 2 else "./baseconv.txt"
+    with open(filePath, "r", encoding="utf-8") as file:
+        for l in file:
+            line = l.split(" ")
+            b_i = int(line[0])
+            b_o = int(line[1])
+            n = line[2].replace("\n", "")
+            if verify(b_i, b_o, n):
+                dec = to_decimal(b_i, n)
+                converted = decimal_to_base(b_o, dec)
+                print(converted)
+            else:
+                print("???")
+except:
+    print("File does not exists.")
