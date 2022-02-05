@@ -83,5 +83,5 @@ try:
                 print(converted)
             else:
                 print("???")
-except:
+except:  # pylint: disable=bare-except
     print("File does not exists.")
