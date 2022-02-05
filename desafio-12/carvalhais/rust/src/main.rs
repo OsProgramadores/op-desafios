@@ -12,6 +12,8 @@
 // TODO: implement from scratch a nice popcount algoritm (possible candidates:
 // sideways sum, SWAR, etc), and write a nice article on the README.md file
 // explaining how it works
+extern crate num_bigint;
+
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
