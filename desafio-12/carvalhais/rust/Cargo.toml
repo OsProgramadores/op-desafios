@@ -5,6 +5,7 @@ edition = "2015"
 
 [dependencies]
 num-bigint = "0.4"
+clap = { version = "3.0", features = ["derive"] }
 
 [[bin]]
 name = "pwr"

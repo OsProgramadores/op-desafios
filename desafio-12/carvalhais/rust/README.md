@@ -26,12 +26,31 @@ sideways sum, ou outro.
 
 Compilar com o cargo:
 
-```bash
+```console
 cargo build
 ```
 
 Executar o binário gerado:
 
-```bash
+```conole
 ./target/debug/pwr filename.txt
+```
+
+Ajuda:
+
+````console
+$pwr --help
+
+pwr 0.1.0
+
+USAGE:
+    pwr [OPTIONS] <FILENAME>
+
+ARGS:
+    <FILENAME>    files to load the numbers from, one per line
+
+OPTIONS:
+    -h, --help       Print help information
+        --tabular    outputs a nicely formatted table with big numbers shortened
+    -V, --version    Print version information
 ```
