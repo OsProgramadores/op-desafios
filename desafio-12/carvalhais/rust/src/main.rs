@@ -40,7 +40,7 @@ fn main() {
         Ok(f) => f,
         Err(e) => {
             println!(
-                "{}: {}", 
+                "{}: {}",
                 e, opts.filename.to_string_lossy());
             return;
         }
@@ -49,11 +49,11 @@ fn main() {
 
     if opts.tabular {
         println!(
-            " {:^4} | {:^20} | {:^6} | {:^6} | {:^6} ", 
-            "ID", 
+            " {:^4} | {:^20} | {:^6} | {:^6} | {:^6} ",
+            "ID",
             "Number",
             "Digits",
-            "Power", 
+            "Power",
             "Exp"
         );
         println!("{:-^6}|{:-^22}|{:-^8}|{:-^8}|{:-^8}", "", "", "", "", "");
@@ -73,28 +73,28 @@ fn main() {
             let num_digits = number.len();
             if num_digits > 20 {
                 number = format!(
-                    "{}...{}", 
-                    &number[0..14], 
+                    "{}...{}",
+                    &number[0..14],
                     &number[num_digits - 3..]
                 );
             }
             if is_power {
                 println!(
-                    " {:^4} | {:>20} | {:^6} | {:^6} | {:^6} ", 
-                    index, 
-                    number, 
+                    " {:^4} | {:>20} | {:^6} | {:^6} | {:^6} ",
+                    index,
+                    number,
                     num_digits,
-                    is_power, 
+                    is_power,
                     exponent.unwrap()
                 );
                 continue;
             }
             println!(
-                " {:^4} | {:>20} | {:^6} | {:^6} | {:^6} ", 
-                index, 
-                number, 
+                " {:^4} | {:>20} | {:^6} | {:^6} | {:^6} ",
+                index,
+                number,
                 num_digits,
-                is_power, 
+                is_power,
                 "--"
             );
         }
