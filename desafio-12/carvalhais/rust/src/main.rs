@@ -12,14 +12,14 @@
 // TODO: implement from scratch a nice popcount algoritm (possible candidates:
 // sideways sum, SWAR, etc), and write a nice article on the README.md file
 // explaining how it works
-extern crate num_bigint;
 extern crate clap;
+extern crate num_bigint;
 
 use clap::Parser;
+use num_bigint::BigUint;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::PathBuf;
-use num_bigint::BigUint;
 
 #[derive(Parser)]
 #[clap(about, version, author)]
@@ -39,9 +39,7 @@ fn main() {
     let file = match File::open(&opts.filename) {
         Ok(f) => f,
         Err(e) => {
-            println!(
-                "{}: {}",
-                e, opts.filename.to_string_lossy());
+            println!("{}: {}", e, opts.filename.to_string_lossy());
             return;
         }
     };
@@ -50,11 +48,7 @@ fn main() {
     if opts.tabular {
         println!(
             " {:^4} | {:^20} | {:^6} | {:^6} | {:^6} ",
-            "ID",
-            "Number",
-            "Digits",
-            "Power",
-            "Exp"
+            "ID", "Number", "Digits", "Power", "Exp"
         );
         println!("{:-^6}|{:-^22}|{:-^8}|{:-^8}|{:-^8}", "", "", "", "", "");
     }
@@ -66,17 +60,13 @@ fn main() {
         let is_power = number.count_ones() == 1;
         let exponent = match is_power {
             true => Some(number.trailing_zeros().unwrap()),
-            false => None
+            false => None,
         };
         if opts.tabular {
             let mut number = format!("{}", number);
             let num_digits = number.len();
             if num_digits > 20 {
-                number = format!(
-                    "{}...{}",
-                    &number[0..14],
-                    &number[num_digits - 3..]
-                );
+                number = format!("{}...{}", &number[0..14], &number[num_digits - 3..]);
             }
             if is_power {
                 println!(
@@ -91,14 +81,9 @@ fn main() {
             }
             println!(
                 " {:^4} | {:>20} | {:^6} | {:^6} | {:^6} ",
-                index,
-                number,
-                num_digits,
-                is_power,
-                "--"
+                index, number, num_digits, is_power, "--"
             );
-        }
-        else {
+        } else {
             if is_power {
                 println!("{} {} {}", number, is_power, exponent.unwrap());
                 continue;
