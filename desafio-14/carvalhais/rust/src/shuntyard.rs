@@ -1,12 +1,20 @@
+// numeric_expressions - a rust solution for challenge #14 from OsProgramadores
+// website implementing Dijkstra's shunting yard algorithm
+//
+// (c) Andre Carvalhais <carvalhais@live.com>
+//
+// For the full copyright and license information, please view the LICENSE file
+// that was distributed with this source code.
+
 use super::prelude::*;
 
-/// Implements Dijkstra's shuting-yard algorithm over the [`Token`]s vector.
+/// Implements Dijkstra's shuting-yard algorithm over the [`Token`] vector.
 ///
 /// The shunting-yard algorithm takes a token vector representing a regular
 /// mathematical expression and rearrange it into a postfix notation (sometimes
 /// also called Reverse Polish Notation) which is directly computable by a
 /// computer program. The rearranged expression is also given in termos of a
-///  [`Token`]s  vector.
+///  [`Token`]  vector.
 ///
 /// This implementation is based on the algorithm description summarized in
 /// http://mathcenter.oxford.emory.edu/site/cs171/shuntingYardAlgorithm/.
