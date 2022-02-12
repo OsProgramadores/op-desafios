@@ -19,11 +19,7 @@ use super::prelude::*;
 /// This implementation is based on the algorithm description summarized in
 /// http://mathcenter.oxford.emory.edu/site/cs171/shuntingYardAlgorithm/.
 ///
-/// # Example
-/// ```
-/// let tokens = scan("1 * (2 + 3)").unwrap();
-/// let postfix = shunt(tokens).unwrap();
-/// ```
+
 pub fn shunt(tokens: Vec<Token>) -> Result<Vec<Token>, &'static str> {
     let mut output: Vec<Token> = Vec::new();
     let mut stack: Vec<Token> = Vec::new();

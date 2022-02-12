@@ -8,7 +8,7 @@
 
 use super::prelude::*;
 
-/// Tokenizes the input string into a vector of [`Token`]s.
+/// Tokenizes the input string into a vector of [`Token`].
 ///
 /// Any integer values are parsed and a conversion to an i32 is tried. If this
 /// conversion fails, it is considered a syntax error. Stray characters (that
@@ -18,10 +18,7 @@ use super::prelude::*;
 /// No attempt is made to validate any other aspect of the expression, this is
 /// delegated to the [`shunt`] and [`compute`] functions.
 ///
-/// # Example
-/// ```
-/// let tokens = scan("1 * (2 + 3)").unwrap();
-/// ```
+
 pub fn scan(expression: &str) -> Result<Vec<Token>, &'static str> {
     let mut tokens: Vec<Token> = Vec::new();
     let mut sequence = String::new();

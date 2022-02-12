@@ -8,6 +8,24 @@
 
 use super::prelude::*;
 
+/// Takes a [`Token`] vector and computes the corresponding mathematical
+/// expression.
+///
+/// This function expects that it's argument is already parsed, and reordered
+/// by the shunting yard algorithm in a RPN notation (Reverse Polish Notation).
+/// All this funcion does is consume the input vector, push values to a stack,
+/// and consume them in reverse order for each operation, pushing the result
+/// back to the stack to be consumed by the next operation.
+///
+/// Any other token that is not a value or a operation is considered an error;
+/// a stack underflow, or a stack with a value count different than one after
+/// all the operations have taken place are also considered a syntax error
+/// (because it means the expression was malformed, not all errors are caught by
+/// the scanning and shunting algorithms).
+///
+/// The algorithm also detects division by zero errors.
+///
+
 pub fn compute(tokens: Vec<Token>) -> Result<i64, &'static str> {
     let mut stack: Vec<i64> = Vec::new();
     for tk in tokens {
