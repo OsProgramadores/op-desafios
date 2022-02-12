@@ -7,9 +7,12 @@
 // that was distributed with this source code.
 
 /// Error type for mathematical expressions parsing and computations.
+#[derive(Debug)]
 pub enum ExprError {
     Unknown,
     DivByZero,
+    NumConversion,
+    StrayChar,
     Syntax,
 }
 

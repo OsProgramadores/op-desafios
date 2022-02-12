@@ -32,7 +32,7 @@ fn main() {
         let parsed = match res_parsed {
             Ok(_) => res_parsed.unwrap(),
             Err(e) => {
-                println!("{}", e);
+                println!("{:?}", e);
                 continue;
             }
         };
