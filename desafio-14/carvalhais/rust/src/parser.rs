@@ -15,5 +15,5 @@ pub mod prelude {
     pub use super::computer::compute;
     pub use super::scanner::scan;
     pub use super::shuntyard::shunt;
-    pub use super::types::{Direction, Procedure, Token};
+    pub use super::types::{Direction, ExprError, Procedure, Token};
 }

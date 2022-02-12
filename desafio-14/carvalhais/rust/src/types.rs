@@ -6,6 +6,13 @@
 // For the full copyright and license information, please view the LICENSE file
 // that was distributed with this source code.
 
+/// Error type for mathematical expressions parsing and computations.
+pub enum ExprError {
+    Unknown,
+    DivByZero,
+    Syntax,
+}
+
 /// A direction (left or right) indicator for parentheses and associativity.
 #[derive(Debug, PartialEq)]
 pub enum Direction {
