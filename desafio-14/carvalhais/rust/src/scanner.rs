@@ -8,6 +8,8 @@
 
 use super::prelude::*;
 
+/// Tries to convert the number in `&str` into a `i64`
+
 fn helper_num_conversion(s: &str) -> Result<i64, ExprError> {
     // try to convert the sequence into a number
     match i64::from_str_radix(s, 10) {
