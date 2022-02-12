@@ -35,19 +35,17 @@ pub fn scan(expression: &str) -> Result<Vec<Token>, &'static str> {
             }
             // char is not a digit, the operand sequence is over; finish the
             // sequence and fall through the rest of the loop to process 'ch'
-            else {
-                seq_flag = false;
-                // try to convert the sequence into a number and reset sequence
-                // state; if the conversion fails, we've got a syntax error
-                match i64::from_str_radix(&sequence, 10) {
-                    Ok(num) => {
-                        tokens.push(Token::Value(num));
-                        sequence.clear();
-                    }
-                    // if the conversion fails, we have a badly formatted number
-                    Err(_) => {
-                        return Err("ERR SYNTAX");
-                    }
+            seq_flag = false;
+            // try to convert the sequence into a number and reset sequence
+            // state; if the conversion fails, we've got a syntax error
+            match i64::from_str_radix(&sequence, 10) {
+                Ok(num) => {
+                    tokens.push(Token::Value(num));
+                    sequence.clear();
+                }
+                // if the conversion fails, we have a badly formatted number
+                Err(_) => {
+                    return Err("ERR SYNTAX");
                 }
             }
         }
