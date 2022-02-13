@@ -9,7 +9,7 @@
 use super::prelude::*;
 
 /// Tries to convert the number in `&str` into a `i64`
-
+///
 fn helper_num_conversion(s: &str) -> Result<i64, ExprError> {
     // try to convert the sequence into a number
     match i64::from_str_radix(s, 10) {
@@ -29,7 +29,6 @@ fn helper_num_conversion(s: &str) -> Result<i64, ExprError> {
 /// No attempt is made to validate any other aspect of the expression, this is
 /// delegated to the [`shunt`] and [`compute`] functions.
 ///
-
 pub fn scan(expression: &str) -> Result<Vec<Token>, ExprError> {
     let mut tokens: Vec<Token> = Vec::new();
     let mut operand = String::new();

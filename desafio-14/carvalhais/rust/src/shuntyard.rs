@@ -7,6 +7,120 @@
 // that was distributed with this source code.
 
 use super::prelude::*;
+use core::iter::Peekable;
+use std::vec::IntoIter;
+
+/// Helper function to handle the right parenthesis case.
+///
+/// This function is called whenever the shunting yard algorithm finds a right
+/// parenthesis. It discards the right parenthesis, and looks for the matching
+/// left parenthesis, popping every tokens from the stack and pushing them to
+/// the output until the matching left parenthesis is found.
+///
+/// If the end of the stack is reached before the matching left parenthesis is
+/// found, this is considered an error. If tokens other than operations and left
+/// parenthesis are found, this is also considered an error.
+///
+fn handle_right_paren(
+    tokens: &mut Peekable<IntoIter<Token>>,
+    output: &mut Vec<Token>,
+    stack: &mut Vec<Token>,
+) -> Result<(), ExprError> {
+    // assert that the next symbol in the expression vector is a right
+    // parenthesis, if it is not, something really bad must have hapenned
+    // (since this function is not exposed to the public API, and only called
+    // internally), so we panic; if things are just okay, pop and discard the
+    // right parenthesis
+    if tokens.next() != Some(Token::Paren(Direction::Right)) {
+        panic!("unrecoverable state in function 'handle_right_paren'");
+    }
+    // pop and output the stack symbols until you see a left parenthesis
+    loop {
+        let tos = stack.pop();
+        // if we reach the end of the stack without a matching left
+        // parenthesis, that's a syntax error
+        if tos.is_none() {
+            return Err(ExprError::UnbalancedParen);
+        }
+        // tos isn't a None, unwrap it
+        let tos = tos.unwrap();
+        // pop and output the stack symbols until you see a left parenthesis
+        if let Token::Oper(_) = tos {
+            output.push(tos);
+            continue;
+        }
+        // pop the left parenthesis and discard it
+        if let Token::Paren(Direction::Left) = tos {
+            break;
+        }
+        // anything else is a syntax error, so if we reach the following
+        // statement, we should return an error
+        return Err(ExprError::UnexpectedToken);
+    }
+    Ok(())
+}
+
+/// Helper function to handle the lower precedence or same precedence with left
+/// associativity case.
+///
+/// This function is called whenever the incoming operation symbol  from the
+/// parsed expression has either a lower precedence than the symbol on the top
+/// of the stack, or has the same precedence, but it is left associative. It
+/// consumes the stack, popping it's symbols and pushing them on the output
+/// until this condition is no longer met. Then, the incoming symbol is pushed
+/// into the stack.
+///
+/// Since it is considered a normal operating condition to reach the end of the
+/// stack or an operator that has different precedence and / or associativity
+/// characteristics than the ones needed to keep iterating, this function simply
+/// returns on such situations, and returns no error.
+///
+fn handle_lower_left(
+    tokens: &mut Peekable<IntoIter<Token>>,
+    output: &mut Vec<Token>,
+    stack: &mut Vec<Token>,
+) -> Result<(), ExprError> {
+    // we know the incoming token is an operator, because we got called
+    let incoming = tokens.next().unwrap();
+    let in_attr;
+    if let Token::Oper(any) = &incoming {
+        in_attr = any.attr();
+    // something really bad happened, so we just panic
+    } else {
+        panic!("unrecoverable state in function 'handle_same_left'");
+    }
+
+    // iteratively consume the stack
+    while let Some(tos) = stack.last() {
+        // the stack only contains operators or (optionally) left parenthesis
+        // (since right parenthesis are discarded as soon as they're read), but
+        // we want to stop processing if we reach a left parenthesis or the
+        // end of the stack
+        let tos_attr;
+        if let Token::Oper(any) = tos {
+            tos_attr = any.attr();
+        // tos is not an operator or the stack is empty, we're done
+        } else {
+            break;
+        }
+        // the incoming symbol is an operator and has either lower precedence
+        // than the operator on the top of the stack, or has the same precedence
+        // as the operator on the top of the stack and is left associative
+        let lower = in_attr.precedence < tos_attr.precedence;
+        let same = in_attr.precedence == tos_attr.precedence;
+        let l_assoc = in_attr.associativity == Direction::Left;
+        // continue to pop the stack until this is not true
+        if lower || (same && l_assoc) {
+            let symbol = stack.pop().unwrap();
+            output.push(symbol);
+        } else {
+            break;
+        }
+    }
+    // push the incoming operator
+    stack.push(incoming);
+    Ok(())
+}
 
 /// Implements Dijkstra's shuting-yard algorithm over the [`Token`] vector.
 ///
@@ -19,138 +133,63 @@ use super::prelude::*;
 /// This implementation is based on the algorithm description summarized in
 /// http://mathcenter.oxford.emory.edu/site/cs171/shuntingYardAlgorithm/.
 ///
-
-pub fn shunt(tokens: Vec<Token>) -> Result<Vec<Token>, &'static str> {
+pub fn shunt(tkns: Vec<Token>) -> Result<Vec<Token>, ExprError> {
     let mut output: Vec<Token> = Vec::new();
     let mut stack: Vec<Token> = Vec::new();
+    let mut tokens = tkns.into_iter().peekable();
 
-    for token in tokens {
-        // a) if the incoming symbol is an operand, print it
-        if let Token::Value(_) = token {
-            output.push(token);
-            continue;
-        }
-        // b) if the incoming symbol is a left parenthesis, push it on the stack
-        if let Token::Paren(Direction::Left) = token {
-            stack.push(token);
-            continue;
-        }
-        // c) if the incoming symbol is a right parenthesis: discard the right
-        // parenthesis, pop and print the stack symbols until you see a left
-        // parenthesis; pop the left parenthesis and discard it
-        if let Token::Paren(Direction::Right) = token {
-            loop {
-                let tos = stack.pop();
-                // if we reach the end of the stack without a matching left
-                // parenthesis, that's a syntax error
-                if tos.is_none() {
-                    return Err("ERR SYNTAX");
-                }
-                // tos isn't a None, unwrap it
-                let tos = tos.unwrap();
-                // pop and print the stack symbols until you see a left
-                // parenthesis
-                if let Token::Oper(_) = tos {
-                    output.push(tos);
+    while let Some(peeked) = tokens.peek() {
+        match peeked {
+            // a) if the incoming symbol is an operand, output it
+            Token::Value(_) => output.push(tokens.next().unwrap()),
+            // b) if the incoming symbol is a left parenthesis, push it on the stack
+            Token::Paren(Direction::Left) => stack.push(tokens.next().unwrap()),
+            // c) if the incoming symbol is a right parenthesis: discard the
+            // right parenthesis, pop and output the stack symbols until you see
+            // a left parenthesis; pop the left parenthesis and discard it
+            Token::Paren(Direction::Right) => {
+                handle_right_paren(&mut tokens, &mut output, &mut stack)?
+            }
+            Token::Oper(_) => {
+                // d) if the incoming symbol is an operator and the stack is
+                // empty or contains a left parenthesis on top, push the
+                // incoming operator onto the stack
+                let empty = stack.len() == 0;
+                let left_paren = stack.last() == Some(&Token::Paren(Direction::Left));
+                if empty || left_paren {
+                    stack.push(tokens.next().unwrap());
                     continue;
                 }
-                // pop the left parenthesis and discard it
-                if let Token::Paren(Direction::Left) = tos {
-                    break;
+                // e) if the incoming symbol is an operator and has either
+                // higher precedence than the operator on the top of the stack,
+                // or has the same precedence as the operator on the top of the
+                // stack and is right associative -- push it on the stack
+                let in_attr = &peeked.unwrap_oper().attr();
+                let tos_attr = &stack.last().unwrap().unwrap_oper().attr();
+                let higher = in_attr.precedence > tos_attr.precedence;
+                let same = in_attr.precedence == tos_attr.precedence;
+                let r_assoc = in_attr.associativity == Direction::Right;
+                if higher || (same && r_assoc) {
+                    stack.push(tokens.next().unwrap());
+                    continue;
                 }
-                // anything else is a syntax error, so if we reach the following
-                // statement, we should return an error
-                return Err("ERR SYNTAX");
-            }
-            continue;
-            // handle mathematical operations precedence
-        }
-        if let Token::Oper(_) = token {
-            // d) if the incoming symbol is an operator and the stack is empty
-            // or contains a left parenthesis on top, push the incoming operator
-            // onto the stack
-            let opt_tos = stack.pop();
-            // the stack is empty
-            if opt_tos.is_none() {
-                stack.push(token);
-                continue;
-            }
-            // opt_tos isn't None, unwrap it
-            let mut tos = opt_tos.unwrap();
-            // contains a left parenthesis on top
-            if let Token::Paren(Direction::Left) = tos {
-                stack.push(tos);
-                stack.push(token);
-                continue;
-            }
-            // e) if the incoming symbol is an operator and has either higher
-            // precedence than the operator on the top of the stack, or has the
-            // same precedence as the operator on the top of the stack and is
-            // right associative -- push it on the stack
-            let token_attr = token.unwrap_oper().attr();
-            let mut tos_attr = tos.unwrap_oper().attr();
-
-            let higher = token_attr.precedence > tos_attr.precedence;
-            let equal = token_attr.precedence == tos_attr.precedence;
-            let right = token_attr.associativity == Direction::Right;
-
-            if higher || (equal && right) {
-                stack.push(tos);
-                stack.push(token);
-                continue;
-            }
-
-            // f) if the incoming symbol is an operator and has either lower
-            // precedence than the operator on the top of the stack, or has
-            // the same precedence as the operator on the top of the stack and
-            // is left associative -- continue to pop the stack until this is
-            // not true; then, push the incoming operator
-            let mut lower = token_attr.precedence < tos_attr.precedence;
-            let mut equal = token_attr.precedence == tos_attr.precedence;
-            let mut left = token_attr.associativity == Direction::Left;
-            loop {
-                if lower || (equal && left) {
-                    output.push(tos);
-                } else {
-                    stack.push(tos);
-                    stack.push(token);
-                    break;
-                }
-                if stack.len() >= 1 {
-                    // if theere is an operator on top of the stack, reevaluate
-                    // the loop; if the top of stack is a left paren, it means
-                    // we reached the end of the current 'stream' of oprations,
-                    // so just puch things back in the stack and keep going;
-                    // anything else is a syntax error
-                    tos = stack.pop().unwrap();
-                    match tos {
-                        Token::Oper(_) => {
-                            tos_attr = tos.unwrap_oper().attr();
-                            lower = token_attr.precedence > tos_attr.precedence;
-                            equal = token_attr.precedence == tos_attr.precedence;
-                            left = token_attr.associativity == Direction::Right;
-                        }
-                        Token::Paren(Direction::Left) => {
-                            stack.push(tos);
-                            stack.push(token);
-                            break;
-                        }
-                        _ => return Err("ERR SYNTAX"),
-                    }
-                } else {
-                    stack.push(token);
-                    break;
+                // f) if the incoming symbol is an operator and has either lower
+                // precedence than the operator on the top of the stack, or has
+                // the same precedence as the operator on the top of the stack
+                // and is left associative -- continue to pop the stack until
+                // this is not true; then, push the incoming operator
+                let lower = in_attr.precedence < tos_attr.precedence;
+                let l_assoc = in_attr.associativity == Direction::Left;
+                if lower || (same && l_assoc) {
+                    handle_lower_left(&mut tokens, &mut output, &mut stack)?;
+                    continue;
                 }
             }
         }
     }
-    // at the end of the expression, pop and print all operators on the stack;
-    // (no parentheses should remain)
-    while let Some(token) = stack.pop() {
-        match token {
-            Token::Oper(_) => output.push(token),
-            _ => return Err("ERR SYNTAX"),
-        }
+    // output any remaining tokens left on the stack
+    while let Some(tk) = stack.pop() {
+        output.push(tk);
     }
     Ok(output)
 }

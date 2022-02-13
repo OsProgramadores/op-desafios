@@ -25,8 +25,7 @@ use super::prelude::*;
 ///
 /// The algorithm also detects division by zero errors.
 ///
-
-pub fn compute(tokens: Vec<Token>) -> Result<i64, &'static str> {
+pub fn compute(tokens: Vec<Token>) -> Result<i64, ExprError> {
     let mut stack: Vec<i64> = Vec::new();
     for tk in tokens {
         let op = match tk {
@@ -38,19 +37,19 @@ pub fn compute(tokens: Vec<Token>) -> Result<i64, &'static str> {
             // if the token vector contains other kinds of tokens, then it is
             // an unknown error, since they should have been stripped out by
             // the shunting algorithm
-            _ => return Err("ERR UNKNOWN"),
+            _ => return Err(ExprError::Unknown),
         };
         // if there aren't enough values on the stack, then the expression is
         // malformed, and this is considered a syntax error
-        let rhs = stack.pop().ok_or("ERR SYNTAX")?;
-        let lhs = stack.pop().ok_or("ERR SYNTAX")?;
+        let rhs = stack.pop().ok_or(ExprError::Syntax)?;
+        let lhs = stack.pop().ok_or(ExprError::Syntax)?;
         match op {
             Procedure::Add => stack.push(lhs.wrapping_add(rhs)),
             Procedure::Sub => stack.push(lhs.wrapping_sub(rhs)),
             Procedure::Mul => stack.push(lhs.wrapping_mul(rhs)),
             Procedure::Div => {
                 if rhs == 0 {
-                    return Err("ERR DIVBYZERO");
+                    return Err(ExprError::DivByZero);
                 }
                 stack.push(lhs.wrapping_div(rhs))
             }
@@ -60,7 +59,7 @@ pub fn compute(tokens: Vec<Token>) -> Result<i64, &'static str> {
     // at the end of the computation, we should have only the result left on the
     // stack, if not it means we have a malformed mathematical expression
     if stack.len() != 1 {
-        return Err("ERR SYNTAX");
+        return Err(ExprError::Syntax);
     }
     Ok(stack.pop().unwrap())
 }

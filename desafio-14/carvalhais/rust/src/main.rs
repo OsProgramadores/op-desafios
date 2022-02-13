@@ -40,14 +40,14 @@ fn main() {
         let shunted = match res_shunted {
             Ok(_) => res_shunted.unwrap(),
             Err(e) => {
-                println!("{}", e);
+                println!("{:?}", e);
                 continue;
             }
         };
         let res_result = compute(shunted);
         match res_result {
             Ok(res) => println!("{}", res),
-            Err(e) => println!("{}", e),
+            Err(e) => println!("{:?}", e),
         }
     }
 }

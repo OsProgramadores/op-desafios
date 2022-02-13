@@ -14,17 +14,19 @@ pub enum ExprError {
     NumConversion,
     StrayChar,
     Syntax,
+    UnbalancedParen,
+    UnexpectedToken,
 }
 
 /// A direction (left or right) indicator for parentheses and associativity.
-#[derive(Debug, PartialEq)]
+#[derive(PartialEq, Debug)]
 pub enum Direction {
     Left,
     Right,
 }
 
 /// Mathematical operations known to the algorithm.
-#[derive(Debug)]
+#[derive(PartialEq, Debug)]
 pub enum Procedure {
     Add,
     Sub,
@@ -76,7 +78,7 @@ pub struct ProcAttr {
 /// This could be either a numerical value, a known mathematical operation or
 /// a parentheses. This abstracts the expression from it's string representation
 /// to one more apropriate for algorithmic computations.
-#[derive(Debug)]
+#[derive(PartialEq, Debug)]
 pub enum Token {
     Value(i64),
     Oper(Procedure),
