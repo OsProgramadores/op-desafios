@@ -8,9 +8,9 @@
 
 use super::prelude::*;
 
-/// Tries to convert the number in `&str` into a `i64`
+/// Helper function to convert the number in `&str` into a `i64`.
 ///
-fn helper_num_conversion(s: &str) -> Result<i64, ExprError> {
+fn handle_num_conversion(s: &str) -> Result<i64, ExprError> {
     // try to convert the sequence into a number
     match i64::from_str_radix(s, 10) {
         Ok(num) => Ok(num),
@@ -48,7 +48,7 @@ pub fn scan(expression: &str) -> Result<Vec<Token>, ExprError> {
                 }
             }
             // convert the number just consumed and push it to the stack
-            let value = helper_num_conversion(&operand)?;
+            let value = handle_num_conversion(&operand)?;
             tokens.push(Token::Value(value));
             // clear the operand string, so it can handle the next operand
             operand.clear();
@@ -76,8 +76,124 @@ pub fn scan(expression: &str) -> Result<Vec<Token>, ExprError> {
     // still unconverted on the 'operand' string, however; so we convert it and
     // push it to the stack
     if !operand.is_empty() {
-        let value = helper_num_conversion(&operand)?;
+        let value = handle_num_conversion(&operand)?;
         tokens.push(Token::Value(value));
     }
     Ok(tokens)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn scan_operations() {
+        let result = scan(" + - * / ^ ").unwrap();
+        assert!(
+            result
+                == [
+                    Token::Oper(Procedure::Add),
+                    Token::Oper(Procedure::Sub),
+                    Token::Oper(Procedure::Mul),
+                    Token::Oper(Procedure::Div),
+                    Token::Oper(Procedure::Pow),
+                ]
+        );
+    }
+
+    #[test]
+    fn scan_parens() {
+        let result = scan(" ( ) ").unwrap();
+        assert!(
+            result
+                == [
+                    Token::Paren(Direction::Left),
+                    Token::Paren(Direction::Right),
+                ]
+        );
+    }
+
+    #[test]
+    fn scan_value() {
+        let result = scan(" 93 ").unwrap();
+        assert!(result == [Token::Value(93)]);
+    }
+
+    #[test]
+    fn scan_multiple_values() {
+        let result = scan(" 93 2006 02042019 ").unwrap();
+        assert!(result == [Token::Value(93), Token::Value(2006), Token::Value(2042019),]);
+    }
+
+    #[test]
+    fn consume_whitespace() {
+        let result = scan(" \t  \r\n  \n  ").unwrap();
+        assert!(result == []);
+    }
+
+    #[test]
+    fn math_expr1() {
+        let result = scan("(1 + 2) * 3").unwrap();
+        assert!(
+            result
+                == [
+                    Token::Paren(Direction::Left),
+                    Token::Value(1),
+                    Token::Oper(Procedure::Add),
+                    Token::Value(2),
+                    Token::Paren(Direction::Right),
+                    Token::Oper(Procedure::Mul),
+                    Token::Value(3),
+                ]
+        );
+    }
+
+    #[test]
+    fn math_expr2() {
+        let result = scan("1^2/(3-4)").unwrap();
+        assert!(
+            result
+                == [
+                    Token::Value(1),
+                    Token::Oper(Procedure::Pow),
+                    Token::Value(2),
+                    Token::Oper(Procedure::Div),
+                    Token::Paren(Direction::Left),
+                    Token::Value(3),
+                    Token::Oper(Procedure::Sub),
+                    Token::Value(4),
+                    Token::Paren(Direction::Right),
+                ]
+        );
+    }
+
+    #[test]
+    fn stray_char1() {
+        let result = scan("?");
+        assert!(result == Err(ExprError::StrayChar));
+    }
+
+    #[test]
+    fn stray_char2() {
+        let result = scan("$");
+        assert!(result == Err(ExprError::StrayChar));
+    }
+
+    #[test]
+    fn stray_char3() {
+        let result = scan("e");
+        assert!(result == Err(ExprError::StrayChar));
+    }
+
+    #[test]
+    fn conversion1() {
+        let result = handle_num_conversion("4321");
+        assert!(result == Ok(4321));
+    }
+
+    #[test]
+    fn conversion2() {
+        let result = handle_num_conversion("987a8");
+        assert!(result == Err(ExprError::NumConversion));
+    }
 }
