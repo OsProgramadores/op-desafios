@@ -193,3 +193,139 @@ pub fn shunt(tkns: Vec<Token>) -> Result<Vec<Token>, ExprError> {
     }
     Ok(output)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn expr_from_tokens(tokens: &Vec<Token>) -> String {
+        let mut expr = String::new();
+        for token in tokens {
+            match token {
+                Token::Oper(proc) => match proc {
+                    Procedure::Add => expr.push_str("+ "),
+                    Procedure::Sub => expr.push_str("- "),
+                    Procedure::Mul => expr.push_str("* "),
+                    Procedure::Div => expr.push_str("/ "),
+                    Procedure::Pow => expr.push_str("^ "),
+                },
+                Token::Paren(dir) => match dir {
+                    Direction::Left => expr.push_str("( "),
+                    Direction::Right => expr.push_str(") "),
+                },
+                Token::Value(num) => {
+                    let num = format!("{} ", num);
+                    expr.push_str(num.as_str());
+                }
+            }
+        }
+        expr.pop();
+        expr
+    }
+
+    #[test]
+    fn single_operation() {
+        let infix = "1 + 2";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 +");
+    }
+
+    #[test]
+    fn chained_left_assoc() {
+        let infix = "1 * 2 * 3 * 4";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 * 3 * 4 *");
+    }
+
+    #[test]
+    fn chained_right_assoc() {
+        let infix = "1 ^ 2 ^ 3 ^ 4";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 3 4 ^ ^ ^");
+    }
+
+    #[test]
+    fn different_precedence1() {
+        let infix = "1 + 2 * 3 + 4";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 3 * + 4 +");
+    }
+
+    #[test]
+    fn different_precedence2() {
+        let infix = "1 + 2 + 3 * 4";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 + 3 4 * +");
+    }
+
+    #[test]
+    fn different_precedence3() {
+        let infix = "1 * 2 ^ 3 * 4 - 5";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 3 ^ * 4 * 5 -");
+    }
+
+    #[test]
+    fn different_precedence4() {
+        let infix = "1 * 2 ^ 3 - 4 * 5";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 3 ^ * 4 5 * -");
+    }
+
+    #[test]
+    fn different_precedence5() {
+        let infix = "1 * 2 ^ 3 ^ 4 / 5";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 3 4 ^ ^ * 5 /");
+    }
+
+    #[test]
+    fn parenthesized_expression1() {
+        let infix = "( 1 * 2 ) * 3 + 4";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 * 3 * 4 +");
+    }
+
+    #[test]
+    fn parenthesized_expression2() {
+        let infix = "( 1 * 2 ) * ( 3 + 4 )";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 * 3 4 + *");
+    }
+
+    #[test]
+    fn parenthesized_expression3() {
+        let infix = "( ( ( 1 + 2 ) *  3 ) + 4 ) * 5";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 + 3 * 4 + 5 *");
+    }
+
+    #[test]
+    fn parenthesized_expression4() {
+        let infix = "( ( ( 1 + 2 *  3 ) ^ 4 ) * 5 )";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "1 2 3 * + 4 ^ 5 *");
+    }
+
+    #[test]
+    fn parenthesized_expression5() {
+        let infix = "0 ^ ( 1 * ( 2 - 3 ) / 4 ) - 5 * ( 6 + 7 )";
+        let tokens = shunt(scan(infix).unwrap()).unwrap();
+        let rpn = expr_from_tokens(&tokens);
+        assert_eq!(rpn, "0 1 2 3 - * 4 / ^ 5 6 7 + * -");
+    }
+
+    // Write test cases that should return an error
+}
