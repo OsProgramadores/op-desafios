@@ -327,5 +327,40 @@ mod tests {
         assert_eq!(rpn, "0 1 2 3 - * 4 / ^ 5 6 7 + * -");
     }
 
-    // Write test cases that should return an error
+    // tests that should fail
+    #[test]
+    #[should_panic]
+    fn handle_right_paren_no_right_paren_tos() {
+        let mut tokens = scan("2 1 -").unwrap().into_iter().peekable();
+        let mut output: Vec<Token> = Vec::new();
+        let mut stack = Vec::new();
+        let _ = handle_right_paren(&mut tokens, &mut output, &mut stack);
+    }
+
+    #[test]
+    fn handle_right_paren_unbalanced_paren() {
+        let mut tokens = scan(") 2 1 -").unwrap().into_iter().peekable();
+        let mut output: Vec<Token> = Vec::new();
+        let mut stack = Vec::new();
+        let result = handle_right_paren(&mut tokens, &mut output, &mut stack);
+        assert_eq!(result, Err(ExprError::UnbalancedParen));
+    }
+
+    #[test]
+    fn handle_right_paren_unexpected_token() {
+        let mut tokens = scan(") - + * 1").unwrap().into_iter().peekable();
+        let mut output: Vec<Token> = Vec::new();
+        let mut stack = scan("- + * 1").unwrap();
+        let result = handle_right_paren(&mut tokens, &mut output, &mut stack);
+        assert_eq!(result, Err(ExprError::UnexpectedToken));
+    }
+}
+
+#[test]
+#[should_panic]
+fn handle_lower_left_incoming_not_oper() {
+    let mut tokens = scan("2 1 -").unwrap().into_iter().peekable();
+    let mut output: Vec<Token> = Vec::new();
+    let mut stack = Vec::new();
+    let _ = handle_right_paren(&mut tokens, &mut output, &mut stack);
 }
