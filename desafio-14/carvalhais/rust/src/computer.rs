@@ -63,3 +63,62 @@ pub fn compute(tokens: Vec<Token>) -> Result<i64, ExprError> {
     }
     Ok(stack.pop().unwrap())
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn compute_valid_expression1() {
+        let expr = "1 + 2 * (3 + 4)";
+        let tokens = scan(expr).unwrap();
+        let tokens = shunt(tokens).unwrap();
+        let result = compute(tokens).unwrap();
+        assert_eq!(15, result);
+    }
+
+    #[test]
+    fn compute_valid_expression2() {
+        let expr = "2 ^ 1 * 3";
+        let tokens = scan(expr).unwrap();
+        let tokens = shunt(tokens).unwrap();
+        let result = compute(tokens).unwrap();
+        assert_eq!(6, result);
+    }
+
+    #[test]
+    fn compute_valid_expression3() {
+        let expr = "2 ^ (1 * 3)";
+        let tokens = scan(expr).unwrap();
+        let tokens = shunt(tokens).unwrap();
+        let result = compute(tokens).unwrap();
+        assert_eq!(8, result);
+    }
+
+    #[test]
+    fn compute_invalid_expression1() {
+        let expr = "2 (1 * 3)";
+        let tokens = scan(expr).unwrap();
+        let tokens = shunt(tokens).unwrap();
+        let result = compute(tokens);
+        assert_eq!(result, Err(ExprError::Syntax));
+    }
+
+    #[test]
+    fn compute_invalid_expression2() {
+        let expr = "2 1";
+        let tokens = scan(expr).unwrap();
+        let tokens = shunt(tokens).unwrap();
+        let result = compute(tokens);
+        assert_eq!(result, Err(ExprError::Syntax));
+    }
+
+    #[test]
+    fn compute_div_by_zero() {
+        let expr = "1 / 0";
+        let tokens = scan(expr).unwrap();
+        let tokens = shunt(tokens).unwrap();
+        let result = compute(tokens);
+        assert_eq!(result, Err(ExprError::DivByZero));
+    }
+}
