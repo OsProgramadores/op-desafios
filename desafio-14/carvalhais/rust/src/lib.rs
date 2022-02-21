@@ -27,19 +27,23 @@ pub mod prelude {
 
 #[derive(Parser)]
 #[clap(about, version, author)]
-// Holds the command line arguments given to the application
+/// Holds the command line arguments given to the application, since it's not
+/// directly related to the shunting yeard algorithm functionality, it's not
+/// placed in the types module
 pub struct Config {
     /// files to load expressions from, one per line
     #[clap(parse(from_os_str))]
     pub filename: PathBuf,
 }
 
+/// Attempts to compute an expression value from it's string representation
 fn try_computation(expr: &str) -> Result<i64, ExprError> {
     let step = scan(expr)?;
     let step = shunt(step)?;
     compute(step)
 }
 
+/// Runs the main computing algorithm, handling any unrecoverable error to main
 pub fn run(config: Config) -> Result<(), Box<dyn error::Error>> {
     let file = File::open(&config.filename)?;
     let reader = BufReader::new(file);
