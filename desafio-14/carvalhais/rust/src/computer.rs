@@ -121,4 +121,14 @@ mod test {
         let result = compute(tokens);
         assert_eq!(result, Err(ExprError::DivByZero));
     }
+
+    #[test]
+    fn compute_unexpected_token() {
+        let tokens = vec![
+            Token::Paren(Direction::Left),
+            Token::Paren(Direction::Right),
+        ];
+        let result = compute(tokens);
+        assert_eq!(result, Err(ExprError::UnexpectedToken));
+    }
 }
