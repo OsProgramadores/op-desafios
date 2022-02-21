@@ -37,7 +37,7 @@ pub fn compute(tokens: Vec<Token>) -> Result<i64, ExprError> {
             // if the token vector contains other kinds of tokens, then it is
             // an unknown error, since they should have been stripped out by
             // the shunting algorithm
-            _ => return Err(ExprError::Unknown),
+            _ => return Err(ExprError::UnexpectedToken),
         };
         // if there aren't enough values on the stack, then the expression is
         // malformed, and this is considered a syntax error

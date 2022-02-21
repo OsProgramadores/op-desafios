@@ -9,7 +9,6 @@
 /// Error type for mathematical expressions parsing and computations.
 #[derive(PartialEq, Debug)]
 pub enum ExprError {
-    Unknown,
     DivByZero,
     NumConversion,
     StrayChar,
