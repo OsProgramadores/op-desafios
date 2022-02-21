@@ -1,15 +1,16 @@
 [package]
-name = "numeric_expressions"
+name = "solver"
 version = "0.1.0"
 edition = "2021"
 authors = ["André Carvalhais"]
 
-[lib]
-name = "parser"
-path = "src/parser.rs"
+# [lib]
+# name = "lib"
+# path = "src/lib.rs"
 
-[[bin]]
-name = "solver"
-path = "src/main.rs"
+# [[bin]]
+# name = "bin"
+# path = "src/main.rs"
 
 [dependencies]
+clap = { version = "3.0", features = ["derive"] }
