@@ -7,6 +7,11 @@ import (
 )
 
 func main() {
+	if len(os.Args) != 3 {
+		fmt.Println("uso: palindromo [inicio] [fim]")
+		os.Exit(1)
+	}
+
 	start, _ := strconv.ParseUint(os.Args[1], 10, 64)
 	end, _ := strconv.ParseUint(os.Args[2], 10, 64)
 
