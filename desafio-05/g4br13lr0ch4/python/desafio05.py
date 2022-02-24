@@ -140,7 +140,7 @@ def question04(funcionarios):
 
 def load():
     """Carrega o arquivo e decodifica"""
-    with open(FILE_NAME, 'r') as json_file:
+    with open(FILE_NAME, 'r', encoding='utf-8') as json_file:
         file = json.load(json_file)
         question01(file['funcionarios'])
         question03(file['areas'], question02(file))
