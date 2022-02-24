@@ -15,22 +15,32 @@ func main() {
 		os.Exit(1)
 	}
 
+	tabuleiro := os.Args[1]
+	var buffer = []byte(tabuleiro)
+
+	for _, char := range buffer {
+		if char != '\n' && char != ' ' && (char < 48 || char > 57) {
+			fmt.Println(char)
+			fmt.Println("Tabuleiro inválido")
+			fmt.Println("Tabuleiro exemplo:")
+			fmt.Println("\"4 3 2 5 6 2 3 4\\n1 1 1 1 1 1 1 1\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n1 1 1 1 1 1 1 1\\n4 3 2 5 6 2 3 4\"")
+			os.Exit(1)
+		}
+	}
+
 	var pecas [7]int
-	var buffer = []byte(os.Args[1])
 
 	var idx = 0
 	for idx < len(buffer) {
 		for i := 0; i < 8; i++ {
 			var bytePeca = buffer[idx]
-			idx++
 
 			// ascii table
 			var peca = bytePeca - 48
 			pecas[peca]++
 
-			idx++
+			idx += 2
 		}
-		idx++
 	}
 
 	fmt.Println("Peão:", pecas[1], "peça(s)")
