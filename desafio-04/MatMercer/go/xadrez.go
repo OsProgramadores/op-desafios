@@ -6,21 +6,31 @@ import (
 )
 
 func main() {
+	if len(os.Args) != 2 {
+		fmt.Println("Uso: xadrez [tabuleiro]")
+		fmt.Println("Tabuleiro exemplo:")
+		fmt.Println("4 3 2 5 6 2 3 4\n1 1 1 1 1 1 1 1\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n1 1 1 1 1 1 1 1\n4 3 2 5 6 2 3 4")
+		fmt.Println("As new lines devem ser passadas, por exemplo, pelo bash:")
+		fmt.Println("$ xadrez \"4 3 2 5 6 2 3 4\\n1 1 1 1 1 1 1 1\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n1 1 1 1 1 1 1 1\\n4 3 2 5 6 2 3 4\"")
+		os.Exit(1)
+	}
+
 	var pecas [7]int
+	var buffer = []byte(os.Args[1])
 
-	var b = make([]byte, 1)
-
-	for b[0] != 10 {
+	var idx = 0
+	for idx < len(buffer) {
 		for i := 0; i < 8; i++ {
-			os.Stdin.Read(b)
+			var bytePeca = buffer[idx]
+			idx++
 
 			// ascii table
-			var peca = b[0] - 48
+			var peca = bytePeca - 48
 			pecas[peca]++
 
-			os.Stdin.Read(b)
+			idx++
 		}
-		os.Stdin.Read(b)
+		idx++
 	}
 
 	fmt.Println("Peão:", pecas[1], "peça(s)")
