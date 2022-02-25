@@ -11,7 +11,7 @@ public class PalindromicNumbers {
       Integer termino = sc.nextInt();
       if (inicio > termino) {
         System.out.println(
-          "O valor de término precisa ser maior que o de início. Tente novamente.");
+            "O valor de término precisa ser maior que o de início. Tente novamente.");
         System.out.print("Insira o valor inicial: ");
         inicio = sc.nextInt();
         System.out.print("Insira o valor final: ");
