@@ -1,5 +1,4 @@
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class PalindromicNumbers {
 
@@ -10,8 +9,9 @@ public class PalindromicNumbers {
       Integer inicio = sc.nextInt();
       System.out.print("Insira o valor final: ");
       Integer termino = sc.nextInt();
-      if ( inicio > termino ) {
-        System.out.println("O valor de término precisa ser maior que o de início. Tente novamente.");
+      if (inicio > termino) {
+        System.out.println(
+            "O valor de término precisa ser maior que o de início. Tente novamente.");
         System.out.print("Insira o valor inicial: ");
         inicio = sc.nextInt();
         System.out.print("Insira o valor final: ");
@@ -23,7 +23,7 @@ public class PalindromicNumbers {
         String reversedStr = input.append(str).reverse().toString();
         if (str.equals(reversedStr)) System.out.println(str);
       }
-    } catch (InputFormatException e) {
+    } catch (InputMismatchException e) {
       System.out.println("Os limites de início e de término precisam ser números inteiros.");
     }
     sc.close();
