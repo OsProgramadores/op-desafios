@@ -1,7 +1,6 @@
 import java.util.*;
 
 public class PalindromicNumbers {
-
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         try {
@@ -27,5 +26,5 @@ public class PalindromicNumbers {
             System.out.println("Os limites de início e de término precisam ser números inteiros.");
         }
         sc.close();
-        }
+    }
 }
