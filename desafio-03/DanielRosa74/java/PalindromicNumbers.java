@@ -15,7 +15,7 @@ public class PalindromicNumbers {
                 inicio = sc.nextInt();
                 System.out.print("Insira o valor final: ");
                 termino = sc.nextInt();
-            } 
+            }
             for (Integer i = inicio; i <= termino; i++) {
                 String str = i.toString();
                 StringBuilder input = new StringBuilder();
@@ -25,7 +25,7 @@ public class PalindromicNumbers {
             }
         } catch (InputMismatchException e) {
             System.out.println("Os limites de início e de término precisam ser números inteiros.");
-        }		
+        }
         sc.close();
         }
 }
