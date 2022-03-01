@@ -22,6 +22,7 @@ public class PalindromicNumbers {
         StringBuilder input = new StringBuilder();
         String reversedStr = input.append(str).reverse().toString();
         if (str.equals(reversedStr)) System.out.println(str);
+      }  
     } catch (InputMismatchException e) {
       System.out.println("Os limites de início e de término precisam ser números inteiros.");
     }
