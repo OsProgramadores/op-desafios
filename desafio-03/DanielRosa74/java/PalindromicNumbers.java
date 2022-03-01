@@ -14,10 +14,10 @@ public class PalindromicNumbers {
         termino = sc.nextInt();
         if (inicio > termino) {
           System.out.println(
-            "O valor de término precisa ser maior que o de início. Tente novamente.");
+              "O valor de término precisa ser maior que o de início. Tente novamente.");
         } else if (inicio < 0 || termino < 0) {
           System.out.println(
-            "Os valores de início e de término precisam ser positivos. Tente novamente.");
+              "Os valores de início e de término precisam ser positivos. Tente novamente.");
         } else break;
       }
       for (Integer i = inicio; i <= termino; i++) {
