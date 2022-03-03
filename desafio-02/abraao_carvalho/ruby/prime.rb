@@ -13,4 +13,4 @@ for i in first..last do
 	if k == 1 then
 		puts i
 	end
-end 
+end
