@@ -31,7 +31,7 @@ const quest = (q) => {
   return questObj[q]
 }
 
-const pieces = "1-Peão 2-Bispo 3-Cavalo 4-Torre 5-Rainha 6-Rei" 
+const pieces = "1-Peão 2-Bispo 3-Cavalo 4-Torre 5-Rainha 6-Rei"
 
 const updateBoard = () => {
   console.log('\033[2J')
@@ -51,7 +51,6 @@ const showCount = () => {
   console.log(pieces)
   console.log('\r')
   console.table(board)
-  
   console.log('\r')
   console.log(`Peão: ${countPieces(1)} peça (s)`)
   console.log(`Bispo: ${countPieces(2)} peça (s)`)
@@ -63,15 +62,12 @@ const showCount = () => {
   console.log("Enter para continuar ou ctrl + d pra finalizar")
 }
 
-
 const getInput = () => {
   updateBoard()
   count++
-  
   if (count == 1) {
     fp = fillPosition
   }
-  
   rl.question(quest(count), x => {
     if ((count == 1 && (x < 0 || x > 6)) || ((count == 2 || count == 3) && x < 0 || x > 7)){
       count--
