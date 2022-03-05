@@ -4,7 +4,7 @@ const rl = readline.createInterface(process.stdin, process.stdout)
 let board = [[], [], [], [], [], [], [], []]
 let count = 0
 
-const fillZero = () => {
+const fillBoardWithZero = () => {
   for(let i = 0; i <= 7; i++){
     for(let j = 0; j <= 7; j++){
       board[i][j] = 0;
@@ -93,5 +93,5 @@ const getInput = () => {
   })
 }
 
-fillZero()
+fillBoardWithZero()
 getInput()
