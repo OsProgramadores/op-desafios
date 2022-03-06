@@ -4,6 +4,10 @@ const rl = readline.createInterface(process.stdin, process.stdout)
 let board = [[], [], [], [], [], [], [], []]
 let count = 0
 
+const clearScreen = () => {
+  console.log('\033[0m\033[2J\033c')
+}
+
 const fillBoardWithZero = () => {
   for(let i = 0; i <= 7; i++){
     for(let j = 0; j <= 7; j++){
@@ -25,58 +29,55 @@ const quest = (q) => {
     1: "Digite o número da peça (1-6): ",
     2: "Digite a posição da linha (0-7): ",
     3: "Digite a posição da coluna (0-7): ",
-    4: "Enter pra continuar ou c para contar as peças: \r"
+    4: "[Enter] pra continuar ou [c] para contar as peças: \r"
   }
 
   return questObj[q]
 }
 
-const pieces = "1-Peão 2-Bispo 3-Cavalo 4-Torre 5-Rainha 6-Rei"
+const pieces = "\n1-Peão 2-Bispo 3-Cavalo 4-Torre 5-Rainha 6-Rei\n"
 
 const updateBoard = () => {
-  console.log('\033[2J')
+  clearScreen()
   console.table(board)
-  console.log('\r')
-  console.log("Insira o numero da peça na posição desejada")
-  console.log('\r')
-  console.log(pieces)
-  console.log('\r')
+  console.log(`${pieces}
+    \rInsira o numero da peça na posição desejada\n`)
 }
 
 const showCount = () => {
   let flatBoard = board.flat()
   let countPieces = countOccurr(flatBoard)
 
-  console.log('\033[2J')
-  console.log(pieces)
-  console.log('\r')
+  clearScreen()
   console.table(board)
-  console.log('\r')
-  console.log(`Peão: ${countPieces(1)} peça (s)`)
-  console.log(`Bispo: ${countPieces(2)} peça (s)`)
-  console.log(`Cavalo: ${countPieces(3)} peça (s)`)
-  console.log(`Torre: ${countPieces(4)} peça (s)`)
-  console.log(`Rainha: ${countPieces(5)} peça (s)`)
-  console.log(`Rei: ${countPieces(6)} peça (s)`)
-  console.log('\r')
-  console.log("Enter para continuar ou ctrl + d pra finalizar")
+  console.log(`${pieces}
+    \rPeão: ${countPieces(1)} peça (s)
+    \rBispo: ${countPieces(2)} peça (s)
+    \rCavalo: ${countPieces(3)} peça (s)
+    \rTorre: ${countPieces(4)} peça (s)
+    \rRainha: ${countPieces(5)} peça (s)
+    \rRei: ${countPieces(6)} peça (s)
+    \r\n[Enter] para continuar ou [ctrl + d] pra finalizar`)
 }
 
 const getInput = () => {
   updateBoard()
   count++
+
   if (count == 1) {
     fp = fillPosition
   }
+
   rl.question(quest(count), x => {
     if ((count == 1 && (x < 0 || x > 6)) || ((count == 2 || count == 3) && x < 0 || x > 7)){
       count--
       updateBoard()
-    } else
-    {
+    } else {
       fp = fp(x)
     }
+
     getInput()
+
     if (x == 'c' || x == 'C') {
       showCount()
       count = 0
