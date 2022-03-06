@@ -12,7 +12,7 @@ const fillBoardWithZero = () => {
   }
 }
 
-const countOccurr = (arr) => (val) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0)
+const countOccurr = (arr) => (val) => arr.filter(el => el == val).length
 
 const fillPosition = (piece) => (line) => (column) => {
   board[line][column] = parseInt(piece)
