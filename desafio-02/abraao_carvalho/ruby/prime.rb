@@ -1,5 +1,5 @@
 first = 1
-last = 1000
+last = 10000
 
 puts 'Prime numbers: ' + first.to_s + ' a ' + last.to_s + ':'
 
