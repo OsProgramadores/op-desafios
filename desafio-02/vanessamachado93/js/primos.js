@@ -10,11 +10,11 @@ function listaPrimos(num) {
 	return true
 }
 
-let numeros = []
+let numero = []
 for (let i = 0; i < 10000; i++) {
-	numeros[i] = i + 1
+	numero[i] = i + 1
 }
 
-var resultado = numeros.filter(listaPrimos)
+var resultado = numero.filter(listaPrimos)
 
 console.log(`Os números primos de 1 a 10000 são:\n ${resultado}.`)
