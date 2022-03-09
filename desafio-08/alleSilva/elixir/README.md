@@ -7,7 +7,7 @@ e produza na saída a versão simplificada de cada fração.
 Números simples assumem denominador 1 (apenas imprima o número).
 Em caso de erros na entrada (como divisão por zero), imprima “ERR” em maíusculas.
 
-> Execute da seguinte forma e siga as instruções do próprio programa.
+> Execute da seguinte forma:
 ```
 $ elixir fractions.exs
 ```
