@@ -1,3 +1,5 @@
+#/usr/bin/bash -e {0} 
+
 '''
 Desafio 02 
 Escreva um programa para listar todos os números primos entre 1 e 10000, na linguagem de sua preferência. 
