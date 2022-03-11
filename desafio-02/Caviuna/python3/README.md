@@ -6,7 +6,7 @@
 
 
 
-- Vale-se destacar que para o pensamento computacional por mais que pareça simples ele tem uma nuança de complexidade. Abordatem interessante descrita abaixo: 
+- Vale-se destacar que para o pensamento computacional por mais que pareça simples ele tem uma nuança de complexidade. Abordagem interessante descrita abaixo: 
 
 ```	 
 - To find all the prime numbers less than or equal to a given integer n by Eratosthenes' method:
@@ -22,7 +22,7 @@
 - Fonte: https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes 
 
 
-### Ainda pretento voltar a esse desafio para melhorar a minha resposta de acordo com o tentado: 
+### Ainda pretendo voltar a esse desafio para melhorar a minha resposta de acordo com o tentado: 
 
 ``` python
 
@@ -46,7 +46,7 @@ def lista(x):
     for i, j in enumerate(range(1, x+1)):
         div = 0
         if(i%j == 0):
-            div = div + 1
+            div += 1
         if (div == 2):
             numeros.append(i)
     print(numeros)
