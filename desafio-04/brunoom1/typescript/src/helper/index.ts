@@ -1,6 +1,6 @@
 export const readInput = (argv: string[]): string[] => {
   return argv.slice(2, argv.length);
-} 
+}
 
 export const stringToMatrix = (str: string[], totalCols: number=8): number[][] => {
   const mat:number[][] = [];

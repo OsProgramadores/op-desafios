@@ -18,7 +18,7 @@ describe ("testar contabilização das peças", () => {
   test('Testando estrutura que deveria ser retornada da função de contabilidade', () => {
     expect(result).toEqual([60, 4, 0, 0, 0, 0, 0]);
   });
-  
+
 })
 
 test("Testar saida da função de printar o resultado contabilizado", () => {
@@ -38,5 +38,4 @@ test("Testar saida do programa formatado", () => {
     const resultFormat = `Peão: 4 peça(s)\nBispo: 0 peça(s)\nCavalo: 0 peça(s)\nTorre: 0 peça(s)\nRainha: 0 peça(s)\nRei: 0 peça(s)`;
     expect(result).toMatch(resultFormat);
   });
-
 });

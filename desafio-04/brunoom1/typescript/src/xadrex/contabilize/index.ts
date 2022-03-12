@@ -14,8 +14,8 @@ export function contabilize (tabuleiro: Tabuleiro): ContabilizeResult {
     for (let y = 0; y < tabuleiro[x].length; y++) {
       pecasCount[tabuleiro[x][y]]++;
     }
-  }  
-  
+  }
+
   return pecasCount;
 }
 
