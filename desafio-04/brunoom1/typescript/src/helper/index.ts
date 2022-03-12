@@ -7,7 +7,6 @@ export const stringToMatrix = (str: string[], totalCols: number=8): number[][] =
 
   let row = 0; let col = 0;
   for(let i = 0; i < str.length; i ++) {
-   
     if (!mat[row]) {
       mat[row] = [];
     }
@@ -18,7 +17,7 @@ export const stringToMatrix = (str: string[], totalCols: number=8): number[][] =
       row ++;
       col = 0;
     }
-  }  
+  }
 
   return mat;
 }
