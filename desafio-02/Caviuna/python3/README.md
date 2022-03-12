@@ -36,6 +36,22 @@ def lista(x):
     print(numeros)
 lista(100)
 
+# Refactored code: Implementação com a class. 
+
+numeros = [] 
+class __main__():   
+    def lista(x):
+        for i in range(1, x+1):
+            div = 0
+            for j in range(1, i+1):
+                if(i%j == 0):
+                    div += 1
+            if (div == 2):
+                numeros.append(i)
+        print(numeros)
+if __name__ == "__main__":
+    __main__.lista(10)
+
 
 # tentativa de implementar 
 # Error: Returna apenas um lista vazia. 
