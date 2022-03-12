@@ -1,14 +1,12 @@
-# Listando números primos 
+# Listando números primos
+
 - Programa que lista os números primos entre 1 e 10000 escrito em Python.
-- O programa tenta simplificar os laços para que seja feita uma interação mais dinámica.	
+- O programa tenta simplificar os laços para que seja feita uma interação mais dinámica.
 
-- Baseado em resposta contida no link: https://pt.stackoverflow.com/questions/205458/obter-a-lista-de-n%C3%BAmeros-primos-menores-que-n
+- Baseado em resposta contida no link: <https://pt.stackoverflow.com/questions/205458/obter-a-lista-de-n%C3%BAmeros-primos-menores-que-n>
 
+- Vale-se destacar que para o pensamento computacional por mais que pareça simples ele tem uma nuança de complexidade. Abordagem interessante descrita abaixo:
 
-
-- Vale-se destacar que para o pensamento computacional por mais que pareça simples ele tem uma nuança de complexidade. Abordagem interessante descrita abaixo: 
-
-```	 
 - To find all the prime numbers less than or equal to a given integer n by Eratosthenes' method:
 
     1. Create a list of consecutive integers from 2 through n: (2, 3, 4, ..., n).
@@ -17,12 +15,11 @@
     4. Find the smallest number in the list greater than p that is not marked. If there was no such number, stop. Otherwise, let p now equal this new number (which is the next prime), and repeat from step 3.
     5. When the algorithm terminates, the numbers remaining not marked in the list are all the primes below n.
 
-```	 
+- Em que pese resalta-se que mesmo tendo como base esse entendimento, por motivo de mais uso de memória, opta-se por usar uma implementação mais simples e atual, condizente com as necessidades do problema.
 
-- Fonte: https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes 
+- Fonte: <https://en.wikipedia.org/wiki/Sieve_of_Eratosthenes>
 
-
-### Ainda pretendo voltar a esse desafio para melhorar a minha resposta de acordo com o tentado: 
+## Ainda pretendo voltar a esse desafio para melhorar a minha resposta de acordo com o tentado
 
 ``` python
 
@@ -32,10 +29,10 @@ def lista(x):
     for i in range(1, x+1):
         div = 0
         for j in range(1, i+1):
-             if(i%j == 0):
-                 div += 1
+            if(i%j == 0):
+                div += 1
         if (div == 2):
-             numeros.append(i)
+            numeros.append(i)
     print(numeros)
 lista(100)
 
@@ -67,4 +64,4 @@ def lista (x):
 lista(10000)  
 
 
-``` 
+```
