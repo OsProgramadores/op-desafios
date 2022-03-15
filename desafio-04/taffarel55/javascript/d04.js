@@ -20,8 +20,8 @@ readFile(filename, "utf8", function (err, data) {
   }
 
   data
-    ?.replaceAll(" ", "") // Remover espaços
-    ?.replaceAll("\n", "") // Remover novas linhas
+    ?.replace(/ /g, "") // Remover espaços
+    ?.replace(/\n/g, "") // Remover novas linhas
     ?.split("") // Transformar em um vetor
     ?.forEach((i) => pecas[i].qtd++); // Contar cada peça
 
