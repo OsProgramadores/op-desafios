@@ -1,0 +1,16 @@
+[package]
+name = "solver"
+version = "0.1.0"
+edition = "2021"
+authors = ["André Carvalhais"]
+
+# [lib]
+# name = "lib"
+# path = "src/lib.rs"
+
+# [[bin]]
+# name = "bin"
+# path = "src/main.rs"
+
+[dependencies]
+clap = { version = "3.0", features = ["derive"] }
