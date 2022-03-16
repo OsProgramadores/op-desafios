@@ -7,28 +7,15 @@ import (
 
 func main() {
 	if len(os.Args) != 2 {
-		fmt.Println("Uso: xadrez [tabuleiro]")
-		fmt.Println("Tabuleiro exemplo:")
-		fmt.Println("4 3 2 5 6 2 3 4\n1 1 1 1 1 1 1 1\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n1 1 1 1 1 1 1 1\n4 3 2 5 6 2 3 4")
-		fmt.Println("As new lines devem ser passadas, por exemplo, pelo bash:")
-		fmt.Println("$ xadrez \"4 3 2 5 6 2 3 4\\n1 1 1 1 1 1 1 1\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n1 1 1 1 1 1 1 1\\n4 3 2 5 6 2 3 4\"")
-		os.Exit(1)
+		usoEDesliga()
 	}
 
 	tabuleiro := os.Args[1]
-	var buffer = []byte(tabuleiro)
 
-	for _, char := range buffer {
-		if char != '\n' && char != ' ' && (char < 48 || char > 57) {
-			fmt.Println(char)
-			fmt.Println("Tabuleiro inválido")
-			fmt.Println("Tabuleiro exemplo:")
-			fmt.Println("\"4 3 2 5 6 2 3 4\\n1 1 1 1 1 1 1 1\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n1 1 1 1 1 1 1 1\\n4 3 2 5 6 2 3 4\"")
-			os.Exit(1)
-		}
-	}
+	validarTabuleiro(tabuleiro)
 
 	var pecas [7]int
+	var buffer = []byte(tabuleiro)
 
 	var idx = 0
 	for idx < len(buffer) {
@@ -49,4 +36,30 @@ func main() {
 	fmt.Println("Torre:", pecas[4], "peça(s)")
 	fmt.Println("Rainha:", pecas[5], "peça(s)")
 	fmt.Println("Rei:", pecas[6], "peça(s)")
+}
+
+func validarTabuleiro(tabuleiro string) {
+	if len(tabuleiro) != 127 {
+		tabuleiroInvalido()
+	}
+
+	for _, char := range tabuleiro {
+		if char != '\n' && char != ' ' && (char < 48 || char > 54) {
+			tabuleiroInvalido()
+		}
+	}
+}
+
+func tabuleiroInvalido() {
+	fmt.Printf("\n\nERRO: Tabuleiro inválido\n\n")
+	usoEDesliga()
+}
+
+func usoEDesliga() {
+	fmt.Println("Uso: xadrez [tabuleiro]")
+	fmt.Println("\nNo Linux Bash:")
+	fmt.Println("xadrez \"$(printf \"4 3 2 5 6 2 3 4\\n1 1 1 1 1 1 1 1\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n0 0 0 0 0 0 0 0\\n1 1 1 1 1 1 1 1\\n4 3 2 5 6 2 3 4\")\"")
+	fmt.Println("\nNo Windows Powershell:")
+	fmt.Println("xadrez.exe \"4 3 2 5 6 2 3 4`n1 1 1 1 1 1 1 1`n0 0 0 0 0 0 0 0`n0 0 0 0 0 0 0 0`n0 0 0 0 0 0 0 0`n0 0 0 0 0 0 0 0`n1 1 1 1 1 1 1 1`n4 3 2 5 6 2 3 4\"")
+	os.Exit(1)
 }

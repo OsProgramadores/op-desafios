@@ -17,7 +17,13 @@ Tabuleiro exemplo:
 4 3 2 5 6 2 3 4
 ```
 
-As new lines devem ser passadas, por exemplo, pelo bash:
+As new lines devem ser passadas, por exemplo:
 ```
-$ xadrez "4 3 2 5 6 2 3 4\n1 1 1 1 1 1 1 1\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n1 1 1 1 1 1 1 1\n4 3 2 5 6 2 3 4"
+Uso: xadrez [tabuleiro]
+
+No Linux Bash:
+xadrez "$(printf "4 3 2 5 6 2 3 4\n1 1 1 1 1 1 1 1\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n0 0 0 0 0 0 0 0\n1 1 1 1 1 1 1 1\n4 3 2 5 6 2 3 4")"
+
+No Windows Powershell:
+xadrez.exe "4 3 2 5 6 2 3 4`n1 1 1 1 1 1 1 1`n0 0 0 0 0 0 0 0`n0 0 0 0 0 0 0 0`n0 0 0 0 0 0 0 0`n0 0 0 0 0 0 0 0`n1 1 1 1 1 1 1 1`n4 3 2 5 6 2 3 4"
 ```
