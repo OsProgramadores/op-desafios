@@ -1,4 +1,4 @@
-""" O Programa determina se o número é palindromico. """
+""" O Programa determina se o número é ou não, palindromico. """
 
 import math
 

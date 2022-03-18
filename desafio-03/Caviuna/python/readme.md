@@ -9,6 +9,6 @@
     em termos de vizualização, porém não é o de mais fácil entendimento já que se faz necessário o
     uso de logarítmo e exponenciação. Porém caso fosse relacionado a um grande número de dados,
     seria interessante pois o desenpenho é muito mais rápido, sendo que não é necessário
-    a transformação para strings e trata-los.
+    a transformação para strings e tratar do fatiamento.
     <https://acervolima.com/programa-python-para-verificar-se-o-numero-e-palindromo-one-liner/>
 '''
