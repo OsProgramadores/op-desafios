@@ -86,7 +86,7 @@ func contarPecas(buffer []byte) {
 		var peca = bytePeca % '0' % ' ' % '\r' % '\n'
 		pecas[peca]++
 
-		idx += 1
+		idx++
 	}
 
 	fmt.Println("Peão:", pecas[1], "peça(s)")
