@@ -1,8 +1,8 @@
 #include <stdio.h>
 // Algoritmo: número primos de 1 - 10000
-int main(void) {
+int main() {
     int min = 0, max = 10000, i, j, primo;
-    
+
     for (i = min; i <= max; i++) {
         if (i == 0 || i == 1) {
             primo = 0; // excluindo 0 e 1 (não são primos)
@@ -15,8 +15,9 @@ int main(void) {
             }
         }
         if (primo == 1) {
-            printf("%i ", i); // imprimindo os números primos
+            printf("%i\n", i); // imprimindo os números primos
         }
     }
+
     return 0;
 }
