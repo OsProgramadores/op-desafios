@@ -1,17 +1,20 @@
 (function () {
   console.log("Desafio 02 - Listar todos os números primos entre 1 e 10000.");
 
-  for (let number = 1; number <= 10000; number++) {
-    count = 0;
+  exibirNumerosPrimos(10000);
 
-    for (let i = 1; i <= number; i++) {
-      if (number % i === 0) {
-        count++;
-      };
-    };
+  function exibirNumerosPrimos(limite) {
+    for (let numero = 2; numero <= limite; numero++) {
+      if (NumeroPrimo(numero)) console.log(numero);
+    }
+  }
 
-    if (count === 2) {
-      console.log(number);
-    };
-  };
+  function NumeroPrimo(numero) {
+    for (let divisor = 2; divisor < numero; divisor++) {
+      if (numero % divisor === 0) {
+        return false;
+      }
+    }
+    return true;
+  }
 })();
