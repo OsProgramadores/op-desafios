@@ -12,9 +12,9 @@ n = int(input('Número final: '))
 
 
 for i in range(x, n):
-	i = str(i)
-	z = i[::-1]
-	if i == z:
-		print(i)
-	else:
-		continue
+    i = str(i)
+    z = i[::-1]
+    if i == z:
+        print(i)
+    else:
+        continue
