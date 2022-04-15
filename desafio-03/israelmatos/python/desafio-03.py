@@ -1,6 +1,6 @@
 '''
 Autor: Israel Matos(@lolzaws)
-Descrição: Soluao do desafio 03(https://osprogramadores.com/desafios/d03/)
+Descrição: Solução do desafio 03(https://osprogramadores.com/desafios/d03/)
 Data: 15/04/22
 '''
 
