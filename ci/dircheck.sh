@@ -29,6 +29,9 @@ set -o nounset
 # Regular expression catching obsolete directories (first path element only).
 readonly OBSOLETE_REGEXP="^(desafio-04|desafio-05)$"
 
+# Users matches by this regular expression can submit to deprecated directories.
+readonly OVERRIDE_USERS='^(marcopaganini|mpinheir|qrwteyrutiyoup|BernardinoCampos|dependabot\[bot\])$'
+
 # Regular expression catching valid languages.
 readonly VALID_LANG_REGEXP="^(c|cpp|csharp|java|javascript|go|php|python)$"
 
@@ -93,6 +96,9 @@ function check_dir_structure() {
 
 # Flag obsolete/deprecated challenges.
 function check_deprecated() {
+  # Some users can override obsolete checks.
+  grep -q --perl-regexp "${OVERRIDE_USERS}" <<< "${GITHUB_ACTOR}" && return
+
   # Fetch the first path in the directory (desafio-XX)
   while read -r des; do
     if grep -q --perl-regexp "${OBSOLETE_REGEXP}" <<< "$des"; then
