@@ -127,7 +127,7 @@ results=(
 
 # Check deprecated directories and supported languages if not coming from
 # one of the users authorized to override this test.
-if grep -q --perl-regexp "${OVERRIDE_USERS}" <<< "${GITHUB_ACTOR:-nobody}"; then
+if ! grep -q --perl-regexp "${OVERRIDE_USERS}" <<< "${GITHUB_ACTOR:-nobody}"; then
   results+=( "$(check_deprecated)" "$(check_languages)" )
 fi
 
