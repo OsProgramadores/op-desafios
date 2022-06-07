@@ -96,9 +96,6 @@ function check_dir_structure() {
 
 # Flag obsolete/deprecated challenges.
 function check_deprecated() {
-  # Some users can override obsolete checks.
-  grep -q --perl-regexp "${OVERRIDE_USERS}" <<< "${GITHUB_ACTOR}" && return
-
   # Fetch the first path in the directory (desafio-XX)
   while read -r des; do
     if grep -q --perl-regexp "${OBSOLETE_REGEXP}" <<< "$des"; then
@@ -126,8 +123,13 @@ results=(
   "$(check_filenames)"
   "$(check_multiple)"
   "$(check_dir_structure)"
-  "$(check_deprecated)"
-  "$(check_languages)")
+)
+
+# Check deprecated directories and supported languages if not coming from
+# one of the users authorized to override this test.
+if grep -q --perl-regexp "${OVERRIDE_USERS}" <<< "${GITHUB_ACTOR:-nobody}"; then
+  results+=( "$(check_deprecated)" "$(check_languages)" )
+fi
 
 # Assemble the printed output based on the contents of the results array
 # with newlines separating each result.
