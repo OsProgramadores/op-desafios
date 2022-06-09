@@ -43,7 +43,7 @@ individuais de cada desafio.
 
    ```
    git remote update
-   git reset upstream master --hard
+   git reset upstream/master --hard
    ```
 
    > **ATENÇÃO**
