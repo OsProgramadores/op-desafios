@@ -8,7 +8,7 @@ let values = input.split('\n').filter((value) => {
 })
 
 function isPotency(number) {
-  /* A função é feita usando BigInt, pois a divisão com  numeros maiores que o MAX_SAFE_INTEGER 
+  /* A função é feita usando BigInt, pois a divisão com  números maiores que o MAX_SAFE_INTEGER
   sempre resultam em infinity.*/
   number = BigInt(number)
   let exponent = 0
