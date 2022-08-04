@@ -1,6 +1,6 @@
 /* OsProgramadores.com
 
-Desafio #2: Listando números primos 
+Desafio #2: Listando números primos
 
 Instruções: Escreva um programa para listar todos os números primos entre 1 e 10000, na linguagem de sua preferência. */
 
