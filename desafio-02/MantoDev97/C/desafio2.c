@@ -15,9 +15,9 @@ int ehPrimo(int x){
     }
 
     if(divisores == 2)
-        return 1;// é primo
+        return 1;
     else
-        return 0; // não é primo
+        return 0; 
 }
 
 int main(){
