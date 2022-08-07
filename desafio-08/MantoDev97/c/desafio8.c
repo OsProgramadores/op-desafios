@@ -1,4 +1,4 @@
-//Desafio 8 osProgramadores.  MantoDev97.
+//Desafio 8 osProgramadores. MantoDev97.
 /*Escreva um programa que leia um arquivo texto contendo uma lista de frações em ASCII 
 (uma por linha) e produza na saída a versão simplificada de cada fração. 
 Números simples assumem denominador 1 (apenas imprima o número). 
