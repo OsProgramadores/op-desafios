@@ -1,13 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
-/* Criado por MantoDev97
-
- Desafio 2 osProgramadores 
-descrição: Escreva um programa para listar todos os números primos entre 1 e 10000 */
 
 
 int ehPrimo(int x){
-    int i, divisores = 0; //variaveis.
+    int i, divisores = 0; //variaveis
 
     for(i = 1; i <= x; i++){
         if(x % i == 0)
