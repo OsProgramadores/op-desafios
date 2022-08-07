@@ -1,16 +1,15 @@
 #include <stdio.h>
 
-
 int palindromo(int b);
-int main(){
+int main()
+{
 
     int inicio, fim, i;
 
     while (1)
     {
-        printf("Digite dois numeros positivos e separados por espaço: ");
+        printf("Digite dois numeros positivos e separados por espaço.: ");
         scanf("%d %d", &inicio, &fim);
-
 
         // checando se os valores são positivos.
 
@@ -28,8 +27,6 @@ int main(){
                         printf(" %d ", i);
                     }
                 }
-
-                
             } // caso o usuario digite o ultimo numero com primeiro.
             else
             {
@@ -42,20 +39,15 @@ int main(){
                 }
             }
             break;
-
-            
-        }   // caso seja negativo.
+        } // caso seja negativo.
         else
         {
             printf("Os valores são invalidos!\n\n");
         }
     }
-
     printf("\n");
     return 0;
 }
-
-
 // verificando se o numero é palindromo.
 int palindromo(int b)
 {
