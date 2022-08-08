@@ -8,7 +8,6 @@
 long long isPotentenciaDeDois(mpz_t num) {
   if(mpz_cmp_ui(num, 1) == 0) {
     return 0;
-    
   }
   mpz_t div;
   mpz_init(div);
