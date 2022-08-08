@@ -3,6 +3,8 @@
 #include <string.h>
 #include <gmp.h>
 
+//Para compilar gcc d12.c -lgmp -o d12
+
 long long isPotentenciaDeDois(mpz_t num) {
   if(mpz_cmp_ui(num, 1) == 0) {
     return 0;
