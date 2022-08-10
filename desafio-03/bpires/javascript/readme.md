@@ -15,7 +15,7 @@ Para o desafio, assuma:
 ```
 ├── verificar se o input é um número, e se os parâmetros estão na ordem correta.
 ├── para testar se é palíndromo:
-│   ├── em uma variável para teste, transformar o número em um array 
+│   ├── em uma variável para teste, transformar o número em um array
 │   │   contendo seus algarismos
 │   ├── inverter a ordem do array e unir os algarismos novamente
 │   ├── transformar a string resultando em um número
@@ -25,7 +25,7 @@ Para o desafio, assuma:
 
 ```
 
-Para testar a solução, clone o repositório, instale as dependências e ao final utilize o node.js para rodar o programa em sua máquina:
+Para testar a solução, clone o repositório, navegue até o diretório e instale as dependências. Depois, utilize o node.js para rodar o programa em sua máquina:
 
 ```bash
 $ git clone git@github.com:OsProgramadores/op-desafios.git
@@ -33,3 +33,5 @@ $ cd .\op-desafios\desafio-03\bpires\javascript\
 $ npm install
 $ node 03-palindromos.js
 ```
+
+> **Nota:** Foi utilizado o pacote prompt-sync para node com o objetivo de permitir a leitura de inputs do usuário.
