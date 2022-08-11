@@ -24,14 +24,16 @@ Para o desafio, assuma:
 └── se for palíndromo, imprimir o número na tela
 
 ```
+### Teste e execução
 
-Para testar a solução, clone o repositório, navegue até o diretório e instale as dependências. Depois, utilize o node.js para rodar o programa em sua máquina:
+Para testar a solução, é necessário ter o [Node.js](https://nodejs.org/) instalado em sua máquina.
+
+Faça um clone do repositório para a máquina local, e rode o arquivo no node, passando os números como argumentos:
 
 ```bash
 $ git clone git@github.com:OsProgramadores/op-desafios.git
-$ cd .\op-desafios\desafio-03\bpires\javascript\
-$ npm install
-$ node 03-palindromos.js
-```
 
-> **Nota:** Foi utilizado o pacote prompt-sync para node com o objetivo de permitir a leitura de inputs do usuário.
+$ cd .\op-desafios\ 
+
+$ node .\desafio-03\bpires\javascript\03-palindromos.js "número 1" "número 2"
+```
