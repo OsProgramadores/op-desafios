@@ -33,7 +33,7 @@ Faça um clone do repositório para a máquina local, e rode o arquivo no node, 
 ```bash
 $ git clone git@github.com:OsProgramadores/op-desafios.git
 
-$ cd .\op-desafios\ 
+$ cd .\op-desafios\
 
 $ node .\desafio-03\bpires\javascript\03-palindromos.js "número 1" "número 2"
 ```
