@@ -1,4 +1,4 @@
-﻿    namespace Desafio_02_csharp
+﻿    namespace csharp
     {
         class numerosPrimos
         {
