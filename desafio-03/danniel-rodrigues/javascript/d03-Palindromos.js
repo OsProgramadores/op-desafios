@@ -1,6 +1,6 @@
 function definirPalindromo(numInicial, numFinal) {
     let palindromos = [];
-    
+
     while (numInicial <= numFinal) {
         let intLength = ('' + numInicial).length;
 
@@ -10,7 +10,7 @@ function definirPalindromo(numInicial, numFinal) {
         else {
             let str = numInicial.toString();
             let inverso = str.split("").reverse().join("");
-            
+
             if(str == inverso) {
                 palindromos.push(numInicial);
             }
@@ -24,7 +24,7 @@ function definirPalindromo(numInicial, numFinal) {
 
 function exibirPalindromos(numInicial, numFinal) {
     let numPalindromos = definirPalindromo(numInicial, numFinal);
-    
+
     console.log(`Palindromos de ${numInicial} a ${numFinal} são: ${numPalindromos.toString()}`);
 
 }
