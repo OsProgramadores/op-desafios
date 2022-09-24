@@ -1,16 +1,12 @@
 public class NumerosPrimos {
 
     public static void main(String[] args) {
-        int inicioIntervalo = 1;
-        int fimIntervalo = 10000;
-        int inicioContador = 2;
-
-        for (int numero = (inicioIntervalo + 1); numero <= fimIntervalo; numero++) {
+        
+        for (int numero = 2; numero <= 10000; numero++) {
             boolean ehPrimo = true;
-            for (int contador = inicioContador; contador < numero; contador++) {
+            for (int contador = 2; contador < numero; contador++) {
                 if (numero % contador == 0) {
                     ehPrimo = false;
-                    break;
                 }
             }
             if (ehPrimo) {
