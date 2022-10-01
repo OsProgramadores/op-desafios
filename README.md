@@ -185,19 +185,19 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
 1. O código deve ser formatado utilizando o [estilo de desenvolvimento do
    Google](https://google.github.io/styleguide/javaguide.html).
 
-1. O código será testado utilizando a OpenJDK VM na última versão **LTS** disponível.
+1. O código será testado utilizando a OpenJDK VM na última versão **LTS** disponível: 17.
 
 1. Utilizamos uma [biblioteca open-source disponibilizada pelo
    Google](https://github.com/google/google-java-format) para verificar a
    formatação do código. Dentro do repositório dela há mais informações sobre
    como integrá-la com ferramentas como Maven e Gradle caso deseje. A versão
-   utilizada atualmente é a 1.10.0.
+   utilizada atualmente é a 1.15.0.
 
 1. Para formatar os arquivos de acordo com o padrão utilizado, basta seguir os seguintes passos:
 
    ```shell
-   $ curl -LJO "https://github.com/google/google-java-format/releases/download/v1.10.0/google-java-format-1.10.0-all-deps.jar"
-   $ java -jar <caminho-para-o-jar-baixado>/google-java-format-1.10.0-all-deps.jar --replace <lista-arquivos-java>
+   $ curl -LJO "https://github.com/google/google-java-format/releases/download/v1.15.0/google-java-format-1.15.0-all-deps.jar"
+   $ java -jar <caminho-para-o-jar-baixado>/google-java-format-1.15.0-all-deps.jar --replace <lista-arquivos-java>
    ```
 
 1. Pull Requests contendo código em Java serão automaticamente verificados pela
