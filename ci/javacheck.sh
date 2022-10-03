@@ -5,7 +5,7 @@ echo "Java code check"
 echo "======================"
 
 set -e
-readonly FORMATTER_VERSION="1.10.0"
+readonly FORMATTER_VERSION="1.15.0"
 readonly JAVA_FORMATTER_FILE="/tmp/google-java-format-${FORMATTER_VERSION}-all-deps.jar"
 readonly JAVA_FORMATTER_URL="https://github.com/google/google-java-format/releases/download/v${FORMATTER_VERSION}/${JAVA_FORMATTER_FILE##*/}"
 

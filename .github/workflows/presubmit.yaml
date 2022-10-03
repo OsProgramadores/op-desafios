@@ -14,11 +14,11 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install Java 11
-        uses: actions/setup-java@v2
+      - name: Install Java 17
+        uses: actions/setup-java@v3
         with:
-          distribution: 'adopt'
-          java-version: '11'
+          distribution: 'zulu'
+          java-version: '17'
 
       - name: Checkout code
         uses: actions/checkout@v2
