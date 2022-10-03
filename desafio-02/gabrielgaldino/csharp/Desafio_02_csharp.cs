@@ -1,11 +1,14 @@
-﻿    namespace csharp
-    {
+﻿using System;
+using System.Collections.Generics
+
+namespace csharp
+{
         class numerosPrimos
         {
             static void Main(string[] args)
             {
-                List<int> numeros = new List<int>();
-                List<int> primos = new List<int>();
+            var numeros = new List<int>();
+            var primos = new List<int>();
 
                 for (int i = 2; i <= 1000; i++)
                 {
@@ -34,5 +37,4 @@
                 }
             }
         }
-    }
 }
