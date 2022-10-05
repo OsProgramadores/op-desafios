@@ -27,10 +27,8 @@ public class Square {
   }
 
   public int quantityOfSquaresToMove() {
-    this.squaresThatCanMove = this.squaresThatCanMove
-        .stream()
-        .filter(Square::isNotReached)
-        .collect(Collectors.toSet());
+    this.squaresThatCanMove =
+        this.squaresThatCanMove.stream().filter(Square::isNotReached).collect(Collectors.toSet());
 
     return this.squaresThatCanMove.size();
   }
@@ -44,10 +42,8 @@ public class Square {
   }
 
   public Optional<Square> nextToMove() {
-    final var nextToMove = Optional.ofNullable(squaresThatCanMove
-        .stream()
-        .reduce(null, squareBinaryOperator)
-    );
+    final var nextToMove =
+        Optional.ofNullable(squaresThatCanMove.stream().reduce(null, squareBinaryOperator));
 
     nextToMove.ifPresent(Square::reachAndUpdateStatus);
 
@@ -58,22 +54,23 @@ public class Square {
     return reached.getAndSet(true);
   }
 
-  private final BinaryOperator<Square> squareBinaryOperator = (square, square2) -> {
-    if (square == null) {
-      square2.quantityOfSquaresToMove();
-      return  square2;
-    }
+  private final BinaryOperator<Square> squareBinaryOperator =
+      (square, square2) -> {
+        if (square == null) {
+          square2.quantityOfSquaresToMove();
+          return square2;
+        }
 
-    if (square2 == null) {
-      square.quantityOfSquaresToMove();
-      return square;
-    }
+        if (square2 == null) {
+          square.quantityOfSquaresToMove();
+          return square;
+        }
 
-    final var quantitySquare1 = square.quantityOfSquaresToMove();
-    final var quantitySquare2 = square2.quantityOfSquaresToMove();
+        final var quantitySquare1 = square.quantityOfSquaresToMove();
+        final var quantitySquare2 = square2.quantityOfSquaresToMove();
 
-    return quantitySquare1 <= quantitySquare2 ? square : square2;
-  };
+        return quantitySquare1 <= quantitySquare2 ? square : square2;
+      };
 
   public void printSquareRepresentation() {
     System.out.println(this);

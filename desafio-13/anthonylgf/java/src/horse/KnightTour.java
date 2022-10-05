@@ -2,17 +2,15 @@ package horse;
 
 import java.util.Optional;
 
-/**
- * Algorithm used to solve horse tour problem using Warnsdoff's rule
- */
+/** Algorithm used to solve horse tour problem using Warnsdoff's rule */
 public class KnightTour {
 
   public static void main(final String[] args) {
     if (args.length != 1 || args[0].length() != 2) {
-      final var errorMessage = 
-      """ 
+      final var errorMessage =
+          """
         You must run the program as java KnightTour <initial-square>
-        Examples: 
+        Examples:
             - java KnightTour a1
             - java KnightTour b3
       """;
@@ -36,5 +34,4 @@ public class KnightTour {
       actualSquare = actualSquare.flatMap(Square::nextToMove);
     } while (actualSquare.isPresent());
   }
-
 }
