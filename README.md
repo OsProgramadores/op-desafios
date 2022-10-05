@@ -233,15 +233,20 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
 
 1. O código será inspecionado pela ferramenta [ESlint](https://eslint.org/docs/latest/user-guide/getting-started), utilizando as configurações padrões da ferramenta.
 
-2. Cheque o seu código com o eslint antes de enviar. O
+1. Faça o download do plugin do eslint no repositório localmente:
+   ```sh
+   $ npm install --save-dev eslint-config-standard-with-typescript@23.0.0
+   ```
+
+1. Cheque o seu código com o eslint antes de enviar. O
    arquivo de configuração usado pelo repo está em `ci/.eslintrc.yml`. Para
    checar o seu programa, rode:
 
    ```
-   $ npx eslint@8.24.0 -c <diretorio_do_seu_repo>/ci/.eslintrc.yml <nome_do_seu_arquivo.js>
+   $ npx eslint@8.24.0 -c <diretorio_do_seu_repo>/ci/.eslintrc.yml <caminho_arquivo.js>
    ```
 
-3. Pull Requests contendo código em Javascript serão automaticamente verificados
+1. Pull Requests contendo código em Javascript serão automaticamente verificados
    pelo eslint. Ao submeter um PR, observe a tela do PR e verifique se a
    integração falhou. Em caso de erro, clique no link e verifique as mensagens
    de erro do eslint. Corrija o código, faça outro submit e push.
