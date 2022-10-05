@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-      
+
       - name: Checkout code
         uses: actions/checkout@v2
         with:
@@ -67,7 +67,7 @@ jobs:
       - name: Check Java code
         run: |
           ./ci/javacheck.sh
-      
+
       - name: Check Javascript code
         run: |
           ./ci/javascriptcheck.sh
