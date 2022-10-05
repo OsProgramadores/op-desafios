@@ -217,7 +217,7 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
 1. Use indentação em **4 espaços**.
 
 1. Cheque o seu código com o [pylint](http://pylint.org) antes de enviar. O
-   arquivo de configuração usado pelo depo está em `travis-ci/pylint3.rc`. Para
+   arquivo de configuração usado pelo depo está em `ci/pylint3.rc`. Para
    checar o seu programa, rode:
 
    ```
@@ -229,6 +229,22 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
    integração falhou. Em caso de erro, clique no link e verifique as mensagens
    de erro do pylint. Corrija o código, faça outro submit e push.
 
+### Javascript
+
+1. O código será inspecionado pela ferramenta [ESlint](https://eslint.org/docs/latest/user-guide/getting-started), utilizando as configurações padrões da ferramenta.
+
+2. Cheque o seu código com o eslint antes de enviar. O
+   arquivo de configuração usado pelo repo está em `ci/.eslintrc.yml`. Para
+   checar o seu programa, rode:
+
+   ```
+   $ npx eslint@8.24.0 -c <diretorio_do_seu_repo>/ci/.eslintrc.yml <nome_do_seu_arquivo.js>
+   ```
+
+3. Pull Requests contendo código em Javascript serão automaticamente verificados
+   pelo eslint. Ao submeter um PR, observe a tela do PR e verifique se a
+   integração falhou. Em caso de erro, clique no link e verifique as mensagens
+   de erro do eslint. Corrija o código, faça outro submit e push.
 
 ## Ainda tem dúvidas?
 
