@@ -8,8 +8,6 @@ import java.util.stream.Collectors;
 
 public class Square {
 
-  private static final Square NULL_SQUARE = null;
-
   private Set<Square> squaresThatCanMove;
 
   private final AtomicBoolean reached = new AtomicBoolean(false);

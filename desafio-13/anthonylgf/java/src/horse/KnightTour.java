@@ -9,21 +9,27 @@ public class KnightTour {
 
   public static void main(final String[] args) {
     if (args.length != 1 || args[0].length() != 2) {
-      System.out.println("Wou must run the program as java KnightTour <initial-square>");
-      System.out.println("Example: java KnightTour a1 or java KnightTour b3");
+      final var errorMessage = 
+      """ 
+        You must run the program as java KnightTour <initial-square>
+        Examples: 
+            - java KnightTour a1
+            - java KnightTour b3
+      """;
+      System.out.println(errorMessage);
       System.exit(1);
     }
 
     final var initialCoordinate = args[0].toLowerCase();
 
-    final Square initialSquare = SquareManager.getInitialSquare(initialCoordinate);
+    final var initialSquare = SquareManager.getInitialSquare(initialCoordinate);
 
     printMovements(initialSquare);
   }
 
   private static void printMovements(final Square initialSquare) {
     initialSquare.reachAndUpdateStatus();
-    Optional<Square> actualSquare = Optional.of(initialSquare);
+    var actualSquare = Optional.of(initialSquare);
 
     do {
       actualSquare.ifPresent(Square::printSquareRepresentation);
