@@ -213,21 +213,11 @@ class Parser:
         return result[-1]
 
 
-class Reader:
-    """Read lines from a file. Discard '\n' at the end of
-    each line
-    """
-    def __init__(self, filename: str) -> None:
-        with open(filename, 'r', encoding='utf-8') as file:
-            self.lines = list(file.read().splitlines())
-
-    def lines(self,):
-        return self.lines
-
-    def read(self, filename: str) -> None:
-        with open(filename, 'r', encoding='utf-8') as file:
-            self.lines = list(file.read().splitlines())
-
+def read(filename: str) -> None:
+    """read lines from filename"""
+    with open(filename, 'r', encoding='utf-8') as file:
+        lines = list(file.read().splitlines())
+        return lines
 
 def parse_arg_file(num=1):
     """Parse file path as command line argument
@@ -255,8 +245,8 @@ def main():
     ## and comment the next one
     # arg = parse_arg_file()
     # handler = Reader(arg.path[0])
-    handler = Reader('d14.txt')
-    for expr in handler.lines:
+    expressions = read('d14.txt')
+    for expr in expressions:
         try:
             parser = Parser(expr)
             print(parser.evaluate())
