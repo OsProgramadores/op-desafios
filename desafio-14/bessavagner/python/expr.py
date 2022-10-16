@@ -241,9 +241,9 @@ def main():
 
     ## To read from command line, uncomment following two lines
     ## and comment the next one
-    arg = parse_arg_file()
-    handler = Reader(arg.path[0])
-    # handler = Reader('d14.txt')
+    # arg = parse_arg_file()
+    # handler = Reader(arg.path[0])
+    handler = Reader('d14.txt')
     for expr in handler.lines:
         try:
             parser = Parser(expr)
@@ -252,8 +252,16 @@ def main():
             print(err)
         except ErrSyntax as err:
             print(err)
-        except ErrOverflow as err:
-            print(err)
+    # try:
+    #     expr = "266 + 54 * 4 - ( 41 + 2 ) * 10 / 5 - 7 ^ 3 - 1 + 1 * 0 - (( 45 / 5 * 3 - 1) * 2)"  # "((79 - 12) * (5 + (2 - 1))"
+    #     parser = Parser(expr)
+    #     print(parser.evaluate())
+    # except ErrDivByZero as err:
+    #     print(err)
+    # except ErrSyntax as err:
+    #     print(err)
+    # except ErrOverflow as err:
+    #     print(err)
 
 if __name__ == '__main__':
     main()
