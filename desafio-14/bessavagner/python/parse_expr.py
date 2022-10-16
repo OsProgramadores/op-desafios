@@ -88,9 +88,15 @@ def tokenize(expr: str) -> List[str]:
 
 
 class Parser:
+    """
+     Parser para expressões aritiméticas
+
+    """
     def __init__(self, expr=None) -> None:
-        self.err_styntax = "ERR SYNTAX"
-        self.err_divbyzero = "ERR DIVBYZERO"
+        self.err = {
+            'syntax': "ERR SYNTAX",
+            'divzero': "ERR DIVBYZERO"
+        }
         self.operators = '+ - * / ^'.split(' ')
         self.operator_associativeness = {
             self.operators[0]: 'left',
@@ -127,7 +133,7 @@ class Parser:
         if expr is None:
             expr = self.input
         if expr[0] in self.operators:
-            raise ErrSyntax(self.err_styntax)
+            raise ErrSyntax(self.err['syntax'])
         output = ['']
         stack = []
         append_number = False
@@ -155,13 +161,13 @@ class Parser:
                 while len(stack) > 0 and stack[-1] != '(':
                     output.append(stack.pop())
                 if len(stack) == 0 or stack[-1] != '(':
-                    raise ErrSyntax(self.err_styntax)
+                    raise ErrSyntax(self.err['syntax'])
                 stack.pop()
                 append_number = True
 
         while len(stack) > 0:
             if stack[-1] == '(':  # mismatch parentheses
-                raise ErrSyntax(self.err_styntax)
+                raise ErrSyntax(self.err['syntax'])
             output.append(stack.pop())
 
         return output
@@ -186,18 +192,18 @@ class Parser:
             stack = self.rpn
         stack.reverse()
         if stack[-1] == '':
-            raise ErrSyntax(self.err_styntax)
+            raise ErrSyntax(self.err['syntax'])
         while len(stack) > 0:
             if stack[-1] in self.operators:
                 num1 = to_number(result.pop())
                 try:
                     num2 = to_number(result.pop())
                 except IndexError as err:
-                    raise ErrSyntax(self.err_styntax) from err
+                    raise ErrSyntax(self.err['syntax']) from err
                 operation = self.operation[stack.pop()]
 
                 if operation == op.truediv and num1 == 0:  # pylint: disable=W0143
-                    raise ErrDivByZero(self.err_divbyzero)
+                    raise ErrDivByZero(self.err['divzero'])
 
                 value = to_number(operation(num2, num1))
                 result.append(value)
@@ -213,8 +219,14 @@ class Reader:
     """
     def __init__(self, filename: str) -> None:
         with open(filename, 'r', encoding='utf-8') as file:
-            #  don't include '\n'
-            self.lines = [line for line in file.read().splitlines()]
+            self.lines = list(file.read().splitlines())
+
+    def lines(self,):
+        return self.lines
+
+    def read(self, filename: str) -> None:
+        with open(filename, 'r', encoding='utf-8') as file:
+            self.lines = list(file.read().splitlines())
 
 
 def parse_arg_file(num=1):
@@ -252,16 +264,6 @@ def main():
             print(err)
         except ErrSyntax as err:
             print(err)
-    # try:
-    #     expr = "266 + 54 * 4 - ( 41 + 2 ) * 10 / 5 - 7 ^ 3 - 1 + 1 * 0 - (( 45 / 5 * 3 - 1) * 2)"  # "((79 - 12) * (5 + (2 - 1))"
-    #     parser = Parser(expr)
-    #     print(parser.evaluate())
-    # except ErrDivByZero as err:
-    #     print(err)
-    # except ErrSyntax as err:
-    #     print(err)
-    # except ErrOverflow as err:
-    #     print(err)
 
 if __name__ == '__main__':
     main()
