@@ -7,4 +7,4 @@ function primos (num) {
 const recebePrimos = (numeros) => {
   for (let contador = 2; contador < numeros; contador++) { if (primos(contador)) console.log(contador) }
 }
-recebePrimos(1000)
+recebePrimos(10000)
