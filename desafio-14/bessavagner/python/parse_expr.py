@@ -97,7 +97,7 @@ class Parser:
             self.operators[1]: 'left',
             self.operators[2]: 'left',
             self.operators[3]: 'left',
-            self.operators[4]: 'right',           
+            self.operators[4]: 'right',
         }
         self.operation = {
             self.operators[0]: op.add,
@@ -221,7 +221,7 @@ def parse_arg_file(num=1):
     """Parse file path as command line argument
 
     Args:
-        num (int, optional): The number of command-line paths 
+        num (int, optional): The number of command-line paths
             that should be consumed.. Defaults to 1.
 
     Returns:
