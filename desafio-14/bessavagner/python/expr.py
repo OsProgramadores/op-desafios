@@ -241,9 +241,9 @@ def main():
 
     ## To read from command line, uncomment following two lines
     ## and comment the next one
-    # arg = parse_arg_file()
-    # handler = Reader(arg.path[0])
-    handler = Reader('d14.txt')
+    arg = parse_arg_file()
+    handler = Reader(arg.path[0])
+    # handler = Reader('d14.txt')
     for expr in handler.lines:
         try:
             parser = Parser(expr)
