@@ -1,6 +1,6 @@
-listarNumerosPrimos(10000);
+executarNumerosPrimos(10000);
 
-function listarNumerosPrimos(limite){
+function executarNumerosPrimos(limite){
     for(let numero = 1; numero <= limite; numero++){
 
         if(NumeroPrimo(numero)) console.log(numero);
