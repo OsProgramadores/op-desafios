@@ -1,5 +1,4 @@
-/*
-Escreva um programa para listar todos os números primos 
+/* Escreva um programa para listar todos os números primos 
 entre 1 e 10000, na linguagem de sua preferência.
 */
 
@@ -21,6 +20,4 @@ function numerosPrimos(num) {
       };
     return num >1;
     }
-    
-    console.log(numerosPrimos(10000));
-    
+  console.log(numerosPrimos(10000));
