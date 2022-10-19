@@ -10,4 +10,3 @@ function numeroPrimo(num) {
 var numero = 10000;
 for (var i = 2; i < numero; i++) if (numeroPrimo(i))
 console.log(i);
-
