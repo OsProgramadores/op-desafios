@@ -10,5 +10,4 @@ function numeroPrimo(numero) {
            return false;
         }
     }
-  return true;
-}
+return true; }
