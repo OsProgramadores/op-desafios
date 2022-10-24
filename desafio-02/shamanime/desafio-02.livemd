@@ -1,0 +1,28 @@
+# OsProgramadores - Desafio 02
+
+## Números primos entre 1 e 10_000
+
+Link do desafio: https://osprogramadores.com/desafios/d02/
+
+Para rodar o desafio você pode acessar https://livebook.dev e baixar o aplicativo do Livebook para desktop ou usar o Fly.io para rodar o código online.
+
+```elixir
+defmodule Primes do
+  @spec is_prime(integer()) :: boolean()
+  def is_prime(2), do: true
+  def is_prime(n) when n < 2 or rem(n, 2) == 0, do: false
+  def is_prime(n), do: is_prime(n, 3)
+
+  defp is_prime(n, x) when n < x * x, do: true
+  defp is_prime(n, x) when rem(n, x) == 0, do: false
+  defp is_prime(n, x), do: is_prime(n, x + 2)
+
+  @spec prime_up_to(integer()) :: [integer()]
+  def prime_up_to(n) do
+    Enum.filter(1..n, &is_prime/1)
+  end
+end
+
+Primes.prime_up_to(10_000)
+|> IO.inspect(limit: :infinity)
+```
