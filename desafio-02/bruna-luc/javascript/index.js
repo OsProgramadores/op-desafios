@@ -9,7 +9,7 @@
 const final = 10000
 let count = 2
 let count2 = 2
-const primo = [1]
+const primo = []
 
 for (count; count < final; count++) {
   count2 = (count - 1)
@@ -23,4 +23,4 @@ for (count; count < final; count++) {
     }
   }
 }
-document.getElementById('resultado').innerHTML = primo
+console.log(`Números primos de 1 a 10000 ${primo}`)
