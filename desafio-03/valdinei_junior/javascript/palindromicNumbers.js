@@ -1,6 +1,6 @@
 function palindromicNumbers (firstNumber, lastNumber) {
   if (typeof firstNumber !== 'number' || typeof lastNumber !== 'number' || firstNumber > lastNumber) {
-    console.log('Os parâmetros dever ser dois números inteiros sendo o primeiro menor que o segundo.')
+    console.log('Os parâmetros devem ser dois números inteiros sendo o primeiro menor que o segundo.')
   } else {
     for (let number = firstNumber; number <= lastNumber; number++) {
       let lengthNumber = number.toString().length
