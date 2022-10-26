@@ -31,7 +31,7 @@ defmodule Palindrome do
   """
   @spec is_palindrome?(integer()) :: boolean()
   def is_palindrome?(number) when number < 0, do: false
-  def is_palindrome?(number) when number >= 0 and number <= 9, do: true
+  def is_palindrome?(number) when number <= 9, do: true
   def is_palindrome?(number) when rem(number, 10) == 0, do: false
 
   def is_palindrome?(number) do
