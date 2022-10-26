@@ -44,7 +44,7 @@ defmodule Palindrome do
   @spec is_palindrome?(integer(), integer()) :: boolean()
   defp is_palindrome?(0, _tail), do: false
   defp is_palindrome?(number, number), do: true
-  defp is_palindrome?(head, tail) when tail == (head / 10) |> trunc(), do: true
+  defp is_palindrome?(head, tail) when tail == div(head, 10), do: true
 
   defp is_palindrome?(head, tail) do
     new_head = div(head, 10)
