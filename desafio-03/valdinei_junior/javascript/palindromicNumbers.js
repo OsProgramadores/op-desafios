@@ -9,7 +9,9 @@ function iterationBetweenNumbers (firstNumber, lastNumber) {
     )
   } else {
     for (let number = firstNumber; number <= lastNumber; number++) {
-      checkIfTheNumberIsPalindrome(number)
+      if (checkIfTheNumberIsPalindrome(number)) {
+        console.log(number)
+      }
     }
   }
 }
@@ -32,7 +34,9 @@ function checkIfTheNumberIsPalindrome (number) {
     expoente++
   }
   if (number === reverseNumber) {
-    console.log(number)
+    return true
+  } else {
+    return false
   }
 }
 
