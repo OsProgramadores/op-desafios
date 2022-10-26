@@ -1,0 +1,72 @@
+# Desafio 02
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.6.1"}
+])
+```
+
+## Números palíndromos
+
+Link do desafio: https://osprogramadores.com/desafios/d03/
+
+Para rodar o desafio você pode acessar https://livebook.dev e baixar o aplicativo do Livebook para desktop ou usar o Fly.io para rodar o código online.
+
+## Intervalo de valores
+
+```elixir
+from_number = Kino.Input.text("Valor inicial")
+```
+
+```elixir
+to_number = Kino.Input.text("Valor final")
+```
+
+## Definição da função
+
+```elixir
+defmodule Palindrome do
+  @doc """
+  Reverts half of the digits to check for palindromic numbers
+  """
+  @spec is_palindrome?(integer()) :: boolean()
+  def is_palindrome?(number) when number < 0, do: false
+  def is_palindrome?(number) when number >= 0 and number <= 9, do: true
+  def is_palindrome?(number) when rem(number, 10) == 0, do: false
+
+  def is_palindrome?(number) do
+    head = div(number, 10)
+    tail = rem(number, 10)
+
+    is_palindrome?(head, tail)
+  end
+
+  @spec is_palindrome?(integer(), integer()) :: boolean()
+  defp is_palindrome?(0, _tail), do: false
+  defp is_palindrome?(number, number), do: true
+  defp is_palindrome?(head, tail) when tail == (head / 10) |> trunc(), do: true
+
+  defp is_palindrome?(head, tail) do
+    new_head = div(head, 10)
+    new_tail = rem(head, 10)
+
+    is_palindrome?(new_head, 10 * tail + new_tail)
+  end
+end
+```
+
+## Verificação dos valores
+
+```elixir
+with {:from_number, {from_number, _}} <-
+       {:from_number, Integer.parse(Kino.Input.read(from_number))},
+     {:to_number, {to_number, _}} <- {:to_number, Integer.parse(Kino.Input.read(to_number))},
+     {:range, true} <- {:range, from_number <= to_number} do
+  Enum.filter(from_number..to_number, &Palindrome.is_palindrome?/1)
+  |> IO.inspect(limit: :infinity)
+else
+  {:from_number, _} -> IO.inspect("O valor inicial não é um número válido")
+  {:to_number, _} -> IO.inspect("O valor final não é um número válido")
+  {:range, _} -> IO.inspect("O valor inicial deve ser menor que o valor final")
+end
+```
