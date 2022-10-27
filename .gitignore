@@ -6,3 +6,4 @@
 *.jar
 node_modules
 *.json
+.venv
