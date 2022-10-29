@@ -8,6 +8,6 @@ for(i = 2; i <= limite; i++){
             ePrimo = false;
             break;
         }
-    } 
+    }
     if(ePrimo) console.log(i);
 }
