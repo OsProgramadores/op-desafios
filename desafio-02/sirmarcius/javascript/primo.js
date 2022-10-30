@@ -1,22 +1,23 @@
-/* Escreva um programa para listar todos os números primos
-entre 1 e 10000. */
+/*
+Escreva um programa para listar todos os números primosTotalRowdyLaboratory
+entre 1 e 10000.
+*/
+// eslint-disable-next-line no-use-before-define
+numerosPrimos(10000);
 
-// eslint-disable-next-line require-jsdoc, consistent-return
-function numeroPrimo(num) {
-  // eslint-disable-next-line no-unreachable-loop, no-plusplus
-  for (let divisor = 2; divisor < num; divisor++) {
-    if (num % divisor === 0) {
-      return false;
-    }
-    return true;
+function numerosPrimos(limite) {
+  // eslint-disable-next-line indent
+    // eslint-disable-next-line indent, no-plusplus
+    for (let num = 2; num <= limite; num++) {
+    // eslint-disable-next-line no-use-before-define, no-console
+    if (verificarNumerosPrimos(num)) console.log(num);
   }
 }
-const numero = 10000;
-// eslint-disable-next-line no-plusplus
-for (let i = 2; i < numero; i++) {
-  // eslint-disable-next-line no-console
-  if (numeroPrimo(i)) {
-    // eslint-disable-next-line no-console
-    console.log(i);
+function verificarNumerosPrimos(numero) {
+  // eslint-disable-next-line no-plusplus
+  for (let divisor = 2; divisor < numero; divisor++) {
+    if (numero % divisor === 0) return false;
   }
+
+  return true;
 }
