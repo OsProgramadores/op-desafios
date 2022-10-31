@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>palindromo numerico</title>
+  </head>
+  <body>
+    <script>
+    
+    let number1 = prompt("entre com um numero");
+let number2 = prompt("entre com um numero");
+
+let numbers = [];
+
+if (number1 > number2) {
+  const c = number2;
+  number2 = number1;
+  number1 = c;
+}
+
+console.log("Inicial:"+number1);
+console.log("Final"+number2);
+
+for (let index = number1; index < number2; index++) {
+  let textNumber = String(index);
+
+  if (index < 10) {
+    numbers.push(textNumber);
+   
+  } 
+  else {
+
+    let numberLeft = textNumber.substring(0, textNumber.length / 2);
+    let numberRight;
+    
+    if (textNumber.length % 2 === 0) {
+      numberRight = textNumber.substring(textNumber.length / 2, textNumber.length);
+
+      palindromo (numberLeft,numberRight,textNumber);
+    }
+    else {
+      numberRight = textNumber.substring(textNumber.length / 2 + 1, textNumber.length);
+      palindromo (numberLeft,numberRight,textNumber);
+      
+    }
+  }
+}
+console.log(numbers);
+
+function palindromo (numberLeft,numberRight,textNumber) {
+  if (numberLeft === numberRight) {
+    numbers.push(textNumber);
+  }
+}
+  </script>
+  </body>
+</html>
