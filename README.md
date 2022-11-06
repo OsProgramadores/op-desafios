@@ -248,8 +248,8 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
    ```
    $ npx eslint -c <diretorio_do_seu_repo>/ci/.eslintrc.yml <caminho_arquivo.js>
    ```
-   
-   Por exemplo, se seu diretório está em `/home/user/op-desafios`, e seu arquivo se chama `primos.js` e está na pasta atual, o comando deve ser:
+
+   Por exemplo, se seu diretório está em `/home/user/op-desafios`, o arquivo se chama `primos.js` e está na pasta atual, o comando deve ser:
 
    ```
    $ npx eslint -c /home/user/op-desafios/ci/.eslintrc.yml primos.js
