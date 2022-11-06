@@ -233,9 +233,12 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
 
 1. O código será inspecionado pela ferramenta [ESlint](https://eslint.org/docs/latest/user-guide/getting-started), utilizando as configurações padrões da ferramenta.
 
-1. Faça o download do plugin do eslint no repositório localmente:
+1. Instale NodeJS na sua máquina, [seguindo as instruções aqui](https://nodejs.org/en/download/package-manager/)
+
+1. Feche e abra o prompt de comando e faça o download do plugin do eslint no repositório localmente:
    ```sh
-   $ npm install --save-dev eslint-config-standard-with-typescript@23.0.0
+   $ cd <diretorio_do_seu_repo>
+   $ npm install --save-dev eslint-config-standard-with-typescript@23.0.0 eslint@8.24.0
    ```
 
 1. Cheque o seu código com o eslint antes de enviar. O
@@ -243,13 +246,21 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
    checar o seu programa, rode:
 
    ```
-   $ npx eslint@8.24.0 -c <diretorio_do_seu_repo>/ci/.eslintrc.yml <caminho_arquivo.js>
+   $ npx eslint -c <diretorio_do_seu_repo>/ci/.eslintrc.yml <caminho_arquivo.js>
+   ```
+   
+   Por exemplo, se seu diretório está em `/home/user/op-desafios`, e seu arquivo se chama `primos.js` e está na pasta atual, o comando deve ser:
+
+   ```
+   $ npx eslint -c /home/user/op-desafios/ci/.eslintrc.yml primos.js
    ```
 
 1. Pull Requests contendo código em Javascript serão automaticamente verificados
    pelo eslint. Ao submeter um PR, observe a tela do PR e verifique se a
    integração falhou. Em caso de erro, clique no link e verifique as mensagens
    de erro do eslint. Corrija o código, faça outro submit e push.
+
+> :warning: Não faça commit da pasta `node_modules` e dos arquivos `package.json` e `package-lock.json`. Não faça `git add *`, adicione *somente* sua pasta de solução no commit.
 
 ## Ainda tem dúvidas?
 
