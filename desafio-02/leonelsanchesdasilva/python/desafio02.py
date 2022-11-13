@@ -1,3 +1,4 @@
+"""Desafio de geração dos números primos de 1 a 10000."""
 import math
 
 for i in range(1, 10001):
