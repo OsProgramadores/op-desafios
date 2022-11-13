@@ -1,7 +1,7 @@
 '''
 Desafio 08 - Frações
 '''
-with open('frac.txt', 'r') as OPEN:
+with open('frac.txt', 'r', encoding='utf-8') as OPEN:
     READFILE = OPEN.readlines()
 
 def m_d_c(num_1, num_2):
