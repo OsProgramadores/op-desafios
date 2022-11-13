@@ -1,8 +1,8 @@
 '''
 Desafio 08 - Frações
 '''
-OPEN = open('frac.txt')
-READFILE = OPEN.readlines()
+with open('frac.txt', 'r') as OPEN:
+    READFILE = OPEN.readlines()
 
 def m_d_c(num_1, num_2):
     '''Reduzir as mistas'''
