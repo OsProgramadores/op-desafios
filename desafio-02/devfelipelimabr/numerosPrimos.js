@@ -1,13 +1,21 @@
-function primo(numero = 10000) {
+function isPrimo(num) {
 
-    let primos = [2, 3, 5, 7];
-    for (let i = 8; i <= numero; i++) {
-        if (Number.isInteger(i % 2) === false && Number.isInteger(i % 3) === false && Number.isInteger(i % 5) === false && Number.isInteger(i % 7) === false) {
-            primos.push(i);
+    for (let i = 2; i <= num; i++) {
+        if (num % i === 0){
+            return false;
         }
+        return num > 1;
     }
-    return primos;
+   
 }
 
-let j = 11;
-console.log(Number.isInteger(j % 2));
+let arr = [2];
+let numEntrada = 10000;
+
+for (let i = 3; i < numEntrada; i++){
+    if (isPrimo(i) === true){
+        arr.push(i)
+    }
+}
+
+console.log(arr)
