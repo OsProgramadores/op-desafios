@@ -6,3 +6,6 @@
 *.jar
 node_modules
 *.json
+
+*.exe
+*.obj
