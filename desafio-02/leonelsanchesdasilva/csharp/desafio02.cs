@@ -1,7 +1,7 @@
 using System;
 
 namespace OsProgramadores {
-    class Desafio02 {          
+    class Desafio02 {
         static void Main(string[] args) {
             for (int i = 1; i <= 10000; i++) {
                 bool primo = true;
