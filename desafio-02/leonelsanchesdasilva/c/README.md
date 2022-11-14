@@ -2,7 +2,7 @@
 
 ## Usando Developer Command Prompt for Visual Studio
 
-Você deve ter algum Visual Studio Community Edition instalado. 
+Você deve ter algum Visual Studio Community Edition instalado.
 
 Execute com:
 
