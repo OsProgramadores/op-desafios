@@ -18,7 +18,7 @@ int main()
 			
 			if(converter == numero_inverso)
 			{
-				std::cout << "Os numeros palindromicos sao:  " << converter << '\n';
+				std::cout << "Os numeros palindromicos sao: " << converter << '\n';
 			}
 	    }		
 	}
