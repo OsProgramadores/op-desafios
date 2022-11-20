@@ -6,7 +6,6 @@ function isPrimo(num) {
         }
         return num > 1;
     }
-   
 }
 
 let arr = [2];
@@ -17,5 +16,4 @@ for (let i = 3; i < numEntrada; i++){
         arr.push(i);
     }
 }
-
 console.log(arr)
