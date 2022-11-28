@@ -1,2 +1,2 @@
 palindromo: palindromo.cpp
-	g++ -Wall -o palindromo palindromo.cpp 
+	g++ -o palindromo palindromo.cpp 
