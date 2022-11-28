@@ -7,7 +7,6 @@ public:
     unsigned long long int num_final;
 
     void exibeInfo() {
-        unsigned long long int testInt{ 0 };
         std::cout << "Informe os numeros limites para achar os palindromos" << '\n';
         std::cout << "Inserir o numero limite inicial" << '\n';
         std::cin >> num_inicial;
