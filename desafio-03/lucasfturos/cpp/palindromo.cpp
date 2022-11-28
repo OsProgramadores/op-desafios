@@ -17,8 +17,7 @@ public:
             std::cerr << "Informe um numero maior que o limite inicial para o limite final\n";
             std::exit(0);
         }
-        else if (num_final >= static_cast<unsigned long long int>(-1) ||
-            num_inicial >= static_cast<unsigned long long int>(-1)) {
+        else if (num_final >= static_cast<unsigned long long int>(-1) || num_inicial >= static_cast<unsigned long long int>(-1)) {
             std::cerr << "Erro: Execute o programa novamente\n";
             std::cerr << "Insira apenas numeros inteiros e positivos\n";
             std::exit(0);
