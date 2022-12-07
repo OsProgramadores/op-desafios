@@ -26,7 +26,7 @@ jobs:
           node-version: 16
               
       - name: Instal Zig 0.10
-        uses: goto-bus-stop/setup-zig@v1.3.0
+        uses: goto-bus-stop/setup-zig@v2
         with:
           version: 0.10.0
           
