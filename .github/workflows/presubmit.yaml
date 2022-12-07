@@ -24,12 +24,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
-              
-      - name: Install Zig 0.10
-        uses: goto-bus-stop/setup-zig@v2
-        with:
-          version: 0.10.0
-          
+
       - name: Checkout code
         uses: actions/checkout@v2
         with:
@@ -77,10 +72,6 @@ jobs:
       - name: Check Javascript code
         run: |
           ./ci/javascriptcheck.sh
-          
-      - name: Check Zig code
-        run: |
-          zig fmt --ast-check --check **.zig
 
       - name: Check Validator code
         run: |
