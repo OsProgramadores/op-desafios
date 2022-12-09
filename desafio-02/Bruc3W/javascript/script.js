@@ -1,4 +1,4 @@
-const limite = 100
+const limite = 10000
 
 for (let i = 2; i <= limite; i++) {
   let ePrimo = true
