@@ -1,5 +1,5 @@
 /*
-Exibir os números primos de 1 até 10000
+Exibir os números primos de 1 até 10000.
 */
 
 exibirPrimos(10000);
