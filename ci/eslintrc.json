@@ -1,0 +1,32 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+
+  "extends": "standard-with-typescript",
+
+  "overrides": [],
+
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+
+  "rules": {
+    "space-before-function-paren": ["error", {
+      "anonymous": "always",
+      "asyncArrow": "always",
+      "named": "never"
+    }],
+    "semi": ["error", "always"],
+    "semi-spacing": ["error", {
+      "before": false,
+      "after": true
+    }],
+    "quotes": ["error", "double", {
+      "avoidEscape": true
+    }]
+  }
+}

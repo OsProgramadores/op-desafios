@@ -16,4 +16,4 @@ fi
 
 echo "✔️  Checking the Javascript files..."
 
-npx eslint@$ESLINT_VERSION -c ci/.eslintrc.yml ${FILES[@]}
+npx "eslint@${ESLINT_VERSION}" -c ci/eslintrc.json "${FILES[@]}"
