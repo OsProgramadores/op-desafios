@@ -15,18 +15,19 @@
   },
 
   "rules": {
-    "space-before-function-paren": ["error", {
-      "anonymous": "always",
-      "asyncArrow": "always",
-      "named": "never"
+    "indent": ["error", 4],
+    "quotes": ["error", "double", {
+      "avoidEscape": true
     }],
     "semi": ["error", "always"],
     "semi-spacing": ["error", {
       "before": false,
       "after": true
     }],
-    "quotes": ["error", "double", {
-      "avoidEscape": true
+    "space-before-function-paren": ["error", {
+      "anonymous": "always",
+      "asyncArrow": "always",
+      "named": "never"
     }]
   }
 }
