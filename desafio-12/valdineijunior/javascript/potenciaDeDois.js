@@ -30,4 +30,4 @@ function readFractions(path) {
     }
   });
 }
-readFractions("/d12.txt");
+readFractions("./d12.txt");
