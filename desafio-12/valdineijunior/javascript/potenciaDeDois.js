@@ -6,7 +6,8 @@ function readFractions(path) {
       console.log("erro de leitura: " + error.message);
     } else {
       let numbersArray = [];
-      if ((/[\n\r]/.test(data))) {
+      console.log(data)
+      if ((/(\r)/.test(data))) {
         numbersArray = data.split("\r\n");
       } else {
         numbersArray = data.split("\n");
