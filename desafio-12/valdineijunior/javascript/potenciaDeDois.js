@@ -1,5 +1,9 @@
 const fs = require('fs')
 
+const nome_arquivo = '/d12.txt'
+
+const path = __dirname + `${nome_arquivo}`
+
 function readFractions(path) {
   fs.readFile(path, 'utf-8', function (error, data) {
     if (error) {
@@ -25,4 +29,4 @@ function readFractions(path) {
     }
   })
 }
-readFractions('./d12.txt')
+readFractions(path)
