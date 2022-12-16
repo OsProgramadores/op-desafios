@@ -46,7 +46,7 @@ std::string BigBase::converteBase(std::uint32_t baseInput, std::uint32_t baseOut
         return "???";
     }
     output = "";
-    while (numInput != "" && output != "???") {
+    while (!numInput.empty() && output != "???") {
         resto = 0;
         for (auto& i : numInput) {
             aux = bases.find(i);
