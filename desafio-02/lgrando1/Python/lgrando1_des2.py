@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 print('São primos os seguintes números:')
 for a in range(2,10000):
     b = 2
