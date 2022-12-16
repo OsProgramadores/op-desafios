@@ -1,4 +1,4 @@
-run: baseconv.txt
+run: build baseconv.txt
 	./bigbase baseconv.txt
 build:
 	g++ -Wall -o bigbase bigbase.cpp
