@@ -1,39 +1,49 @@
 #include <fstream>
-#include <sstream>
 #include <iostream>
+#include <sstream>
 
-std::string converteBase(uint64_t baseInput, uint64_t baseOutput, std::string numInput) {
-    std::string bases{ "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" };
-    std::string output;
-    size_t numero{ 0 };
-    size_t resto{ 0 };
+std::string converteBase(uint64_t baseInput, uint64_t baseOutput,
+    std::string numInput) {
     uint64_t aux{ 0 };
-    if (baseInput > bases.length() || baseOutput > bases.length() || baseOutput < 2 || baseInput < 2) {
-        return "???";
-    }
+    std::string output;
+    size_t num{ 0 }, rest{ 0 };
+    std::string bases{
+        "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" };
+
     if (numInput == "0") {
         return numInput;
     }
+
     if (baseOutput < 62 && numInput == "???") {
         return "???";
     }
+
+    if (baseInput > bases.length() || baseOutput > bases.length() ||
+        baseOutput < 2 || baseInput < 2) {
+        return "???";
+    }
+
     output = "";
     while (!numInput.empty() && output != "???") {
-        resto = 0;
+        rest = 0;
+
         for (auto& i : numInput) {
             aux = bases.find(i);
-            if (aux == std::string::npos || aux >= baseInput) {
+            if (aux == -1UL || aux >= baseInput) {
                 return "???";
             }
-            numero = (resto * baseInput) + aux;
-            resto = numero % baseOutput;
-            i = bases[(numero / baseOutput)];
+            num = (rest * baseInput) + aux;
+            rest = num % baseOutput;
+            i = bases[(num / baseOutput)];
         }
-        output = bases[resto] + output;
+
+        output = bases[rest] + output;
+
         while (numInput[0] == '0') {
             numInput = numInput.substr(1);
         }
     }
+
     if (baseOutput == 62) {
         if (output.length() > 30) {
             output = "???";
@@ -43,15 +53,12 @@ std::string converteBase(uint64_t baseInput, uint64_t baseOutput, std::string nu
 }
 
 int main(int argc, char const* argv[]) {
-    std::string numInput;
-    std::string baseconv;
-    uint64_t baseInput{ 0 };
-    uint64_t baseOutput{ 0 };
+    std::string numInput, baseconv;
+    uint64_t baseInput{ 0 }, baseOutput{ 0 };
     std::ifstream baseconvArq(argv[1]);
 
     if (!baseconvArq.is_open()) {
         std::cout << "Erro ao abrir o arquivo" << '\n';
-        return 1;
     }
 
     while (std::getline(baseconvArq, baseconv)) {
@@ -60,6 +67,7 @@ int main(int argc, char const* argv[]) {
             std::cout << converteBase(baseInput, baseOutput, numInput) << '\n';
         }
     }
+
     baseconvArq.close();
 
     return 0;
