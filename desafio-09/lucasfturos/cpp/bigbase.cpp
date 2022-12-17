@@ -2,13 +2,11 @@
 #include <iostream>
 #include <sstream>
 
-std::string converteBase(uint64_t baseInput, uint64_t baseOutput,
-    std::string numInput) {
+std::string converteBase(uint64_t baseInput, uint64_t baseOutput, std::string numInput) {
     uint64_t aux{ 0 };
     std::string output;
     size_t num{ 0 }, rest{ 0 };
-    std::string bases{
-        "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" };
+    std::string bases{ "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz" };
 
     if (numInput == "0") {
         return numInput;
