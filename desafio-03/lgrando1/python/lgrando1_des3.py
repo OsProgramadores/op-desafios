@@ -7,4 +7,3 @@ for i in range(start,end):
     ix = str(i)
     if ix == ix[::-1]:
         print(i)
-    
