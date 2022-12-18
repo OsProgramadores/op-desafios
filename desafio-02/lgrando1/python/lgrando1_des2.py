@@ -14,4 +14,3 @@ for a in range(2,10000):
 
     if contador == 0:
         print(a)
-
