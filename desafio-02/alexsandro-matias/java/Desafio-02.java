@@ -7,7 +7,7 @@ public class Desafio02 {
 					contador++;
 				}
 			}
-			if (contador == 2){
+			if (contador == 2) {
 				System.out.println(j);
 				j++;
 			}
