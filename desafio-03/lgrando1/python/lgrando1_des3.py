@@ -8,4 +8,3 @@ for i in range(start,end):
     if ix == ix[::-1]:
         print(i)
     
-        
