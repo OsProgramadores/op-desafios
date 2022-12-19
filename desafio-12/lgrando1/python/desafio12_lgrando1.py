@@ -23,4 +23,3 @@ with open("d12.txt", 'r', encoding='UTF-8') as lin:
     linhas = lin.readlines()
     for linha in linhas:
         potencia_de_2(linha)
-    
