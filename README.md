@@ -24,7 +24,7 @@ individuais de cada desafio.
 
 1. Faça um clone do repositório para a sua estação de trabalho:
    ```
-   $ git clone https://github.com/<seu_usuario_no_github>/op-desafios
+   git clone https://github.com/<seu_usuario_no_github>/op-desafios
    ```
 1. Entre no diretório criado pelo git (`op-desafios`).
 
@@ -32,7 +32,7 @@ individuais de cada desafio.
    principal. Isso facilitará a atualização do seu repositório local:
 
    ```
-   $ git remote add upstream https://github.com/osprogramadores/op-desafios
+   git remote add upstream https://github.com/osprogramadores/op-desafios
    ```
 
 1. **Antes de começar a trabalhar em qualquer desafio**: é importante resetar os números de
@@ -57,14 +57,14 @@ individuais de cada desafio.
 1. Crie um _branch_ de trabalho com um nome adequado. No nosso exemplo, usaremos o nome "dev":
 
    ```
-   $ git checkout -b dev
+   git checkout -b dev
    ```
 
 1. Trabalhe normalmente no _branch_ de desenvolvimento. Quando estiver satisfeito
    com o resultado, faça o _commit_ e o _push_ com:
 
    ```
-   $ git push origin dev --force
+   git push origin dev --force
    ```
 
 1. O `git push` transfere o conteúdo do seu branch corrente ("dev" nesse caso)
@@ -196,8 +196,8 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
 1. Para formatar os arquivos de acordo com o padrão utilizado, basta seguir os seguintes passos:
 
    ```shell
-   $ curl -LJO "https://github.com/google/google-java-format/releases/download/v1.15.0/google-java-format-1.15.0-all-deps.jar"
-   $ java -jar <caminho-para-o-jar-baixado>/google-java-format-1.15.0-all-deps.jar --replace <lista-arquivos-java>
+   curl -LJO "https://github.com/google/google-java-format/releases/download/v1.15.0/google-java-format-1.15.0-all-deps.jar"
+   java -jar <caminho-para-o-jar-baixado>/google-java-format-1.15.0-all-deps.jar --replace <lista-arquivos-java>
    ```
 
 1. Pull Requests contendo código em Java serão automaticamente verificados pela
@@ -221,7 +221,7 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
    checar o seu programa, rode:
 
    ```
-   $ pylint --rcfile=<diretorio_do_seu_repo>/ci/pylint3.rc <nome_do_seu_arquivo.py>
+   pylint --rcfile=<diretorio_do_seu_repo>/ci/pylint3.rc <nome_do_seu_arquivo.py>
    ```
 
 1. Pull Requests contendo código em Python serão automaticamente verificados
@@ -237,8 +237,8 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
 
 1. Feche e abra o prompt de comando e faça o download do plugin do eslint no repositório localmente:
    ```sh
-   $ cd <diretorio_do_seu_repo>
-   $ npm install --save-dev eslint-config-standard-with-typescript@23.0.0 eslint@8.24.0
+   cd <diretorio_do_seu_repo>
+   npm install --save-dev eslint-config-standard-with-typescript@23.0.0 eslint@8.24.0
    ```
 
 1. Cheque o seu código com o eslint antes de enviar. O
@@ -246,13 +246,13 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
    checar o seu programa, rode:
 
    ```
-   $ npx eslint -c <diretorio_do_seu_repo>/ci/.eslintrc.yml <caminho_arquivo.js>
+   npx eslint -c <diretorio_do_seu_repo>/ci/.eslintrc.yml <caminho_arquivo.js>
    ```
 
    Por exemplo, se seu diretório está em `/home/user/op-desafios`, o arquivo se chama `primos.js` e está na pasta atual, o comando deve ser:
 
    ```
-   $ npx eslint -c /home/user/op-desafios/ci/.eslintrc.yml primos.js
+   npx eslint -c /home/user/op-desafios/ci/.eslintrc.yml primos.js
    ```
 
 1. Pull Requests contendo código em Javascript serão automaticamente verificados
