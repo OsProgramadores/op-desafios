@@ -1,5 +1,5 @@
 
-// Desafio-03: Verificar números palindromos.
+// Desafio-03: Verificar números palindromos
 
 palindrome(100000);
 
