@@ -67,36 +67,36 @@ function doTheCalculation(expression, operator) {
     const operatorIndex = expression.findIndex((elemenet) => elemenet === operator);
     if (operatorIndex > 0 && operatorIndex < (expression.length - 1)) {
         switch (operator) {
-            case "c": {
-                const joinTheCharactersbackIntoANumber = expression[operatorIndex - 1] + expression[operatorIndex + 1];
-                expression.splice(operatorIndex - 1, 3, joinTheCharactersbackIntoANumber.toString());
-                break;
-            }
-            case "^": {
-                const exponentialProduct = expression[operatorIndex - 1] ** expression[operatorIndex + 1];
-                expression.splice(operatorIndex - 1, 3, exponentialProduct.toString());
-                break;
-            }
-            case "/": {
-                const divisionProduct = parseInt(expression[operatorIndex - 1]) / parseInt(expression[operatorIndex + 1]);
-                expression.splice(operatorIndex - 1, 3, divisionProduct.toString());
-                break;
-            }
-            case "*": {
-                const MultiplicationProduct = parseInt(expression[operatorIndex - 1]) * parseInt(expression[operatorIndex + 1]);
-                expression.splice(operatorIndex - 1, 3, MultiplicationProduct.toString());
-                break;
-            }
-            case "+": {
-                const sumProduct = parseInt(expression[operatorIndex - 1]) + parseInt(expression[operatorIndex + 1]);
-                expression.splice(operatorIndex - 1, 3, sumProduct.toString());
-                break;
-            }
-            case "-": {
-                const subtractionProduct = parseInt(expression[operatorIndex - 1]) - parseInt(expression[operatorIndex + 1]);
-                expression.splice(operatorIndex - 1, 3, subtractionProduct.toString());
-                break;
-            }
+        case "c": {
+            const joinTheCharactersbackIntoANumber = expression[operatorIndex - 1] + expression[operatorIndex + 1];
+            expression.splice(operatorIndex - 1, 3, joinTheCharactersbackIntoANumber.toString());
+            break;
+        }
+        case "^": {
+            const exponentialProduct = expression[operatorIndex - 1] ** expression[operatorIndex + 1];
+            expression.splice(operatorIndex - 1, 3, exponentialProduct.toString());
+            break;
+        }
+        case "/": {
+            const divisionProduct = parseInt(expression[operatorIndex - 1]) / parseInt(expression[operatorIndex + 1]);
+            expression.splice(operatorIndex - 1, 3, divisionProduct.toString());
+            break;
+        }
+        case "*": {
+            const MultiplicationProduct = parseInt(expression[operatorIndex - 1]) * parseInt(expression[operatorIndex + 1]);
+            expression.splice(operatorIndex - 1, 3, MultiplicationProduct.toString());
+            break;
+        }
+        case "+": {
+            const sumProduct = parseInt(expression[operatorIndex - 1]) + parseInt(expression[operatorIndex + 1]);
+            expression.splice(operatorIndex - 1, 3, sumProduct.toString());
+            break;
+        }
+        case "-": {
+            const subtractionProduct = parseInt(expression[operatorIndex - 1]) - parseInt(expression[operatorIndex + 1]);
+            expression.splice(operatorIndex - 1, 3, subtractionProduct.toString());
+            break;
+        }
         }
     }
     return expression;
