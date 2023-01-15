@@ -31,20 +31,18 @@ def check_num(num: int):
     while bitmask <= num:
         if bitmask ^ num == 0:
             return (True, shift)
-        bitmask = bitmask << 1 
+        bitmask = bitmask << 1
         shift += 1
     return (False, 0)
-  
-with open("d12.txt", "r") as num_file:
+
+with open("d12.txt", "r", encoding="utf-8") as num_file:
     for line in num_file:
         try:
-            num = int(line)
-            (potencia, shift) =  check_num(num)
+            number = int(line)
+            (potencia, s) =  check_num(number)
             if potencia:
-                print(f"{num} true {shift}")
+                print(f"{number} true {s}")
             else:
-                print(f"{num} false")
+                print(f"{number} false")
         except ValueError:
             print(f"numero {line} invalido")
-        except:
-            print("erro inesperado")
