@@ -36,15 +36,15 @@ def check_num(num: int):
     return (False, 0)
   
 with open("d12.txt", "r") as num_file:
-  for line in num_file:
-    try:
-      num = int(line)
-      (potencia, shift) =  check_num(num)
-      if potencia:
-        print(f"{num} true {shift}")
-      else:
-        print(f"{num} false")
-    except ValueError:
-      print(f"numero {line} invalido")
-    except:
-      print("erro inesperado")
+    for line in num_file:
+        try:
+            num = int(line)
+            (potencia, shift) =  check_num(num)
+            if potencia:
+                print(f"{num} true {shift}")
+            else:
+                print(f"{num} false")
+        except ValueError:
+            print(f"numero {line} invalido")
+        except:
+            print("erro inesperado")
