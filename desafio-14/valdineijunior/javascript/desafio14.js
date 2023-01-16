@@ -1,27 +1,21 @@
+const file = process.argv[2];
+const readline = require("readline");
 const fs = require("fs");
 
-function readNumericalExpressions(path) {
-    fs.readFile(path, "utf-8", function (error, data) {
-        if (error) {
-            console.log("erro de leitura: " + error.message);
-        } else {
-            let numericalExpressions;
-            if ((/(\r)/.test(data))) {
-                numericalExpressions = data.split("\r\n");
-            } else {
-                numericalExpressions = data.split("\n");
-            }
-            numericalExpressions = numericalExpressions.slice(0, -1);
-            for (let index = 0; index < numericalExpressions.length; index++) {
-                const element = numericalExpressions[index];
-                const expression = element.split(" ").join("").split(/(\d|\(|\))/);
-                expression.shift();
-                expression.pop();
-                expression.forEach(function (item, i) { if (item === "") expression[i] = "c"; });
-                console.log(handleNumericalExpressions(expression));
-            }
-        }
-    });
+const myInterface = readline.createInterface({
+    input: fs.createReadStream(file)
+});
+
+myInterface.on("line", function (line) {
+    return readNumericalExpressions(line);
+});
+
+function readNumericalExpressions(element) {
+    const expression = element.split(" ").join("").split(/(\d|\(|\))/);
+    expression.shift();
+    expression.pop();
+    expression.forEach(function (item, i) { if (item === "") expression[i] = "c"; });
+    console.log(handleNumericalExpressions(expression));
 }
 
 function handleNumericalExpressions(expression) {
@@ -67,38 +61,37 @@ function doTheCalculation(expression, operator) {
     const operatorIndex = expression.findIndex((elemenet) => elemenet === operator);
     if (operatorIndex > 0 && operatorIndex < (expression.length - 1)) {
         switch (operator) {
-        case "c": {
-            const joinTheCharactersbackIntoANumber = expression[operatorIndex - 1] + expression[operatorIndex + 1];
-            expression.splice(operatorIndex - 1, 3, joinTheCharactersbackIntoANumber.toString());
-            break;
-        }
-        case "^": {
-            const exponentialProduct = expression[operatorIndex - 1] ** expression[operatorIndex + 1];
-            expression.splice(operatorIndex - 1, 3, exponentialProduct.toString());
-            break;
-        }
-        case "/": {
-            const divisionProduct = parseInt(expression[operatorIndex - 1]) / parseInt(expression[operatorIndex + 1]);
-            expression.splice(operatorIndex - 1, 3, divisionProduct.toString());
-            break;
-        }
-        case "*": {
-            const MultiplicationProduct = parseInt(expression[operatorIndex - 1]) * parseInt(expression[operatorIndex + 1]);
-            expression.splice(operatorIndex - 1, 3, MultiplicationProduct.toString());
-            break;
-        }
-        case "+": {
-            const sumProduct = parseInt(expression[operatorIndex - 1]) + parseInt(expression[operatorIndex + 1]);
-            expression.splice(operatorIndex - 1, 3, sumProduct.toString());
-            break;
-        }
-        case "-": {
-            const subtractionProduct = parseInt(expression[operatorIndex - 1]) - parseInt(expression[operatorIndex + 1]);
-            expression.splice(operatorIndex - 1, 3, subtractionProduct.toString());
-            break;
-        }
+            case "c": {
+                const joinTheCharactersbackIntoANumber = expression[operatorIndex - 1] + expression[operatorIndex + 1];
+                expression.splice(operatorIndex - 1, 3, joinTheCharactersbackIntoANumber.toString());
+                break;
+            }
+            case "^": {
+                const exponentialProduct = expression[operatorIndex - 1] ** expression[operatorIndex + 1];
+                expression.splice(operatorIndex - 1, 3, exponentialProduct.toString());
+                break;
+            }
+            case "/": {
+                const divisionProduct = parseInt(expression[operatorIndex - 1]) / parseInt(expression[operatorIndex + 1]);
+                expression.splice(operatorIndex - 1, 3, divisionProduct.toString());
+                break;
+            }
+            case "*": {
+                const MultiplicationProduct = parseInt(expression[operatorIndex - 1]) * parseInt(expression[operatorIndex + 1]);
+                expression.splice(operatorIndex - 1, 3, MultiplicationProduct.toString());
+                break;
+            }
+            case "+": {
+                const sumProduct = parseInt(expression[operatorIndex - 1]) + parseInt(expression[operatorIndex + 1]);
+                expression.splice(operatorIndex - 1, 3, sumProduct.toString());
+                break;
+            }
+            case "-": {
+                const subtractionProduct = parseInt(expression[operatorIndex - 1]) - parseInt(expression[operatorIndex + 1]);
+                expression.splice(operatorIndex - 1, 3, subtractionProduct.toString());
+                break;
+            }
         }
     }
     return expression;
 }
-readNumericalExpressions("./d14.txt");
