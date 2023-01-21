@@ -50,7 +50,7 @@ file_status open_and_process(const char *file_name) {
     if (file_dp == -1) {
         return file;
     }
-    
+
     //usa stat syscall para receber o tamanho do arquivo
     struct stat file_stat;
     fstat(file_dp, &file_stat);
@@ -69,7 +69,7 @@ void close_file(file_status file) { close(file.file); }
 
 // escreve o buffer na tela
 // recebe o arquivo e a posição de inicio e fim do print
-// caso o do conteudo seja maior que o buffer BUFFER_SIZE < (end - begin) 
+// caso o do conteudo seja maior que o buffer BUFFER_SIZE < (end - begin)
 // divide o conteudo em tamanhos de BUFFER_SIZE
 void print_buffer(int file, int begin, int end){
     char buffer[BUFFER_SIZE];
@@ -85,7 +85,7 @@ void print_buffer(int file, int begin, int end){
     }
     pread(file, buffer, print_size, off_set_begin);
     write(STDOUT_FILENO, buffer, print_size);
-    
+
 }
 
 //começa a leitura pelo final do arquivo, até encontrar \n ou o inicio do arquivo
@@ -113,7 +113,7 @@ void reverse_print(file_status file) {
         puts("Ex ./main arquivo.txt");
         return ERROR;
     }
-      
+
     file_status file = open_and_process(argv[1]);
     switch (file.error) {
     case OK:
@@ -122,7 +122,7 @@ void reverse_print(file_status file) {
       break;
     case ERROR:
         perror("o programa encontrou o seguinte error");
-        return  ERROR;
+        return ERROR;
         break;
     }
     return 0;
