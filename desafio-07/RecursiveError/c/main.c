@@ -95,14 +95,14 @@ void reverse_print(file_status file) {
     char buf[1];
     int end = (int) file.end_file;
     int i = end;
-    for(;i >= 0; i--){
+    for(;i >= -1; i--){
         pread(file.file, buf, 1, i);
-        //printf("%c", *buf);
         if(*buf == '\n'){
             print_buffer(file.file, i+1, end+1);
             end = i;
         }else if(i == 0){
             print_buffer(file.file, i, end+1);
+            break;
         }
     }
 }
