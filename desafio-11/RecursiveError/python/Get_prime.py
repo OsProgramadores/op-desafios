@@ -1,4 +1,4 @@
-"""resposta desafio-02"""
+"""função para gerar lista de numeros primos"""
 
 def get_prime(limit: int):
     """retorna todos os numeros primos de 2 ate limit usando Crivo de Eratóstenes"""
