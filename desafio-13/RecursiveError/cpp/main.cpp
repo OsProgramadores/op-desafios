@@ -38,8 +38,8 @@ struct Point_2D {
 //estrutura do campo
 struct Chess_board {
   Chess_board(std::map<std::string, PointState> m,
-              std::array<std::array<std::string, 8>, 8> a) : 
-    board_map{m}, board_array{a} 
+              std::array<std::array<std::string, 8>, 8> a) :
+    board_map{m}, board_array{a}
     {}
     std::string operator[](Point_2D point){
         return this->board_array[point.x][point.y];
@@ -93,7 +93,7 @@ bool check_point(Point_2D point, Chess_board &board){
     return board[board[point]] == PointState::Open;
 }
 
-//gera todos os possiveis movimentos a partir de uma coordenada x,y 
+//gera todos os possiveis movimentos a partir de uma coordenada x,y
 std::vector<Point_2D> gen_moves(Point_2D begin, Chess_board &board) {
     std::vector<Point_2D> moves;
     int x = 0;
