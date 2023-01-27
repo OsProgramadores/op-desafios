@@ -142,7 +142,6 @@ PathState gen_path(Point_2D point, Chess_board &board, int rows_left ,std::vecto
             return PathState::Ok;
         }
     }
-    PathState state;
     Point_2D next_move = gen_close_path(moves, board);
     board.board_map[board[next_move]] = PointState::Occupied;
     result.push_back(next_move);
@@ -190,10 +189,10 @@ int main(int argc, char *argv[]) {
     auto chess_map = gen_map(start, chess_array);
     auto chess_board = Chess_board(chess_map, chess_array);
     std::vector<Point_2D> result_vector;
+    result_vector.push_back(get_point(start, chess_array));
     PathState return_state = gen_path(get_point(start, chess_array), chess_board, 63, result_vector);
     switch(return_state){
         case PathState::Ok:
-            std::cout << chess_board[get_point(start, chess_array)] << "\n";
             for(auto point : result_vector){
                 std::cout << chess_board[point] << "\n";
             }
