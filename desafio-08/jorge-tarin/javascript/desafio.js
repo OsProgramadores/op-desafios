@@ -61,12 +61,16 @@ function simplifyFraction(numerator, denominator) {
             }
         }
     } else if (numerator > denominator) {
-        let i = 0;
-        while (numerator > denominator) {
-            numerator -= denominator;
-            i++;
+        if (numerator % denominator === 0) {
+            console.log(`${numerator / denominator}`);
+        } else {
+            let i = 0;
+            while (numerator > denominator) {
+                numerator -= denominator;
+                i++;
+            }
+            console.log(`${i} ${numerator}/${denominator}`);
         }
-        console.log(`${i} ${numerator}/${denominator}`);
     }
 }
 
