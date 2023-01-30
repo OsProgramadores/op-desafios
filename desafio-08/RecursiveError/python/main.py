@@ -3,7 +3,7 @@ Solução Desafio-08
 Author: Guilherme Silva Schultz
 Data: 28-01-2023
 
-le um arquivo de texto contedo uma lista de frações
+le um arquivo de texto contendo uma lista de frações
 e aplica regras matematicas para simplificar
 """
 
