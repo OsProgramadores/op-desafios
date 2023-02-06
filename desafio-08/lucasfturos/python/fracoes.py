@@ -10,6 +10,7 @@ def fracao_simples(fracao: str) -> str:
         numerador = frac.numerator % frac.denominator
         complemento = frac.numerator // frac.denominator
         is_zero = '' if complemento == 0 else f'{complemento} '
+
         if frac.denominator == 1:
             return frac.numerator
         return f'{is_zero}{numerador}/{frac.denominator}'
