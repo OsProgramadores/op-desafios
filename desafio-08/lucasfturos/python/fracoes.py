@@ -24,4 +24,3 @@ try:
     fracao_file.close()
 except IOError:
     print('Erro ao abrir arquivo')
-
