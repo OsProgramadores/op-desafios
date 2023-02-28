@@ -1,13 +1,13 @@
 function palind(num) {
-  const palindrome = [];
+  const palindromes = [];
   for (let i = 1; i <= num; i++) {
       const str = i.toString();
       const reversedStr = str.split("").reverse().join("");
       const reversedNum = parseInt(reversedStr);
       if (i === reversedNum) {
-          palindrome.push(i);
+          palindromes.push(i);
       }
   }
-  return palindrome;
+  return palindromes;
 }
 console.log(palind(64));
