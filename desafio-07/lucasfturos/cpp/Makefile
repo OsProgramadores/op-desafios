@@ -1,5 +1,5 @@
 run: build
-	@ulimit -v 524288 && ./tac 1GB.txt | md5sum
+	@ulimit -v 524288 && ./tac 1GB.txt
 build:
 	@g++ -Wall -o tac tac.cpp
 download:
