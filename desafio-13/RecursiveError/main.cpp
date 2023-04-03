@@ -175,7 +175,7 @@ Point_2D get_point(std::string point, std::array<std::array<std::string, 8>, 8> 
 int main(int argc, char *argv[]) {
     if(argc < 2){
         std::cout << "Chame esse programa passando uma posição em notação algébrica de xadrez\n";
-        std::cout << "exemplo: ./main a1\n";
+        std::cout << "exemplo: ./cavalo a1\n";
         return  1;
     }
 
