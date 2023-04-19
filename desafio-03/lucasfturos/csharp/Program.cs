@@ -5,7 +5,9 @@ namespace Palindromo
 {
     class Program
     {
-        public static long num_inicial, num_final;
+        public static long num_inicial;
+        public static long num_final;
+
         public static void exibeInfo()
         {
             Console.WriteLine("Informe os numeros limites para achar os palindromos");
@@ -17,7 +19,9 @@ namespace Palindromo
             if (num_final < num_inicial)
             {
                 Console.WriteLine("Erro: Execute o programa novamente");
-                Console.WriteLine("Informe um numero maior que o limite inicial para o limite final");
+                Console.WriteLine(
+                    "Informe um numero maior que o limite inicial para o limite final"
+                );
                 Environment.Exit(0);
             }
             else if (num_final <= -1 || num_inicial <= -1)
@@ -36,7 +40,9 @@ namespace Palindromo
 
         private static bool isPalindromo(long num)
         {
-            long test_palindrom = 0, aux = num, resto;
+            long test_palindrom = 0,
+                aux = num,
+                resto;
             while (num > 0)
             {
                 resto = num % 10;
@@ -48,18 +54,18 @@ namespace Palindromo
 
         public static void exibePalindromo()
         {
-            Program p = new Program();
             List<long> palindromo = new List<long>();
             for (long i = num_inicial; i < num_final + 1; i++)
             {
-
                 if (isPalindromo(i))
                 {
                     palindromo.Add(i);
                 }
             }
 
-            Console.WriteLine("Numero que sao palindromos entre " + num_inicial + " a " + num_final + ":");
+            Console.WriteLine(
+                "Numero que sao palindromos entre " + num_inicial + " a " + num_final + ":"
+            );
 
             foreach (long values in palindromo)
             {
@@ -67,6 +73,7 @@ namespace Palindromo
             }
             Console.WriteLine();
         }
+
         static void Main(string[] args)
         {
             exibeInfo();
