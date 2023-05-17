@@ -54,7 +54,7 @@ function checksIfTheInputIsValid(inputBase, outputBase, entryNumber) {
         return "???";
     }
     if (numberInBaseTen === 0n) {
-        return entryNumber;
+        return "0";
     }
     return "valid";
 }
