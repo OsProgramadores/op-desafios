@@ -1,7 +1,21 @@
+"""
+Main module
+
+Lê o texto invertendo as linhas (igual o comando tac)
+ 
+ autor: guiribeirodev
+ 
+ versão: 1.0
+"""
 import sys
 
-def python_tac(filename):
-    with open(filename, 'rb') as file:
+def python_tac(file_path):
+    """Função principal tac
+
+    Args:
+        file_path (txt): recebe como argumento o arquivo a ser lido
+    """
+    with open(file_path, 'rb') as file:
         file.seek(0, 2)
         file_size = file.tell()
 
@@ -35,9 +49,11 @@ def python_tac(filename):
 
 
 def main():
-    filename = sys.argv[1]
+    """Função main, ponto de início  e de controle da execução do programa
+    """
+    file_path = sys.argv[1]
 
-    python_tac(filename)
+    python_tac(file_path)
 
 
 main()
