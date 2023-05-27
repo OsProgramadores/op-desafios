@@ -7,7 +7,12 @@ import (
 	"os"
 )
 
-const bufSize = int64(32)
+func main() {
+	tac()
+}
+
+// in MB size, currently the program uses a max of 2*bufSize iff file size > bufSize
+const maxBufSize = int64(250 << (10 * 2))
 
 func check(e error) {
 	if e != nil {
@@ -16,11 +21,11 @@ func check(e error) {
 }
 
 func errAndExit(msg string) {
-	os.Stderr.WriteString(msg + "\n")
+	_, _ = os.Stderr.WriteString(msg + "\n")
 	os.Exit(1)
 }
 
-func main() {
+func tac() {
 	args := os.Args[1:]
 
 	if len(args) != 1 {
@@ -35,10 +40,11 @@ func main() {
 	fi, err := f.Stat()
 	check(err)
 
+	fs := fi.Size()
+	bufSize := min(fs, maxBufSize)
 	b := make([]byte, bufSize)
-	end := fi.Size()
 	maxRead := bufSize
-	start := end
+	start := fs
 	lineAcc := bytes.NewBuffer([]byte{})
 	for start != 0 {
 		start -= bufSize
@@ -67,9 +73,7 @@ func main() {
 			}
 
 			if i == 0 {
-				newAcc := bytes.NewBuffer([]byte{})
-				_, err = newAcc.Write(b[i:lastEnd])
-				check(err)
+				newAcc := bytes.NewBuffer(b[i:lastEnd])
 				_, err = newAcc.Write(lineAcc.Bytes())
 				check(err)
 				lineAcc.Reset()
@@ -86,4 +90,11 @@ func out(b []byte) {
 	// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
 	_, err := os.Stdout.Write(b)
 	check(err)
+}
+
+func min(x int64, y int64) int64 {
+	if x > y {
+		return y
+	}
+	return x
 }
