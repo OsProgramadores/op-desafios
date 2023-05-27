@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -38,33 +39,50 @@ func main() {
 	out := os.Stdout
 	b := make([]byte, bufSize)
 	end := fi.Size()
-	maxReadIdx := bufSize - 1
+	maxRead := bufSize
 	start := end
+	acc := bytes.NewBuffer([]byte{})
 	for start != 0 {
 		start -= bufSize
 		if start < 0 {
 			// prevent over reading if result is less than buf size
-			maxReadIdx += start
+			maxRead += start
 			start = 0
 		}
 
 		_, err = f.Seek(start, io.SeekStart)
 		check(err)
-		_, err = f.Read(b[:maxReadIdx])
+		_, err = f.Read(b[:maxRead])
 		check(err)
 
 		// search until backwards \n and prints it
-		lastEnd := maxReadIdx
-		for i := maxReadIdx; i >= 0; i-- {
+		lastEnd := maxRead
+		for i := maxRead - 1; i >= 0; i-- {
 			if b[i] == '\n' {
 				_, err = out.Write(b[i+1 : lastEnd])
 				check(err)
+				_, err = out.Write(acc.Bytes())
+				check(err)
+				_, err = out.Write([]byte{'\n'})
+				check(err)
+				acc.Reset()
+				lastEnd = i
 			}
 
 			if i == 0 {
-				_, err = out.Write(b[i:lastEnd])
+				newAcc := bytes.NewBuffer([]byte{})
+				_, err = newAcc.Write(b[i:lastEnd])
 				check(err)
+				_, err = newAcc.Write(acc.Bytes())
+				check(err)
+				acc.Reset()
+				acc = newAcc
 			}
+		}
+		if start == 0 {
+			_, err = out.Write(acc.Bytes())
+			check(err)
+			acc.Reset()
 		}
 	}
 }
