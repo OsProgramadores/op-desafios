@@ -35,13 +35,11 @@ func main() {
 	fi, err := f.Stat()
 	check(err)
 
-	// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
-	out := os.Stdout
 	b := make([]byte, bufSize)
 	end := fi.Size()
 	maxRead := bufSize
 	start := end
-	acc := bytes.NewBuffer([]byte{})
+	lineAcc := bytes.NewBuffer([]byte{})
 	for start != 0 {
 		start -= bufSize
 		if start < 0 {
@@ -59,30 +57,33 @@ func main() {
 		lastEnd := maxRead
 		for i := maxRead - 1; i >= 0; i-- {
 			if b[i] == '\n' {
-				_, err = out.Write(b[i+1 : lastEnd])
-				check(err)
-				_, err = out.Write(acc.Bytes())
-				check(err)
-				_, err = out.Write([]byte{'\n'})
-				check(err)
-				acc.Reset()
-				lastEnd = i
+				// write everything but '\n', since b[i] == '\n'
+				out(b[i+1 : lastEnd])
+				// need to write accumulated value
+				out(lineAcc.Bytes())
+				lineAcc.Reset()
+				// +1 here makes '\n' be printed in next iteration
+				lastEnd = i + 1
 			}
 
 			if i == 0 {
 				newAcc := bytes.NewBuffer([]byte{})
 				_, err = newAcc.Write(b[i:lastEnd])
 				check(err)
-				_, err = newAcc.Write(acc.Bytes())
+				_, err = newAcc.Write(lineAcc.Bytes())
 				check(err)
-				acc.Reset()
-				acc = newAcc
+				lineAcc.Reset()
+				lineAcc = newAcc
 			}
 		}
-		if start == 0 {
-			_, err = out.Write(acc.Bytes())
-			check(err)
-			acc.Reset()
-		}
 	}
+	// prints last chunk of data
+	out(lineAcc.Bytes())
+}
+
+// out outputs to os.Stdout checking for errors
+func out(b []byte) {
+	// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
+	_, err := os.Stdout.Write(b)
+	check(err)
 }
