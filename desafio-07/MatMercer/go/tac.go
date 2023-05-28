@@ -84,7 +84,6 @@ func tac() {
 				check(err)
 				_, err = newAcc.Write(lineAcc.Bytes())
 				check(err)
-				lineAcc.Reset()
 				lineAcc = newAcc
 			}
 		}
