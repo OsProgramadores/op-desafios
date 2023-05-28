@@ -46,6 +46,7 @@ func tac() {
 	maxRead := bufSize
 	start := fs
 	lineAcc := bytes.NewBuffer([]byte{})
+	r := NewReverseReader(f, fs)
 	for start != 0 {
 		start -= bufSize
 		if start < 0 {
@@ -54,9 +55,7 @@ func tac() {
 			start = 0
 		}
 
-		_, err = f.Seek(start, io.SeekStart)
-		check(err)
-		_, err = f.Read(b[:maxRead])
+		_, err = r.Read(b[:maxRead])
 		check(err)
 
 		// search until backwards \n and prints it
@@ -97,4 +96,29 @@ func min(x int64, y int64) int64 {
 		return y
 	}
 	return x
+}
+
+type ReverseReader struct {
+	f      *os.File
+	offset int64
+}
+
+func NewReverseReader(f *os.File, size int64) *ReverseReader {
+	return &ReverseReader{
+		f,
+		size,
+	}
+}
+
+func (r *ReverseReader) Read(b []byte) (n int, err error) {
+	r.offset -= int64(len(b))
+	_, err = r.f.Seek(r.offset, io.SeekStart)
+	if err != nil {
+		return 0, err
+	}
+	read, err := r.f.Read(b)
+	if err != nil {
+		return 0, err
+	}
+	return read, nil
 }
