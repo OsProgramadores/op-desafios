@@ -54,7 +54,7 @@ function getLines(filePath, startLine, endLine) {
 }
 
 async function printLines(filePath, lineCount) {
-    const batchSize = 850000; // Define um tamanho do lote para impressão que funcione com 512M de memória
+    const batchSize = 425000; // Define um tamanho do lote para impressão que funcione com 512M de memória
 
     for (let start = lineCount; start > 0; start -= batchSize) {
         const end = Math.max(start - batchSize + 1, 1);
