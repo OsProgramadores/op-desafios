@@ -72,7 +72,9 @@ func tac() {
 			}
 
 			if i == 0 {
-				newAcc := bytes.NewBuffer(b[i:lastEnd])
+				newAcc := bytes.NewBuffer(nil)
+				_, err = newAcc.Write(b[i:lastEnd])
+				check(err)
 				_, err = newAcc.Write(lineAcc.Bytes())
 				check(err)
 				lineAcc.Reset()
