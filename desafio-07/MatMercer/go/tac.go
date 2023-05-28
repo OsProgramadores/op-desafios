@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bufio"
 	"bytes"
 	"fmt"
 	"io"
@@ -13,6 +14,8 @@ func main() {
 
 // in MB size, currently the program uses a max of 2*bufSize iff file size > bufSize
 const maxBufSize = int64(250 << (10 * 2))
+
+var stdout *bufio.Writer
 
 func check(e error) {
 	if e != nil {
@@ -39,6 +42,10 @@ func tac() {
 	defer f.Close()
 	fi, err := f.Stat()
 	check(err)
+
+	// buffers stdout by 128kb
+	stdout = bufio.NewWriterSize(os.Stdout, 128<<(10))
+	defer stdout.Flush()
 
 	fs := fi.Size()
 	bufSize := min(fs, maxBufSize)
@@ -89,7 +96,7 @@ func tac() {
 // out outputs to os.Stdout checking for errors
 func out(b []byte) {
 	// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
-	_, err := os.Stdout.Write(b)
+	_, err := stdout.Write(b)
 	check(err)
 }
 
