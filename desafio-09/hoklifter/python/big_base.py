@@ -53,6 +53,7 @@ def from_10_to(to_base, value):
 
 def main():
     'Main.'
+
     with open('baseconv.txt', 'r', encoding='utf-8') as nums_to_convert:
         for num in nums_to_convert:
             num = num.split()
