@@ -10,10 +10,10 @@ echo "======================"
 set -e
 
 # Only Added and modified files are checked.
-cat $HOME/changed_files.txt | while read fname; do
+while read -r fname; do
   ext="${fname##*.}"
-  if [[ "$ext" == "py" ]]; then
+  if [[ "${ext}" == "py" ]]; then
     echo "* Checking ${fname}"
-    pylint --rcfile="ci/pylint3.rc" "$fname"
+    pylint --rcfile="ci/pylint3.rc" "${fname}"
   fi
-done
+done < "${HOME}/changed_files.txt"
