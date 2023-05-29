@@ -1,7 +1,8 @@
 #!/bin/bash
 # Test code formatting compliance (Go)
+# shellcheck disable=SC2317  # Functions are called by variable, confuses shellcheck
 
-# Run golangci_lint on all files in the current directory.
+# Run golangci-lint on all files in the current directory.
 function golangci_lint() {
   golangci-lint run -D errcheck 2>&1
 }
@@ -73,7 +74,7 @@ for dir in ${go_dirs}; do
 
   for test in golangci_lint go_fmt; do
     echo -e "\n*** Running test ${test}"
-    ${test} && echo "No problems found" || err=1
+    "${test}" && echo "No problems found" || err=1
   done
   cd "${saved_pwd}" || exit 1
 done

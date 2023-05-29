@@ -9,12 +9,6 @@ readonly FORMATTER_VERSION="1.15.0"
 readonly JAVA_FORMATTER_FILE="/tmp/google-java-format-${FORMATTER_VERSION}-all-deps.jar"
 readonly JAVA_FORMATTER_URL="https://github.com/google/google-java-format/releases/download/v${FORMATTER_VERSION}/${JAVA_FORMATTER_FILE##*/}"
 
-FILES="$(grep "\.*java$" < "${HOME}/changed_files.txt" || [[ $? == 1 ]])"
-if [[ -z "${FILES}" ]]; then
-    echo "Skiping checking, no Java files modified."
-    exit 0
-fi
-
 # Download the repository to check the Java code style
 echo "✔️  Downloading the Google Java Formatter jar..."
 if [[ ! -f "${JAVA_FORMATTER_FILE}" ]]; then
@@ -27,7 +21,9 @@ echo "✔️  Checking the Java code format..."
 
 # Check all java files.
 exitcode=0
-for fname in ${FILES[@]}; do
+while read -r fname; do
+  [[ "${fname}" != *.java ]] && continue
+
   echo "✔️  Checking file: ${fname}"
 
   output="/tmp/${fname##*/}_corrected.java"
@@ -49,6 +45,6 @@ for fname in ${FILES[@]}; do
       exitcode=1
     fi
     rm -f "${output}"
-done
+done <"${HOME}/changed_files.txt"
 
 exit "${exitcode}"
