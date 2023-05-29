@@ -61,7 +61,7 @@ disable=bad-inline-option,
         import-error,
         invalid-name,
         locally-disabled,
-        missing-function-docstring
+        missing-function-docstring,
         raw-checker-failed,
         suppressed-message,
         unspecified-encoding,
