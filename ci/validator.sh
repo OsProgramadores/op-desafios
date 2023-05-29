@@ -12,7 +12,7 @@ echo "====================="
 # For now, we only allow the submittal of one non-legacy challenge at a time.
 # For unique challenge verification, we consider the distinct count of the
 # tuple desafio-XX/username/language-feature for all added and modified files.
-challenges=( $(cat $HOME/changed_files.txt | cut -d/ -f1-3 | grep -v '^desafio-0[1-7]' | grep '^desafio-[0-9]\+' | sort -u) )
+mapfile -t challenges < <(cut -d/ -f1-3 < "${HOME}/changed_files.txt" | grep -v '^desafio-0[1-7]' | grep '^desafio-[0-9]\+' | sort -u)
 num_challenges=${#challenges[@]}
 
 # If no challenges, we exit without prejudice.
@@ -33,9 +33,10 @@ fi
 # desafio-XX/username/language-pattern/.valid Note that we only have filenames.
 # We need to extract the challenge directories and check if .valid exists in
 # those locations.
-cfiles=( $(cat $HOME/changed_files.txt | grep -v '^desafio-0[1-7]' | grep '^desafio-[0-9]\+/[^/]*/[^/]*' ) )
+mapfile -t cfiles < <(grep -v '^desafio-0[1-7]' "${HOME}/changed_files.txt" | grep '^desafio-[0-9]\+/[^/]*/[^/]*')
 valid=()
-for cfile in $cfiles; do
+
+for cfile in "${cfiles[@]}"; do
   cdir=${cfile%/*}
   if [[ -s "$cdir/.valid" ]]; then
     valid+=("$cdir/.valid")
