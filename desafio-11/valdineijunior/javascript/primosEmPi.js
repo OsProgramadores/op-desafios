@@ -1,7 +1,7 @@
 const fs = require("fs");
 const filePath = process.argv[2];
 if (!filePath) {
-    console.error("Erro: Caminho do arquivo não fornecido. Utilize 'node primosEmPi.js pi-1M.txt'");
+    console.error("Erro: Caminho do arquivo não fornecido. Utilize: 'node primosEmPi.js pi-1M.txt'");
     process.exit(1);
 }
 
