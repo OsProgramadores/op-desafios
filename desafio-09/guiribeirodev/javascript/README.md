@@ -6,5 +6,5 @@ Utilizado a versão mais recente LTS do Node (18.16.0). Porém deve funcionar de
 
 Para rodar o programa basta digitar:
   ```
-  $ node index.js "filepath"
+  $ node bigBase.js "filepath"
   ```
