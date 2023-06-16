@@ -18,7 +18,7 @@ function solve(numbers) {
                 console.log(numbers[i] + " " + "false" + " " + powOfTwo(numbers[i]));
             }
         } else {
-            console.log(numbers[i] + " " + "true" +" " + 0);
+            console.log(numbers[i] + " " + "true" + " " + 0);
         }
     }
 }
