@@ -13,12 +13,12 @@ function solve(numbers) {
     for (let i = 0; i < numbers.length; i++) {
         if (Number(numbers[i]) !== 1) {
             if (powOfTwo(numbers[i]) > 0) {
-                console.log(numbers[i] + " " + "true" + " " + powOfTwo(numbers[i]));
+                console.log(numbers[i] + " " + true + " " + powOfTwo(numbers[i]));
             } else {
-                console.log(numbers[i] + " " + "false" + " " + powOfTwo(numbers[i]));
+                console.log(numbers[i] + " " + false);
             }
         } else {
-            console.log(numbers[i] + " " + "true" + " " + 0);
+            console.log(numbers[i] + " " + true + " " + 0);
         }
     }
 }
