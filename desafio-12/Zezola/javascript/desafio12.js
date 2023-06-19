@@ -11,8 +11,9 @@ fs.readFile("./d12.txt", "utf8", (err, data) => {
 
 function solve(numbers) {
     for (let i = 0; i < numbers.length; i++) {
-        if (Number(numbers[i]) !== 1) {
-            if (powOfTwo(numbers[i]) > 0) {
+        const numberBigInt = BigInt(numbers[i]);
+        if (numberBigInt !== 1n) {
+            if (powOfTwo(numberBigInt) > 0n) {
                 console.log(numbers[i] + " " + true + " " + powOfTwo(numbers[i]));
             } else {
                 console.log(numbers[i] + " " + false);
@@ -24,15 +25,16 @@ function solve(numbers) {
 }
 
 function powOfTwo(num) {
+    let numBigInt = BigInt(num);
     let power = 1;
     let result = 0;
-    if (Number(num) === 0) {
+    if (numBigInt === 0n) {
         return result;
     }
-    while (num % 2 === 0) {
-        num = num / 2;
+    while (numBigInt % 2n === 0n) {
+        numBigInt = numBigInt / 2n;
         power++;
-        if (num === 2) {
+        if (numBigInt === 2n) {
             result = power;
         }
     }
