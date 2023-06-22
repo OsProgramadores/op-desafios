@@ -3,7 +3,7 @@ public class numerosPrimos {
 
         int num = 0;
 
-        for (int i = 0; i < 10000; i++) {
+        for (int i = 1; i < 10000; i++) {
             if (numPrimo(i)) {
                 System.out.println(i + " é primo.");
             }
@@ -14,7 +14,7 @@ public class numerosPrimos {
 
         for (int j = 2; j < numero; j++) {
             if (numero % j == 0) {
-                
+
                 return false;
             }
         }
