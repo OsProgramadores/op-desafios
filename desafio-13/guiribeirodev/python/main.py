@@ -62,12 +62,6 @@ def count_valid_moves(y, x, board):
 
         if is_valid_move(new_y, new_x, board):
             count += 1
-    # for i in range(len(moves_y)):
-    #     new_y = y + moves_y[i]
-    #     new_x = x + moves_x[i]
-
-    #     if is_valid_move(new_y, new_x, board):
-    #         count += 1
 
     return count
 
