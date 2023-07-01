@@ -86,7 +86,7 @@ const filename = process.argv[2];
 
 if (!filename) {
     console.log("Nenhum argumento foi passado.");
-    console.log("Exemplo de uso: node turingMachine.js datafile");
+    console.log("Exemplo de uso: node turing.js datafile");
     process.exit(1);
 }
 
