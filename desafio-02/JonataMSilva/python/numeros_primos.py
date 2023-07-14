@@ -1,17 +1,12 @@
-"""Numeros primos"""
-
-
-def num_primo(numero):
-    """funcao para encontrar o numero primo"""
-
+def encontrar_num_primo(numero):
     divisor = 0
-    for i in range(1, 10000):
+    for i in range(1, numero+1):
         if numero % i == 0:
             divisor += 1
     if divisor == 2:
-        return 1
-    return None
+        return True
+    return False
 
 for primos in range(1, 10000):
-    if num_primo(primos) == 1:
+    if encontrar_num_primo(primos):
         print(primos)
