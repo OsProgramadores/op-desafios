@@ -75,6 +75,8 @@ type turingMachine struct {
 	c state
 	// m memory
 	m memory
+	// nm negative memory for negative indexes
+	nm memory
 }
 
 func (m *turingMachine) run() {
@@ -83,12 +85,18 @@ func (m *turingMachine) run() {
 	for {
 		// found program entry
 		var e programEntry
-		fmt.Printf("cur: %c:%d\n", m.cur(), m.cur())
+
+		currentSymbol := m.cur()
+		// spaces must be lookup as '_' in the entry tree
+		if currentSymbol == ' ' {
+			currentSymbol = '_'
+		}
+		fmt.Printf("cur: %c:%d\n", currentSymbol, currentSymbol)
 
 		// check for exact entries in global state, since precedence
 		var matchGlobalEntry bool
 		if hasGlobalState {
-			ge, ok := m.p["*"][m.cur()]
+			ge, ok := m.p["*"][currentSymbol]
 			if ok {
 				matchGlobalEntry = true
 				e = ge
@@ -109,7 +117,7 @@ func (m *turingMachine) run() {
 			}
 
 			// try to find a matching entry by symbol
-			e, ok = et[m.cur()]
+			e, ok = et[currentSymbol]
 			if !ok {
 				// try to find a generic entry symbol
 				g, ok := et['*']
@@ -131,15 +139,16 @@ func (m *turingMachine) run() {
 		}
 		// no operation
 		if newSymbol == '*' {
-			newSymbol = m.cur()
+			newSymbol = currentSymbol
 		}
-		fmt.Printf("changed %c to %c at %d: %s\n", m.m[m.n], newSymbol, m.n, m.m)
-		m.m[m.n] = newSymbol
+		fmt.Printf("changed %c to %c at %d: %s%s\n", currentSymbol, newSymbol, m.n, Reverse(string(m.nm)), m.m)
+		m.updateSymbol(newSymbol)
 
 		// set new state
 		newState := e.s
 		// halt state detection
 		if strings.HasPrefix(string(newState), string(halt)) {
+			fmt.Printf("halt at '%s' state\n", newState)
 			return
 		}
 		m.c = newState
@@ -155,13 +164,46 @@ func (m *turingMachine) run() {
 	}
 }
 
-// cur returns current symbol, growing the current memory accordingly
+func Reverse(s string) string {
+	runes := []rune(s)
+	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
+		runes[i], runes[j] = runes[j], runes[i]
+	}
+	return string(runes)
+}
+
+// cur returns current symbol, negative indexes are supported
 func (m *turingMachine) cur() symbol {
-	//if len(m.m)-1 < m.n {
-	//	m.m = append(m.m, ' ')
-	//	return ' '
-	//}
-	return m.m[m.n]
+	if m.n > 100 {
+		errAndExit(fmt.Errorf("max cycles exhausted"))
+	}
+	// deal with negative memory
+	if m.n < 0 {
+		// real index of negative memory is
+		// -1 = 0
+		// -2 = 1
+		return m.currentSymbol(&m.nm, (m.n*-1)-1)
+	}
+	return m.currentSymbol(&m.m, m.n)
+}
+
+// currentSymbol returns current symbol, growing mem accordingly
+func (m *turingMachine) currentSymbol(mem *memory, i int) symbol {
+	if len(*mem)-1 < i {
+		*mem = append(*mem, ' ')
+		return ' '
+	}
+	return (*mem)[i]
+}
+
+// updateSymbol updates a symbol with negative index support using nm
+func (m *turingMachine) updateSymbol(newSymbol symbol) {
+	if m.n < 0 {
+		m.nm[(m.n*-1)-1] = newSymbol
+	} else {
+		m.m[m.n] = newSymbol
+	}
+
 }
 
 const (
@@ -229,10 +271,11 @@ func createMachine(progFileName string, input string) (*turingMachine, error) {
 	fmt.Printf("%+v\n", prog)
 
 	return &turingMachine{
-		n: 0,
-		p: prog,
-		c: "0",
-		m: []symbol(input),
+		n:  0,
+		p:  prog,
+		c:  "0",
+		m:  []symbol(input),
+		nm: make(memory, 0),
 	}, nil
 }
 
