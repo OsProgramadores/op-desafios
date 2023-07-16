@@ -52,7 +52,7 @@ func main() {
 			errAndExit(fmt.Errorf("failed to execute %s with %s input: %s", prog, input, err))
 		}
 		machine.run()
-		fmt.Printf("%s,%s,%s\n", prog, input, machine.m)
+		fmt.Printf("%s,%s,%s\n", prog, input, strings.TrimSpace(Reverse(string(machine.nm))+string(machine.m)))
 	}
 }
 
@@ -123,6 +123,7 @@ func (m *turingMachine) run() {
 				// halt, no way to continue
 				if !hasGlobalState {
 					debug.Println("halt at no state found")
+					m.error()
 					return
 				}
 				et = m.p["*"]
@@ -136,6 +137,7 @@ func (m *turingMachine) run() {
 				// halt, no way to continue
 				if !ok {
 					debug.Println("halt at no symbol found")
+					m.error()
 					return
 				}
 				e = g
@@ -163,6 +165,13 @@ func (m *turingMachine) run() {
 			debug.Printf("halt at '%s' state\n", newState)
 			return
 		}
+		// error state detection
+		if strings.HasPrefix(string(newState), string(errState)) {
+			debug.Printf("halt at '%s' state\n", newState)
+			m.error()
+			return
+		}
+		debug.Printf("state change %s -> %s", m.c, newState)
 		m.c = newState
 
 		// walk the needle
@@ -186,8 +195,9 @@ func Reverse(s string) string {
 
 // cur returns current symbol, negative indexes are supported
 func (m *turingMachine) cur() symbol {
+	// fail safe for infinite loops
 	if m.n > 100 {
-		errAndExit(fmt.Errorf("max cycles exhausted"))
+		errAndExit(fmt.Errorf("max cycles exhausted, enable DEBUG env var to check possible infinite loop"))
 	}
 	// deal with negative memory
 	if m.n < 0 {
@@ -218,6 +228,12 @@ func (m *turingMachine) updateSymbol(newSymbol symbol) {
 
 }
 
+// error sets the machine into error, output is ERR and negative memory is empty
+func (m *turingMachine) error() {
+	m.nm = nil
+	m.m = memory("ERR")
+}
+
 const (
 	left = direction(iota)
 	right
@@ -225,6 +241,7 @@ const (
 )
 
 var halt = state("halt")
+var errState = state("error")
 
 func createMachine(progFileName string, input string) (*turingMachine, error) {
 	f, err := os.Open(progFileName)
