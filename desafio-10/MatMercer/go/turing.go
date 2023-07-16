@@ -3,13 +3,25 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io"
+	"log"
 	"os"
 	"strings"
+)
+
+var (
+	debug *log.Logger
 )
 
 func main() {
 	if len(os.Args) != 2 {
 		errAndExit(fmt.Errorf("programs file required, usage: %s [programs file]\n", os.Args[0]))
+	}
+
+	if strings.ToLower(os.Getenv("DEBUG")) == "true" {
+		debug = log.New(os.Stderr, "DEBUG ", log.Ldate|log.Ltime)
+	} else {
+		debug = log.New(io.Discard, "", 0)
 	}
 
 	fileName := os.Args[1]
@@ -91,7 +103,7 @@ func (m *turingMachine) run() {
 		if currentSymbol == ' ' {
 			currentSymbol = '_'
 		}
-		fmt.Printf("cur: %c:%d\n", currentSymbol, currentSymbol)
+		debug.Printf("cur: %c:%d\n", currentSymbol, currentSymbol)
 
 		// check for exact entries in global state, since precedence
 		var matchGlobalEntry bool
@@ -110,7 +122,7 @@ func (m *turingMachine) run() {
 			if !ok {
 				// halt, no way to continue
 				if !hasGlobalState {
-					fmt.Println("halt at g state")
+					debug.Println("halt at no state found")
 					return
 				}
 				et = m.p["*"]
@@ -123,12 +135,12 @@ func (m *turingMachine) run() {
 				g, ok := et['*']
 				// halt, no way to continue
 				if !ok {
-					fmt.Println("halt at symbol state")
+					debug.Println("halt at no symbol found")
 					return
 				}
 				e = g
 			}
-			fmt.Printf("entry: %+v\n", e)
+			debug.Printf("entry: %+v\n", e)
 		}
 
 		// swap to new symbol
@@ -141,24 +153,24 @@ func (m *turingMachine) run() {
 		if newSymbol == '*' {
 			newSymbol = currentSymbol
 		}
-		fmt.Printf("changed %c to %c at %d: %s%s\n", currentSymbol, newSymbol, m.n, Reverse(string(m.nm)), m.m)
+		debug.Printf("changed %c to %c at %d: %s%s\n", currentSymbol, newSymbol, m.n, Reverse(string(m.nm)), m.m)
 		m.updateSymbol(newSymbol)
 
 		// set new state
 		newState := e.s
 		// halt state detection
 		if strings.HasPrefix(string(newState), string(halt)) {
-			fmt.Printf("halt at '%s' state\n", newState)
+			debug.Printf("halt at '%s' state\n", newState)
 			return
 		}
 		m.c = newState
 
 		// walk the needle
 		if e.d == left {
-			fmt.Println("left")
+			debug.Println("left")
 			m.n -= 1
 		} else if e.d == right {
-			fmt.Println("right")
+			debug.Println("right")
 			m.n += 1
 		}
 	}
@@ -268,7 +280,7 @@ func createMachine(progFileName string, input string) (*turingMachine, error) {
 		}
 	}
 
-	fmt.Printf("%+v\n", prog)
+	debug.Printf("%+v\n", prog)
 
 	return &turingMachine{
 		n:  0,
