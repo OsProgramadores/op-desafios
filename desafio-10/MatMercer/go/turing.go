@@ -18,18 +18,19 @@ func main() {
 		errAndExit(fmt.Errorf("programs file required, usage: %s [programs file]\n", os.Args[0]))
 	}
 
+	// init a debug logger if DEBUG env var is set, else, don't log it
 	if strings.ToLower(os.Getenv("DEBUG")) == "true" {
 		debug = log.New(os.Stderr, "DEBUG ", log.Ldate|log.Ltime)
 	} else {
 		debug = log.New(io.Discard, "", 0)
 	}
 
+	// open the passed file and read it line by line
 	fileName := os.Args[1]
 	f, err := os.Open(fileName)
 	if err != nil {
 		errAndExit(err)
 	}
-	// open the file reading it line by line
 	fileScanner := bufio.NewScanner(f)
 	fileScanner.Split(bufio.ScanLines)
 
@@ -52,7 +53,9 @@ func main() {
 			errAndExit(fmt.Errorf("failed to execute %s with %s input: %s", prog, input, err))
 		}
 		machine.run()
-		fmt.Printf("%s,%s,%s\n", prog, input, strings.TrimSpace(Reverse(string(machine.nm))+string(machine.m)))
+
+		// output the machine processing
+		fmt.Printf("%s,%s,%s\n", prog, input, machine.getMemory())
 	}
 }
 
@@ -155,7 +158,7 @@ func (m *turingMachine) run() {
 		if newSymbol == '*' {
 			newSymbol = currentSymbol
 		}
-		debug.Printf("changed %c to %c at %d: %s%s\n", currentSymbol, newSymbol, m.n, Reverse(string(m.nm)), m.m)
+		debug.Printf("changed %c to %c at %d: %s\n", currentSymbol, newSymbol, m.n, m.getMemory())
 		m.updateSymbol(newSymbol)
 
 		// set new state
@@ -234,14 +237,20 @@ func (m *turingMachine) error() {
 	m.m = memory("ERR")
 }
 
+func (m *turingMachine) getMemory() string {
+	return strings.TrimSpace(Reverse(string(m.nm)) + string(m.m))
+}
+
 const (
 	left = direction(iota)
 	right
 	noDir
 )
 
-var halt = state("halt")
-var errState = state("error")
+const initialState = "0"
+
+const halt = state("halt")
+const errState = state("error")
 
 func createMachine(progFileName string, input string) (*turingMachine, error) {
 	f, err := os.Open(progFileName)
@@ -297,12 +306,12 @@ func createMachine(progFileName string, input string) (*turingMachine, error) {
 		}
 	}
 
-	debug.Printf("%+v\n", prog)
+	debug.Printf("created program: %+v\n", prog)
 
 	return &turingMachine{
 		n:  0,
 		p:  prog,
-		c:  "0",
+		c:  initialState,
 		m:  []symbol(input),
 		nm: make(memory, 0),
 	}, nil
