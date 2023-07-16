@@ -15,7 +15,7 @@ var (
 
 func main() {
 	if len(os.Args) != 2 {
-		errAndExit(fmt.Errorf("programs file required, usage: %s [programs file]\n", os.Args[0]))
+		errAndExit(fmt.Errorf("programs file required, usage: %s [programs file]", os.Args[0]))
 	}
 
 	// init a debug logger if DEBUG env var is set, else, don't log it
@@ -84,8 +84,6 @@ type turingMachine struct {
 	n int
 	// p the program itself
 	p program
-	// g glob entry, '*' state
-	g programEntry
 	// c current state
 	c state
 	// m memory
