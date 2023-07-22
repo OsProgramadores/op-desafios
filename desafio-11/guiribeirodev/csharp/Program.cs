@@ -67,7 +67,7 @@ internal class Program
                     }
                 }
             }
-
+            
             if (updatedSequence.Length > longestSequence.Length)
             {
                 longestSequence.Clear();
@@ -91,9 +91,6 @@ internal class Program
             var data = File.ReadAllText(file)[2..];
 
             var primeNumbers = GetPrimeNumbers(2, 9973);
-            var primeNumber = IsPrime(0);
-
-            Console.WriteLine(primeNumber);
 
             var longestSequence = FindLongestSequence(data, primeNumbers);
 
