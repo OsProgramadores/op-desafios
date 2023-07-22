@@ -24,7 +24,7 @@ internal class Program
             return true;
         }
 
-        return true;
+        return false;
     }
 
     public static HashSet<int> GetPrimeNumbers(int startNumber, int endNumber)
@@ -81,7 +81,6 @@ internal class Program
         }
 
         return longestSequence;
-
     }
 
     private static void Main(string[] args)
@@ -92,6 +91,9 @@ internal class Program
             var data = File.ReadAllText(file)[2..];
 
             var primeNumbers = GetPrimeNumbers(2, 9973);
+            var primeNumber = IsPrime(0);
+
+            Console.WriteLine(primeNumber);
 
             var longestSequence = FindLongestSequence(data, primeNumbers);
 
