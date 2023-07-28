@@ -1,15 +1,21 @@
-"""verificador de numeros primos"""
+"""usando o Crivo de Eratóstenes."""
 
-def verifica_se_numero_eh_primo(numero):
-    """função para verificar o numero em uma range"""
-    divisor = 0
-    for i in range(1, numero+1):
-        if numero % i == 0:
-            divisor += 1
-    if divisor == 2:
-        return True
-    return False
 
-for numero_primo in range(1, 10000):
-    if verifica_se_numero_eh_primo(numero_primo):
-        print(numero_primo)
+def crivo_eratostenes(limite):
+    """Encontra todos os números primos até o limite."""
+    numeros = [True] * (limite + 1)
+    numeros[0] = numeros[1] = False
+
+    for i in range(2, int(limite ** 0.5) + 1):
+        if numeros[i]:
+            for j in range(i * i, limite + 1, i):
+                numeros[j] = False
+
+    primos = [x for x in range(limite + 1) if numeros[x]]
+    return primos
+
+
+numero_limite = 10000
+
+for numero_primo in crivo_eratostenes(numero_limite):
+    print(numero_primo)
