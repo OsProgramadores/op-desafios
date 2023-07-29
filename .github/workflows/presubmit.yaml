@@ -39,7 +39,7 @@ jobs:
         run: |
           # Binary will be $(go env GOPATH)/bin/golangci-lint
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.50.1
-          pip install pylint==2.15.9
+          pip install pylint==2.16.2
           npm install --save-dev eslint-config-standard-with-typescript@23.0.0
 
       - name: Check directory structure
