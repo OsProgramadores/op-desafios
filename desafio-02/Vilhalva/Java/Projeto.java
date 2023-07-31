@@ -21,5 +21,5 @@ public class Numeros {
 	                System.out.println("😳"+i + " ");
 	            }
 	        }
-		}
+	}
 }
