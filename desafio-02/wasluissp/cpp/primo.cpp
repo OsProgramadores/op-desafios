@@ -1,11 +1,9 @@
 #include <iostream>
-
 using namespace std;
 
 int main() {
   int i, j;
   bool isPrime;
-
   for (i = 2; i <= 10000; i++) {
     isPrime = true;
     for (j = 2; j * j <= i; j++) {
@@ -18,6 +16,5 @@ int main() {
       cout << i << endl;
     }
   }
-
   return 0;
 }
