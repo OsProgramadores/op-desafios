@@ -1,4 +1,4 @@
-#variaveis definindo um range de numeros 
+#variaveis definindo um range de numeros
 numinicio = 100
 numfinal = 999
 
