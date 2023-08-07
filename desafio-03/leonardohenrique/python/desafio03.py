@@ -6,7 +6,7 @@ try:
         print ("O número inicial deve ser menor que o final.")
 
     if num_inicio < 0 or num_final < 0:
-        print("Os números precisam ser maior que 0.")    
+        print("Os números precisam ser maior que 0.")
     else:
 
         for i in range(num_inicio, num_final):
