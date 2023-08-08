@@ -1,5 +1,5 @@
 """
-Números palindrômic2os
+Números palindrômicos
 
 Solução de Jonata M Silva
 Github: https://github.com/JonataMSilva
