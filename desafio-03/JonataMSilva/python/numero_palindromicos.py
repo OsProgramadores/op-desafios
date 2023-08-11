@@ -4,8 +4,8 @@ Números palindrômicos
 Solução de Jonata M Silva
 Github: https://github.com/JonataMSilva
 """
-inicial = input("digite o numero inicial")
-final = input("digite o numero final")
+inicial = input("digite o numero inicial: ")
+final = input("digite o numero final: ")
 
 
 def numero_palindromico():
