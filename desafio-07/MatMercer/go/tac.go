@@ -13,6 +13,7 @@ const maxBufSize = int64(250 << (10 * 2))
 
 var stdout *bufio.Writer
 
+// min standard math.Min supports only float64
 func min(x int64, y int64) int64 {
 	if x > y {
 		return y
@@ -45,19 +46,14 @@ func (r *ReverseReader) Read(b []byte) (n int, err error) {
 	return read, nil
 }
 
-func main() {
-	if len(os.Args) != 2 {
-		log.Fatalln("usage: tac [file]")
-	}
-
-	fileName := os.Args[1]
+func tac(fileName string) error {
 	f, err := os.Open(fileName)
 	if err != nil {
-		log.Fatalf("tac error: %v", err)
+		return err
 	}
 	fi, err := f.Stat()
 	if err != nil {
-		log.Fatalf("tac error: %v", err)
+		return err
 	}
 
 	// buffers stdout by 128kb
@@ -80,7 +76,7 @@ func main() {
 
 		_, err = r.Read(b[:maxRead])
 		if err != nil {
-			log.Fatalf("tac error: %v", err)
+			return err
 		}
 
 		// search until backwards \n and prints it
@@ -90,12 +86,12 @@ func main() {
 				// write everything but '\n', since b[i] == '\n'
 				_, err = stdout.Write(b[i+1 : lastEnd])
 				if err != nil {
-					log.Fatalf("tac error: %v", err)
+					return err
 				}
 				// writes accumulated value
 				_, err = stdout.Write(lineAcc.Bytes())
 				if err != nil {
-					log.Fatalf("tac error: %v", err)
+					return err
 				}
 				// reset the accumulator to receive next line
 				lineAcc.Reset()
@@ -108,11 +104,11 @@ func main() {
 				newAcc := bytes.NewBuffer(nil)
 				_, err = newAcc.Write(b[i:lastEnd])
 				if err != nil {
-					log.Fatalf("tac error: %v", err)
+					return err
 				}
 				_, err = newAcc.Write(lineAcc.Bytes())
 				if err != nil {
-					log.Fatalf("tac error: %v", err)
+					return err
 				}
 				lineAcc = newAcc
 			}
@@ -125,11 +121,26 @@ func main() {
 	// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
 	_, err = stdout.Write(lineAcc.Bytes())
 	if err != nil {
-		log.Fatalf("tac error: %v", err)
+		return err
 	}
 
 	err = stdout.Flush()
 	if err != nil {
-		log.Fatalf("tac error: %v", err)
+		return err
+	}
+
+	return nil
+}
+
+func main() {
+	logger := log.New(os.Stderr, "", 0)
+	if len(os.Args) != 2 {
+		logger.Fatalln("usage: tac [file]")
+	}
+
+	fileName := os.Args[1]
+	err := tac(fileName)
+	if err != nil {
+		logger.Fatalf("tac error: %v", err)
 	}
 }
