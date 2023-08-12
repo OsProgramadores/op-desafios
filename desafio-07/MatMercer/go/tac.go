@@ -13,12 +13,6 @@ const maxBufSize = int64(250 << (10 * 2))
 
 var stdout *bufio.Writer
 
-func check(e error) {
-	if e != nil {
-		log.Fatalf("tac error: %v", e)
-	}
-}
-
 func min(x int64, y int64) int64 {
 	if x > y {
 		return y
@@ -61,7 +55,6 @@ func main() {
 	if err != nil {
 		log.Fatalf("tac error: %v", err)
 	}
-	defer f.Close()
 	fi, err := f.Stat()
 	if err != nil {
 		log.Fatalf("tac error: %v", err)
@@ -95,22 +88,22 @@ func main() {
 		for i := maxRead - 1; i >= 0; i-- {
 			if b[i] == '\n' {
 				// write everything but '\n', since b[i] == '\n'
-				// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
 				_, err = stdout.Write(b[i+1 : lastEnd])
 				if err != nil {
 					log.Fatalf("tac error: %v", err)
 				}
-				// need to write accumulated value
-				// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
+				// writes accumulated value
 				_, err = stdout.Write(lineAcc.Bytes())
 				if err != nil {
 					log.Fatalf("tac error: %v", err)
 				}
+				// reset the accumulator to receive next line
 				lineAcc.Reset()
-				// +1 here makes '\n' be printed in next iteration
+				// makes '\n' be printed in next iteration
 				lastEnd = i + 1
 			}
 
+			// on last iteration, create a new accumulator with [max-read][current-accumulator]
 			if i == 0 {
 				newAcc := bytes.NewBuffer(nil)
 				_, err = newAcc.Write(b[i:lastEnd])
@@ -125,6 +118,9 @@ func main() {
 			}
 		}
 	}
+	// closes the file
+	_ = f.Close()
+
 	// prints last chunk of data
 	// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
 	_, err = stdout.Write(lineAcc.Bytes())
