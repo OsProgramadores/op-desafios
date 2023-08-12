@@ -33,7 +33,7 @@ func NewReverseReader(f *os.File, size int64) *ReverseReader {
 	}
 }
 
-func (r *ReverseReader) Read(b []byte) (n int, err error) {
+func (r ReverseReader) Read(b []byte) (n int, err error) {
 	r.offset -= int64(len(b))
 	_, err = r.f.Seek(r.offset, io.SeekStart)
 	if err != nil {
