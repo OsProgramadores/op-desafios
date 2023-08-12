@@ -5,8 +5,8 @@ turing.tar.gz:
 	wget https://osprogramadores.com/files/d10/turing.tar.gz 2> /dev/null
 	tar zxvf turing.tar.gz
 
-turing: turing.tar.gz turing.go
-	go build -o turing turing.go
+turing: turing.tar.gz main.go machine/machine.go go.mod
+	go build -o turing
 
 .PHONY: run
 run: turing

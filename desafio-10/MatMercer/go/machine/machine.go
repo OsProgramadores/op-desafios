@@ -1,48 +1,12 @@
-package main
+package machine
 
 import (
 	"bufio"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"strings"
 )
-
-func runPrograms(fileName string) error {
-	f, err := os.Open(fileName)
-	if err != nil {
-		return err
-	}
-	fileScanner := bufio.NewScanner(f)
-	fileScanner.Split(bufio.ScanLines)
-
-	line := 0
-	for fileScanner.Scan() {
-		line++
-		// expect line: prog.tur,input
-		text := strings.TrimSpace(fileScanner.Text())
-		if len(text) == 0 {
-			continue
-		}
-
-		progAndInput := strings.Split(text, ",")
-		if !(len(text) == 0) && len(progAndInput) != 2 {
-			return fmt.Errorf("%s: invalid format at line %d: '%s' -> expected prog.tur,input", fileName, line, text)
-		}
-		prog, input := progAndInput[0], progAndInput[1]
-		machine, err := createMachine(prog, input)
-		if err != nil {
-			return fmt.Errorf("failed to execute %s with %s input: %s", prog, input, err)
-		}
-		machine.run()
-
-		// output the machine processing
-		fmt.Printf("%s,%s,%s\n", prog, input, machine.getMemory())
-	}
-
-	return nil
-}
 
 type state string
 
@@ -65,7 +29,7 @@ type programEntry struct {
 }
 type program map[state]map[symbol]programEntry
 
-type turingMachine struct {
+type TuringMachine struct {
 	// pos the position of the current machine
 	pos int
 	// prog the machine program
@@ -76,9 +40,11 @@ type turingMachine struct {
 	mem memory
 	// nMem negative memory for negative indexes
 	nMem memory
+	// debug logger for debug
+	debug *log.Logger
 }
 
-func (m *turingMachine) run() {
+func (m *TuringMachine) Run() {
 	_, hasGlobalState := m.prog["*"]
 
 	for {
@@ -90,7 +56,7 @@ func (m *turingMachine) run() {
 		if currentSymbol == ' ' {
 			currentSymbol = '_'
 		}
-		debug.Printf("cur: %state:%d\n", currentSymbol, currentSymbol)
+		m.debug.Printf("cur: %state:%d\n", currentSymbol, currentSymbol)
 
 		// check for exact entries in global state, since precedence
 		var matchGlobalEntry bool
@@ -109,7 +75,7 @@ func (m *turingMachine) run() {
 			if !ok {
 				// halt, no way to continue
 				if !hasGlobalState {
-					debug.Println("halt at no state found")
+					m.debug.Println("halt at no state found")
 					m.error()
 					return
 				}
@@ -123,13 +89,13 @@ func (m *turingMachine) run() {
 				g, ok := et['*']
 				// halt, no way to continue
 				if !ok {
-					debug.Println("halt at no symbol found")
+					m.debug.Println("halt at no symbol found")
 					m.error()
 					return
 				}
 				e = g
 			}
-			debug.Printf("entry: %+v\n", e)
+			m.debug.Printf("entry: %+v\n", e)
 		}
 
 		// swap to new symbol
@@ -142,31 +108,31 @@ func (m *turingMachine) run() {
 		if newSymbol == '*' {
 			newSymbol = currentSymbol
 		}
-		debug.Printf("changed %state to %state at %d: %s\n", currentSymbol, newSymbol, m.pos, m.getMemory())
+		m.debug.Printf("changed %state to %state at %d: %s\n", currentSymbol, newSymbol, m.pos, m.GetMemory())
 		m.updateSymbol(newSymbol)
 
 		// set new state
 		newState := e.s
 		// halt state detection
 		if strings.HasPrefix(string(newState), string(halt)) {
-			debug.Printf("halt at '%s' state\n", newState)
+			m.debug.Printf("halt at '%s' state\n", newState)
 			return
 		}
 		// error state detection
 		if strings.HasPrefix(string(newState), string(errState)) {
-			debug.Printf("halt at '%s' state\n", newState)
+			m.debug.Printf("halt at '%s' state\n", newState)
 			m.error()
 			return
 		}
-		debug.Printf("state change %s -> %s", m.state, newState)
+		m.debug.Printf("state change %s -> %s", m.state, newState)
 		m.state = newState
 
 		// walk the needle
 		if e.d == left {
-			debug.Println("left")
+			m.debug.Println("left")
 			m.pos -= 1
 		} else if e.d == right {
-			debug.Println("right")
+			m.debug.Println("right")
 			m.pos += 1
 		}
 	}
@@ -182,7 +148,7 @@ func Reverse(s string) string {
 }
 
 // cur returns current symbol, negative indexes are supported
-func (m *turingMachine) cur() symbol {
+func (m *TuringMachine) cur() symbol {
 	// deal with negative memory
 	if m.pos < 0 {
 		// real index of negative memory is
@@ -194,7 +160,7 @@ func (m *turingMachine) cur() symbol {
 }
 
 // currentSymbol returns current symbol, growing mem accordingly
-func (m *turingMachine) currentSymbol(mem *memory, i int) symbol {
+func (m *TuringMachine) currentSymbol(mem *memory, i int) symbol {
 	if len(*mem)-1 < i {
 		*mem = append(*mem, ' ')
 		return ' '
@@ -203,7 +169,7 @@ func (m *turingMachine) currentSymbol(mem *memory, i int) symbol {
 }
 
 // updateSymbol updates a symbol with negative index support using nMem
-func (m *turingMachine) updateSymbol(newSymbol symbol) {
+func (m *TuringMachine) updateSymbol(newSymbol symbol) {
 	if m.pos < 0 {
 		m.nMem[(m.pos*-1)-1] = newSymbol
 	} else {
@@ -213,12 +179,12 @@ func (m *turingMachine) updateSymbol(newSymbol symbol) {
 }
 
 // error sets the machine into error, output is ERR and negative memory is empty
-func (m *turingMachine) error() {
+func (m *TuringMachine) error() {
 	m.nMem = nil
 	m.mem = memory("ERR")
 }
 
-func (m *turingMachine) getMemory() string {
+func (m *TuringMachine) GetMemory() string {
 	return strings.TrimSpace(Reverse(string(m.nMem)) + string(m.mem))
 }
 
@@ -234,7 +200,7 @@ const halt = state("halt")
 
 const errState = state("error")
 
-func createMachine(progFileName string, input string) (*turingMachine, error) {
+func New(progFileName string, input string, debug *log.Logger) (*TuringMachine, error) {
 	f, err := os.Open(progFileName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to open %s program file: %s", progFileName, err)
@@ -290,12 +256,13 @@ func createMachine(progFileName string, input string) (*turingMachine, error) {
 
 	debug.Printf("created program: %+v\n", prog)
 
-	return &turingMachine{
+	return &TuringMachine{
 		pos:   0,
 		prog:  prog,
 		state: initialState,
 		mem:   []symbol(input),
 		nMem:  make(memory, 0),
+		debug: debug,
 	}, nil
 }
 
@@ -321,28 +288,4 @@ func parseDirection(d string) direction {
 	}
 
 	return parsedDir
-}
-
-var debug *log.Logger
-var stderr *log.Logger
-
-func main() {
-	// init stderr log
-	stderr = log.New(os.Stderr, "", 0)
-	if len(os.Args) != 2 {
-		stderr.Printf("programs file required, usage: %s [programs file]", os.Args[0])
-	}
-
-	// init a debug logger if DEBUG env var is set, else, don't log it
-	if strings.ToLower(os.Getenv("DEBUG")) == "true" {
-		debug = log.New(os.Stderr, "DEBUG ", log.Ldate|log.Ltime)
-	} else {
-		debug = log.New(io.Discard, "", 0)
-	}
-
-	fileName := os.Args[1]
-	err := runPrograms(fileName)
-	if err != nil {
-		stderr.Fatalf("turing machine error: %v", err)
-	}
 }
