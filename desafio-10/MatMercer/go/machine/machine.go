@@ -56,7 +56,7 @@ func (m *TuringMachine) Run() {
 		if currentSymbol == ' ' {
 			currentSymbol = '_'
 		}
-		m.debug.Printf("cur: %state:%d\n", currentSymbol, currentSymbol)
+		m.debug.Printf("cur: %s:%d\n", currentSymbol, currentSymbol)
 
 		// check for exact entries in global state, since precedence
 		var matchGlobalEntry bool
@@ -108,7 +108,7 @@ func (m *TuringMachine) Run() {
 		if newSymbol == '*' {
 			newSymbol = currentSymbol
 		}
-		m.debug.Printf("changed %state to %state at %d: %s\n", currentSymbol, newSymbol, m.pos, m.GetMemory())
+		m.debug.Printf("changed %s to %s at %d: %s\n", currentSymbol, newSymbol, m.pos, m.GetMemory())
 		m.updateSymbol(newSymbol)
 
 		// set new state
