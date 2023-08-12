@@ -26,13 +26,6 @@ type ReverseReader struct {
 	offset int64
 }
 
-func NewReverseReader(f *os.File, size int64) *ReverseReader {
-	return &ReverseReader{
-		f,
-		size,
-	}
-}
-
 func (r *ReverseReader) Read(b []byte) (n int, err error) {
 	r.offset -= int64(len(b))
 	_, err = r.f.Seek(r.offset, io.SeekStart)
@@ -65,7 +58,7 @@ func tac(fileName string) error {
 	maxRead := bufSize
 	start := fileSize
 	lineAcc := bytes.NewBuffer([]byte{})
-	r := NewReverseReader(f, fileSize)
+	r := &ReverseReader{f, fileSize}
 	for start != 0 {
 		start -= bufSize
 		if start < 0 {
