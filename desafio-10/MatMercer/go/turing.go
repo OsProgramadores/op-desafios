@@ -9,27 +9,10 @@ import (
 	"strings"
 )
 
-var (
-	debug *log.Logger
-)
-
-func main() {
-	if len(os.Args) != 2 {
-		errAndExit(fmt.Errorf("programs file required, usage: %s [programs file]", os.Args[0]))
-	}
-
-	// init a debug logger if DEBUG env var is set, else, don't log it
-	if strings.ToLower(os.Getenv("DEBUG")) == "true" {
-		debug = log.New(os.Stderr, "DEBUG ", log.Ldate|log.Ltime)
-	} else {
-		debug = log.New(io.Discard, "", 0)
-	}
-
-	// open the passed file and read it line by line
-	fileName := os.Args[1]
+func doTuringMachine(fileName string) error {
 	f, err := os.Open(fileName)
 	if err != nil {
-		errAndExit(err)
+		return err
 	}
 	fileScanner := bufio.NewScanner(f)
 	fileScanner.Split(bufio.ScanLines)
@@ -45,21 +28,24 @@ func main() {
 
 		progAndInput := strings.Split(text, ",")
 		if !(len(text) == 0) && len(progAndInput) != 2 {
-			errAndExit(fmt.Errorf("%s: invalid format at line %d: '%s' -> expected prog.tur,input", fileName, line, text))
+			return fmt.Errorf("%s: invalid format at line %d: '%s' -> expected prog.tur,input", fileName, line, text)
 		}
 		prog, input := progAndInput[0], progAndInput[1]
 		machine, err := createMachine(prog, input)
 		if err != nil {
-			errAndExit(fmt.Errorf("failed to execute %s with %s input: %s", prog, input, err))
+			return fmt.Errorf("failed to execute %s with %s input: %s", prog, input, err)
 		}
 		machine.run()
 
 		// output the machine processing
 		fmt.Printf("%s,%s,%s\n", prog, input, machine.getMemory())
 	}
+
+	return nil
 }
 
 type state string
+
 type symbol byte
 type memory []symbol
 
@@ -68,6 +54,7 @@ func (m memory) String() string {
 }
 
 type direction byte
+
 type programEntry struct {
 	// n new symbol
 	n symbol
@@ -76,7 +63,6 @@ type programEntry struct {
 	// s new state to set
 	s state
 }
-
 type program map[state]map[symbol]programEntry
 
 type turingMachine struct {
@@ -186,6 +172,7 @@ func (m *turingMachine) run() {
 	}
 }
 
+// Reverse reverses a string
 func Reverse(s string) string {
 	runes := []rune(s)
 	for i, j := 0, len(runes)-1; i < j; i, j = i+1, j-1 {
@@ -196,10 +183,6 @@ func Reverse(s string) string {
 
 // cur returns current symbol, negative indexes are supported
 func (m *turingMachine) cur() symbol {
-	// fail safe for infinite loops
-	if m.n > 100 {
-		errAndExit(fmt.Errorf("max cycles exhausted, enable DEBUG env var to check possible infinite loop"))
-	}
 	// deal with negative memory
 	if m.n < 0 {
 		// real index of negative memory is
@@ -248,6 +231,7 @@ const (
 const initialState = "0"
 
 const halt = state("halt")
+
 const errState = state("error")
 
 func createMachine(progFileName string, input string) (*turingMachine, error) {
@@ -339,7 +323,26 @@ func parseDirection(d string) direction {
 	return parsedDir
 }
 
-func errAndExit(err error) {
-	fmt.Printf("%s\n", err)
-	os.Exit(1)
+var debug *log.Logger
+var stderr *log.Logger
+
+func main() {
+	// init stderr log
+	stderr = log.New(os.Stderr, "", 0)
+	if len(os.Args) != 2 {
+		stderr.Printf("programs file required, usage: %s [programs file]", os.Args[0])
+	}
+
+	// init a debug logger if DEBUG env var is set, else, don't log it
+	if strings.ToLower(os.Getenv("DEBUG")) == "true" {
+		debug = log.New(os.Stderr, "DEBUG ", log.Ldate|log.Ltime)
+	} else {
+		debug = log.New(io.Discard, "", 0)
+	}
+
+	fileName := os.Args[1]
+	err := doTuringMachine(fileName)
+	if err != nil {
+		stderr.Fatalf("turing machine error: %v", err)
+	}
 }
