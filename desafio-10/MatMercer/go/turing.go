@@ -66,8 +66,8 @@ type programEntry struct {
 type program map[state]map[symbol]programEntry
 
 type turingMachine struct {
-	// n the position of the current machine
-	n int
+	// pos the position of the current machine
+	pos int
 	// p the program itself
 	p program
 	// c current state
@@ -142,7 +142,7 @@ func (m *turingMachine) run() {
 		if newSymbol == '*' {
 			newSymbol = currentSymbol
 		}
-		debug.Printf("changed %c to %c at %d: %s\n", currentSymbol, newSymbol, m.n, m.getMemory())
+		debug.Printf("changed %c to %c at %d: %s\n", currentSymbol, newSymbol, m.pos, m.getMemory())
 		m.updateSymbol(newSymbol)
 
 		// set new state
@@ -164,10 +164,10 @@ func (m *turingMachine) run() {
 		// walk the needle
 		if e.d == left {
 			debug.Println("left")
-			m.n -= 1
+			m.pos -= 1
 		} else if e.d == right {
 			debug.Println("right")
-			m.n += 1
+			m.pos += 1
 		}
 	}
 }
@@ -184,13 +184,13 @@ func Reverse(s string) string {
 // cur returns current symbol, negative indexes are supported
 func (m *turingMachine) cur() symbol {
 	// deal with negative memory
-	if m.n < 0 {
+	if m.pos < 0 {
 		// real index of negative memory is
 		// -1 = 0
 		// -2 = 1
-		return m.currentSymbol(&m.nm, (m.n*-1)-1)
+		return m.currentSymbol(&m.nm, (m.pos*-1)-1)
 	}
-	return m.currentSymbol(&m.m, m.n)
+	return m.currentSymbol(&m.m, m.pos)
 }
 
 // currentSymbol returns current symbol, growing mem accordingly
@@ -204,10 +204,10 @@ func (m *turingMachine) currentSymbol(mem *memory, i int) symbol {
 
 // updateSymbol updates a symbol with negative index support using nm
 func (m *turingMachine) updateSymbol(newSymbol symbol) {
-	if m.n < 0 {
-		m.nm[(m.n*-1)-1] = newSymbol
+	if m.pos < 0 {
+		m.nm[(m.pos*-1)-1] = newSymbol
 	} else {
-		m.m[m.n] = newSymbol
+		m.m[m.pos] = newSymbol
 	}
 
 }
@@ -291,11 +291,11 @@ func createMachine(progFileName string, input string) (*turingMachine, error) {
 	debug.Printf("created program: %+v\n", prog)
 
 	return &turingMachine{
-		n:  0,
-		p:  prog,
-		c:  initialState,
-		m:  []symbol(input),
-		nm: make(memory, 0),
+		pos: 0,
+		p:   prog,
+		c:   initialState,
+		m:   []symbol(input),
+		nm:  make(memory, 0),
 	}, nil
 }
 
