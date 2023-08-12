@@ -25,14 +25,11 @@ func errAndExit(msg string) {
 }
 
 func tac() {
-	args := os.Args[1:]
-
-	if len(args) != 1 {
+	if len(os.Args) != 2 {
 		errAndExit("usage: tac [file]")
 	}
 
-	fileName := args[0]
-
+	fileName := os.Args[0]
 	f, err := os.Open(fileName)
 	check(err)
 	defer f.Close()
