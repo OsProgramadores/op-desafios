@@ -8,10 +8,6 @@ import (
 	"os"
 )
 
-func main() {
-	tac()
-}
-
 // in MB size, currently the program uses a max of 2*bufSize iff file size > bufSize
 const maxBufSize = int64(250 << (10 * 2))
 
@@ -129,4 +125,8 @@ func (r *ReverseReader) Read(b []byte) (n int, err error) {
 		return 0, err
 	}
 	return read, nil
+}
+
+func main() {
+	tac()
 }
