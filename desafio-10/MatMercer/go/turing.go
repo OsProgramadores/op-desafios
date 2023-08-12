@@ -68,8 +68,8 @@ type program map[state]map[symbol]programEntry
 type turingMachine struct {
 	// pos the position of the current machine
 	pos int
-	// p the program itself
-	p program
+	// prog the machine program
+	prog program
 	// c current state
 	c state
 	// m memory
@@ -79,7 +79,7 @@ type turingMachine struct {
 }
 
 func (m *turingMachine) run() {
-	_, hasGlobalState := m.p["*"]
+	_, hasGlobalState := m.prog["*"]
 
 	for {
 		// found program entry
@@ -95,7 +95,7 @@ func (m *turingMachine) run() {
 		// check for exact entries in global state, since precedence
 		var matchGlobalEntry bool
 		if hasGlobalState {
-			ge, ok := m.p["*"][currentSymbol]
+			ge, ok := m.prog["*"][currentSymbol]
 			if ok {
 				matchGlobalEntry = true
 				e = ge
@@ -105,7 +105,7 @@ func (m *turingMachine) run() {
 		// no global entry found do normal entry logic
 		if !matchGlobalEntry {
 			// get current entry tree
-			et, ok := m.p[m.c]
+			et, ok := m.prog[m.c]
 			if !ok {
 				// halt, no way to continue
 				if !hasGlobalState {
@@ -113,7 +113,7 @@ func (m *turingMachine) run() {
 					m.error()
 					return
 				}
-				et = m.p["*"]
+				et = m.prog["*"]
 			}
 
 			// try to find a matching entry by symbol
@@ -291,11 +291,11 @@ func createMachine(progFileName string, input string) (*turingMachine, error) {
 	debug.Printf("created program: %+v\n", prog)
 
 	return &turingMachine{
-		pos: 0,
-		p:   prog,
-		c:   initialState,
-		m:   []symbol(input),
-		nm:  make(memory, 0),
+		pos:  0,
+		prog: prog,
+		c:    initialState,
+		m:    []symbol(input),
+		nm:   make(memory, 0),
 	}, nil
 }
 
