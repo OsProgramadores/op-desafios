@@ -56,7 +56,7 @@ func main() {
 		log.Fatalln("usage: tac [file]")
 	}
 
-	fileName := os.Args[0]
+	fileName := os.Args[1]
 	f, err := os.Open(fileName)
 	if err != nil {
 		log.Fatalf("tac error: %v", err)
