@@ -19,15 +19,6 @@ func check(e error) {
 	}
 }
 
-// out outputs to os.Stdout checking for errors
-func out(b []byte) {
-	// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
-	_, err := stdout.Write(b)
-	if err != nil {
-		log.Fatalf("tac error: %v", err)
-	}
-}
-
 func min(x int64, y int64) int64 {
 	if x > y {
 		return y
@@ -105,9 +96,17 @@ func main() {
 		for i := maxRead - 1; i >= 0; i-- {
 			if b[i] == '\n' {
 				// write everything but '\n', since b[i] == '\n'
-				out(b[i+1 : lastEnd])
+				// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
+				_, err = stdout.Write(b[i+1 : lastEnd])
+				if err != nil {
+					log.Fatalf("tac error: %v", err)
+				}
 				// need to write accumulated value
-				out(lineAcc.Bytes())
+				// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
+				_, err = stdout.Write(lineAcc.Bytes())
+				if err != nil {
+					log.Fatalf("tac error: %v", err)
+				}
 				lineAcc.Reset()
 				// +1 here makes '\n' be printed in next iteration
 				lastEnd = i + 1
@@ -128,5 +127,9 @@ func main() {
 		}
 	}
 	// prints last chunk of data
-	out(lineAcc.Bytes())
+	// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
+	_, err = stdout.Write(lineAcc.Bytes())
+	if err != nil {
+		log.Fatalf("tac error: %v", err)
+	}
 }
