@@ -59,13 +59,13 @@ func tac(fileName string) error {
 	// buffers stdout by 128kb
 	stdout = bufio.NewWriterSize(os.Stdout, 128<<(10))
 
-	fs := fi.Size()
-	bufSize := min(fs, maxBufSize)
-	b := make([]byte, bufSize)
+	fileSize := fi.Size()
+	bufSize := min(fileSize, maxBufSize)
+	readBuf := make([]byte, bufSize)
 	maxRead := bufSize
-	start := fs
+	start := fileSize
 	lineAcc := bytes.NewBuffer([]byte{})
-	r := NewReverseReader(f, fs)
+	r := NewReverseReader(f, fileSize)
 	for start != 0 {
 		start -= bufSize
 		if start < 0 {
@@ -74,7 +74,7 @@ func tac(fileName string) error {
 			start = 0
 		}
 
-		_, err = r.Read(b[:maxRead])
+		_, err = r.Read(readBuf[:maxRead])
 		if err != nil {
 			return err
 		}
@@ -82,9 +82,9 @@ func tac(fileName string) error {
 		// search until backwards \n and prints it
 		lastEnd := maxRead
 		for i := maxRead - 1; i >= 0; i-- {
-			if b[i] == '\n' {
-				// write everything but '\n', since b[i] == '\n'
-				_, err = stdout.Write(b[i+1 : lastEnd])
+			if readBuf[i] == '\n' {
+				// write everything but '\n', since readBuf[i] == '\n'
+				_, err = stdout.Write(readBuf[i+1 : lastEnd])
 				if err != nil {
 					return err
 				}
@@ -102,7 +102,7 @@ func tac(fileName string) error {
 			// on last iteration, create a new accumulator with [max-read][current-accumulator]
 			if i == 0 {
 				newAcc := bytes.NewBuffer(nil)
-				_, err = newAcc.Write(b[i:lastEnd])
+				_, err = newAcc.Write(readBuf[i:lastEnd])
 				if err != nil {
 					return err
 				}
