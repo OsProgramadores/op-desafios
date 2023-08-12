@@ -108,7 +108,7 @@ func (m *TuringMachine) Run() {
 		if newSymbol == '*' {
 			newSymbol = currentSymbol
 		}
-		m.debug.Printf("changed %r to %r at %d: %s\n", currentSymbol, newSymbol, m.pos, m.GetMemory())
+		m.debug.Printf("changed %c to %c at %d: %s\n", currentSymbol, newSymbol, m.pos, m.GetMemory())
 		m.updateSymbol(newSymbol)
 
 		// set new state
