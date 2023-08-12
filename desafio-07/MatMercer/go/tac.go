@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"bytes"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -10,8 +10,6 @@ import (
 
 // in MB size, currently the program uses a max of 2*bufSize iff file size > bufSize
 const maxBufSize = int64(250 << (10 * 2))
-
-var stdout *bufio.Writer
 
 func check(e error) {
 	if e != nil {
@@ -67,9 +65,6 @@ func main() {
 		log.Fatalf("tac error: %v", err)
 	}
 
-	// buffers stdout by 128kb
-	stdout = bufio.NewWriterSize(os.Stdout, 128<<(10))
-
 	fs := fi.Size()
 	bufSize := min(fs, maxBufSize)
 	b := make([]byte, bufSize)
@@ -95,17 +90,9 @@ func main() {
 		for i := maxRead - 1; i >= 0; i-- {
 			if b[i] == '\n' {
 				// write everything but '\n', since b[i] == '\n'
-				// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
-				_, err = stdout.Write(b[i+1 : lastEnd])
-				if err != nil {
-					log.Fatalf("tac error: %v", err)
-				}
+				fmt.Print(string(b[i+1 : lastEnd]))
 				// need to write accumulated value
-				// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
-				_, err = stdout.Write(lineAcc.Bytes())
-				if err != nil {
-					log.Fatalf("tac error: %v", err)
-				}
+				fmt.Print(lineAcc.String())
 				lineAcc.Reset()
 				// +1 here makes '\n' be printed in next iteration
 				lastEnd = i + 1
@@ -126,14 +113,5 @@ func main() {
 		}
 	}
 	// prints last chunk of data
-	// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
-	_, err = stdout.Write(lineAcc.Bytes())
-	if err != nil {
-		log.Fatalf("tac error: %v", err)
-	}
-
-	err = stdout.Flush()
-	if err != nil {
-		log.Fatalf("tac error: %v", err)
-	}
+	fmt.Print(lineAcc)
 }
