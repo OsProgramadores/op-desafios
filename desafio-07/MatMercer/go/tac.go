@@ -19,72 +19,13 @@ func check(e error) {
 	}
 }
 
-func tac() {
-	if len(os.Args) != 2 {
-		log.Fatalln("usage: tac [file]")
-	}
-
-	fileName := os.Args[0]
-	f, err := os.Open(fileName)
-	check(err)
-	defer f.Close()
-	fi, err := f.Stat()
-	check(err)
-
-	// buffers stdout by 128kb
-	stdout = bufio.NewWriterSize(os.Stdout, 128<<(10))
-	defer stdout.Flush()
-
-	fs := fi.Size()
-	bufSize := min(fs, maxBufSize)
-	b := make([]byte, bufSize)
-	maxRead := bufSize
-	start := fs
-	lineAcc := bytes.NewBuffer([]byte{})
-	r := NewReverseReader(f, fs)
-	for start != 0 {
-		start -= bufSize
-		if start < 0 {
-			// prevent over reading if result is less than buf size
-			maxRead += start
-			start = 0
-		}
-
-		_, err = r.Read(b[:maxRead])
-		check(err)
-
-		// search until backwards \n and prints it
-		lastEnd := maxRead
-		for i := maxRead - 1; i >= 0; i-- {
-			if b[i] == '\n' {
-				// write everything but '\n', since b[i] == '\n'
-				out(b[i+1 : lastEnd])
-				// need to write accumulated value
-				out(lineAcc.Bytes())
-				lineAcc.Reset()
-				// +1 here makes '\n' be printed in next iteration
-				lastEnd = i + 1
-			}
-
-			if i == 0 {
-				newAcc := bytes.NewBuffer(nil)
-				_, err = newAcc.Write(b[i:lastEnd])
-				check(err)
-				_, err = newAcc.Write(lineAcc.Bytes())
-				check(err)
-				lineAcc = newAcc
-			}
-		}
-	}
-	// prints last chunk of data
-	out(lineAcc.Bytes())
-}
-
 // out outputs to os.Stdout checking for errors
 func out(b []byte) {
 	// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
 	_, err := stdout.Write(b)
-	check(err)
+	if err != nil {
+		log.Fatalf("tac error: %v", err)
+	}
 }
 
 func min(x int64, y int64) int64 {
@@ -120,5 +61,72 @@ func (r *ReverseReader) Read(b []byte) (n int, err error) {
 }
 
 func main() {
-	tac()
+	if len(os.Args) != 2 {
+		log.Fatalln("usage: tac [file]")
+	}
+
+	fileName := os.Args[0]
+	f, err := os.Open(fileName)
+	if err != nil {
+		log.Fatalf("tac error: %v", err)
+	}
+	defer f.Close()
+	fi, err := f.Stat()
+	if err != nil {
+		log.Fatalf("tac error: %v", err)
+	}
+
+	// buffers stdout by 128kb
+	stdout = bufio.NewWriterSize(os.Stdout, 128<<(10))
+	defer stdout.Flush()
+
+	fs := fi.Size()
+	bufSize := min(fs, maxBufSize)
+	b := make([]byte, bufSize)
+	maxRead := bufSize
+	start := fs
+	lineAcc := bytes.NewBuffer([]byte{})
+	r := NewReverseReader(f, fs)
+	for start != 0 {
+		start -= bufSize
+		if start < 0 {
+			// prevent over reading if result is less than buf size
+			maxRead += start
+			start = 0
+		}
+
+		_, err = r.Read(b[:maxRead])
+		if err != nil {
+			log.Fatalf("tac error: %v", err)
+		}
+
+		// search until backwards \n and prints it
+		lastEnd := maxRead
+		for i := maxRead - 1; i >= 0; i-- {
+			if b[i] == '\n' {
+				// write everything but '\n', since b[i] == '\n'
+				out(b[i+1 : lastEnd])
+				// need to write accumulated value
+				out(lineAcc.Bytes())
+				lineAcc.Reset()
+				// +1 here makes '\n' be printed in next iteration
+				lastEnd = i + 1
+			}
+
+			if i == 0 {
+				newAcc := bytes.NewBuffer(nil)
+				_, err = newAcc.Write(b[i:lastEnd])
+				if err != nil {
+					log.Fatalf("tac error: %v", err)
+				}
+				_, err = newAcc.Write(lineAcc.Bytes())
+				if err != nil {
+					log.Fatalf("tac error: %v", err)
+				}
+				lineAcc = newAcc
+			}
+		}
+	}
+	// prints last chunk of data
+	out(lineAcc.Bytes())
 }
