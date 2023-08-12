@@ -3,8 +3,8 @@ package main
 import (
 	"bufio"
 	"bytes"
-	"fmt"
 	"io"
+	"log"
 	"os"
 )
 
@@ -15,18 +15,13 @@ var stdout *bufio.Writer
 
 func check(e error) {
 	if e != nil {
-		errAndExit(fmt.Sprintf("tac error: %v", e))
+		log.Fatalf("tac error: %v", e)
 	}
-}
-
-func errAndExit(msg string) {
-	_, _ = os.Stderr.WriteString(msg + "\n")
-	os.Exit(1)
 }
 
 func tac() {
 	if len(os.Args) != 2 {
-		errAndExit("usage: tac [file]")
+		log.Fatalln("usage: tac [file]")
 	}
 
 	fileName := os.Args[0]
