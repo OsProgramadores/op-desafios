@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func doTuringMachine(fileName string) error {
+func runPrograms(fileName string) error {
 	f, err := os.Open(fileName)
 	if err != nil {
 		return err
@@ -70,12 +70,12 @@ type turingMachine struct {
 	pos int
 	// prog the machine program
 	prog program
-	// c current state
-	c state
-	// m memory
-	m memory
-	// nm negative memory for negative indexes
-	nm memory
+	// state current state
+	state state
+	// mem memory
+	mem memory
+	// nMem negative memory for negative indexes
+	nMem memory
 }
 
 func (m *turingMachine) run() {
@@ -90,7 +90,7 @@ func (m *turingMachine) run() {
 		if currentSymbol == ' ' {
 			currentSymbol = '_'
 		}
-		debug.Printf("cur: %c:%d\n", currentSymbol, currentSymbol)
+		debug.Printf("cur: %state:%d\n", currentSymbol, currentSymbol)
 
 		// check for exact entries in global state, since precedence
 		var matchGlobalEntry bool
@@ -105,7 +105,7 @@ func (m *turingMachine) run() {
 		// no global entry found do normal entry logic
 		if !matchGlobalEntry {
 			// get current entry tree
-			et, ok := m.prog[m.c]
+			et, ok := m.prog[m.state]
 			if !ok {
 				// halt, no way to continue
 				if !hasGlobalState {
@@ -142,7 +142,7 @@ func (m *turingMachine) run() {
 		if newSymbol == '*' {
 			newSymbol = currentSymbol
 		}
-		debug.Printf("changed %c to %c at %d: %s\n", currentSymbol, newSymbol, m.pos, m.getMemory())
+		debug.Printf("changed %state to %state at %d: %s\n", currentSymbol, newSymbol, m.pos, m.getMemory())
 		m.updateSymbol(newSymbol)
 
 		// set new state
@@ -158,8 +158,8 @@ func (m *turingMachine) run() {
 			m.error()
 			return
 		}
-		debug.Printf("state change %s -> %s", m.c, newState)
-		m.c = newState
+		debug.Printf("state change %s -> %s", m.state, newState)
+		m.state = newState
 
 		// walk the needle
 		if e.d == left {
@@ -188,9 +188,9 @@ func (m *turingMachine) cur() symbol {
 		// real index of negative memory is
 		// -1 = 0
 		// -2 = 1
-		return m.currentSymbol(&m.nm, (m.pos*-1)-1)
+		return m.currentSymbol(&m.nMem, (m.pos*-1)-1)
 	}
-	return m.currentSymbol(&m.m, m.pos)
+	return m.currentSymbol(&m.mem, m.pos)
 }
 
 // currentSymbol returns current symbol, growing mem accordingly
@@ -202,24 +202,24 @@ func (m *turingMachine) currentSymbol(mem *memory, i int) symbol {
 	return (*mem)[i]
 }
 
-// updateSymbol updates a symbol with negative index support using nm
+// updateSymbol updates a symbol with negative index support using nMem
 func (m *turingMachine) updateSymbol(newSymbol symbol) {
 	if m.pos < 0 {
-		m.nm[(m.pos*-1)-1] = newSymbol
+		m.nMem[(m.pos*-1)-1] = newSymbol
 	} else {
-		m.m[m.pos] = newSymbol
+		m.mem[m.pos] = newSymbol
 	}
 
 }
 
 // error sets the machine into error, output is ERR and negative memory is empty
 func (m *turingMachine) error() {
-	m.nm = nil
-	m.m = memory("ERR")
+	m.nMem = nil
+	m.mem = memory("ERR")
 }
 
 func (m *turingMachine) getMemory() string {
-	return strings.TrimSpace(Reverse(string(m.nm)) + string(m.m))
+	return strings.TrimSpace(Reverse(string(m.nMem)) + string(m.mem))
 }
 
 const (
@@ -259,7 +259,7 @@ func createMachine(progFileName string, input string) (*turingMachine, error) {
 		}
 
 		// sanitize comments like that
-		// a b c d e     ; a comment
+		// a b state d e     ; a comment
 		text = strings.TrimSpace(strings.Split(text, ";")[0])
 
 		// scan program line and validate it
@@ -291,11 +291,11 @@ func createMachine(progFileName string, input string) (*turingMachine, error) {
 	debug.Printf("created program: %+v\n", prog)
 
 	return &turingMachine{
-		pos:  0,
-		prog: prog,
-		c:    initialState,
-		m:    []symbol(input),
-		nm:   make(memory, 0),
+		pos:   0,
+		prog:  prog,
+		state: initialState,
+		mem:   []symbol(input),
+		nMem:  make(memory, 0),
 	}, nil
 }
 
@@ -341,7 +341,7 @@ func main() {
 	}
 
 	fileName := os.Args[1]
-	err := doTuringMachine(fileName)
+	err := runPrograms(fileName)
 	if err != nil {
 		stderr.Fatalf("turing machine error: %v", err)
 	}
