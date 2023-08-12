@@ -69,7 +69,6 @@ func main() {
 
 	// buffers stdout by 128kb
 	stdout = bufio.NewWriterSize(os.Stdout, 128<<(10))
-	defer stdout.Flush()
 
 	fs := fi.Size()
 	bufSize := min(fs, maxBufSize)
@@ -129,6 +128,11 @@ func main() {
 	// prints last chunk of data
 	// fmt.Println is unbuffered https://github.com/golang/go/issues/36619
 	_, err = stdout.Write(lineAcc.Bytes())
+	if err != nil {
+		log.Fatalf("tac error: %v", err)
+	}
+
+	err = stdout.Flush()
 	if err != nil {
 		log.Fatalf("tac error: %v", err)
 	}
