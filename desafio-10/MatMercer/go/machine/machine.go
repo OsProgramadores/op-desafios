@@ -13,10 +13,6 @@ type state string
 type symbol byte
 type memory []symbol
 
-func (m memory) String() string {
-	return string(m)
-}
-
 type direction byte
 
 type programEntry struct {
@@ -207,7 +203,7 @@ func New(progSource io.Reader, input string, debug *log.Logger) (*TuringMachine,
 
 	line := 0
 
-	prog := make(program)
+	prog := program{}
 	for fileScanner.Scan() {
 		line++
 		text := strings.TrimSpace(fileScanner.Text())
@@ -258,7 +254,7 @@ func New(progSource io.Reader, input string, debug *log.Logger) (*TuringMachine,
 		prog:  prog,
 		state: initialState,
 		mem:   []symbol(input),
-		nMem:  make(memory, 0),
+		nMem:  memory{},
 		debug: debug,
 	}, nil
 }
