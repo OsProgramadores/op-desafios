@@ -16,28 +16,19 @@ type memory []symbol
 type direction byte
 
 type programEntry struct {
-	// newSym new symbol
-	newSym symbol
-	// dir direction
-	dir direction
-	// newState new state to set
-	newState state
+	newSym   symbol    // new symbol
+	dir      direction // direction
+	newState state     // newState new state to set
 }
 type program map[state]map[symbol]programEntry
 
 type TuringMachine struct {
-	// pos the position of the current machine
-	pos int
-	// prog the machine program
-	prog program
-	// state current state
-	state state
-	// mem memory
-	mem memory
-	// nMem negative memory for negative indexes
-	nMem memory
-	// debug logger for debug
-	debug *log.Logger
+	pos   int         // the position of the current machine
+	prog  program     // the machine program
+	state state       // current state
+	mem   memory      // memory
+	nMem  memory      // negative memory for negative indexes
+	debug *log.Logger // logger for debug
 }
 
 func (m *TuringMachine) Run() {
