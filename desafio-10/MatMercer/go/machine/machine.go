@@ -104,23 +104,23 @@ func (m *TuringMachine) Run() {
 		if newSymbol == '*' {
 			newSymbol = currentSymbol
 		}
-		m.debug.Printf("changed %c to %c at %d: %s\n", currentSymbol, newSymbol, m.pos, m.GetMemory())
+		m.debug.Printf("changed %q to %q at %d: %q\n", currentSymbol, newSymbol, m.pos, m.GetMemory())
 		m.updateSymbol(newSymbol)
 
 		// set new state
 		newState := e.newState
 		// halt state detection
 		if strings.HasPrefix(string(newState), string(halt)) {
-			m.debug.Printf("halt at '%s' state\n", newState)
+			m.debug.Printf("halt at %q state\n", newState)
 			return
 		}
 		// error state detection
 		if strings.HasPrefix(string(newState), string(errState)) {
-			m.debug.Printf("halt at '%s' state\n", newState)
+			m.debug.Printf("halt at %q state\n", newState)
 			m.error()
 			return
 		}
-		m.debug.Printf("state change %s -> %s", m.state, newState)
+		m.debug.Printf("state change %q -> %q", m.state, newState)
 		m.state = newState
 
 		// walk the needle
@@ -224,14 +224,14 @@ func New(progSource io.Reader, input string, debug *log.Logger) (*TuringMachine,
 		// scan program line and validate it
 		tokens := strings.Split(text, " ")
 		if len(tokens) != 5 {
-			return nil, fmt.Errorf("invalid syntax at line %d, expected 5 tokens, got %d: '%s'", line, len(tokens), text)
+			return nil, fmt.Errorf("invalid syntax at line %d, expected 5 tokens, got %d: %q", line, len(tokens), text)
 		}
 		// extract program line as bytes
 		d := tokens[3]
 
 		// validate direction
 		if d != "l" && d != "r" && d != "*" {
-			return nil, fmt.Errorf("invalid direction at line %d: '%s' -> must be one of l,r,*", line, d)
+			return nil, fmt.Errorf("invalid direction at line %d: %q -> must be one of l,r,*", line, d)
 		}
 
 		// everything ok, create the entry
