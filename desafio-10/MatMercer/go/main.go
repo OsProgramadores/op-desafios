@@ -31,7 +31,7 @@ func runPrograms(fileName string) error {
 		}
 
 		progAndInput := strings.Split(text, ",")
-		if !(len(text) == 0) && len(progAndInput) != 2 {
+		if len(progAndInput) != 2 {
 			return fmt.Errorf("%s: invalid format at line %d: '%s' -> expected prog.tur,input", fileName, line, text)
 		}
 
