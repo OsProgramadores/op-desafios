@@ -179,6 +179,7 @@ const (
 	left = direction(iota)
 	right
 	noDir
+	invalid
 )
 
 const initialState = "0"
@@ -220,20 +221,21 @@ func New(progSource io.Reader, input string, debug *log.Logger) (*TuringMachine,
 		// extract program line as bytes
 		d := tokens[3]
 
-		// validate direction
-		if d != "l" && d != "r" && d != "*" {
-			return nil, fmt.Errorf("invalid direction at line %d: %q -> must be one of l,r,*", line, d)
-		}
-
 		// everything ok, create the entry
 		targetState := state(tokens[0])
 		targetSymbol := symbol(toSingleByte(tokens[1]))
 		if prog[targetState] == nil {
 			prog[targetState] = map[symbol]programEntry{}
 		}
+
+		// validate direction
+		dir := parseDirection(d)
+		if dir == invalid {
+			return nil, fmt.Errorf("invalid direction at line %d: %q -> must be one of l,r,*", line, d)
+		}
 		prog[targetState][targetSymbol] = programEntry{
 			newSym:   symbol(toSingleByte(tokens[2])),
-			dir:      parseDirection(d),
+			dir:      dir,
 			newState: state(tokens[4]),
 		}
 	}
@@ -260,16 +262,14 @@ func toSingleByte(s string) byte {
 }
 
 func parseDirection(d string) direction {
-	var parsedDir direction
-	if d == "*" {
-		parsedDir = noDir
-	}
-	if d == "l" {
-		parsedDir = left
-	}
-	if d == "r" {
-		parsedDir = right
+	switch d {
+	case "*":
+		return noDir
+	case "l":
+		return left
+	case "r":
+		return right
 	}
 
-	return parsedDir
+	return invalid
 }
