@@ -3,8 +3,8 @@ package machine
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"log"
-	"os"
 	"strings"
 )
 
@@ -20,12 +20,12 @@ func (m memory) String() string {
 type direction byte
 
 type programEntry struct {
-	// n new symbol
-	n symbol
-	// d direction
-	d direction
-	// s new state to set
-	s state
+	// newSym new symbol
+	newSym symbol
+	// dir direction
+	dir direction
+	// newState new state to set
+	newState state
 }
 type program map[state]map[symbol]programEntry
 
@@ -99,7 +99,7 @@ func (m *TuringMachine) Run() {
 		}
 
 		// swap to new symbol
-		newSymbol := e.n
+		newSymbol := e.newSym
 		// check if new symbol must be a space
 		if newSymbol == '_' {
 			newSymbol = ' '
@@ -112,7 +112,7 @@ func (m *TuringMachine) Run() {
 		m.updateSymbol(newSymbol)
 
 		// set new state
-		newState := e.s
+		newState := e.newState
 		// halt state detection
 		if strings.HasPrefix(string(newState), string(halt)) {
 			m.debug.Printf("halt at '%s' state\n", newState)
@@ -128,10 +128,10 @@ func (m *TuringMachine) Run() {
 		m.state = newState
 
 		// walk the needle
-		if e.d == left {
+		if e.dir == left {
 			m.debug.Println("left")
 			m.pos -= 1
-		} else if e.d == right {
+		} else if e.dir == right {
 			m.debug.Println("right")
 			m.pos += 1
 		}
@@ -200,12 +200,9 @@ const halt = state("halt")
 
 const errState = state("error")
 
-func New(progFileName string, input string, debug *log.Logger) (*TuringMachine, error) {
-	f, err := os.Open(progFileName)
-	if err != nil {
-		return nil, fmt.Errorf("failed to open %s program file: %s", progFileName, err)
-	}
-	fileScanner := bufio.NewScanner(f)
+// New creates a new turing machine.
+func New(progSource io.Reader, input string, debug *log.Logger) (*TuringMachine, error) {
+	fileScanner := bufio.NewScanner(progSource)
 	fileScanner.Split(bufio.ScanLines)
 
 	line := 0
@@ -248,9 +245,9 @@ func New(progFileName string, input string, debug *log.Logger) (*TuringMachine, 
 			prog[targetState] = make(map[symbol]programEntry)
 		}
 		prog[targetState][targetSymbol] = programEntry{
-			n: symbol(toSingleByte(tokens[2])),
-			d: parseDirection(d),
-			s: state(tokens[4]),
+			newSym:   symbol(toSingleByte(tokens[2])),
+			dir:      parseDirection(d),
+			newState: state(tokens[4]),
 		}
 	}
 

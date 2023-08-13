@@ -34,15 +34,21 @@ func runPrograms(fileName string) error {
 		if !(len(text) == 0) && len(progAndInput) != 2 {
 			return fmt.Errorf("%s: invalid format at line %d: '%s' -> expected prog.tur,input", fileName, line, text)
 		}
-		prog, input := progAndInput[0], progAndInput[1]
-		turMachine, err := machine.New(prog, input, debug)
+
+		progFileName, input := progAndInput[0], progAndInput[1]
+		progFile, err := os.Open(progFileName)
 		if err != nil {
-			return fmt.Errorf("failed to execute %s with %s input: %s", prog, input, err)
+			return fmt.Errorf("failed to open %s program file: %s", progFileName, err)
 		}
+		turMachine, err := machine.New(progFile, input, debug)
+		if err != nil {
+			return fmt.Errorf("failed to create %s program with %s input: %s", progFileName, input, err)
+		}
+		_ = progFile.Close()
 		turMachine.Run()
 
 		// output the turMachine processing
-		fmt.Printf("%s,%s,%s\n", prog, input, turMachine.GetMemory())
+		fmt.Printf("%s,%s,%s\n", progFileName, input, turMachine.GetMemory())
 	}
 
 	return nil
