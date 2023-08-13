@@ -238,7 +238,7 @@ func New(progSource io.Reader, input string, debug *log.Logger) (*TuringMachine,
 		targetState := state(tokens[0])
 		targetSymbol := symbol(toSingleByte(tokens[1]))
 		if prog[targetState] == nil {
-			prog[targetState] = make(map[symbol]programEntry)
+			prog[targetState] = map[symbol]programEntry{}
 		}
 		prog[targetState][targetSymbol] = programEntry{
 			newSym:   symbol(toSingleByte(tokens[2])),
