@@ -38,11 +38,11 @@ func runPrograms(fileName string) error {
 		progFileName, input := progAndInput[0], progAndInput[1]
 		progFile, err := os.Open(progFileName)
 		if err != nil {
-			return fmt.Errorf("failed to open %s program file: %s", progFileName, err)
+			return fmt.Errorf("failed to open %q program file: %s", progFileName, err)
 		}
 		turMachine, err := machine.New(progFile, input, debug)
 		if err != nil {
-			return fmt.Errorf("failed to create %s program with %s input: %s", progFileName, input, err)
+			return fmt.Errorf("failed to create %q program with %q input: %s", progFileName, input, err)
 		}
 		_ = progFile.Close()
 		turMachine.Run()
