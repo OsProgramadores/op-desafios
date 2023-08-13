@@ -58,18 +58,16 @@ func main() {
 	// init stderr log
 	stderr = log.New(os.Stderr, "", 0)
 	if len(os.Args) != 2 {
-		stderr.Fatalf("programs file required, usage: %s [programs file]", os.Args[0])
+		stderr.Fatalf("Programs file required, usage: %s [programs file]", os.Args[0])
 	}
 
 	debug = log.New(io.Discard, "", 0)
-	// init a debug logger if DEBUG env var is set, else, don't log it
+	// init a debug logger if DEBUG env var is set
 	if strings.ToLower(os.Getenv("DEBUG")) == "true" {
-		debug = log.New(os.Stderr, "DEBUG ", log.Ldate|log.Ltime)
+		debug = log.New(os.Stderr, "DEBUG ", log.Ldate|log.Ltime|log.Lmicroseconds)
 	}
 
-	fileName := os.Args[1]
-	err := runPrograms(fileName)
-	if err != nil {
-		stderr.Fatalf("turing machine error: %v", err)
+	if err := runPrograms(os.Args[1]); err != nil {
+		stderr.Fatalf("Turing machine error: %v", err)
 	}
 }
