@@ -16,18 +16,19 @@ function isPrime(num) {
 }
 
 function generatePrimeInRange(start, end) {
-    const numbers = [];
     const numbersPrimes = [];
 
     for (let i = start; i <= end; i++) {
-        numbers.push(i);
-    }
-    for (let c = 0; c < numbers.length; c++) {
-        const prime = isPrime(numbers[c]);
-        if (prime === true) {
-            numbersPrimes.push(numbers[c]);
+        if (isPrime(i)) {
+            numbersPrimes.push(i);
         }
     }
+
     return numbersPrimes;
 }
-console.log(generatePrimeInRange(1, 10000));
+
+const prime = generatePrimeInRange(1, 10000);
+
+prime.forEach(element => {
+    console.log(element);
+});
