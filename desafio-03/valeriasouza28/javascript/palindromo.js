@@ -1,25 +1,21 @@
-function palindromes(start, end) {
-    const numbers = [];
-    const numbersPalindrome = [];
-    for (let i = start; i <= end; i++) {
-        numbers.push(i.toString());
-    }
+const readline = require("readline-sync");
 
-    for (let c = 0; c < numbers.length; c++) {
-        const regex = /^\d{2,}$/;
-        const regexTest = regex.test(numbers[c].toString());
-        if (regexTest) {
-            const reverse = numbers[c].split("").reverse().join("");
-            if (numbers[c] === reverse) {
-                numbersPalindrome.push(numbers[c]);
-            }
-        }
-    }
+const start = readline.question("Digite um número: ");
+const end = readline.question("Digite um número: ");
+const numbers = [];
+const numbersPalindrome = [];
 
-    return numbersPalindrome;
+for (let i = start; i <= end; i++) {
+    numbers.push(i.toString());
 }
 
-const palindrome = palindromes(3000, 3010);
-palindrome.forEach(element => {
+for (let c = 0; c < numbers.length; c++) {
+    const reverse = numbers[c].split("").reverse().join("");
+    if (numbers[c] === reverse) {
+        numbersPalindrome.push(numbers[c]);
+    }
+}
+
+numbersPalindrome.forEach(element => {
     console.log(element);
 });
