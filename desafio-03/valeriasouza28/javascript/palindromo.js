@@ -1,7 +1,7 @@
 const numbers = [];
 const numbersPalindrome = [];
 
-function prime(start, end) {
+function palindrome(start, end) {
     for (let i = start; i <= end; i++) {
         numbers.push(i.toString());
     }
@@ -15,8 +15,8 @@ function prime(start, end) {
     return numbersPalindrome;
 }
 
-const usingPrime = prime(1, 20);
+const usingPalindrome = palindrome(1, 20);
 
-usingPrime.forEach(element => {
+usingPalindrome.forEach(element => {
     console.log(element);
 });
