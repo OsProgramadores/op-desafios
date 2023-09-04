@@ -1,22 +1,20 @@
+const readline = require("readline-sync");
 const numbers = [];
-const numbersPalindrome = [];
+const palindromeNumbers = [];
+const start = readline.question("Digite um número inicial: ");
+const end = readline.question("Digite um número final: ");
 
-function palindrome(start, end) {
-    for (let i = start; i <= end; i++) {
-        numbers.push(i.toString());
-    }
-
-    for (let c = 0; c < numbers.length; c++) {
-        const reverse = numbers[c].split("").reverse().join("");
-        if (numbers[c] === reverse) {
-            numbersPalindrome.push(numbers[c]);
-        }
-    }
-    return numbersPalindrome;
+for (let i = start; i <= end; i++) {
+    numbers.push(i.toString());
 }
 
-const usingPalindrome = palindrome(1, 20);
+for (let c = 0; c < numbers.length; c++) {
+    const reverse = numbers[c].split("").reverse().join("");
+    if (numbers[c] === reverse) {
+        palindromeNumbers.push(numbers[c]);
+    }
+}
 
-usingPalindrome.forEach(element => {
+palindromeNumbers.forEach(element => {
     console.log(element);
 });
