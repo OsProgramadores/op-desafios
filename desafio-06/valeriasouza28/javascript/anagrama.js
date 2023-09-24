@@ -8,6 +8,7 @@ function normalizarPalavras(palavra) {
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toUpperCase();
+
     return normaliza.toString();
 }
 function testaSeAnagrama(palavra1, palavra2) {
