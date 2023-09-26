@@ -24,7 +24,7 @@ const isPrimeNumber = (number: number) => {
 };
 
 isPrimeNumber(minPrime);
-for (var i = minPrime - 1; i <= maxPrime; i += 2)
+for (let i = minPrime - 1; i <= maxPrime; i += 2)
   isPrimeNumber(i);
 
 for (let i = 1; i < numbers.length; i++) {
