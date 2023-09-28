@@ -2,10 +2,14 @@ const fs = require("fs");
 const nomeDoArquivo = "./words.txt";
 const readline = require("readline-sync");
 const palavra = readline.question("Digite uma palavra : ");
-const verificaInputCaracteres = / ^[a - zA - Z\s]*$/;
+const verificaInputCaracteres = /^[a-zA-Z\s]*$/;
+const { Writable } = require("stream");
 
 function normalizarPalavras(palavra) {
-    const normaliza = palavra.normalize("NFD").replace(/ [\u0300-\u036f\s]/g, "").toUpperCase();
+    const normaliza = palavra
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f\s]/g, "")
+        .toUpperCase();
 
     return normaliza.toString();
 }
@@ -49,11 +53,22 @@ try {
         }
     }
 
-    palavrasEncontradas.forEach(element => { console.log(element); });
+    const writeSteam = new Writable({
+        write(chunk, encoding, callback) {
+            console.log(chunk.toString());
+            callback();
+        }
+    });
+
+    palavrasEncontradas.forEach(element => {
+        writeSteam.write(element + "\n");
+    });
 } catch (error) {
     if (error.message === "A palavra digitada contém caracteres inválidos.") {
         console.error(`Erro : ${error.message}`);
-    } else if (error.message === "Digite uma palavra com menos de 16 caracteres.") {
+    } else if (
+        error.message === "Digite uma palavra com menos de 16 caracteres."
+    ) {
         console.error(`Erro : ${error.message}`);
     } else {
         console.error(error);
