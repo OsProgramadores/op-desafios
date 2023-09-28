@@ -2,12 +2,10 @@ const fs = require("fs");
 const nomeDoArquivo = "./words.txt";
 const readline = require("readline-sync");
 const palavra = readline.question("Digite uma palavra : ");
+const verificaInputCaracteres = / ^[a - zA - Z\s]*$/;
 
 function normalizarPalavras(palavra) {
-    const normaliza = palavra
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toUpperCase();
+    const normaliza = palavra.normalize("NFD").replace(/ [\u0300-\u036f\s]/g, "").toUpperCase();
 
     return normaliza.toString();
 }
@@ -32,16 +30,32 @@ function inspecionarPalavra(palavra) {
     return count;
 }
 const linhas = fs.readFileSync(nomeDoArquivo, "utf8").split("\n");
-const palavra1 = inspecionarPalavra(normalizarPalavras(palavra));
 const palavrasEncontradas = [];
-for (const linha of linhas) {
-    const palavra2 = inspecionarPalavra(normalizarPalavras(linha));
-    const testaAnagrama = testaSeAnagrama(palavra1, palavra2);
-    if (testaAnagrama) {
-        palavrasEncontradas.push(linha);
+try {
+    if (!verificaInputCaracteres.test(palavra)) {
+        throw new Error("A palavra digitada contém caracteres inválidos.");
+    } else if (palavra.length > 16) {
+        throw new Error("Digite uma palavra com menos de 16 caracteres.");
+    } else {
+        const palavraNormalizada = normalizarPalavras(palavra);
+        const palavra1 = inspecionarPalavra(palavraNormalizada);
+
+        for (const linha of linhas) {
+            const palavra2 = inspecionarPalavra(normalizarPalavras(linha));
+            const testaAnagrama = testaSeAnagrama(palavra1, palavra2);
+            if (testaAnagrama) {
+                palavrasEncontradas.push(linha);
+            }
+        }
+    }
+
+    palavrasEncontradas.forEach(element => { console.log(element); });
+} catch (error) {
+    if (error.message === "A palavra digitada contém caracteres inválidos.") {
+        console.error(`Erro : ${error.message}`);
+    } else if (error.message === "Digite uma palavra com menos de 16 caracteres.") {
+        console.error(`Erro : ${error.message}`);
+    } else {
+        console.error(error);
     }
 }
-
-palavrasEncontradas.forEach(element => {
-    console.log(element);
-});
