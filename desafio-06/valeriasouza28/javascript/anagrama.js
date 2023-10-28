@@ -1,76 +1,92 @@
 const fs = require("fs");
-const nomeDoArquivo = "./words.txt";
+const fileName = "./word.txt";
 const readline = require("readline-sync");
-const palavra = readline.question("Digite uma palavra : ");
-const verificaInputCaracteres = /^[a-zA-Z\s]+$/;
+const word = readline.question("Digite uma palavra: ");
+const characterInputCheck = /^[a-zA-Z\s]+$/;
 
-function normalizarPalavras(palavra) {
-    const normaliza = palavra
+function readFile(fileName) {
+    try {
+        const data = fs.readFileSync(fileName, "utf8");
+        return data;
+    } catch (error) {
+        if (error.code === "ENOENT") {
+            console.error("O arquivo não foi encontrado.");
+        } else {
+            console.error("Ocorreu um erro ao ler o arquivo:", error.message);
+        }
+    }
+}
+
+function normalizeWords(word) {
+    const normalized = word
         .normalize("NFD")
         .replace(/[\u0300-\u036f]/g, "")
         .toUpperCase();
 
-    return normaliza.toString();
+    return normalized.toString();
 }
 
-function testaSeAnagrama(palavra1, palavra2) {
-    if (Object.keys(palavra1).length !== Object.keys(palavra2).length) {
+function testAnagram(word1, word2) {
+    if (Object.keys(word1).length !== Object.keys(word2).length) {
         return false;
     }
-    for (const letter in palavra1) {
-        if (palavra1[letter] !== palavra2[letter]) {
+    for (const letter in word1) {
+        if (word1[letter] !== word2[letter]) {
             return false;
         }
     }
     return true;
 }
 
-function inspecionarPalavra(palavra) {
+function inspectWord(word) {
     const count = {};
-    for (let i = 0; i < palavra.length; i++) {
-        const letter = palavra[i];
+    for (let i = 0; i < word.length; i++) {
+        const letter = word[i];
         count[letter] = (count[letter] || 0) + 1;
     }
 
-    const novoObjeto = {};
+    const newObject = {};
 
-    Object.keys(count).forEach(chave => {
-        if (chave !== " ") {
-            novoObjeto[chave] = count[chave];
+    Object.keys(count).forEach((key) => {
+        if (key !== " ") {
+            newObject[key] = count[key];
         }
     });
 
-    return novoObjeto;
+    return newObject;
 }
 
-const linhas = fs.readFileSync(nomeDoArquivo, "utf8").split("\n");
-const palavra1 = inspecionarPalavra(normalizarPalavras(palavra));
-const palavrasEncontradas = [];
+const fileData = readFile(fileName);
 
-try {
-    if (!verificaInputCaracteres.test(palavra)) {
-        throw new Error("A palavra digitada contém caracteres inválidos.");
-    } else if (palavra.length > 16) {
-        throw new Error("Digite uma palavra com menos de 16 caracteres.");
-    } else {
-        for (const linha of linhas) {
-            const palavra2 = inspecionarPalavra(normalizarPalavras(linha));
-            const testaAnagrama = testaSeAnagrama(palavra1, palavra2);
-            if (testaAnagrama) {
-                palavrasEncontradas.push(linha);
+if (fileData) {
+    const foundWords = [];
+    const lines = fileData.split("\n");
+    const word1 = inspectWord(normalizeWords(word));
+
+    try {
+        if (!characterInputCheck.test(word)) {
+            throw new Error("A palavra digitada contém caracteres inválidos.");
+        } else if (word.length > 16) {
+            throw new Error("Digite uma palavra com menos de 16 caracteres.");
+        } else {
+            for (const line of lines) {
+                const word2 = inspectWord(normalizeWords(line));
+                const isAnagram = testAnagram(word1, word2);
+                if (isAnagram) {
+                    foundWords.push(line);
+                }
             }
         }
-    }
-
-    palavrasEncontradas.forEach(element => {
-        console.log(element);
-    });
-} catch (error) {
-    if (error.message === "A palavra digitada contém caracteres inválidos.") {
-        console.error(`Erro : ${error.message}`);
-    } else if (error.message === "Digite uma palavra com menos de 16 caracteres.") {
-        console.error(`Erro : ${error.message}`);
-    } else {
-        console.error(error);
+        foundWords.forEach((element) => {
+            console.log(element);
+        });
+    } catch (error) {
+        if (error.message === "A palavra digitada contém caracteres inválidos.") {
+            console.error(`Erro: ${error.message}`);
+        } else if (error.message === "Digite uma palavra com menos de 16 caracteres.") {
+            console.error(`Erro: ${error.message}`);
+        } else {
+            console.error(error);
+        }
     }
 }
