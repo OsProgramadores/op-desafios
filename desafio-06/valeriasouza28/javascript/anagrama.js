@@ -1,5 +1,5 @@
 const fs = require("fs");
-const fileName = "./word.txt";
+const fileName = "./words.txt";
 const readline = require("readline-sync");
 const word = readline.question("Digite uma palavra: ");
 const characterInputCheck = /^[a-zA-Z\s]+$/;
