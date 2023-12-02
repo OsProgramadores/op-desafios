@@ -27,10 +27,10 @@ Prime calculation based on the Sieve of Eratosthenes algorithm.
 
 def sieve_of_eratosthenes_set():
     """
-    Implements the Sieve of Eratosthenes algorithm to find all prime numbers up to a given limit.
+    Implements the Sieve of Eratosthenes algorithm to find all prime numbers up to the given limit.
 
     Returns:
-    - primelist (set): Set of prime numbers up to the given limit.
+    - primelist (set): Set of prime numbers up to the user's nth given range.
     """
     primelimit = int(input("Enter the calculation limit: "))
     primerange = int(input("Enter the number of prime numbers to be displayed (0 = all): "))
