@@ -11,7 +11,7 @@ To use this program, you will need to have Python installed on your computer. If
 After you have installed Python, you can run the program by executing the following command in your terminal:
 
 ```
-python sieve_of_eratosthenes_set.py
+python primos.py
 ```
 The program will prompt you to enter the calculation limit and the number of prime numbers to be displayed. If you want to display all prime numbers, simply enter 0 for the second input.
 
