@@ -5,7 +5,6 @@ class PrimeCalc:
     def sieve_of_eratosthenes_set():
         """
         Implements the Sieve of Eratosthenes to find all prime numbers up to the given limit.
-
         Returns:
         - primelist (set): Set of prime numbers up to the user's nth given range.
         """
@@ -25,8 +24,7 @@ class PrimeCalc:
                     primelimit = 100.0
                     print("No given limit. It has been automatically set to 100.")
                     break
-                print("Invalid input. Please enter a valid number.")
-
+                print("Invalid input. Please enter a valid number.")      
         if round(primelimit) != primelimit:
             print(f"The limit has been rounded to the nearest integer: {round(primelimit)}")
         primelimit = int(round(primelimit))
