@@ -8,9 +8,9 @@ To use this program, you will need to have Python installed on your computer. If
 
 ## Functionality
 
-This program can calculate prime numbers from 1 to 1.000.000 (including) and only accepts numerical values/null as inputs. 
+This program can calculate prime numbers from 1 to 1.000.000 (including) and only accepts numerical values/null as inputs.
 
-The __main__.py script is the entry point of the application. It calls the Sieve of Eratosthenes calculation procedures on module soecalc.py. 
+The __main__.py script is the entry point of the application. It calls the Sieve of Eratosthenes calculation procedures on module soecalc.py.
 
 The sieve_of_eratosthenes_set function takes the following steps:
 
