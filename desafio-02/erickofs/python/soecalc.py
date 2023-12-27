@@ -80,4 +80,3 @@ class PrimeCalc():
             print(f"The limit has been rounded to the nearest integer: {round(primerange)}")
         primerange = int(round(primerange))
         return primerange
-    
