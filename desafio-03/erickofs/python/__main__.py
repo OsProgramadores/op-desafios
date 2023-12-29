@@ -1,5 +1,5 @@
 """
-This is the main file of the project.
+This is the main file of the project. It calls the PalCalc class and prints the palindromes.
 """
 from palcalc import PalCalc
 
