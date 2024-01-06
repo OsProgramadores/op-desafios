@@ -1,4 +1,3 @@
-import palcalc
 from palcalc import PalCalc
 
 if __name__ == "__main__":
