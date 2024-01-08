@@ -10,8 +10,8 @@ Para executar este módulo, basta ter uma versão do Python 3.10+.
 ## 2. Implementação
 
 ### Uso
-1. O script solicita ao usuário que insira o limite de cálculo (até 1000000) 
-2. O script solicita ao usuário a quantidade de números palíndromos a serem exibidos 
+1. O script solicita ao usuário que insira o limite de cálculo (até 1000000).
+2. O script solicita ao usuário a quantidade de números palíndromos a serem exibidos.
 3. Se nenhum valor for fornecido para o limite ou intervalo, valores padrão são definidos.
 
 ### Observação
