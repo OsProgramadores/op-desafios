@@ -7,7 +7,7 @@ Este script foi projetado para calcular e recuperar números palíndromos com ba
 
 Para executar este módulo, basta ter uma versão do Python 3.10+ e executar a seguinte linha de comando no terminal:
 ```
-python.exe __main__.py
+python __main__.py
 ```
 
 ## 2. Implementação
