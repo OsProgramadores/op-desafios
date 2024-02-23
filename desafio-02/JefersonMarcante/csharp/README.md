@@ -35,24 +35,3 @@ Para executar o código do desafio, é necessário ter as ferramentas mencionada
 ```cmd
 dotnet run
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
