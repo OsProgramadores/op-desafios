@@ -7,7 +7,8 @@ def exibir_numeros_primos():
     """
         Exibe todos os números primos de 1 a 10000 no console
     """
-    for numero in range(1, 10001):
+    print(1)
+    for numero in range(2, 10001):
         if e_primo(numero):
             print(numero)
 
