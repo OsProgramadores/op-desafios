@@ -7,3 +7,5 @@
 node_modules
 *.json
 *.pyc
+[Bb]in/
+[Oo]bj/
