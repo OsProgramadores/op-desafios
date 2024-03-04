@@ -1,7 +1,7 @@
 ﻿//Algoritmo - Crivo de Erastótenes
 
 //Valor Limite
-var valorLimite = 50000;
+var valorLimite = 10000;
 
 //Maior número a ser verificado, ele corresponde à raiz quadrada do valor limite, arredondando pra baixo.
 var maiorNumeroVerificado = Math.Floor(Math.Sqrt(valorLimite));
