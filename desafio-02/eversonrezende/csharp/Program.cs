@@ -1,41 +1,33 @@
-﻿//Um numero primo e um numero divisivel apenas por 1 e por ele mesmo
+﻿//Algoritmo - Crivo de Erastótenes
 
-for (int i = 1; i <= 10000; i++)
+//Valor Limite
+var valorLimite = 50000;
+
+//Maior número a ser verificado, ele corresponde à raiz quadrada do valor limite, arredondando pra baixo.
+var maiorNumeroVerificado = Math.Floor(Math.Sqrt(valorLimite));
+
+//Criar uma lista de todos os números inteiros de 2 até o valor limite.
+List<int> listaPrimos = new();
+
+for (int i = 2; i <= valorLimite; i++)
 {
-  //Numero 1 nao e primo
-  if (i == 1)
+  listaPrimos.Add(i);
+}
+
+//Começando em 2 (i), percorra a lista e remova todos os múltiplos de i até o valor limite. 
+for (int i = 2; i <= maiorNumeroVerificado; i++)
+{
+  for (int j = 2; j <= valorLimite; j++)
   {
-    continue;
+    if (j % i == 0 && j != i && listaPrimos.Contains(j))
+    {
+      listaPrimos.Remove(j);
+    }
   }
+}
 
-  // Usando a ferramenta "Crivo de Eratostenes"
-  // Consiste em 4 passos
-
-  //Passo 1 - Numeros divisiveis por 2: Numeros pares sao todos divisiveis por 2
-  //ou seja, terao como divisores o proprio numero, 1 e 2
-  //logo nao sao primos (exceto o 2)
-  if (i != 2 && i % 2 == 0)
-  {
-    continue;
-  }
-
-  //Passo 2 - Numeros divisiveis por 3
-  if (i != 3 && i % 3 == 0)
-  {
-    continue;
-  }
-
-  //Passo 3 - Numeros divisiveis por 5, ou seja, que terminam em 0 e 5.
-  if (i != 5 && i % 5 == 0)
-  {
-    continue;
-  }
-
-  //Passo 4 - Excluir multiplos de 7
-  if (i != 7 && i % 7 == 0)
-  {
-    continue;
-  }
-
-  Console.WriteLine(i);
+//Após a verificação acima, sobram apenas os números primos
+foreach (var numero in listaPrimos)
+{
+  Console.WriteLine(numero);
 }

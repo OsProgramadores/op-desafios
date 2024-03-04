@@ -4,6 +4,8 @@
 
 Proposta de solução utilizando C# para resolução do [Desafio 02](https://osprogramadores.com/desafios/d02/) do site [OsProgramadores](https://osprogramadores.com/).
 
+Nesse algoritmo foi utilizado o método de [Crivo de Eratóstenes](https://pt.wikipedia.org/wiki/Crivo_de_Erat%C3%B3stenes), um método para encontrar números primos até um certo valor limite.
+
 ## 💫 Tecnologias Utilizadas
 
 - **.NET 8:** Versão do Framework .NET para desenvolvimento de aplicações.
