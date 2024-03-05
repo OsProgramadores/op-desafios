@@ -1,12 +1,12 @@
-﻿//Algoritmo - Crivo de Erastótenes
+﻿//Algoritmo - Crivo de Erastotenes
 
 //Valor Limite
 var valorLimite = 10000;
 
-//Maior número a ser verificado, ele corresponde à raiz quadrada do valor limite, arredondando pra baixo.
+//Maior numero a ser verificado, ele corresponde a raiz quadrada do valor limite, arredondando pra baixo.
 var maiorNumeroVerificado = Math.Floor(Math.Sqrt(valorLimite));
 
-//Criar uma lista de todos os números inteiros de 2 até o valor limite.
+//Criar uma lista de todos os numeros inteiros de 2 ate o valor limite.
 List<int> listaPrimos = new();
 
 for (int i = 2; i <= valorLimite; i++)
@@ -14,7 +14,7 @@ for (int i = 2; i <= valorLimite; i++)
   listaPrimos.Add(i);
 }
 
-//Começando em 2 (i), percorra a lista e remova todos os múltiplos de i até o valor limite. 
+//Comecando em 2 (i), percorra a lista e remova todos os multiplos de i ate o valor limite. 
 for (int i = 2; i <= maiorNumeroVerificado; i++)
 {
   for (int j = 2; j <= valorLimite; j++)
@@ -26,7 +26,7 @@ for (int i = 2; i <= maiorNumeroVerificado; i++)
   }
 }
 
-//Após a verificação acima, sobram apenas os números primos
+//Apos a verificacao acima, sobram apenas os numeros primos
 foreach (var numero in listaPrimos)
 {
   Console.WriteLine(numero);
