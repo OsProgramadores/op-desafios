@@ -16,4 +16,4 @@ go test
 
 ### Dependências
 
-Go 1.22.1
+Go 1.19
