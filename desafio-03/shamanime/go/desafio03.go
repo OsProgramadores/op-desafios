@@ -6,9 +6,6 @@ import (
 )
 
 func IsPalindromicNumber(n uint64) bool {
-	if n < 0 {
-		return false
-	}
 	input := n
 	var reversed uint64 = 0
 	for n > 0 {
