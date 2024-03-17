@@ -1,5 +1,5 @@
 """
-    Verifica quais os números palíndromos entre dois números fornecidos, 
+    Verifica quais os números palíndromos entre dois números fornecidos,
     extremos inclusos na pesquisa
 """
 import sys
