@@ -4,7 +4,7 @@
 
 # Verificação do código com Pylint
 
-Executando dentro da pasta do desafio (desafio-02/disouzam/python), o comando é:
+Executando dentro da pasta do desafio (desafio-03/disouzam/python), o comando é:
 
 ```python
 pylint --rcfile=../../../ci/pylint3.rc palindromos.py
@@ -12,12 +12,13 @@ pylint --rcfile=../../../ci/pylint3.rc palindromos.py
 
 # Como executar o script
 
-Executando dentro da pasta do desafio (desafio-02/disouzam/python), o comando é:
+Executando dentro da pasta do desafio (desafio-03/disouzam/python), o comando é:
 
 ```python
-python -m palindromos
+python -m palindromos limite_inferior limite_superior
 ```
 
+onde limite_inferior é o limite inferior da busca de números palíndromos e limite_superior é o limite superior da busca de palíndromos, ambos inteiros, positivos e menores que 10^64
 
 # Extra
 
