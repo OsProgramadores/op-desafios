@@ -18,13 +18,19 @@ def main(args):
     if len(args) <= 1:
         print("Nenhum argumento foi fornecido.")
         return
-    elif len(args) == 2:
+
+    if len(args) == 2:
         # pylint: disable=line-too-long
         print("Apenas um argumento foi fornecido. É necessário fornecer um limite inferior e um limite superior.")
         return
-    elif len(args) == 3:
+
+    if len(args) == 3:
         limite_inferior = int(args[1])
         limite_superior = int(args[2])
+    else:
+        print(f"Número incorreto de argumentos. Esperados 2 argumentos mas foram recebidos {
+              len(args) - 1}")
+        return
 
     lista_de_palindromos = []
     if limite_inferior != 0 and limite_superior != 0:
