@@ -26,6 +26,23 @@ def main(args):
         limite_inferior = int(args[1])
         limite_superior = int(args[2])
 
+    lista_de_palindromos = []
+    if limite_inferior != 0 and limite_superior != 0:
+        lista_de_palindromos = obter_todos_palindromos(
+            limite_inferior, limite_superior)
+
+    lista_concatenada = ','.join(lista_de_palindromos)
+    print(lista_concatenada)
+
+
+def obter_todos_palindromos(limite_inferior, limite_superior):
+    """
+        Obtém todos os palíndromos entre limite inferior e limite superior e
+        retorna todos numa lista
+    """
+    lista_de_palindromos = []
+    return lista_de_palindromos
+
 
 if __name__ == "__main__":
     main(sys.argv)
