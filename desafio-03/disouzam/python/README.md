@@ -22,5 +22,5 @@ onde limite_inferior é o limite inferior da busca de números palíndromos e li
 
 # Extra
 
-Fiz um trabalho com números palíndromos em 2023, associado à uma tarefa didática no meu trabalho para testar conceitos de programação em .NET e técnicas como escrita de testes, geração de relatório de cobertura de testes, testes de mutação com uma pessoa iniciante que estava entrando na minha área de atuação. Os códigos que eu escrevi para esse projeto didático estão no repo: 
+Fiz um trabalho com números palíndromos em 2023, associado à uma tarefa didática no meu trabalho para testar conceitos de programação em .NET e técnicas como escrita de testes, geração de relatório de cobertura de testes, testes de mutação com uma pessoa iniciante que estava entrando na minha área de atuação. Os códigos que eu escrevi para esse projeto didático estão no repo:
 - https://github.com/disouzam/Palindromes.git
