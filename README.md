@@ -266,7 +266,7 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
 
 Qualquer um pode se voluntariar para corrigir os desafios [na lista de pull requests](https://github.com/OsProgramadores/op-desafios/pulls). Você pode usar um script auxiliar para fazer checkout de um fork.
 
-Digamos que você tenha q corrigir o desafio do user `MatMercer` na branch `d10`:
+Digamos que você tenha que corrigir o desafio do usuário `MatMercer` na branch `d10`:
 
 ```
 ./checkout-fork.sh MatMercer:d10
