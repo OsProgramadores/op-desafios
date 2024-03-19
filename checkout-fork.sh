@@ -16,7 +16,7 @@ if [ -z "$BRANCH_NAME" ]; then
 fi
 
 # Repository name is hardcoded as per your request
-REPOSITORY_NAME="command-line"
+REPOSITORY_NAME="op-desafios"
 
 # Check if the remote already exists
 if git remote get-url "$USERNAME" > /dev/null 2>&1; then
