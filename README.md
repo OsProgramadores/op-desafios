@@ -262,6 +262,20 @@ Leia a documentação da linguagem Go sobre como obter essas ferramentas
 
 > :warning: Não faça commit da pasta `node_modules` e dos arquivos `package.json` e `package-lock.json`. Não faça `git add *`, adicione *somente* sua pasta de solução no commit.
 
+## Corrigindo um desafio
+
+Qualquer um pode se voluntariar para corrigir os desafios [na lista de pull requests](https://github.com/OsProgramadores/op-desafios/pulls). Você pode usar um script auxiliar para fazer checkout de um fork.
+
+Digamos que você tenha que corrigir o desafio do usuário `MatMercer` na branch `d10`:
+
+```
+./checkout-fork.sh MatMercer:d10
+
+# os comandos abaixo dependem do desafio e linguagem de programação usada
+cd desafio-10/MatMercer/go
+make
+```
+
 ## Ainda tem dúvidas?
 
 Em caso de problemas ou dúvidas, entre em contato com um dos administradores
