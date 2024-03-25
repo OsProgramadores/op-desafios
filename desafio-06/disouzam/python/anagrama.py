@@ -68,42 +68,45 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos):
     """
     lista_anagramas = []
     anagrama = []
+    antigas_letras_expressao_atual = letras_expressao_atual
     novas_letras_expressao_atual = {}
 
     # pylint: disable=consider-using-enumerate
     for i in range(0, len(candidatos)):
         candidato = candidatos[i]
+        anagrama.append(candidato[0])
         print(
             f"i: {i} - candidato: {candidato[0]} - Num de Candidatos: {len(candidatos)}")
 
-        novas_letras_expressao_atual = {}
-        for letra in letras_expressao_atual:
-            if letra in candidato[1]:
-                novas_letras_expressao_atual[letra] = letras_expressao_atual[letra] - \
-                    candidato[1][letra]
-            else:
-                novas_letras_expressao_atual[letra] = letras_expressao_atual[letra]
-            if novas_letras_expressao_atual[letra] < 0:
-                anagrama.clear()
-                break
-
         candidato_valido = True
         letras_remanescentes = 0
+        for letra in antigas_letras_expressao_atual:
 
-        # pylint: disable=consider-using-dict-items
-        for letra in novas_letras_expressao_atual:
+            # Calculate a quantidade de letras remanescentes se o candidato atual for incluído
+            # no anagrama
+            if letra in candidato[1]:
+                novas_letras_expressao_atual[letra] = antigas_letras_expressao_atual[letra] - \
+                    candidato[1][letra]
+            else:
+                novas_letras_expressao_atual[letra] = antigas_letras_expressao_atual[letra]
+
             letras_remanescentes += novas_letras_expressao_atual[letra]
             if novas_letras_expressao_atual[letra] < 0:
                 candidato_valido = False
                 break
 
+        for letra in candidato[1]:
+            if letra not in antigas_letras_expressao_atual:
+                candidato_valido = False
+                break
+
         if not candidato_valido:
-            anagrama.clear()
+            anagrama.pop()
             continue
-        elif letras_remanescentes > 0:
-            anagrama.append(candidato[0])
+        elif letras_remanescentes == 0:
+            return anagrama
         else:
-            return candidato[0]
+            antigas_letras_expressao_atual = novas_letras_expressao_atual
 
         for j in range(i+1, len(candidatos)):
             print(
@@ -113,7 +116,7 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos):
             if sub_anagrama == [] or sub_anagrama == None:
                 continue
             else:
-                anagrama.append(sub_anagrama)
+                anagrama = anagrama + sub_anagrama
 
     lista_anagramas.append(anagrama)
 
