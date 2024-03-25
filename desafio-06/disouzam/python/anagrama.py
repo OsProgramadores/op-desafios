@@ -29,6 +29,20 @@ def main(args):
             raise ArgumentError("Expressão contém caracteres inválidos")
 
     print(converte_expressao(expressao))
+    print(conta_letras(expressao))
+
+
+def conta_letras(expressao):
+    """
+        Processa a expressao e conta o número de ocorrências de cada letra da palavra ou frase
+    """
+    contagem_letras = {}
+    for letra in expressao:
+        if letra in contagem_letras:
+            contagem_letras[letra] += 1
+        else:
+            contagem_letras[letra] = 1
+    return contagem_letras
 
 
 def converte_expressao(expressao):
