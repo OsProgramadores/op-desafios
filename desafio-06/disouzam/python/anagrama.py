@@ -29,13 +29,12 @@ def main(args):
         if not e_valida(expressao):
             raise ArgumentError("Expressão contém caracteres inválidos")
 
-    print(converte_expressao(expressao))
-    print(conta_letras(expressao))
-
+    letras_expressao_atual = conta_letras(expressao)
     palavras_e_letras = processa_arquivo_de_palavras()
 
-    for palavra in palavras_e_letras.items():
-        print(palavra)
+    for palavra_candidata in palavras_e_letras.items():
+        print(palavra_e_candidata(
+            letras_expressao_atual, palavra_candidata[1]))
 
 
 def processa_arquivo_de_palavras():
@@ -58,6 +57,20 @@ def processa_arquivo_de_palavras():
             palavras_e_letras[word] = conta_letras(word)
 
     return palavras_e_letras
+
+
+def palavra_e_candidata(letras_expressao_atual, palavra_candidata):
+    """
+        Verifica se palavra_candidata pode compor anagrama da expressão atual
+        representada por sua versão em contagem de letras
+    """
+
+    for letra in palavra_candidata:
+        if letra not in letras_expressao_atual or \
+                palavra_candidata[letra] > letras_expressao_atual[letra]:
+            return False
+
+    return True
 
 
 def conta_letras(expressao):
