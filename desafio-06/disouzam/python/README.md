@@ -26,3 +26,13 @@ python -m anagrama "oi gente"
 ```
 
 Ambos os exemplos foram extraídos do texto original do desafio no site [OsProgramadores](https://osprogramadores.com/desafios/d06/)
+
+Exemplos com caracteres inválidos:
+
+```python
+python -m anagrama "Hello world!"
+```
+
+```python
+python -m anagrama "Hello world! Hoje é dia 24 de março de 2024."
+```
