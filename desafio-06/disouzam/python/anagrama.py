@@ -33,9 +33,89 @@ def main(args):
     letras_expressao_atual = conta_letras(expressao)
     palavras_e_letras = processa_arquivo_de_palavras()
 
-    for palavra_candidata in palavras_e_letras:
-        print(palavra_e_candidata(
-            letras_expressao_atual, palavra_candidata[1]))
+    imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras)
+
+
+def imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
+    """
+        Imprime todos os anagramas existentes
+    """
+    lista_candidatos = gera_lista_candidatos(
+        letras_expressao_atual, palavras_e_letras)
+    lista_anagramas = gera_lista_anagramas(
+        letras_expressao_atual, lista_candidatos)
+    print(lista_anagramas)
+
+
+def gera_lista_candidatos(letras_expressao_atual, palavras_e_letras):
+    """
+        Gera lista de candidatos a compor o anagrama
+    """
+    lista_candidatos = []
+
+    for _, palavra_candidata in enumerate(palavras_e_letras):
+        if palavra_e_candidata(
+                letras_expressao_atual, palavra_candidata[1]):
+
+            lista_candidatos.append(palavra_candidata)
+
+    return lista_candidatos
+
+
+def gera_lista_anagramas(letras_expressao_atual, candidatos):
+    """ 
+        Gera lista de anagramas a partir de uma lista de candidatos
+    """
+    lista_anagramas = []
+    anagrama = []
+    novas_letras_expressao_atual = {}
+
+    # pylint: disable=consider-using-enumerate
+    for i in range(0, len(candidatos)):
+        candidato = candidatos[i]
+        print(
+            f"i: {i} - candidato: {candidato[0]} - Num de Candidatos: {len(candidatos)}")
+
+        novas_letras_expressao_atual = {}
+        for letra in letras_expressao_atual:
+            if letra in candidato[1]:
+                novas_letras_expressao_atual[letra] = letras_expressao_atual[letra] - \
+                    candidato[1][letra]
+            else:
+                novas_letras_expressao_atual[letra] = letras_expressao_atual[letra]
+            if novas_letras_expressao_atual[letra] < 0:
+                anagrama.clear()
+                break
+
+        candidato_valido = True
+        letras_remanescentes = 0
+
+        # pylint: disable=consider-using-dict-items
+        for letra in novas_letras_expressao_atual:
+            letras_remanescentes += novas_letras_expressao_atual[letra]
+            if novas_letras_expressao_atual[letra] < 0:
+                candidato_valido = False
+                break
+
+        if not candidato_valido:
+            anagrama.clear()
+            continue
+        elif letras_remanescentes > 0:
+            anagrama.append(candidato[0])
+        else:
+            return candidato[0]
+
+        for j in range(i+1, len(candidatos)):
+            print(
+                f"j: {j} - candidato: {candidatos[j][0]} - Num de Candidatos: {len(candidatos)}")
+            sub_anagrama = gera_lista_anagramas(
+                novas_letras_expressao_atual, candidatos[i+1:])
+            if sub_anagrama == [] or sub_anagrama == None:
+                continue
+            else:
+                anagrama.append(sub_anagrama)
+
+    lista_anagramas.append(anagrama)
 
 
 def processa_arquivo_de_palavras():
