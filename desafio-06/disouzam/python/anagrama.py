@@ -95,10 +95,13 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos):
                 candidato_valido = False
                 break
 
-        for letra in candidato[1]:
-            if letra not in antigas_letras_expressao_atual:
-                candidato_valido = False
-                break
+        # Candidato ainda não foi invalidado por ter letras a mais do que o necessário
+        if candidato_valido:
+            for letra in candidato[1]:
+                # Candidato será invalidado por ter letras que não estão na expressão original
+                if letra not in antigas_letras_expressao_atual:
+                    candidato_valido = False
+                    break
 
         if not candidato_valido:
             anagrama.pop()
