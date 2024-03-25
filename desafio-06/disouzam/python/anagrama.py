@@ -9,6 +9,7 @@ import string
 import sys
 import re
 import numpy as np
+import traceback
 
 
 def main(args):
@@ -68,60 +69,102 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos):
     """
     lista_anagramas = []
     anagrama = []
-    antigas_letras_expressao_atual = letras_expressao_atual
-    novas_letras_expressao_atual = {}
 
     # pylint: disable=consider-using-enumerate
     for i in range(0, len(candidatos)):
-        candidato = candidatos[i]
-        anagrama.append(candidato[0])
-        print(
-            f"i: {i} - candidato: {candidato[0]} - Num de Candidatos: {len(candidatos)}")
+        anagrama = get_anagrama_for_candidato_starting_at_index_i(
+            letras_expressao_atual, candidatos, i)
 
-        candidato_valido = True
-        letras_remanescentes = 0
-        for letra in antigas_letras_expressao_atual:
+        if anagrama is not None:
+            lista_anagramas.append(anagrama)
 
-            # Calculate a quantidade de letras remanescentes se o candidato atual for incluído
-            # no anagrama
-            if letra in candidato[1]:
-                novas_letras_expressao_atual[letra] = antigas_letras_expressao_atual[letra] - \
-                    candidato[1][letra]
-            else:
-                novas_letras_expressao_atual[letra] = antigas_letras_expressao_atual[letra]
+    return lista_anagramas
 
-            letras_remanescentes += novas_letras_expressao_atual[letra]
-            if novas_letras_expressao_atual[letra] < 0:
+
+def get_anagrama_for_candidato_starting_at_index_i(letras_expressao_atual, candidatos, i):
+    """
+        Obtem um anagrama comecando com candidatos[i]
+    """
+    tb = traceback.extract_stack()
+    list_tb = list(tb)
+    new_list = list(filter(lambda x: x.name ==
+                    "get_anagrama_for_candidato_starting_at_index_i", list_tb))
+    recursive_calls_length = len(new_list)
+
+    anagrama = []
+    antigas_letras_expressao_atual = letras_expressao_atual
+    novas_letras_expressao_atual = {}
+    candidato = candidatos[i]
+    anagrama.append(candidato[0])
+    print(
+        f"\n\nChamada: {recursive_calls_length} - i: {i} - candidato: {candidato[0]} - Num de Candidatos: {len(candidatos)}")
+
+    candidato_valido = True
+    letras_remanescentes = 0
+    for letra in antigas_letras_expressao_atual:
+
+        # Calculate a quantidade de letras remanescentes se o candidato atual for incluído
+        # no anagrama
+        if letra in candidato[1]:
+            novas_letras_expressao_atual[letra] = antigas_letras_expressao_atual[letra] - \
+                candidato[1][letra]
+        else:
+            novas_letras_expressao_atual[letra] = antigas_letras_expressao_atual[letra]
+
+        letras_remanescentes += novas_letras_expressao_atual[letra]
+        if novas_letras_expressao_atual[letra] < 0:
+            candidato_valido = False
+            break
+
+    # Candidato ainda não foi invalidado por ter letras a mais do que o necessário
+    if candidato_valido:
+        for letra in candidato[1]:
+            # Candidato será invalidado por ter letras que não estão na expressão original
+            if letra not in antigas_letras_expressao_atual:
                 candidato_valido = False
                 break
 
-        # Candidato ainda não foi invalidado por ter letras a mais do que o necessário
-        if candidato_valido:
-            for letra in candidato[1]:
-                # Candidato será invalidado por ter letras que não estão na expressão original
-                if letra not in antigas_letras_expressao_atual:
-                    candidato_valido = False
-                    break
+    if not candidato_valido:
+        anagrama.pop()
+        return anagrama
+    elif letras_remanescentes == 0:
+        return anagrama
 
-        if not candidato_valido:
-            anagrama.pop()
+    sub_anagrama_encontrado = False
+
+    for j in range(i+1, len(candidatos)):
+        print(
+            f"j: {j} - candidato: {candidatos[j][0]} - Num de Candidatos: {len(candidatos)}")
+        sub_anagrama = get_anagrama_for_candidato_starting_at_index_i(
+            novas_letras_expressao_atual, candidatos, j)
+        if sub_anagrama == [] or sub_anagrama is None:
             continue
-        elif letras_remanescentes == 0:
-            return anagrama
         else:
-            antigas_letras_expressao_atual = novas_letras_expressao_atual
+            sub_anagrama_encontrado = True
+            anagrama = anagrama + sub_anagrama
 
-        for j in range(i+1, len(candidatos)):
-            print(
-                f"j: {j} - candidato: {candidatos[j][0]} - Num de Candidatos: {len(candidatos)}")
-            sub_anagrama = gera_lista_anagramas(
-                novas_letras_expressao_atual, candidatos[i+1:])
-            if sub_anagrama == [] or sub_anagrama == None:
-                continue
-            else:
-                anagrama = anagrama + sub_anagrama
+            if verifica_anagrama(letras_expressao_atual, anagrama):
+                break
 
-    lista_anagramas.append(anagrama)
+    if sub_anagrama_encontrado:
+        return anagrama
+
+
+def verifica_anagrama(letras_expressao_atual, anagrama):
+    """
+        Verifica se um anagrama está correto
+    """
+    string_concatenada = "".join(anagrama)
+    letras_anagrama_potencial = conta_letras(string_concatenada)
+
+    if (len(letras_expressao_atual) != len(letras_anagrama_potencial)):
+        return False
+
+    for letra in letras_expressao_atual:
+        if letras_expressao_atual[letra] != letras_anagrama_potencial[letra]:
+            return False
+
+    return True
 
 
 def processa_arquivo_de_palavras():
