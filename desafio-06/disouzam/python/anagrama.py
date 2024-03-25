@@ -6,6 +6,7 @@
 from ctypes import ArgumentError
 import string
 import sys
+import re
 
 
 def main(args):
@@ -52,6 +53,10 @@ def e_valida(expressao):
     for letra in expressao:
         if letra in string.punctuation:
             return False
+
+    # https://stackoverflow.com/a/22162423
+    if not re.match('^[a-zA-Z]+$', expressao):
+        return False
 
     return True
 
