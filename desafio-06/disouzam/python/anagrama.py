@@ -4,6 +4,7 @@
     https://osprogramadores.com/desafios/d06/words.txt)
 """
 from ctypes import ArgumentError
+import os
 import string
 import sys
 import re
@@ -30,6 +31,33 @@ def main(args):
 
     print(converte_expressao(expressao))
     print(conta_letras(expressao))
+
+    palavras_e_letras = processa_arquivo_de_palavras()
+
+    for palavra in palavras_e_letras.items():
+        print(palavra)
+
+
+def processa_arquivo_de_palavras():
+    """
+        Processa o arquivo 'words.txt' e retorna um dicionário com a palavra e a contagem de letras 
+        nela
+    """
+    # Execução como script através do VS Code
+    file_path = os.path.join("desafio-06", "disouzam", "python", "words.txt")
+
+    if not os.path.isfile(file_path):
+        # Execução como módulo via linha de comando a partir do diretório do desafio
+        file_path = os.path.join("words.txt")
+
+    palavras_e_letras = {}
+
+    with open(file_path, "r", encoding='UTF-8') as words_file:
+        for word in words_file:
+            word = word.strip()
+            palavras_e_letras[word] = conta_letras(word)
+
+    return palavras_e_letras
 
 
 def conta_letras(expressao):
