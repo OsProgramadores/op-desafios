@@ -64,15 +64,15 @@ def processa_arquivo_de_palavras():
     return palavras_e_letras_como_array
 
 
-def palavra_e_candidata(letras_expressao_atual, palavra_candidata):
+def palavra_e_candidata(letras_expressao_atual, letras_palavra_candidata):
     """
         Verifica se palavra_candidata pode compor anagrama da expressão atual
         representada por sua versão em contagem de letras
     """
 
-    for letra in palavra_candidata:
+    for letra in letras_palavra_candidata:
         if letra not in letras_expressao_atual or \
-                palavra_candidata[letra] > letras_expressao_atual[letra]:
+                letras_palavra_candidata[letra] > letras_expressao_atual[letra]:
             return False
 
     return True
