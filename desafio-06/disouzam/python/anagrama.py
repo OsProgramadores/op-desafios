@@ -8,6 +8,7 @@ import os
 import string
 import sys
 import re
+import numpy as np
 
 
 def main(args):
@@ -32,7 +33,7 @@ def main(args):
     letras_expressao_atual = conta_letras(expressao)
     palavras_e_letras = processa_arquivo_de_palavras()
 
-    for palavra_candidata in palavras_e_letras.items():
+    for palavra_candidata in palavras_e_letras:
         print(palavra_e_candidata(
             letras_expressao_atual, palavra_candidata[1]))
 
@@ -56,7 +57,11 @@ def processa_arquivo_de_palavras():
             word = word.strip()
             palavras_e_letras[word] = conta_letras(word)
 
-    return palavras_e_letras
+    items = palavras_e_letras.items()
+    data = list(items)
+    palavras_e_letras_como_array = np.array(data)
+
+    return palavras_e_letras_como_array
 
 
 def palavra_e_candidata(letras_expressao_atual, palavra_candidata):
