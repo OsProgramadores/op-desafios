@@ -4,6 +4,7 @@
     https://osprogramadores.com/desafios/d06/words.txt)
 """
 from ctypes import ArgumentError
+import string
 import sys
 
 
@@ -22,14 +23,36 @@ def main(args):
 
     if len(args) == 2:
         expressao = args[1]
+        expressao = converte_expressao(expressao)
         if not e_valida(expressao):
             raise ArgumentError("Expressão contém caracteres inválidos")
+
+    print(converte_expressao(expressao))
+
+
+def converte_expressao(expressao):
+    """
+        Converte expressão para letras maiúsculas e remove os espaços existentes
+    """
+    # Primeiro converte todas as letras em maiúsculas
+    result = expressao.upper()
+
+    # pylint: disable=line-too-long
+    # Depois remove os espaços em branco https://www.digitalocean.com/community/tutorials/python-remove-spaces-from-string#remove-all-spaces-using-the-replace-method
+    result = result.replace(" ", "")
+
+    return result
 
 
 def e_valida(expressao):
     """
         Verifica se a expressão fornecida como argumento contém caracteres inválidos
     """
+    # https://www.geeksforgeeks.org/string-punctuation-in-python/
+    for letra in expressao:
+        if letra in string.punctuation:
+            return False
+
     return True
 
 
