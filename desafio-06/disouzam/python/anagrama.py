@@ -45,7 +45,9 @@ def imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
         letras_expressao_atual, palavras_e_letras)
     lista_anagramas = gera_lista_anagramas(
         letras_expressao_atual, lista_candidatos)
-    print(lista_anagramas)
+
+    for anagrama in lista_anagramas:
+        print(" ".join(anagrama))
 
 
 def gera_lista_candidatos(letras_expressao_atual, palavras_e_letras):
