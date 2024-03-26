@@ -148,14 +148,14 @@ def obter_anagrama_for_candidato_comecando_no_indice_i(letras_expressao_atual, c
         sub_anagrama_encontrado = True
         anagrama = anagrama + sub_anagrama
 
-        if verifica_anagrama(letras_expressao_atual, anagrama):
+        if e_um_anagrama(letras_expressao_atual, anagrama):
             break
 
     if sub_anagrama_encontrado:
         return anagrama
 
 
-def verifica_anagrama(letras_expressao_atual, anagrama):
+def e_um_anagrama(letras_expressao_atual, anagrama):
     """
         Verifica se um anagrama está correto
     """
