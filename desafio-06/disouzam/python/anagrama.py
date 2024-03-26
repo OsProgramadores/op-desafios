@@ -8,8 +8,8 @@ import os
 import string
 import sys
 import re
-import numpy as np
 import traceback
+import numpy as np
 
 
 def main(args):
