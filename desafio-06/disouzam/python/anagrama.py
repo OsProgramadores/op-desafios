@@ -159,7 +159,7 @@ def verifica_anagrama(letras_expressao_atual, anagrama):
     string_concatenada = "".join(anagrama)
     letras_anagrama_potencial = conta_letras(string_concatenada)
 
-    if (len(letras_expressao_atual) != len(letras_anagrama_potencial)):
+    if len(letras_expressao_atual) != len(letras_anagrama_potencial):
         return False
 
     for letra in letras_expressao_atual:
