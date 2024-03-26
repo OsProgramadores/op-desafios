@@ -35,6 +35,20 @@ def main(args):
     palavras_e_letras = processa_arquivo_de_palavras()
 
     imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras)
+    imprimir_todos_os_anagramas2(letras_expressao_atual, palavras_e_letras)
+
+
+def imprimir_todos_os_anagramas2(letras_expressao_atual, palavras_e_letras):
+    """
+        Imprime todos os anagramas existentes
+    """
+    lista_candidatos = gera_lista_candidatos(
+        letras_expressao_atual, palavras_e_letras)
+    lista_anagramas = gera_lista_anagramas2(
+        letras_expressao_atual, lista_candidatos)
+
+    for anagrama in lista_anagramas:
+        print(" ".join(anagrama))
 
 
 def imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
@@ -83,7 +97,97 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos):
     return lista_anagramas
 
 
+def gera_lista_anagramas2(letras_expressao_atual, candidatos):
+    """ 
+        Gera lista de anagramas a partir de uma lista de candidatos
+    """
+    lista_anagramas = []
+    anagrama = []
+
+    # pylint: disable=consider-using-enumerate
+    for i in range(0, len(candidatos)):
+        anagrama = obter_anagrama_for_candidato_comecando_no_indice_i_2(
+            letras_expressao_atual, candidatos, i)
+
+        if anagrama is not None:
+            lista_anagramas.append(anagrama)
+
+    return lista_anagramas
+
+
 def obter_anagrama_for_candidato_comecando_no_indice_i(letras_expressao_atual, candidatos, i):
+    """
+        Obtem um anagrama comecando com candidatos[i]
+    """
+    tb = traceback.extract_stack()
+    list_tb = list(tb)
+    new_list = list(filter(lambda x: x.name ==
+                    "get_anagrama_for_candidato_starting_at_index_i", list_tb))
+    recursive_calls_length = len(new_list)
+
+    anagrama = []
+    antigas_letras_expressao_atual = letras_expressao_atual
+    novas_letras_expressao_atual = {}
+    candidato = candidatos[i]
+    anagrama.append(candidato[0])
+
+    # pylint: disable=line-too-long
+    print(
+        f"\n\nChamada: {recursive_calls_length} - i: {i} - candidato: {candidato[0]} - Num de Candidatos: {len(candidatos)}")
+
+    candidato_valido = True
+    letras_remanescentes = 0
+    for letra in antigas_letras_expressao_atual:
+
+        # Calculate a quantidade de letras remanescentes se o candidato atual for incluído
+        # no anagrama
+        if letra in candidato[1]:
+            novas_letras_expressao_atual[letra] = antigas_letras_expressao_atual[letra] - \
+                candidato[1][letra]
+        else:
+            novas_letras_expressao_atual[letra] = antigas_letras_expressao_atual[letra]
+
+        letras_remanescentes += novas_letras_expressao_atual[letra]
+        if novas_letras_expressao_atual[letra] < 0:
+            candidato_valido = False
+            break
+
+    # Candidato ainda não foi invalidado por ter letras a mais do que o necessário
+    if candidato_valido:
+        for letra in candidato[1]:
+            # Candidato será invalidado por ter letras que não estão na expressão original
+            if letra not in antigas_letras_expressao_atual:
+                candidato_valido = False
+                break
+
+    if not candidato_valido:
+        anagrama.pop()
+
+    if not candidato_valido or letras_remanescentes == 0:
+        return anagrama
+
+    sub_anagrama_encontrado = False
+
+    for j in range(i+1, len(candidatos)):
+        print(
+            f"j: {j} - candidato: {candidatos[j][0]} - Num de Candidatos: {len(candidatos)}")
+        sub_anagrama = obter_anagrama_for_candidato_comecando_no_indice_i(
+            novas_letras_expressao_atual, candidatos, j)
+
+        if sub_anagrama == [] or sub_anagrama is None:
+            continue
+
+        sub_anagrama_encontrado = True
+        anagrama = anagrama + sub_anagrama
+
+        if e_um_anagrama(letras_expressao_atual, anagrama):
+            break
+
+    if sub_anagrama_encontrado:
+        return anagrama
+
+
+def obter_anagrama_for_candidato_comecando_no_indice_i_2(letras_expressao_atual, candidatos, i):
     """
         Obtem um anagrama comecando com candidatos[i]
     """
