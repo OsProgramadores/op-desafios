@@ -98,6 +98,8 @@ def get_anagrama_for_candidato_starting_at_index_i(letras_expressao_atual, candi
     novas_letras_expressao_atual = {}
     candidato = candidatos[i]
     anagrama.append(candidato[0])
+
+    # pylint: disable=line-too-long
     print(
         f"\n\nChamada: {recursive_calls_length} - i: {i} - candidato: {candidato[0]} - Num de Candidatos: {len(candidatos)}")
 
@@ -128,8 +130,8 @@ def get_anagrama_for_candidato_starting_at_index_i(letras_expressao_atual, candi
 
     if not candidato_valido:
         anagrama.pop()
-        return anagrama
-    elif letras_remanescentes == 0:
+
+    if not candidato_valido or letras_remanescentes == 0:
         return anagrama
 
     sub_anagrama_encontrado = False
@@ -139,14 +141,15 @@ def get_anagrama_for_candidato_starting_at_index_i(letras_expressao_atual, candi
             f"j: {j} - candidato: {candidatos[j][0]} - Num de Candidatos: {len(candidatos)}")
         sub_anagrama = get_anagrama_for_candidato_starting_at_index_i(
             novas_letras_expressao_atual, candidatos, j)
+
         if sub_anagrama == [] or sub_anagrama is None:
             continue
-        else:
-            sub_anagrama_encontrado = True
-            anagrama = anagrama + sub_anagrama
 
-            if verifica_anagrama(letras_expressao_atual, anagrama):
-                break
+        sub_anagrama_encontrado = True
+        anagrama = anagrama + sub_anagrama
+
+        if verifica_anagrama(letras_expressao_atual, anagrama):
+            break
 
     if sub_anagrama_encontrado:
         return anagrama
