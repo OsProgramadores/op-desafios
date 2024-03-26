@@ -74,7 +74,7 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos):
 
     # pylint: disable=consider-using-enumerate
     for i in range(0, len(candidatos)):
-        anagrama = get_anagrama_for_candidato_starting_at_index_i(
+        anagrama = obter_anagrama_for_candidato_comecando_no_indice_i(
             letras_expressao_atual, candidatos, i)
 
         if anagrama is not None:
@@ -83,7 +83,7 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos):
     return lista_anagramas
 
 
-def get_anagrama_for_candidato_starting_at_index_i(letras_expressao_atual, candidatos, i):
+def obter_anagrama_for_candidato_comecando_no_indice_i(letras_expressao_atual, candidatos, i):
     """
         Obtem um anagrama comecando com candidatos[i]
     """
@@ -139,7 +139,7 @@ def get_anagrama_for_candidato_starting_at_index_i(letras_expressao_atual, candi
     for j in range(i+1, len(candidatos)):
         print(
             f"j: {j} - candidato: {candidatos[j][0]} - Num de Candidatos: {len(candidatos)}")
-        sub_anagrama = get_anagrama_for_candidato_starting_at_index_i(
+        sub_anagrama = obter_anagrama_for_candidato_comecando_no_indice_i(
             novas_letras_expressao_atual, candidatos, j)
 
         if sub_anagrama == [] or sub_anagrama is None:
