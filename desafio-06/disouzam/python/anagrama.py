@@ -14,22 +14,25 @@ import numpy as np
 
 def main(args):
     """
-        Processa os valores passados na linha de comando, descritos pelo parâmetro args
-        e retorna todos os palíndromos entre o limite inferior e o limite superior, ambos
-        inclusos na avaliação de números palíndromos
+        Processa uma expressão passada na linha de comando, descrita pelo parâmetro args
+        e imprime os anagramas existentes a partir de uma busca no arquivo words.txt
     """
     expressao = ""
 
     # Análise dos argumentos recebidos em args
     if len(args) <= 1:
-        print("Nenhum argumento foi fornecido.")
-        return
+        raise ArgumentError("Nenhum argumento foi fornecido.")
 
+    # Validação dos argumentos
     if len(args) == 2:
         expressao = args[1]
         expressao = converte_expressao(expressao)
         if not e_valida(expressao):
             raise ArgumentError("Expressão contém caracteres inválidos")
+    else:
+        # pylint: disable=line-too-long
+        raise ArgumentError(
+            "Número excessivo de argumentos. Apenas um argumento como string é necessário para determinar os anagramas existentes.")
 
     letras_expressao_atual = conta_letras(expressao)
     palavras_e_letras = processa_arquivo_de_palavras()
