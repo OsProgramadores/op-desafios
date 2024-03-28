@@ -5,7 +5,13 @@ Processa uma palavra ou frase e retorna todas as combinações possíveis de ana
 
 # Verificação do código com Pylint
 
-Executando dentro da pasta do desafio (desafio-06/disouzam/python), o comando é:
+O comando a seguir altera o diretório para a pasta do desafio:
+
+```shell
+cd desafio-06/disouzam/python
+```
+
+Executando dentro da pasta do desafio (desafio-06/disouzam/python), o comando para verificar o código através do Pylint é:
 
 ```python
 pylint --rcfile=../../../ci/pylint3.rc anagrama.py
