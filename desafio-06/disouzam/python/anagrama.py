@@ -35,10 +35,10 @@ def main(args):
     palavras_e_letras = processa_arquivo_de_palavras()
 
     # imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras)
-    imprimir_todos_os_anagramas2(letras_expressao_atual, palavras_e_letras)
+    imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras)
 
 
-def imprimir_todos_os_anagramas2(letras_expressao_atual, palavras_e_letras):
+def imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
     """
         Imprime todos os anagramas existentes
     """
@@ -46,7 +46,7 @@ def imprimir_todos_os_anagramas2(letras_expressao_atual, palavras_e_letras):
         letras_expressao_atual, palavras_e_letras)
 
     candidatos_a_anagramas = []
-    lista_anagramas = gera_lista_anagramas2(
+    lista_anagramas = gera_lista_anagramas(
         letras_expressao_atual, lista_candidatos, candidatos_a_anagramas)
 
     for item in lista_anagramas:
@@ -68,7 +68,7 @@ def gera_lista_candidatos(letras_expressao_atual, palavras_e_letras):
     return lista_candidatos
 
 
-def gera_lista_anagramas2(letras_expressao_atual, candidatos, candidatos_a_anagrama):
+def gera_lista_anagramas(letras_expressao_atual, candidatos, candidatos_a_anagrama):
     """ 
         Gera lista de anagramas a partir de uma lista de candidatos
     """
@@ -126,8 +126,8 @@ def gera_lista_anagramas2(letras_expressao_atual, candidatos, candidatos_a_anagr
             nova_busca = True
 
     if nova_busca:
-        candidatos_a_anagrama_atualizado = gera_lista_anagramas2(letras_expressao_atual,
-                                                                 candidatos, candidatos_a_anagrama_atualizado)
+        candidatos_a_anagrama_atualizado = gera_lista_anagramas(letras_expressao_atual,
+                                                                candidatos, candidatos_a_anagrama_atualizado)
 
     return candidatos_a_anagrama_atualizado
 
