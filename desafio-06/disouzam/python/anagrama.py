@@ -13,9 +13,14 @@ import numpy as np
 
 
 def main(args):
-    """
-        Processa uma expressão passada na linha de comando, descrita pelo parâmetro args
-        e imprime os anagramas existentes a partir de uma busca no arquivo words.txt
+    """main(args):
+    Processa uma expressão passada na linha de comando, descrita pelo parâmetro args
+    e imprime os anagramas existentes a partir de uma busca no arquivo words.txt.
+
+    Parâmetros:
+    args: Lista de argumentos recebido da linha de comando e 
+          pré-processado na chamada da função main. Deve conter 2 argumentos e 
+          o segundo é uma expressão a ser processada em busca dos anagramas.
     """
     expressao = ""
 
@@ -278,8 +283,14 @@ def palavra_e_candidata(letras_expressao_atual, letras_palavra_candidata):
 
 
 def conta_letras(expressao):
-    """
-        Processa a expressao e conta o número de ocorrências de cada letra da palavra ou frase
+    """conta_letras(expressao):
+    Processa a `expressao` e conta o número de ocorrências de cada letra da palavra ou frase
+    e retorna o resultado como um dicionário onde a chave é a letra e o valor é o número
+    de ocorrências.
+
+    Parâmetros:
+    expressao: Uma palavra ou frase contendo somente letras e espaços. 
+               Acentos e pontuação não são permitidos.
     """
     contagem_letras = {}
     for letra in expressao:
@@ -354,4 +365,6 @@ def e_valida(expressao):
 
 
 if __name__ == "__main__":
+    print(main.__doc__)
+    print(conta_letras.__doc__)
     main(sys.argv)

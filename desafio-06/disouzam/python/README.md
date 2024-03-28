@@ -42,3 +42,8 @@ python -m anagrama "Hello world!"
 ```python
 python -m anagrama "Hello world! Hoje é dia 24 de março de 2024."
 ```
+
+# Referências
+
+- [PEP 257 – Docstring Conventions](https://peps.python.org/pep-0257/)
+- [Advanced Python with Joe Marini](https://www.linkedin.com/learning/advanced-python/function-documentation-strings)
