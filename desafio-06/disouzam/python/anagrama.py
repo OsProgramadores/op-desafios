@@ -39,7 +39,7 @@ def main(args):
         raise ArgumentError(
             "Número excessivo de argumentos. Apenas um argumento como string é necessário para determinar os anagramas existentes.")
 
-    letras_expressao_atual = conta_letras(expressao)
+    letras_expressao_atual = obtem_contagem_de_letras(expressao)
     palavras_e_letras = processa_arquivo_de_palavras()
 
     # imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras)
@@ -228,7 +228,7 @@ def e_um_anagrama(letras_expressao_atual, anagrama):
         Verifica se um anagrama está correto
     """
     string_concatenada = "".join(anagrama)
-    letras_anagrama_potencial = conta_letras(string_concatenada)
+    letras_anagrama_potencial = obtem_contagem_de_letras(string_concatenada)
 
     if len(letras_expressao_atual) != len(letras_anagrama_potencial):
         return False
@@ -257,7 +257,7 @@ def processa_arquivo_de_palavras():
     with open(file_path, "r", encoding='UTF-8') as words_file:
         for word in words_file:
             word = word.strip()
-            palavras_e_letras[word] = conta_letras(word)
+            palavras_e_letras[word] = obtem_contagem_de_letras(word)
 
     items = palavras_e_letras.items()
     data = list(items)
@@ -282,8 +282,8 @@ def palavra_e_candidata(letras_expressao_atual, letras_palavra_candidata):
     return True
 
 
-def conta_letras(expressao):
-    """conta_letras(expressao):
+def obtem_contagem_de_letras(expressao):
+    """obtem_contagem_de_letras(expressao):
     Processa a `expressao` e conta o número de ocorrências de cada letra da palavra ou frase
     e retorna o resultado como um dicionário onde a chave é a letra e o valor é o número
     de ocorrências.
@@ -366,5 +366,5 @@ def e_valida(expressao):
 
 if __name__ == "__main__":
     print(main.__doc__)
-    print(conta_letras.__doc__)
+    print(obtem_contagem_de_letras.__doc__)
     main(sys.argv)
