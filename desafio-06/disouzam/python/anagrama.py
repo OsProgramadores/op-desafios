@@ -40,7 +40,9 @@ def main(args):
             "Número excessivo de argumentos. Apenas um argumento como string é necessário para determinar os anagramas existentes.")
 
     letras_expressao_atual = obtem_contagem_de_letras(expressao)
-    palavras_e_letras = processa_arquivo_de_palavras()
+    caminho_do_arquivo_com_as_palavras = obtem_caminho_do_arquivo_com_as_palavras()
+    palavras_e_letras = processa_arquivo_de_palavras(
+        caminho_do_arquivo_com_as_palavras)
 
     # imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras)
     imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras)
@@ -240,10 +242,9 @@ def e_um_anagrama(letras_expressao_atual, anagrama):
     return True
 
 
-def processa_arquivo_de_palavras():
-    """
-        Processa o arquivo 'words.txt' e retorna um dicionário com a palavra e a contagem de letras 
-        nela
+def obtem_caminho_do_arquivo_com_as_palavras():
+    """obtem_caminho_do_arquivo_com_as_palavras:
+    Obtém o caminho para o arquivo com as palavras do idioma selecionado para a busca dos anagramas
     """
     # Execução como script através do VS Code
     file_path = os.path.join("desafio-06", "disouzam", "python", "words.txt")
@@ -251,6 +252,15 @@ def processa_arquivo_de_palavras():
     if not os.path.isfile(file_path):
         # Execução como módulo via linha de comando a partir do diretório do desafio
         file_path = os.path.join("words.txt")
+
+    return file_path
+
+
+def processa_arquivo_de_palavras(file_path):
+    """processa_arquivo_de_palavras:
+    Processa o arquivo 'words.txt' e retorna um vetor de tuplas com a palavra como primeiro item e 
+    a contagem de letras como segundo item
+    """
 
     palavras_e_letras = {}
 
@@ -367,4 +377,6 @@ def e_valida(expressao):
 if __name__ == "__main__":
     print(main.__doc__)
     print(obtem_contagem_de_letras.__doc__)
+    print(obtem_caminho_do_arquivo_com_as_palavras.__doc__)
+    print(processa_arquivo_de_palavras.__doc__)
     main(sys.argv)
