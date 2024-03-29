@@ -257,11 +257,13 @@ def obtem_caminho_do_arquivo_com_as_palavras():
 
 
 def processa_arquivo_de_palavras(file_path):
-    """processa_arquivo_de_palavras:
+    """processa_arquivo_de_palavras(file_path):
     Processa o arquivo 'words.txt' e retorna um vetor de tuplas com a palavra como primeiro item e 
     a contagem de letras como segundo item
-    """
 
+    Parâmetros:
+    file_path: Caminho do arquivo contendo as palavras do idioma selecionado
+    """
     palavras_e_letras = {}
 
     with open(file_path, "r", encoding='UTF-8') as words_file:
