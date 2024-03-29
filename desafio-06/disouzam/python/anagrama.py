@@ -9,7 +9,6 @@ import string
 import sys
 import re
 import traceback
-import numpy as np
 
 
 def main(args):
