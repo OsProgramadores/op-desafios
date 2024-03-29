@@ -19,6 +19,8 @@ pylint --rcfile=../../../ci/pylint3.rc anagrama.py
 
 # Como executar o script
 
+Esse código foi testado com a versão 3.12.1 do Python e pode apresentar alguma instabilidade com o Python 3.11 (não foi checado contra essa versão).
+
 Executando dentro da pasta do desafio (desafio-06/disouzam/python), o comando é (com uma palavra de exemplo):
 
 ```python
