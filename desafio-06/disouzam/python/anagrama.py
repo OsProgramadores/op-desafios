@@ -63,8 +63,27 @@ def imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
     lista_anagramas_sem_repeticao = gera_lista_anagramas_sem_repeticao(
         lista_anagramas)
 
+    lista_ordenada = obtem_lista_ordenada_como_strings(
+        lista_anagramas_sem_repeticao)
+    for item in lista_ordenada:
+        print(item)
+
+
+def obtem_lista_ordenada_como_strings(lista_anagramas_sem_repeticao):
+    """obtem_lista_ordenada_como_strings(lista_anagramas_sem_repeticao):
+    Concatena as sublistas como strings e retorna valores ordenados
+
+    Parâmetro:
+    lista_anagramas_sem_repeticao: lista de listas de anagramas sem repeticao
+    """
+    lista_ordenada = []
+
     for item in lista_anagramas_sem_repeticao:
-        print(" ".join(item))
+        lista_ordenada.append(" ".join(item))
+
+    lista_ordenada.sort()
+
+    return lista_ordenada
 
 
 def gera_lista_anagramas_sem_repeticao(lista_anagramas):
