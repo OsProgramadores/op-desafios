@@ -61,8 +61,28 @@ def imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
     lista_anagramas = gera_lista_anagramas(
         letras_expressao_atual, lista_candidatos, candidatos_a_anagramas)
 
-    for item in lista_anagramas:
+    lista_anagramas_sem_repeticao = gera_lista_anagramas_sem_repeticao(
+        lista_anagramas)
+
+    for item in lista_anagramas_sem_repeticao:
         print(item)
+
+
+def gera_lista_anagramas_sem_repeticao(lista_anagramas):
+    """gera_lista_anagramas_sem_repeticao(lista_anagramas):
+    Processa a lista final de anagramas obtida e remove duplicatas e transforma a tupla em uma lista
+    de listas simples
+
+    Parâmetro:
+    lista_anagramas: lista de anagramas válidos contendo repeticao
+    """
+    lista_sem_repeticao = []
+
+    for anagrama in lista_anagramas:
+        if anagrama[0] not in lista_sem_repeticao:
+            lista_sem_repeticao.append(anagrama[0])
+
+    return lista_sem_repeticao
 
 
 def gera_lista_candidatos(letras_expressao_atual, palavras_e_letras):
@@ -127,7 +147,8 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos, candidatos_a_anagra
     return candidatos_a_anagrama
 
 
-def filtra_candidatos_a_anagrama_invalidos(candidatos_a_anagrama, numero_inicial_candidatos_a_anagrama):
+def filtra_candidatos_a_anagrama_invalidos(candidatos_a_anagrama,
+                                           numero_inicial_candidatos_a_anagrama):
     """filtra_candidatos_a_anagrama_invalidos(candidatos_a_anagrama, 
                                                 numero_inicial_candidatos_a_anagrama):
     Filtra os candidatos a anagrama que já estão desatualizados (foram incrementalmente modificados)
@@ -145,6 +166,7 @@ def filtra_candidatos_a_anagrama_invalidos(candidatos_a_anagrama, numero_inicial
         else:
             # Os os demais candidatos serão adicionados automaticamente
             candidatos_a_anagrama_atualizado.append(candidato)
+
     return candidatos_a_anagrama_atualizado
 
 
@@ -416,4 +438,5 @@ if __name__ == "__main__":
     print(obtem_contagem_letras_faltantes_para_um_anagrama.__doc__)
     print(palavra_e_candidata.__doc__)
     print(obtem_candidatos_iniciais.__doc__)
+    print(gera_lista_anagramas_sem_repeticao.__doc__)
     main(sys.argv)
