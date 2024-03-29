@@ -8,7 +8,6 @@ import os
 import string
 import sys
 import re
-import traceback
 
 
 def main(args):
@@ -208,8 +207,12 @@ def busca_novos_anagramas(letras_expressao_atual, candidatos,
                     letras_expressao_atual, anagrama_potencial)
                 total_letras_faltantes = obtem_total_letras(
                     letras_faltantes)
+
                 candidatos_a_anagrama.append(
-                    (anagrama_potencial, posicao_novo_candidato, total_letras_faltantes, letras_faltantes))
+                    (anagrama_potencial,
+                     posicao_novo_candidato,
+                     total_letras_faltantes,
+                     letras_faltantes))
 
     return candidatos_a_anagrama
 
