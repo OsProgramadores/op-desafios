@@ -64,7 +64,7 @@ def imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
         lista_anagramas)
 
     for item in lista_anagramas_sem_repeticao:
-        print(item)
+        print(" ".join(item))
 
 
 def gera_lista_anagramas_sem_repeticao(lista_anagramas):
