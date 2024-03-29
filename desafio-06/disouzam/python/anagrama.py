@@ -215,8 +215,11 @@ def obtem_candidatos_iniciais(letras_expressao_atual, candidatos):
 
 
 def obtem_total_letras(letras_faltantes):
-    """
-        Calcula o total de letras faltantes
+    """obtem_total_letras(letras_faltantes):
+    Calcula o total de letras faltantes
+
+    Parâmetro:
+    letras_faltantes: dicionário com o número de letras faltantes por letra
     """
     total = 0
     for letra in letras_faltantes:
@@ -225,81 +228,13 @@ def obtem_total_letras(letras_faltantes):
     return total
 
 
-def obter_anagrama_for_candidato_comecando_no_indice_i(letras_expressao_atual, candidatos, i):
-    """
-        Obtem um anagrama comecando com candidatos[i]
-    """
-    tb = traceback.extract_stack()
-    list_tb = list(tb)
-    new_list = list(filter(lambda x: x.name ==
-                    "get_anagrama_for_candidato_starting_at_index_i", list_tb))
-    recursive_calls_length = len(new_list)
-
-    anagrama = []
-    antigas_letras_expressao_atual = letras_expressao_atual
-    novas_letras_expressao_atual = {}
-    candidato = candidatos[i]
-    anagrama.append(candidato[0])
-
-    # pylint: disable=line-too-long
-    print(
-        f"\n\nChamada: {recursive_calls_length} - i: {i} - candidato: {candidato[0]} - Num de Candidatos: {len(candidatos)}")
-
-    candidato_valido = True
-    letras_remanescentes = 0
-    for letra in antigas_letras_expressao_atual:
-
-        # Calculate a quantidade de letras remanescentes se o candidato atual for incluído
-        # no anagrama
-        if letra in candidato[1]:
-            novas_letras_expressao_atual[letra] = antigas_letras_expressao_atual[letra] - \
-                candidato[1][letra]
-        else:
-            novas_letras_expressao_atual[letra] = antigas_letras_expressao_atual[letra]
-
-        letras_remanescentes += novas_letras_expressao_atual[letra]
-        if novas_letras_expressao_atual[letra] < 0:
-            candidato_valido = False
-            break
-
-    # Candidato ainda não foi invalidado por ter letras a mais do que o necessário
-    if candidato_valido:
-        for letra in candidato[1]:
-            # Candidato será invalidado por ter letras que não estão na expressão original
-            if letra not in antigas_letras_expressao_atual:
-                candidato_valido = False
-                break
-
-    if not candidato_valido:
-        anagrama.pop()
-
-    if not candidato_valido or letras_remanescentes == 0:
-        return anagrama
-
-    sub_anagrama_encontrado = False
-
-    for j in range(i+1, len(candidatos)):
-        print(
-            f"j: {j} - candidato: {candidatos[j][0]} - Num de Candidatos: {len(candidatos)}")
-        sub_anagrama = obter_anagrama_for_candidato_comecando_no_indice_i(
-            novas_letras_expressao_atual, candidatos, j)
-
-        if sub_anagrama == [] or sub_anagrama is None:
-            continue
-
-        sub_anagrama_encontrado = True
-        anagrama = anagrama + sub_anagrama
-
-        if e_um_anagrama(letras_expressao_atual, anagrama):
-            break
-
-    if sub_anagrama_encontrado:
-        return anagrama
-
-
 def e_um_anagrama(letras_expressao_atual, anagrama):
-    """
-        Verifica se um anagrama está correto
+    """e_um_anagrama(letras_expressao_atual, anagrama):
+    Verifica se um anagrama está correto
+
+    Parâmetros:
+    letras_expressao_atual: dicionário de letras da expressão atual e sua contagem de ocorrências
+    anagrama: anagrama em potencial para ser checado
     """
     string_concatenada = "".join(anagrama)
     letras_anagrama_potencial = obtem_contagem_de_letras(string_concatenada)
@@ -348,9 +283,14 @@ def processa_arquivo_de_palavras(file_path):
 
 
 def palavra_e_candidata(letras_expressao_atual, letras_palavra_candidata):
-    """
-        Verifica se palavra_candidata pode compor anagrama da expressão atual
-        representada por sua versão em contagem de letras
+    """palavra_e_candidata(letras_expressao_atual, letras_palavra_candidata):
+    Verifica se palavra_candidata pode compor anagrama da expressão atual
+    representada por sua versão em contagem de letras
+
+    Parâmetros:
+    letras_expressao_atual: dicionário de letras da expressão atual e sua contagem de ocorrências
+    letras_palavra_candidata: dicionário de letras da palavra candidata com sua 
+                              contagem de ocorrências
     """
     if not isinstance(letras_palavra_candidata, dict):
         raise ArgumentError("letras_palavra_candidata deve ser um dicionário")
@@ -383,9 +323,13 @@ def obtem_contagem_de_letras(expressao):
 
 
 def obtem_contagem_letras_faltantes_para_um_anagrama(letras_expressao_atual, lista_de_strings):
-    """
-        Processa a expressao e calcula o número de letras faltantes para formação de um anagrama
-        a partir da lista fornecida
+    """obtem_contagem_letras_faltantes_para_um_anagrama(letras_expressao_atual, lista_de_strings):
+    Processa a expressao e calcula o número de letras faltantes para formação de um anagrama
+    a partir da lista fornecida
+
+    Parâmetros:
+    letras_expressao_atual: dicionário de letras da expressão atual e sua contagem de ocorrências
+    lista_de_strings: lista de palavras que podem formar um anagrama
     """
     letras_da_lista_atual = conta_letras_de_uma_lista(lista_de_strings)
     letras_faltantes = {}
@@ -401,9 +345,12 @@ def obtem_contagem_letras_faltantes_para_um_anagrama(letras_expressao_atual, lis
 
 
 def conta_letras_de_uma_lista(lista_de_strings):
-    """
-        Processa a expressao e conta o número de ocorrências de cada letra da palavra ou frase em
-        uma lista de strings
+    """conta_letras_de_uma_lista(lista_de_strings):
+    Processa a expressao e conta o número de ocorrências de cada letra da palavra ou frase em
+    uma lista de strings
+
+    Parâmetro:
+    lista_de_strings: lista de palavras que podem formar um anagrama
     """
     string_concatenada = "".join(lista_de_strings)
     contagem_letras = {}
@@ -416,8 +363,11 @@ def conta_letras_de_uma_lista(lista_de_strings):
 
 
 def converte_expressao(expressao):
-    """
-        Converte expressão para letras maiúsculas e remove os espaços existentes
+    """converte_expressao(expressao):
+    Converte expressão para letras maiúsculas e remove os espaços existentes
+
+    Parâmetro:
+    expressao: palavra ou frase a ser processada em busca de anagramas
     """
     # Primeiro converte todas as letras em maiúsculas
     result = expressao.upper()
@@ -430,8 +380,11 @@ def converte_expressao(expressao):
 
 
 def e_valida(expressao):
-    """
-        Verifica se a expressão fornecida como argumento contém caracteres inválidos
+    """e_valida(expressao):
+    Verifica se a expressão fornecida como argumento contém caracteres inválidos
+
+    Parâmetro:
+    expressao: palavra ou frase a ser processada em busca de anagramas
     """
     # https://www.geeksforgeeks.org/string-punctuation-in-python/
     for letra in expressao:
@@ -455,4 +408,12 @@ if __name__ == "__main__":
     print(gera_lista_anagramas.__doc__)
     print(busca_novos_anagramas.__doc__)
     print(filtra_candidatos_a_anagrama_invalidos.__doc__)
+    print(obtem_total_letras.__doc__)
+    print(e_um_anagrama.__doc__)
+    print(e_valida.__doc__)
+    print(converte_expressao.__doc__)
+    print(conta_letras_de_uma_lista.__doc__)
+    print(obtem_contagem_letras_faltantes_para_um_anagrama.__doc__)
+    print(palavra_e_candidata.__doc__)
+    print(obtem_candidatos_iniciais.__doc__)
     main(sys.argv)
