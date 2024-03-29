@@ -86,46 +86,56 @@ def gera_lista_candidatos(letras_expressao_atual, palavras_e_letras):
 
 
 def gera_lista_anagramas(letras_expressao_atual, candidatos, candidatos_a_anagrama):
-    """ 
-        Gera lista de anagramas a partir de uma lista de candidatos
+    """gera_lista_anagramas(letras_expressao_atual, candidatos, candidatos_a_anagrama):
+    Gera lista de anagramas a partir de uma lista de candidatos
+
+    Parâmetros:
+    letras_expressao_atual: dicionário de letras da expressão atual e sua contagem de ocorrências
+    candidatos: lista de palavras candidatas a formar um anagrama
+    candidatos_a_anagrama: lista de candidatos a anagrama em construção incremental
     """
     # caso-base: adiciona cada palavra candidata como um possível anagrama
     if len(candidatos_a_anagrama) == 0:
-        for posicao_candidato_na_lista, candidato in enumerate(candidatos):
-            lista = []
-            lista.append(candidato[0])
-            letras_faltantes = obtem_contagem_letras_faltantes_para_um_anagrama(
-                letras_expressao_atual, lista)
-            total_letras_faltantes = obtem_total_letras(letras_faltantes)
-            candidatos_a_anagrama.append(
-                (lista, posicao_candidato_na_lista, total_letras_faltantes, letras_faltantes))
+        candidatos_a_anagrama = obtem_candidatos_iniciais(
+            letras_expressao_atual, candidatos)
 
     # caso-geral
     total_candidatos = len(candidatos)
     numero_inicial_candidatos_a_anagrama = len(candidatos_a_anagrama)
 
     for posicao_candidato_a_anagrama, candidato_inicial in enumerate(candidatos_a_anagrama):
+        candidatos_a_anagrama = busca_novos_anagramas(letras_expressao_atual,
+                                                      candidatos,
+                                                      candidatos_a_anagrama,
+                                                      total_candidatos,
+                                                      posicao_candidato_a_anagrama,
+                                                      candidato_inicial)
 
-        if candidato_inicial[2] > 0:
-            posicao_ultimo_candidato_inserido = candidato_inicial[1]
-            proximo_candidato = posicao_ultimo_candidato_inserido + 1
+    candidatos_a_anagrama = filtra_candidatos_a_anagrama_invalidos(
+        candidatos_a_anagrama, numero_inicial_candidatos_a_anagrama)
 
-            for posicao_novo_candidato in range(proximo_candidato, total_candidatos):
-                novo_candidato = candidatos[posicao_novo_candidato]
-                letras_faltantes = candidatos_a_anagrama[posicao_candidato_a_anagrama][3]
+    # Verifica se há candidatos que necessitam de busca extra
+    nova_busca = False
+    for candidato in candidatos_a_anagrama:
+        if candidato[2] != 0:
+            nova_busca = True
 
-                if palavra_e_candidata(letras_faltantes, novo_candidato[1]):
-                    temp_list = []
-                    temp_list.append(novo_candidato[0])
-                    anagrama_potencial = candidatos_a_anagrama[posicao_candidato_a_anagrama][0] + \
-                        temp_list
-                    letras_faltantes = obtem_contagem_letras_faltantes_para_um_anagrama(
-                        letras_expressao_atual, anagrama_potencial)
-                    total_letras_faltantes = obtem_total_letras(
-                        letras_faltantes)
-                    candidatos_a_anagrama.append(
-                        (anagrama_potencial, posicao_novo_candidato, total_letras_faltantes, letras_faltantes))
+    if nova_busca:
+        candidatos_a_anagrama = gera_lista_anagramas(letras_expressao_atual,
+                                                     candidatos, candidatos_a_anagrama)
 
+    return candidatos_a_anagrama
+
+
+def filtra_candidatos_a_anagrama_invalidos(candidatos_a_anagrama, numero_inicial_candidatos_a_anagrama):
+    """filtra_candidatos_a_anagrama_invalidos(candidatos_a_anagrama, 
+                                                numero_inicial_candidatos_a_anagrama):
+    Filtra os candidatos a anagrama que já estão desatualizados (foram incrementalmente modificados)
+
+    Parâmetros:
+    candidatos_a_anagrama: lista de candidatos a anagrama em construção incremental
+    numero_inicial_candidatos_a_anagrama: número inicial de candidatos a anagrama
+    """
     candidatos_a_anagrama_atualizado = []
     for posicao_candidato_a_anagrama, candidato in enumerate(candidatos_a_anagrama):
         if posicao_candidato_a_anagrama < numero_inicial_candidatos_a_anagrama:
@@ -135,18 +145,73 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos, candidatos_a_anagra
         else:
             # Os os demais candidatos serão adicionados automaticamente
             candidatos_a_anagrama_atualizado.append(candidato)
-
-    # Verifica se há candidatos que necessitam de busca extra
-    nova_busca = False
-    for candidato in candidatos_a_anagrama_atualizado:
-        if candidato[2] != 0:
-            nova_busca = True
-
-    if nova_busca:
-        candidatos_a_anagrama_atualizado = gera_lista_anagramas(letras_expressao_atual,
-                                                                candidatos, candidatos_a_anagrama_atualizado)
-
     return candidatos_a_anagrama_atualizado
+
+
+def busca_novos_anagramas(letras_expressao_atual, candidatos,
+                          candidatos_a_anagrama,
+                          total_candidatos,
+                          posicao_candidato_a_anagrama,
+                          candidato_inicial):
+    """busca_novos_anagramas(letras_expressao_atual, candidatos, 
+                          candidatos_a_anagrama, 
+                          total_candidatos, 
+                          posicao_candidato_a_anagrama, 
+                          candidato_inicial):
+
+    Busca novas combinações que possam ser candidatos em potencial de um anagrama
+
+    Parâmetros:
+    letras_expressao_atual: dicionário de letras da expressão atual e sua contagem de ocorrências
+    candidatos: lista de palavras candidatas a formar um anagrama
+    candidatos_a_anagrama: lista de candidatos a anagrama em construção incremental
+    total_candidatos: total de candidatos simples da lista de palavras
+    posicao_candidato_a_anagrama: posição do último candidato que entrou no anagrama em construção
+    candidato_inicial: candidato a anagram em construção
+    """
+    if candidato_inicial[2] > 0:
+        posicao_ultimo_candidato_inserido = candidato_inicial[1]
+        proximo_candidato = posicao_ultimo_candidato_inserido + 1
+
+        for posicao_novo_candidato in range(proximo_candidato, total_candidatos):
+            novo_candidato = candidatos[posicao_novo_candidato]
+            letras_faltantes = candidatos_a_anagrama[posicao_candidato_a_anagrama][3]
+
+            if palavra_e_candidata(letras_faltantes, novo_candidato[1]):
+                temp_list = []
+                temp_list.append(novo_candidato[0])
+                anagrama_potencial = candidatos_a_anagrama[posicao_candidato_a_anagrama][0] + \
+                    temp_list
+                letras_faltantes = obtem_contagem_letras_faltantes_para_um_anagrama(
+                    letras_expressao_atual, anagrama_potencial)
+                total_letras_faltantes = obtem_total_letras(
+                    letras_faltantes)
+                candidatos_a_anagrama.append(
+                    (anagrama_potencial, posicao_novo_candidato, total_letras_faltantes, letras_faltantes))
+
+    return candidatos_a_anagrama
+
+
+def obtem_candidatos_iniciais(letras_expressao_atual, candidatos):
+    """obtem_candidatos_iniciais(letras_expressao_atual, candidatos):
+    Obtém a lista inicial de candidatos a anagrama a partir de uma lista simples de palavras 
+    candidatas e as letras da expressão atual
+
+    Parâmetros:
+    letras_expressao_atual: dicionário de letras da expressão atual e sua contagem de ocorrências
+    candidatos: lista de palavras candidatas a formar um anagrama
+    """
+    candidatos_a_anagrama = []
+    for posicao_candidato_na_lista, candidato in enumerate(candidatos):
+        lista = []
+        lista.append(candidato[0])
+        letras_faltantes = obtem_contagem_letras_faltantes_para_um_anagrama(
+            letras_expressao_atual, lista)
+        total_letras_faltantes = obtem_total_letras(letras_faltantes)
+        candidatos_a_anagrama.append(
+            (lista, posicao_candidato_na_lista, total_letras_faltantes, letras_faltantes))
+
+    return candidatos_a_anagrama
 
 
 def obtem_total_letras(letras_faltantes):
@@ -387,4 +452,7 @@ if __name__ == "__main__":
     print(processa_arquivo_de_palavras.__doc__)
     print(gera_lista_candidatos.__doc__)
     print(imprimir_todos_os_anagramas.__doc__)
+    print(gera_lista_anagramas.__doc__)
+    print(busca_novos_anagramas.__doc__)
+    print(filtra_candidatos_a_anagrama_invalidos.__doc__)
     main(sys.argv)
