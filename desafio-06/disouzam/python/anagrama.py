@@ -44,7 +44,6 @@ def main(args):
     palavras_e_letras = processa_arquivo_de_palavras(
         caminho_do_arquivo_com_as_palavras)
 
-    # imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras)
     imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras)
 
 
@@ -64,8 +63,13 @@ def imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
 
 
 def gera_lista_candidatos(letras_expressao_atual, palavras_e_letras):
-    """
-        Gera lista de candidatos a compor o anagrama
+    """gera_lista_candidatos(letras_expressao_atual, palavras_e_letras):
+    Gera lista de candidatos a compor o anagrama a partir de um dicionário de letras da 
+    expressão atual e da lista de palavras do idioma selecionado
+
+    Parâmetros:
+    letras_expressao_atual: dicionário de letras da expressão atual e sua contagem de ocorrências
+    palavras_e_letras: lista de tuplas com as palavras e a respectiva contagem de letras
     """
     lista_candidatos = []
 
@@ -378,4 +382,5 @@ if __name__ == "__main__":
     print(obtem_contagem_de_letras.__doc__)
     print(obtem_caminho_do_arquivo_com_as_palavras.__doc__)
     print(processa_arquivo_de_palavras.__doc__)
+    print(gera_lista_candidatos.__doc__)
     main(sys.argv)
