@@ -47,8 +47,12 @@ def main(args):
 
 
 def imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
-    """
-        Imprime todos os anagramas existentes
+    """imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
+    Imprime todos os anagramas existentes
+
+    Pârametros:
+    letras_expressao_atual: dicionário de letras da expressão atual e sua contagem de ocorrências
+    palavras_e_letras: lista de tuplas com as palavras e a respectiva contagem de letras
     """
     lista_candidatos = gera_lista_candidatos(
         letras_expressao_atual, palavras_e_letras)
@@ -382,4 +386,5 @@ if __name__ == "__main__":
     print(obtem_caminho_do_arquivo_com_as_palavras.__doc__)
     print(processa_arquivo_de_palavras.__doc__)
     print(gera_lista_candidatos.__doc__)
+    print(imprimir_todos_os_anagramas.__doc__)
     main(sys.argv)
