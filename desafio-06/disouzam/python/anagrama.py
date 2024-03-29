@@ -69,7 +69,7 @@ def gera_lista_candidatos(letras_expressao_atual, palavras_e_letras):
     """
     lista_candidatos = []
 
-    for _, palavra_candidata in enumerate(palavras_e_letras):
+    for palavra_candidata in palavras_e_letras:
         if palavra_e_candidata(
                 letras_expressao_atual, palavra_candidata[1]):
 
@@ -264,18 +264,15 @@ def processa_arquivo_de_palavras(file_path):
     Parâmetros:
     file_path: Caminho do arquivo contendo as palavras do idioma selecionado
     """
-    palavras_e_letras = {}
+    palavras_e_letras = []
 
     with open(file_path, "r", encoding='UTF-8') as words_file:
         for word in words_file:
             word = word.strip()
-            palavras_e_letras[word] = obtem_contagem_de_letras(word)
+            contagem_de_letras = obtem_contagem_de_letras(word)
+            palavras_e_letras.append((word, contagem_de_letras))
 
-    items = palavras_e_letras.items()
-    data = list(items)
-    palavras_e_letras_como_array = np.array(data)
-
-    return palavras_e_letras_como_array
+    return palavras_e_letras
 
 
 def palavra_e_candidata(letras_expressao_atual, letras_palavra_candidata):
