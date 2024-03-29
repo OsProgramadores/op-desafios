@@ -442,23 +442,34 @@ def e_valida(expressao):
     return True
 
 
+def debugger_is_active() -> bool:
+    """Return if the debugger is currently active
+
+    # pylint: disable=line-too-long
+    Source: https://stackoverflow.com/questions/38634988/check-if-program-runs-in-debug-mode/67065084#67065084
+    """
+    return hasattr(sys, 'gettrace') and sys.gettrace() is not None
+
+
 if __name__ == "__main__":
-    print(main.__doc__)
-    print(obtem_contagem_de_letras.__doc__)
-    print(obtem_caminho_do_arquivo_com_as_palavras.__doc__)
-    print(processa_arquivo_de_palavras.__doc__)
-    print(gera_lista_candidatos.__doc__)
-    print(imprimir_todos_os_anagramas.__doc__)
-    print(gera_lista_anagramas.__doc__)
-    print(busca_novos_anagramas.__doc__)
-    print(filtra_candidatos_a_anagrama_invalidos.__doc__)
-    print(obtem_total_letras.__doc__)
-    print(e_um_anagrama.__doc__)
-    print(e_valida.__doc__)
-    print(converte_expressao.__doc__)
-    print(conta_letras_de_uma_lista.__doc__)
-    print(obtem_contagem_letras_faltantes_para_um_anagrama.__doc__)
-    print(palavra_e_candidata.__doc__)
-    print(obtem_candidatos_iniciais.__doc__)
-    print(gera_lista_anagramas_sem_repeticao.__doc__)
+    if debugger_is_active():
+        print(main.__doc__)
+        print(obtem_contagem_de_letras.__doc__)
+        print(obtem_caminho_do_arquivo_com_as_palavras.__doc__)
+        print(processa_arquivo_de_palavras.__doc__)
+        print(gera_lista_candidatos.__doc__)
+        print(imprimir_todos_os_anagramas.__doc__)
+        print(gera_lista_anagramas.__doc__)
+        print(busca_novos_anagramas.__doc__)
+        print(filtra_candidatos_a_anagrama_invalidos.__doc__)
+        print(obtem_total_letras.__doc__)
+        print(e_um_anagrama.__doc__)
+        print(e_valida.__doc__)
+        print(converte_expressao.__doc__)
+        print(conta_letras_de_uma_lista.__doc__)
+        print(obtem_contagem_letras_faltantes_para_um_anagrama.__doc__)
+        print(palavra_e_candidata.__doc__)
+        print(obtem_candidatos_iniciais.__doc__)
+        print(gera_lista_anagramas_sem_repeticao.__doc__)
+        print(obtem_lista_ordenada_como_strings.__doc__)
     main(sys.argv)
