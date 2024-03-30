@@ -3,9 +3,7 @@
 """
 from ctypes import ArgumentError
 import os
-import string
 import sys
-import re
 
 
 def main(args):
@@ -24,9 +22,13 @@ def main(args):
 
     # Validação dos argumentos
     if len(args) == 2:
-        pass
+        caminho_do_arquivo = args[1]
+        if not os.path.isfile(caminho_do_arquivo):
+            raise FileNotFoundError("Arquivo inexistente ou caminho inválido.")
     else:
-        raise ArgumentError("Número excessivo de argumentos.")
+        raise ArgumentError(
+            "Número excessivo de argumentos. \
+            Apenas um argumento com o caminho do arquivo é aceito.")
 
     print("Draft of main function")
 
