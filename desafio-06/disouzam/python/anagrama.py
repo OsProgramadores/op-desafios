@@ -16,8 +16,8 @@ def main(args):
     e imprime os anagramas existentes a partir de uma busca no arquivo words.txt.
 
     Parâmetros:
-    args: Lista de argumentos recebido da linha de comando e 
-          pré-processado na chamada da função main. Deve conter 2 argumentos e 
+    args: Lista de argumentos recebido da linha de comando e
+          pré-processado na chamada da função main. Deve conter 2 argumentos e
           o segundo é uma expressão a ser processada em busca dos anagramas.
     """
     expressao = ""
@@ -179,7 +179,7 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos, candidatos_a_anagra
 
 def filtra_candidatos_a_anagrama_invalidos(candidatos_a_anagrama,
                                            numero_inicial_candidatos_a_anagrama):
-    """filtra_candidatos_a_anagrama_invalidos(candidatos_a_anagrama, 
+    """filtra_candidatos_a_anagrama_invalidos(candidatos_a_anagrama,
                                                 numero_inicial_candidatos_a_anagrama):
     Filtra os candidatos a anagrama que já estão desatualizados (foram incrementalmente modificados)
 
@@ -206,11 +206,11 @@ def busca_novos_anagramas(letras_expressao_atual,
                           candidatos_a_anagrama,
                           posicao_candidato_a_anagrama,
                           candidato_inicial):
-    """busca_novos_anagramas(letras_expressao_atual, 
+    """busca_novos_anagramas(letras_expressao_atual,
                           candidatos,
                           viabilidade_candidatos
-                          candidatos_a_anagrama, 
-                          posicao_candidato_a_anagrama, 
+                          candidatos_a_anagrama,
+                          posicao_candidato_a_anagrama,
                           candidato_inicial):
     Busca novas combinações que possam ser candidatos em potencial de um anagrama
 
@@ -255,7 +255,7 @@ def busca_novos_anagramas(letras_expressao_atual,
 
 def obtem_candidatos_iniciais(letras_expressao_atual, candidatos):
     """obtem_candidatos_iniciais(letras_expressao_atual, candidatos):
-    Obtém a lista inicial de candidatos a anagrama a partir de uma lista simples de palavras 
+    Obtém a lista inicial de candidatos a anagrama a partir de uma lista simples de palavras
     candidatas e as letras da expressão atual
 
     Parâmetros:
@@ -326,7 +326,7 @@ def obtem_caminho_do_arquivo_com_as_palavras():
 
 def processa_arquivo_de_palavras(file_path):
     """processa_arquivo_de_palavras(file_path):
-    Processa o arquivo 'words.txt' e retorna um vetor de tuplas com a palavra como primeiro item e 
+    Processa o arquivo 'words.txt' e retorna um vetor de tuplas com a palavra como primeiro item e
     a contagem de letras como segundo item
 
     Parâmetros:
@@ -350,7 +350,7 @@ def palavra_e_candidata(letras_expressao_atual, letras_palavra_candidata):
 
     Parâmetros:
     letras_expressao_atual: dicionário de letras da expressão atual e sua contagem de ocorrências
-    letras_palavra_candidata: dicionário de letras da palavra candidata com sua 
+    letras_palavra_candidata: dicionário de letras da palavra candidata com sua
                               contagem de ocorrências
     """
     if not isinstance(letras_palavra_candidata, dict):
@@ -371,7 +371,7 @@ def obtem_contagem_de_letras(expressao):
     de ocorrências.
 
     Parâmetros:
-    expressao: Uma palavra ou frase contendo somente letras e espaços. 
+    expressao: Uma palavra ou frase contendo somente letras e espaços.
                Acentos e pontuação não são permitidos.
     """
     contagem_letras = {}
