@@ -132,6 +132,7 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos, candidatos_a_anagra
     candidatos: lista de palavras candidatas a formar um anagrama
     candidatos_a_anagrama: lista de candidatos a anagrama em construção incremental
     """
+
     # caso-base: adiciona cada palavra candidata como um possível anagrama
     if len(candidatos_a_anagrama) == 0:
         candidatos_a_anagrama = obtem_candidatos_iniciais(
@@ -139,26 +140,38 @@ def gera_lista_anagramas(letras_expressao_atual, candidatos, candidatos_a_anagra
 
     # caso-geral
     total_candidatos = len(candidatos)
+    candidatos_continuam_viaveis = [False] * len(candidatos)
     numero_inicial_candidatos_a_anagrama = len(candidatos_a_anagrama)
 
+    candidatos_a_anagrama_nao_filtrado = candidatos_a_anagrama.copy()
     for posicao_candidato_a_anagrama, candidato_inicial in enumerate(candidatos_a_anagrama):
-        candidatos_a_anagrama = busca_novos_anagramas(letras_expressao_atual,
-                                                      candidatos,
-                                                      candidatos_a_anagrama,
-                                                      total_candidatos,
-                                                      posicao_candidato_a_anagrama,
-                                                      candidato_inicial)
+        candidatos_a_anagrama_nao_filtrado = busca_novos_anagramas(letras_expressao_atual,
+                                                                   candidatos,
+                                                                   candidatos_continuam_viaveis,
+                                                                   candidatos_a_anagrama_nao_filtrado,
+                                                                   total_candidatos,
+                                                                   posicao_candidato_a_anagrama,
+                                                                   candidato_inicial)
 
     candidatos_a_anagrama = filtra_candidatos_a_anagrama_invalidos(
-        candidatos_a_anagrama, numero_inicial_candidatos_a_anagrama)
+        candidatos_a_anagrama_nao_filtrado, numero_inicial_candidatos_a_anagrama)
 
     # Verifica se há candidatos que necessitam de busca extra
     nova_busca = False
     for candidato in candidatos_a_anagrama:
         if candidato[2] != 0:
             nova_busca = True
+            break
 
     if nova_busca:
+        candidatos_filtrados = []
+
+        for posicao, item in enumerate(candidatos):
+            if candidatos_continuam_viaveis[posicao]:
+                candidatos_filtrados.append(item)
+
+        candidatos = candidatos_filtrados
+
         candidatos_a_anagrama = gera_lista_anagramas(letras_expressao_atual,
                                                      candidatos, candidatos_a_anagrama)
 
@@ -188,22 +201,27 @@ def filtra_candidatos_a_anagrama_invalidos(candidatos_a_anagrama,
     return candidatos_a_anagrama_atualizado
 
 
-def busca_novos_anagramas(letras_expressao_atual, candidatos,
+def busca_novos_anagramas(letras_expressao_atual,
+                          candidatos,
+                          viabilidade_candidatos,
                           candidatos_a_anagrama,
                           total_candidatos,
                           posicao_candidato_a_anagrama,
                           candidato_inicial):
-    """busca_novos_anagramas(letras_expressao_atual, candidatos, 
+    """busca_novos_anagramas(letras_expressao_atual, 
+                          candidatos,
+                          viabilidade_candidatos
                           candidatos_a_anagrama, 
                           total_candidatos, 
                           posicao_candidato_a_anagrama, 
                           candidato_inicial):
-
     Busca novas combinações que possam ser candidatos em potencial de um anagrama
 
     Parâmetros:
     letras_expressao_atual: dicionário de letras da expressão atual e sua contagem de ocorrências
     candidatos: lista de palavras candidatas a formar um anagrama
+    viabilidade_candidatos: registra se houve uso de algum dos candidatos em uma busca completa pela
+                            lista de candidatos
     candidatos_a_anagrama: lista de candidatos a anagrama em construção incremental
     total_candidatos: total de candidatos simples da lista de palavras
     posicao_candidato_a_anagrama: posição do último candidato que entrou no anagrama em construção
@@ -214,6 +232,7 @@ def busca_novos_anagramas(letras_expressao_atual, candidatos,
         proximo_candidato = posicao_ultimo_candidato_inserido + 1
 
         for posicao_novo_candidato in range(proximo_candidato, total_candidatos):
+            viabilidade_candidatos[posicao_novo_candidato] = True
             novo_candidato = candidatos[posicao_novo_candidato]
             letras_faltantes = candidatos_a_anagrama[posicao_candidato_a_anagrama][3]
 
