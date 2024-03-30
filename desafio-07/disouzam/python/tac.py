@@ -30,14 +30,26 @@ def main(args):
             "Número excessivo de argumentos. \
             Apenas um argumento com o caminho do arquivo é aceito.")
 
-    print("Draft of main function")
+    imprimir_arquivo_em_ordem_normal(caminho_do_arquivo)
+
+
+def imprimir_arquivo_em_ordem_normal(caminho_do_arquivo):
+    """imprimir_arquivo_em_ordem_normal(caminho_do_arquivo):
+    Abre o arquivo especificado pelo caminho fornecido e imprime seu conteúdo em ordem normal
+
+    Parâmetros:
+    caminho_do_arquivo: Caminho do arquivo no disco
+    """
+    with open(caminho_do_arquivo, "r", encoding="utf-8") as arquivo:
+        for linha in arquivo:
+            print(linha, end='')
 
 
 def debugger_is_active() -> bool:
     """Return if the debugger is currently active
 
     # pylint: disable=line-too-long
-    Source: https://stackoverflow.com/questions/38634988/check-if-program-runs-in-debug-mode/67065084#67065084
+    Source: https://stackoverflow.com/questions/38634988/check-if-program-runs-in-debug-mode/67065084
     """
     return hasattr(sys, 'gettrace') and sys.gettrace() is not None
 
