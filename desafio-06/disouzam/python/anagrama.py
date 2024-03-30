@@ -105,7 +105,7 @@ def gera_lista_anagramas_sem_repeticao(lista_anagramas):
 
 def gera_lista_candidatos(letras_expressao_atual, palavras_e_letras):
     """gera_lista_candidatos(letras_expressao_atual, palavras_e_letras):
-    Gera lista de candidatos a compor o anagrama a partir de um dicionário de letras da 
+    Gera lista de candidatos a compor o anagrama a partir de um dicionário de letras da
     expressão atual e da lista de palavras do idioma selecionado
 
     Parâmetros:
