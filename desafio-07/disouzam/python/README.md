@@ -23,8 +23,13 @@ pylint --rcfile=../../../ci/pylint3.rc tac.py
 gzip -d 1GB.txt.gz
 ```
 
+Verificação da integridade do arquivo usando o tac
 ```shell
-python -m tac 1GB.txt | md5sum
+tac 1GB.txt | md5sum
+```
+
+Resultado: 
+```
 2b4fd25f11d75c285ec69ecac420bd07
 ```
 
@@ -36,6 +41,16 @@ Executando dentro da pasta do desafio (desafio-07/disouzam/python), o comando pa
 
 ```python
 python -m tac 1GB.txt
+```
+
+Teste e conferência dos resultados:
+```shell
+python -m tac 1GB.txt | md5sum
+```
+
+Resultado esperado:
+```shell
+2b4fd25f11d75c285ec69ecac420bd07
 ```
 
 Usando um arquivo mais simples, extraído da página de instruções do desafio ([#7: UNIX TAC](https://osprogramadores.com/desafios/d07/)) para fins de desenvolvimento, o comando é:
