@@ -1,5 +1,6 @@
 """
-    Implementação do comando _tac_ que lê um arquivo e exibe as linhas em ordem inversa - da última para a primeira
+    Implementação do comando _tac_ que lê um arquivo e exibe as linhas em ordem inversa
+    - da última linha para a primeira a primeira linha
 """
 from ctypes import ArgumentError
 import os
@@ -54,13 +55,13 @@ def imprimir_arquivo_em_ordem_reversa(caminho_do_arquivo):
     caminho_do_arquivo: Caminho do arquivo no disco
     """
     numero_linhas_arquivo = obter_a_ultima_linha_do_arquivo(caminho_do_arquivo)
-    with open(caminho_do_arquivo, "r", encoding="utf-8") as arquivo:
-        numero_da_linha = numero_linhas_arquivo
-        while numero_da_linha >= 1:
-            conteudo_linha = linecache.getline(
-                caminho_do_arquivo, numero_da_linha)
-            print(conteudo_linha, end='')
-            numero_da_linha -= 1
+
+    numero_da_linha = numero_linhas_arquivo
+    while numero_da_linha >= 1:
+        conteudo_linha = linecache.getline(
+            caminho_do_arquivo, numero_da_linha)
+        print(conteudo_linha, end='')
+        numero_da_linha -= 1
 
 
 def obter_a_ultima_linha_do_arquivo(caminho_do_arquivo):
@@ -100,16 +101,18 @@ def obter_a_ultima_linha_do_arquivo(caminho_do_arquivo):
             caminho_do_arquivo, meio + 1)
 
         # Caso 1: linha do meio e a seguinte estão no meio do arquivo de fato
-        if conteudo_linha_meio != linha_inexistente and conteudo_linha_seguinte != linha_inexistente:
+        if linha_inexistente not in (conteudo_linha_meio, conteudo_linha_seguinte):
             meio = meio + int((ultimo - meio)/2)
 
         # Caso 2: linha do meio e a seguinte estão após o final do arquivo
-        if conteudo_linha_meio == linha_inexistente and conteudo_linha_seguinte == linha_inexistente:
+        if conteudo_linha_meio == linha_inexistente and \
+                conteudo_linha_seguinte == linha_inexistente:
             ultimo = meio + 1
             meio = int(ultimo/2)
 
         # Caso 3: linha do meio é a última linha do arquivo
-        if conteudo_linha_meio != linha_inexistente and conteudo_linha_seguinte == linha_inexistente:
+        if conteudo_linha_meio != linha_inexistente and \
+                conteudo_linha_seguinte == linha_inexistente:
             break
 
     result = meio
