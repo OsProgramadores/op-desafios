@@ -31,8 +31,7 @@ def main(args):
             "Número excessivo de argumentos. \
             Apenas um argumento com o caminho do arquivo é aceito.")
 
-    numero_linhas_arquivo = obter_a_ultima_linha_do_arquivo(caminho_do_arquivo)
-    print(numero_linhas_arquivo)
+    imprimir_arquivo_em_ordem_reversa(caminho_do_arquivo)
 
 
 def imprimir_arquivo_em_ordem_normal(caminho_do_arquivo):
@@ -45,6 +44,23 @@ def imprimir_arquivo_em_ordem_normal(caminho_do_arquivo):
     with open(caminho_do_arquivo, "r", encoding="utf-8") as arquivo:
         for linha in arquivo:
             print(linha, end='')
+
+
+def imprimir_arquivo_em_ordem_reversa(caminho_do_arquivo):
+    """imprimir_arquivo_em_ordem_reversa(caminho_do_arquivo):
+    Abre o arquivo especificado pelo caminho fornecido e imprime seu conteúdo em ordem reversa
+
+    Parâmetros:
+    caminho_do_arquivo: Caminho do arquivo no disco
+    """
+    numero_linhas_arquivo = obter_a_ultima_linha_do_arquivo(caminho_do_arquivo)
+    with open(caminho_do_arquivo, "r", encoding="utf-8") as arquivo:
+        numero_da_linha = numero_linhas_arquivo
+        while numero_da_linha >= 1:
+            conteudo_linha = linecache.getline(
+                caminho_do_arquivo, numero_da_linha)
+            print(conteudo_linha, end='')
+            numero_da_linha -= 1
 
 
 def obter_a_ultima_linha_do_arquivo(caminho_do_arquivo):
