@@ -57,16 +57,33 @@ def imprimir_arquivo_em_ordem_reversa(caminho_do_arquivo):
     numero_linhas_arquivo = obter_a_ultima_linha_do_arquivo(caminho_do_arquivo)
 
     numero_da_linha = numero_linhas_arquivo
-    while numero_da_linha >= 1:
-        conteudo_linha = linecache.getline(
-            caminho_do_arquivo, numero_da_linha)
-        if '\r\n' in conteudo_linha:
-            conteudo_linha = conteudo_linha[:-2]
-        else:
-            conteudo_linha = conteudo_linha[:-1]
 
-        print(conteudo_linha, end='\n')
-        numero_da_linha -= 1
+    temp_file = "temp_file.txt"
+    if os.path.exists(temp_file):
+        os.remove(temp_file)
+
+    with open(temp_file, "a", encoding="utf-8", newline="\n") as arquivo_temporario:
+        while numero_da_linha >= 1:
+            conteudo_linha = linecache.getline(
+                caminho_do_arquivo, numero_da_linha)
+
+            if '\r\n' in conteudo_linha:
+                conteudo_linha = conteudo_linha[:-2]
+
+            if '\n' in conteudo_linha:
+                conteudo_linha = conteudo_linha[:-1]
+
+            conteudo_linha = conteudo_linha + "\n"
+            arquivo_temporario.write(conteudo_linha)
+            numero_da_linha -= 1
+
+    with open(temp_file, "r", encoding="utf-8", newline="\n") as arquivo_temporario:
+        for line in arquivo_temporario:
+            if '\r\n' in line:
+                line = line[:-2]
+            if '\n' in line:
+                line = line[:-1]
+            print(line, end="\n")
 
 
 def obter_a_ultima_linha_do_arquivo(caminho_do_arquivo):
