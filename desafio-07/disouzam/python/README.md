@@ -59,4 +59,19 @@ Usando um arquivo mais simples, extraído da página de instruções do desafio 
 python -m tac exemplo1.txt
 ```
 
-# Referências
+# Verificação em estágios
+
+Conforme explicado no commit **9597e92** - O conteúdo revertido é escrito também num arquivo temporário para verificação, alguma razão não esclarecida faz que o md5sum obtido usando pipes no shell (f742e75495168191e16793cd3eea2902) não coincida com o md5sum esperado (2b4fd25f11d75c285ec69ecac420bd07). Suspeita-se que tenha a ver com o caracter de final de linha ou algo específico do sistema Windows. Várias tentativas foram feitas e muitas buscas na internet para tentar resolver o problema mas não consegui uma boa solução até o momento.
+
+A solução que eu apresento é retornar o conteúdo revertido usando o mecanismo do tac original em um arquivo temporário (_temp_file.txt_) e verificar o md5sum usando o cat nesse arquivo. Veja abaixo exemplos da simulação e uma imagem será inserida no pull request
+
+```shell
+python -m tac 1GB.txt | md5sum
+f742e75495168191e16793cd3eea2902
+
+cat temp_file.txt | md5sum
+2b4fd25f11d75c285ec69ecac420bd07
+
+tac 1GB.txt | md5sum
+2b4fd25f11d75c285ec69ecac420bd07
+```

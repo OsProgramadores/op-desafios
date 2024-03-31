@@ -67,6 +67,8 @@ def imprimir_arquivo_em_ordem_reversa(caminho_do_arquivo):
             conteudo_linha = linecache.getline(
                 caminho_do_arquivo, numero_da_linha)
 
+            conteudo_linha = str(conteudo_linha)
+
             if '\r\n' in conteudo_linha:
                 conteudo_linha = conteudo_linha[:-2]
 
