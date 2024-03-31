@@ -24,7 +24,7 @@ gzip -d 1GB.txt.gz
 ```
 
 ```shell
-seu_programa 1GB.txt | md5sum
+python -m tac 1GB.txt | md5sum
 2b4fd25f11d75c285ec69ecac420bd07
 ```
 
