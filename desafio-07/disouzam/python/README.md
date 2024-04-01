@@ -28,7 +28,7 @@ Verificação da integridade do arquivo usando o tac
 tac 1GB.txt | md5sum
 ```
 
-Resultado: 
+Resultado:
 ```
 2b4fd25f11d75c285ec69ecac420bd07
 ```
