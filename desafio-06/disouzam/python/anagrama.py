@@ -30,7 +30,7 @@ def main(args):
     if len(args) >= 2:
         expressao = args[1]
         expressao = converte_expressao(expressao)
-        if not e_valida(expressao):
+        if not expressao_e_valida(expressao):
             raise ArgumentError("Expressão contém caracteres inválidos")
 
     if len(args) > 2:
@@ -450,8 +450,8 @@ def converte_expressao(expressao):
     return result
 
 
-def e_valida(expressao):
-    """e_valida(expressao):
+def expressao_e_valida(expressao):
+    """expressao_e_valida(expressao):
     Verifica se a expressão fornecida como argumento contém caracteres inválidos
 
     Parâmetro:
