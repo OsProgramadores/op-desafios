@@ -2,8 +2,8 @@
 README.html
 
 # Configuração do ambiente Python
-create_python3.12_environment.sh
+create_python3.11_environment.sh
 setup.sh
-activate_python3.12_environment.sh
+activate_python3.11_environment.sh
 requirements.in
 *.txt
