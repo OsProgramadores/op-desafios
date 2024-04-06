@@ -29,7 +29,7 @@ def main(args):
     # Validação dos argumentos
     if len(args) >= 2:
         expressao = args[1]
-        expressao = converte_expressao(expressao)
+        expressao = expressao.upper().replace(" ", "")
         if not expressao_e_valida(expressao):
             raise ArgumentError("Expressão contém caracteres inválidos")
 
@@ -444,23 +444,6 @@ def conta_letras_de_uma_lista(lista_de_strings):
         else:
             contagem_letras[letra] = 1
     return contagem_letras
-
-
-def converte_expressao(expressao):
-    """converte_expressao(expressao):
-    Converte expressão para letras maiúsculas e remove os espaços existentes
-
-    Parâmetro:
-    expressao: palavra ou frase a ser processada em busca de anagramas
-    """
-    # Primeiro converte todas as letras em maiúsculas
-    result = expressao.upper()
-
-    # pylint: disable=line-too-long
-    # Depois remove os espaços em branco https://www.digitalocean.com/community/tutorials/python-remove-spaces-from-string#remove-all-spaces-using-the-replace-method
-    result = result.replace(" ", "")
-
-    return result
 
 
 def expressao_e_valida(expressao):
