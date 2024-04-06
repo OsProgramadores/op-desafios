@@ -27,15 +27,25 @@ def main(args):
         raise ArgumentError("Nenhum argumento foi fornecido.")
 
     # Validação dos argumentos
-    if len(args) == 2:
+    if len(args) >= 2:
         expressao = args[1]
         expressao = converte_expressao(expressao)
         if not e_valida(expressao):
             raise ArgumentError("Expressão contém caracteres inválidos")
-    else:
-        # pylint: disable=line-too-long
-        raise ArgumentError(
-            "Número excessivo de argumentos. Apenas um argumento como string é necessário para determinar os anagramas existentes.")
+
+    if len(args) > 2:
+        mensagem1 = f"Você informou um número excessivo de argumentos ({
+            len(args) - 1}). "
+        mensagem1 += "Apenas um argumento como string é necessário para "
+        mensagem1 += "determinar os anagramas existentes."
+        print(mensagem1)
+
+        mensagem2 = "Deseja prosseguir ignorando os demais argumentos? (S para Sim e N para não)"
+        escolha_do_usuario = input(mensagem2)
+
+        if escolha_do_usuario.lower() != "s":
+            print("Programa abortado.")
+            return
 
     letras_expressao_atual = obtem_contagem_de_letras(expressao)
     caminho_do_arquivo_com_as_palavras = obtem_caminho_do_arquivo_com_as_palavras()
