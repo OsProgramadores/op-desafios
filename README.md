@@ -121,7 +121,7 @@ Onde:
   * `javascript`: Javascript
   * `go`: Go
   * `php`: PHP
-  * `python`: Python (versão 3.x)
+  * `python`: Python (versão 3.x até versão 3.11.8. Há breaking changes no tratamento de f-strings na versão 3.12.x que podem apresentar comportamento instável na execução de código do desafio)
 
 > Nota: Apenas desafios feitos em uma das linguagens acima serão aceitos.
 
