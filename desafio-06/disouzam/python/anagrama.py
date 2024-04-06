@@ -52,12 +52,14 @@ def main(args):
     palavras_e_letras = processa_arquivo_de_palavras(
         caminho_do_arquivo_com_as_palavras)
 
-    imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras)
+    anagramas = encontrar_anagramas(letras_expressao_atual, palavras_e_letras)
+    imprimir_todos_os_anagramas(anagramas)
 
 
-def imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
-    """imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
-    Imprime todos os anagramas existentes
+def encontrar_anagramas(letras_expressao_atual, palavras_e_letras):
+    """encontrar_anagramas(letras_expressao_atual, palavras_e_letras):
+    Encontra todos os anagramas existentes a partir das letras da expressão atual e
+    das palavras e letras do idioma selecionado
 
     Pârametros:
     letras_expressao_atual: dicionário de letras da expressão atual e sua contagem de ocorrências
@@ -75,7 +77,18 @@ def imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
 
     lista_ordenada = obtem_lista_ordenada_como_strings(
         lista_anagramas_sem_repeticao)
-    for item in lista_ordenada:
+
+    return lista_ordenada
+
+
+def imprimir_todos_os_anagramas(anagramas):
+    """imprimir_todos_os_anagramas(letras_expressao_atual, palavras_e_letras):
+    Imprime todos os anagramas existentes
+
+    Pârametros:
+    anagramas: Lista ordenada dos anagramas a serem impressos
+    """
+    for item in anagramas:
         print(item)
 
 
