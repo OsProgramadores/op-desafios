@@ -8,10 +8,10 @@ Processa uma palavra ou frase e retorna todas as combinações possíveis de ana
 O comando a seguir altera o diretório para a pasta do desafio:
 
 ```shell
-cd desafio-06/disouzam/python
+cd desafio-08/disouzam/python
 ```
 
-Executando dentro da pasta do desafio (desafio-06/disouzam/python), o comando para verificar o código através do Pylint é:
+Executando dentro da pasta do desafio (desafio-08/disouzam/python), o comando para verificar o código através do Pylint é:
 
 ```python
 pylint --rcfile=../../../ci/pylint3.rc anagrama.py
@@ -21,7 +21,7 @@ pylint --rcfile=../../../ci/pylint3.rc anagrama.py
 
 Esse código foi testado com a versão 3.12.1 do Python e pode apresentar alguma instabilidade com o Python 3.11 (não foi checado contra essa versão).
 
-Executando dentro da pasta do desafio (desafio-06/disouzam/python), o comando é (com uma palavra de exemplo):
+Executando dentro da pasta do desafio (desafio-08/disouzam/python), o comando é (com uma palavra de exemplo):
 
 ```python
 python -m anagrama "vermelho"
