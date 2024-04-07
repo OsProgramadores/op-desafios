@@ -68,6 +68,26 @@ def obtem_fracoes_simples(elementos_fracoes):
                        inteiro, 2 quando existe numerador e denominador
     """
     fracoes_simples = []
+
+    for fracao in elementos_fracoes:
+        if len(fracao) == 1:
+            fracoes_simples.append(str(fracao[0]))
+        elif len(fracao) == 2:
+            if int(fracao[1]) == 0:
+                fracoes_simples.append("ERR")
+            else:
+                numerador = int(fracao[0])
+                denominador = int(fracao[1])
+
+                parte_inteira = int(numerador/denominador)
+                resto = numerador % denominador
+
+                if resto == 0:
+                    fracoes_simples.append(str(parte_inteira))
+                else:
+                    fracao_como_string = f"{parte_inteira} {resto}/{denominador}"
+                    fracoes_simples.append(fracao_como_string)
+
     return fracoes_simples
 
 # TODO: Remover antes da submissão do PR
