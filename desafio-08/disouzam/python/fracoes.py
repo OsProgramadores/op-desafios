@@ -31,14 +31,11 @@ def main(args):
             mensagem1 = "Arquivo não encontrado. Caminho fornecido ou nome do arquivo incorreto."
             print(mensagem1)
             return
-        # TODO: Remover antes da submissão do PR
         else:
             with open(caminho_do_arquivo_fracoes, "r", encoding='utf-8') as arquivo:
                 for linha in arquivo:
-                    print(linha, end="")
                     linha_processada = linha.split("\n")
                     numerador_e_denominador = linha_processada[0].split("/")
-                    print(numerador_e_denominador)
                     elementos_fracoes.append(numerador_e_denominador)
 
     if nargs >= 2:
@@ -53,8 +50,6 @@ def main(args):
         if escolha_do_usuario.lower() != "s":
             print("Programa abortado.")
             return
-        
-    
 
 
 # TODO: Remover antes da submissão do PR
