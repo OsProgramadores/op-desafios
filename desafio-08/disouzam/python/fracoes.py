@@ -51,8 +51,28 @@ def main(args):
             print("Programa abortado.")
             return
 
+    fracoes_simples = obtem_fracoes_simples(elementos_fracoes)
+
+    for fracao in fracoes_simples:
+        print(fracao)
+
+
+def obtem_fracoes_simples(elementos_fracoes):
+    """obtem_fracoes_simples(elementos_fracoes):
+    Processa uma lista contendo listas com elementos de frações e retorna uma lista de strings
+    com as frações transformadas em frações simples, números inteiros ou ERR quando houver erro como
+    por exemplo divisão por zero.
+
+    Parâmetro:
+    elementos_fracoes: Lista de listas onde cada sublista tem 1 ou 2 elementos, 1 quando é um número
+                       inteiro, 2 quando existe numerador e denominador
+    """
+    fracoes_simples = []
+    return fracoes_simples
 
 # TODO: Remover antes da submissão do PR
+
+
 def debugger_is_active() -> bool:
     """Return if the debugger is currently active
 
@@ -66,6 +86,7 @@ if __name__ == "__main__":
     # TODO: Remover antes da submissão do PR
     if debugger_is_active():
         print(main.__doc__)
+        print(obtem_fracoes_simples.__doc__)
 
     filtered_args = sys.argv[1:]
     main(filtered_args)
