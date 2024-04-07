@@ -121,23 +121,7 @@ def obter_maximo_divisor_comum(numero1, numero2):
 
     return mdc
 
-# TODO: Remover antes da submissão do PR
-
-
-def debugger_is_active() -> bool:
-    """Return if the debugger is currently active
-
-    # pylint: disable=line-too-long
-    Source: https://stackoverflow.com/questions/38634988/check-if-program-runs-in-debug-mode/67065084
-    """
-    return hasattr(sys, 'gettrace') and sys.gettrace() is not None
-
 
 if __name__ == "__main__":
-    # TODO: Remover antes da submissão do PR
-    if debugger_is_active():
-        print(main.__doc__)
-        print(obtem_fracoes_simples.__doc__)
-
     filtered_args = sys.argv[1:]
     main(filtered_args)
