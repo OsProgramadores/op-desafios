@@ -34,5 +34,3 @@ Como base para desenvolvimento e checagem dos resultados, o exemplo disponível 
 ```python
 python -m fracoes "exemplo_frac.txt"
 ```
-
-# Referências

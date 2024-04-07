@@ -1,5 +1,4 @@
-"""Processa um arquivo texto e simplifica frações
-"""
+"""Processa um arquivo texto e simplifica frações"""
 from ctypes import ArgumentError
 import os
 import sys
@@ -8,7 +7,7 @@ import sys
 def main(args):
     """main(args):
     Processa o arquivo texto passado como parâmetro contendo frações a serem analisadas e retorna
-    no console 
+    no console
 
     Parâmetros:
     args: Lista de argumentos recebido da linha de comando e
