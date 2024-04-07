@@ -86,12 +86,33 @@ def obtem_fracoes_simples(elementos_fracoes):
                     fracoes_simples.append(str(parte_inteira))
                 else:
                     if parte_inteira == 0:
+                        mdc = obter_maximo_divisor_comum(resto, denominador)
+                        resto = resto / mdc
+                        denominador = denominador / mdc
                         fracao_como_string = f"{resto}/{denominador}"
                     else:
                         fracao_como_string = f"{parte_inteira} {resto}/{denominador}"
                     fracoes_simples.append(fracao_como_string)
 
     return fracoes_simples
+
+
+def obter_maximo_divisor_comum(numero1, numero2):
+    """obter_maximo_divisor_comum(numero1, numero2):
+    Obtém o máximo divisor comum entre dois números
+
+    Parâmetros:
+    numero1, numero2: São números inteiros para os quais se busca o máximo divisor comum
+    """
+    mdc = 1
+    if numero1 < numero2:
+        menor = numero1
+        maior = numero2
+    else:
+        menor = numero2
+        maior = numero1
+
+    return mdc
 
 # TODO: Remover antes da submissão do PR
 
