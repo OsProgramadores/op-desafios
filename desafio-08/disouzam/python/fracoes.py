@@ -85,7 +85,10 @@ def obtem_fracoes_simples(elementos_fracoes):
                 if resto == 0:
                     fracoes_simples.append(str(parte_inteira))
                 else:
-                    fracao_como_string = f"{parte_inteira} {resto}/{denominador}"
+                    if parte_inteira == 0:
+                        fracao_como_string = f"{resto}/{denominador}"
+                    else:
+                        fracao_como_string = f"{parte_inteira} {resto}/{denominador}"
                     fracoes_simples.append(fracao_como_string)
 
     return fracoes_simples
