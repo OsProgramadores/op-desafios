@@ -24,7 +24,17 @@ def main(args):
 
     # Validação dos argumentos
     if nargs >= 1:
-        _ = args[0]
+        caminho_do_arquivo_fracoes = args[0]
+
+        if not os.path.isfile(caminho_do_arquivo_fracoes):
+            mensagem1 = "Arquivo não encontrado. Caminho fornecido ou nome do arquivo incorreto."
+            print(mensagem1)
+            return
+        # TODO: Remover antes da submissão do PR
+        else:
+            with open(caminho_do_arquivo_fracoes, "r", encoding='utf-8') as arquivo:
+                for linha in arquivo:
+                    print(linha, end="")
 
     if nargs >= 2:
         mensagem1 = f"Você informou um número excessivo de argumentos ({nargs}). "
@@ -40,6 +50,7 @@ def main(args):
             return
 
 
+# TODO: Remover antes da submissão do PR
 def debugger_is_active() -> bool:
     """Return if the debugger is currently active
 
@@ -50,6 +61,7 @@ def debugger_is_active() -> bool:
 
 
 if __name__ == "__main__":
+    # TODO: Remover antes da submissão do PR
     if debugger_is_active():
         print(main.__doc__)
 
