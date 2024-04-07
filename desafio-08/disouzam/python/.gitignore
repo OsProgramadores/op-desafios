@@ -7,3 +7,7 @@ setup.sh
 activate_python3.11_environment.sh
 requirements.in
 *.txt
+
+# Arquivos texto com casos de teste para a execução do desafio-08
+!frac.txt
+!exemplo_frac.txt

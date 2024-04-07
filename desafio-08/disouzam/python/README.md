@@ -27,4 +27,12 @@ Executando dentro da pasta do desafio (desafio-08/disouzam/python), o comando é
 python -m fracoes "frac.txt"
 ```
 
+# Testes para desenvolvimento
+
+Como base para desenvolvimento e checagem dos resultados, o exemplo disponível na página do desafio foi reproduzido no arquivo `exemplo_frac.txt`
+
+```python
+python -m fracoes "exemplo_frac.txt"
+```
+
 # Referências
