@@ -9,13 +9,13 @@ import sys
 
 def main(args):
     """main(args):
-    Processa o arquivo texto e retorna as linhas, da última para a primeira, diretamente no
-    console.
+    Processa o arquivo texto passado como parâmetro contendo frações a serem analisadas e retorna
+    no console 
 
     Parâmetros:
     args: Lista de argumentos recebido da linha de comando e
-          pré-processado na chamada da função main. Deve conter 2 argumentos e
-          o segundo é o caminho para o arquivo a ser processado.
+          pré-processado na chamada da função main. Deve conter 1 argumento apenas indicando
+          o caminho relativo ou absoluto do arquivo contendo frações a serem analisadas.
     """
     # Análise dos argumentos recebidos em args
     nargs = len(args)
