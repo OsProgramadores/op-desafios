@@ -31,12 +31,12 @@ def main(args):
             mensagem1 = "Arquivo não encontrado. Caminho fornecido ou nome do arquivo incorreto."
             print(mensagem1)
             return
-        else:
-            with open(caminho_do_arquivo_fracoes, "r", encoding='utf-8') as arquivo:
-                for linha in arquivo:
-                    linha_processada = linha.split("\n")
-                    numerador_e_denominador = linha_processada[0].split("/")
-                    elementos_fracoes.append(numerador_e_denominador)
+
+        with open(caminho_do_arquivo_fracoes, "r", encoding='utf-8') as arquivo:
+            for linha in arquivo:
+                linha_processada = linha.split("\n")
+                numerador_e_denominador = linha_processada[0].split("/")
+                elementos_fracoes.append(numerador_e_denominador)
 
     if nargs >= 2:
         mensagem1 = f"Você informou um número excessivo de argumentos ({nargs}). "
