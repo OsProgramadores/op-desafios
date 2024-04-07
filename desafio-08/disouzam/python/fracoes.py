@@ -85,10 +85,11 @@ def obtem_fracoes_simples(elementos_fracoes):
                 if resto == 0:
                     fracoes_simples.append(str(parte_inteira))
                 else:
+                    mdc = obter_maximo_divisor_comum(resto, denominador)
+                    resto = int(resto / mdc)
+                    denominador = int(denominador / mdc)
+
                     if parte_inteira == 0:
-                        mdc = obter_maximo_divisor_comum(resto, denominador)
-                        resto = int(resto / mdc)
-                        denominador = int(denominador / mdc)
                         fracao_como_string = f"{resto}/{denominador}"
                     else:
                         fracao_como_string = f"{parte_inteira} {resto}/{denominador}"
