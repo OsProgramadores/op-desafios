@@ -18,18 +18,26 @@ def main(args):
           o segundo é o caminho para o arquivo a ser processado.
     """
     # Análise dos argumentos recebidos em args
+    # TODO: Adicionar variável para representar o len(args)
     if len(args) <= 1:
         raise ArgumentError("Nenhum argumento foi fornecido.")
 
     # Validação dos argumentos
-    if len(args) == 2:
-        caminho_do_arquivo = args[1]
-        if not os.path.isfile(caminho_do_arquivo):
-            raise FileNotFoundError("Arquivo inexistente ou caminho inválido.")
-    else:
-        raise ArgumentError(
-            "Número excessivo de argumentos. \
-            Apenas um argumento com o caminho do arquivo é aceito.")
+    if len(args) >= 2:
+        _ = args[1]
+
+    if len(args) > 2:
+        mensagem1 = f"Você informou um número excessivo de argumentos({len(args) - 1}). "
+        mensagem1 += "Apenas um argumento como string é necessário para "
+        mensagem1 += "determinar os anagramas existentes."
+        print(mensagem1)
+
+        mensagem2 = "Deseja prosseguir ignorando os demais argumentos? (S para Sim e N para não)"
+        escolha_do_usuario = input(mensagem2)
+
+        if escolha_do_usuario.lower() != "s":
+            print("Programa abortado.")
+            return
 
 
 def debugger_is_active() -> bool:
