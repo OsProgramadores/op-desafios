@@ -87,8 +87,8 @@ def obtem_fracoes_simples(elementos_fracoes):
                 else:
                     if parte_inteira == 0:
                         mdc = obter_maximo_divisor_comum(resto, denominador)
-                        resto = resto / mdc
-                        denominador = denominador / mdc
+                        resto = int(resto / mdc)
+                        denominador = int(denominador / mdc)
                         fracao_como_string = f"{resto}/{denominador}"
                     else:
                         fracao_como_string = f"{parte_inteira} {resto}/{denominador}"
@@ -104,13 +104,19 @@ def obter_maximo_divisor_comum(numero1, numero2):
     Parâmetros:
     numero1, numero2: São números inteiros para os quais se busca o máximo divisor comum
     """
-    mdc = 1
     if numero1 < numero2:
         menor = numero1
         maior = numero2
     else:
         menor = numero2
         maior = numero1
+
+    mdc = 1
+    divisor = 1
+    while divisor <= menor:
+        if menor % divisor == 0 and maior % divisor == 0:
+            mdc = divisor
+        divisor += 1
 
     return mdc
 
