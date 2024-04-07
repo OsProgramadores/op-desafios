@@ -18,18 +18,18 @@ def main(args):
           o segundo é o caminho para o arquivo a ser processado.
     """
     # Análise dos argumentos recebidos em args
-    # TODO: Adicionar variável para representar o len(args)
-    if len(args) <= 1:
+    nargs = len(args)
+    if nargs == 0:
         raise ArgumentError("Nenhum argumento foi fornecido.")
 
     # Validação dos argumentos
-    if len(args) >= 2:
-        _ = args[1]
+    if nargs >= 1:
+        _ = args[0]
 
-    if len(args) > 2:
-        mensagem1 = f"Você informou um número excessivo de argumentos({len(args) - 1}). "
-        mensagem1 += "Apenas um argumento como string é necessário para "
-        mensagem1 += "determinar os anagramas existentes."
+    if nargs >= 2:
+        mensagem1 = f"Você informou um número excessivo de argumentos ({nargs}). "
+        mensagem1 += "Apenas um argumento que aponte o caminho (relativo ou absoluto) "
+        mensagem1 += "do arquivo contendo frações a serem processadas é necessário."
         print(mensagem1)
 
         mensagem2 = "Deseja prosseguir ignorando os demais argumentos? (S para Sim e N para não)"
@@ -52,4 +52,6 @@ def debugger_is_active() -> bool:
 if __name__ == "__main__":
     if debugger_is_active():
         print(main.__doc__)
-    main(sys.argv)
+
+    filtered_args = sys.argv[1:]
+    main(filtered_args)
