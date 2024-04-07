@@ -1,6 +1,4 @@
-"""
-    Implementação do comando _tac_ que lê um arquivo e exibe as linhas em ordem inversa
-    - da última linha para a primeira a primeira linha
+"""Processa um arquivo texto e simplifica frações
 """
 from ctypes import ArgumentError
 import os
