@@ -8,32 +8,28 @@ public class numerosPrimos {
 		 * linguagem de sua preferência.
 		 */
 
-		int i = 1, qtd =0;
+		int i = 2;
 
-		while (i <= 1000000) {
+		while (i < 10000) {
 			int teste = 0;
-	
-				for (int j = 2; j <= i/2; j++) {
 
-					if (i % j == 0) {
-						teste++;
-						break;
-					}
+			for (int j = 2; j <= i / 2; j++) {
+
+				if (i % j == 0) {
+					teste++;
+					break;
 				}
-		
-			
+			}
+
 			if (teste == 0) {
 				System.out.println(i);
-				qtd++;
 
 			}
 			i++;
-			
 
 		}
-		System.out.println(qtd);
-		
 
 	}
 
 }
+
