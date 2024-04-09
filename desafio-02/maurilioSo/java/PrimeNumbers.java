@@ -6,7 +6,7 @@ public class PrimeNumbers
 	public static void main(String[] args)
 	{
 		// For para iterar entre 2 e 10000
-		for (int i = 1; i <= 10000; i++)
+		for (int i = 0; i <= 10000; i++)
 		{
 			if(isPrime(i))
 			{
