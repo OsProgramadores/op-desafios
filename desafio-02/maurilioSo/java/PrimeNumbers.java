@@ -2,27 +2,26 @@
 public class PrimeNumbers {
 
 	public static void main(String[] args) {
-		//O Programa gera uma lista com os numeros primos entre 1 e 10000.
-
-		int num = 2, max = 10000;
-
-		while(num < max) {
-			int test = 0;
-			for(int i = 2; i <= num / 2; i++) {
-				if(num % i == 0) {
-					test++;
-					break;
-				}
-
+		// For para iterar entre 2 e 10000
+		for (int i = 2; i <= 10000; i++) {
+			if(isPrime(i)) {
+				System.out.println(i);
 			}
 
-			if(test == 0) {
-				System.out.println(num);
-			}
-
-			num++;
 		}
 
+	}
+
+	//Função para verificar se o numero é primo
+	public static boolean isPrime (int num) {
+		for (int i = 2; i <= num / 2; i++) {
+			if (num % i == 0) {
+				return false;
+			}
+
+		}
+
+	return true;
 	}
 
 }
