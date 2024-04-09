@@ -1,5 +1,3 @@
-import java.text.MessageFormat;
-
 public class PrimeNumbers
 {
 
