@@ -9,10 +9,9 @@ Para participar também dos desafios, visite a página em [osprogramadores.com/d
 
 ## Como funciona o código?
 
-O programa tem dois métodos auxiliar para solucionar o desafio: 
+O programa tem dois métodos auxiliar para solucionar o desafio:
 O `toString(int num_s)` Este método converte um número inteiro em sua representação de string, invertendo os dígitos no processo.
 O `ehPalidromico(String a, int num)`: Verifica se a string reversa de um número é igual ao próprio número, retornando verdadeiro se for o caso.
-
 
 O meétodo `Main()` O método principal do programa que itera de 1 a 100000 e imprime os números palindrômicos encontrados utilizando os métodos `toString(int num_s)` e `ehPalidromico(String a, int num)`.
 ## Ferramentas Utilizadas
