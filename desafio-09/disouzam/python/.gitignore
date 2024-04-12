@@ -1,0 +1,9 @@
+# Criado automaticamente ao abrir o README no Visual Studio Code (configuração da extensão que uso para manipular markdowns)
+README.html
+
+# Configuração do ambiente Python
+activate_python3.11_environment.sh
+create_python3.11_environment.sh
+setup.sh
+requirements.in
+*.txt
