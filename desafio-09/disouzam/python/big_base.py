@@ -95,6 +95,9 @@ def obter_numero_convertido(base_entrada, numero_entrada, base_saida):
         valor_elemento = elementos_base_entrada.index(elemento)
         total_em_base_10 += valor_elemento * pow(base_entrada, posicao)
 
+    if total_em_base_10 > 591222134364399413463902591994678504204696392694759423:
+        return valor_para_erro
+
     numero_convertido = []
     numero_remanescente = total_em_base_10
     while numero_remanescente >= base_saida:
