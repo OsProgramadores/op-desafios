@@ -50,6 +50,61 @@ def main(args):
             print("Programa abortado.")
             return
 
+    for elemento_a_converter in elementos_para_conversao:
+        base_entrada = int(elemento_a_converter[0])
+        base_saida = int(elemento_a_converter[1])
+        numero_a_converter = elemento_a_converter[2]
+        numero_convertido = obtem_numero_convertido(
+            base_entrada, numero_a_converter, base_saida)
+        print(numero_convertido)
+
+
+def obtem_numero_convertido(base_entrada, numero_entrada, base_saida):
+    """obtem_numero_convertido(base_entrada, numero_entrada, base_saida):
+    Converte um número de entrada na base de entrada em um número correspondente na base de saída
+    e retorna o número convertido ou "???" se acontecer um erro
+
+    Parâmetros:
+    base_entrada: base na qual o número de entrada está representado. Valores entre 2 e 62
+    numero_entrada: número a ser convertido
+    base_saida: o número convertido deve estar nessa base. Valores entre 2 e 62
+    """
+    valor_para_erro = "???"
+    if base_entrada < 2 or base_entrada > 62:
+        return valor_para_erro
+
+    if base_saida < 2 or base_saida > 62:
+        return valor_para_erro
+
+    if "-" in numero_entrada:
+        return valor_para_erro
+
+    elementos_numero_entrada = list(numero_entrada)
+
+    elementos_base_entrada = obtem_elementos_da_base(base_entrada)
+    elementos_base_saida = obtem_elementos_da_base(base_saida)
+
+    for elemento in elementos_numero_entrada:
+        if elemento not in elementos_base_entrada:
+            return valor_para_erro
+
+
+def obtem_elementos_da_base(base):
+    """obtem_elementos_da_base(base):
+    Obtém os elementos que fazem parte da base
+
+    Parâmetro:
+    base: base selecionada (valores entre 2 e 62)
+    """
+    elementos_possiveis = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    elementos_da_base = []
+
+    if base >= 2 and base <= 62:
+        subconjunto = elementos_possiveis[0:base]
+        elementos_da_base = list(subconjunto)
+
+    return elementos_da_base
+
 
 if __name__ == "__main__":
     filtered_args = sys.argv[1:]
