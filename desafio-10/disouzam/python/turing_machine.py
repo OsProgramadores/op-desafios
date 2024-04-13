@@ -19,21 +19,21 @@ def main(args):
     if nargs == 0:
         raise ArgumentError("Nenhum argumento foi fornecido.")
 
-    elementos_para_conversao = []
+    linhas_de_instrucao = []
     # Validação dos argumentos
     if nargs >= 1:
-        caminho_do_arquivo_conversao_base = args[0]
+        arquivo_de_dados = args[0]
 
-        if not os.path.isfile(caminho_do_arquivo_conversao_base):
+        if not os.path.isfile(arquivo_de_dados):
             mensagem1 = "Arquivo não encontrado. Caminho fornecido ou nome do arquivo incorreto."
             print(mensagem1)
             return
 
-        with open(caminho_do_arquivo_conversao_base, "r", encoding='utf-8') as arquivo:
+        with open(arquivo_de_dados, "r", encoding='utf-8') as arquivo:
             for linha in arquivo:
                 linha_processada = linha.split("\n")
-                elementos_entrada = linha_processada[0].split(" ")
-                elementos_para_conversao.append(elementos_entrada)
+                arquivo_de_regras_e_dados = linha_processada[0].split(",")
+                linhas_de_instrucao.append(arquivo_de_regras_e_dados)
 
     if nargs >= 2:
         mensagem1 = f"Você informou um número excessivo de argumentos ({nargs}). "
@@ -47,6 +47,9 @@ def main(args):
         if escolha_do_usuario.lower() != "s":
             print("Programa abortado.")
             return
+
+    for instrucao in linhas_de_instrucao:
+        print(instrucao)
 
 
 if __name__ == "__main__":
