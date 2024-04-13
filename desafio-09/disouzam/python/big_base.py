@@ -126,7 +126,7 @@ def obtem_elementos_da_base(base):
     elementos_possiveis = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     elementos_da_base = []
 
-    if base >= 2 and base <= 62:
+    if 2 <= base <= 62:
         subconjunto = elementos_possiveis[0:base]
         elementos_da_base = list(subconjunto)
 

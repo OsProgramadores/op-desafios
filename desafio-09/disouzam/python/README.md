@@ -61,3 +61,4 @@ python -m big_base "exemplo_entrada.txt"
 # Referência:
 
 - [Floor division in Python](https://www.geeksforgeeks.org/floor-division-in-python/)
+- [chained-comparison / R1716](https://pylint.pycqa.org/en/latest/user_guide/messages/refactor/chained-comparison.html)
