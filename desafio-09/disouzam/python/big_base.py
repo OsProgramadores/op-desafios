@@ -54,13 +54,13 @@ def main(args):
         base_entrada = int(elemento_a_converter[0])
         base_saida = int(elemento_a_converter[1])
         numero_a_converter = elemento_a_converter[2]
-        numero_convertido = obtem_numero_convertido(
+        numero_convertido = obter_numero_convertido(
             base_entrada, numero_a_converter, base_saida)
         print(numero_convertido)
 
 
-def obtem_numero_convertido(base_entrada, numero_entrada, base_saida):
-    """obtem_numero_convertido(base_entrada, numero_entrada, base_saida):
+def obter_numero_convertido(base_entrada, numero_entrada, base_saida):
+    """obter_numero_convertido(base_entrada, numero_entrada, base_saida):
     Converte um número de entrada na base de entrada em um número correspondente na base de saída
     e retorna o número convertido ou "???" se acontecer um erro
 
