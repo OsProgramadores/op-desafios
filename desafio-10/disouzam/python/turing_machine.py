@@ -65,6 +65,22 @@ def main(args):
             continue
 
 
+def obter_regras(caminho_do_arquivo):
+    """obter_regras(caminho_do_arquivo):
+    Obtém as regras a partir do arquivo indicado
+
+    Parâmetro:
+    caminho_do_arquivo: caminho do arquivo contendo as regras a serem aplicadas pela máquina de
+                        Turing
+    """
+    regras = []
+
+    if not os.path.isfile(caminho_do_arquivo):
+        return regras
+
+    return regras
+
+
 if __name__ == "__main__":
     filtered_args = sys.argv[1:]
     main(filtered_args)
