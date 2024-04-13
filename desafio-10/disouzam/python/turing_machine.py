@@ -1,4 +1,5 @@
-""""""
+"""Implementação de uma máquina de Turing
+"""
 from ctypes import ArgumentError
 import os
 import sys
@@ -10,8 +11,8 @@ def main(args):
     Parâmetros:
     args: Lista de argumentos recebido da linha de comando e
           pré-processado na chamada da função main. Deve conter 1 argumento apenas indicando
-          o caminho relativo ou absoluto do arquivo contendo linhas com bases de entrada e saída e
-          números para converter na base de saída.
+          o caminho relativo ou absoluto do arquivo contendo os dados para simulação da máquina
+          de Turing
     """
     # Análise dos argumentos recebidos em args
     nargs = len(args)
