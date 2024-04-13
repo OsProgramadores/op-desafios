@@ -79,14 +79,37 @@ def obtem_numero_convertido(base_entrada, numero_entrada, base_saida):
     if "-" in numero_entrada:
         return valor_para_erro
 
+    if len(numero_entrada) == 1 and numero_entrada[0] == "0":
+        return "0"
+
+    numero_entrada = numero_entrada[::-1]
     elementos_numero_entrada = list(numero_entrada)
 
     elementos_base_entrada = obtem_elementos_da_base(base_entrada)
     elementos_base_saida = obtem_elementos_da_base(base_saida)
 
-    for elemento in elementos_numero_entrada:
+    total_em_base_10 = 0
+    for posicao, elemento in enumerate(elementos_numero_entrada):
         if elemento not in elementos_base_entrada:
             return valor_para_erro
+        valor_elemento = elementos_base_entrada.index(elemento)
+        total_em_base_10 += valor_elemento * pow(base_entrada, posicao)
+
+    numero_convertido = []
+    numero_remanescente = total_em_base_10
+    while numero_remanescente >= base_saida:
+        resto = numero_remanescente % base_saida
+        numero_remanescente = int(numero_remanescente / base_saida)
+        elemento = elementos_base_saida[resto]
+        numero_convertido.append(elemento)
+
+    if numero_remanescente != 0:
+        numero_convertido.append((str(numero_remanescente)))
+
+    numero_convertido = numero_convertido[::-1]
+    numero_convertido = ''.join(numero_convertido)
+
+    return numero_convertido
 
 
 def obtem_elementos_da_base(base):
