@@ -64,6 +64,11 @@ def main(args):
         if not os.path.isfile(caminho_do_arquivo_de_regras):
             continue
 
+        regras = obter_regras(caminho_do_arquivo_de_regras)
+
+        for regra in regras:
+            print(regra)
+
 
 def obter_regras(caminho_do_arquivo):
     """obter_regras(caminho_do_arquivo):
@@ -77,6 +82,12 @@ def obter_regras(caminho_do_arquivo):
 
     if not os.path.isfile(caminho_do_arquivo):
         return regras
+
+    with open(caminho_do_arquivo, "r", encoding='utf-8') as arquivo:
+        for linha in arquivo:
+            linha_processada = linha.split("\n")
+            regra = linha_processada[0].split(" ")
+            regras.append(regra)
 
     return regras
 
