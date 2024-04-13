@@ -57,3 +57,7 @@ Como base para desenvolvimento e checagem dos resultados, o exemplo disponível 
 ```python
 python -m big_base "exemplo_entrada.txt"
 ```
+
+# Referência:
+
+- [Floor division in Python](https://www.geeksforgeeks.org/floor-division-in-python/)

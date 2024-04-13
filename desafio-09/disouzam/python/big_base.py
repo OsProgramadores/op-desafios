@@ -99,7 +99,7 @@ def obter_numero_convertido(base_entrada, numero_entrada, base_saida):
     numero_remanescente = total_em_base_10
     while numero_remanescente >= base_saida:
         resto = numero_remanescente % base_saida
-        numero_remanescente = int(numero_remanescente / base_saida)
+        numero_remanescente = numero_remanescente // base_saida
         elemento = elementos_base_saida[resto]
         numero_convertido.append(elemento)
 
