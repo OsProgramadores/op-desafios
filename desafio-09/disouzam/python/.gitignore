@@ -7,3 +7,7 @@ create_python3.11_environment.sh
 setup.sh
 requirements.in
 *.txt
+
+# Arquivo de suporte para verificações simples
+base-conversion-calculator.xlsx
+~$base-conversion-calculator.xlsx
