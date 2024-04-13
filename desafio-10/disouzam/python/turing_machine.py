@@ -2,6 +2,7 @@
 """
 from ctypes import ArgumentError
 import os
+import pathlib
 import sys
 
 
@@ -29,6 +30,8 @@ def main(args):
             print(mensagem1)
             return
 
+        caminho_do_arquivo_de_dados = pathlib.Path(arquivo_de_dados)
+        pasta_raiz = caminho_do_arquivo_de_dados.parent
         with open(arquivo_de_dados, "r", encoding='utf-8') as arquivo:
             for linha in arquivo:
                 linha_processada = linha.split("\n")
@@ -49,7 +52,17 @@ def main(args):
             return
 
     for instrucao in linhas_de_instrucao:
+        arquivo_regras = instrucao[0]
+        dados = instrucao[1]
+
+        caminho_do_arquivo_de_regras = os.path.join(
+            pasta_raiz.absolute(), arquivo_regras)
         print(instrucao)
+        print(caminho_do_arquivo_de_regras)
+        print(dados)
+
+        if not os.path.isfile(caminho_do_arquivo_de_regras):
+            continue
 
 
 if __name__ == "__main__":
