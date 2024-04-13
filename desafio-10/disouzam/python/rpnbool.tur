@@ -1,0 +1,84 @@
+; This is a simple stack language interpreter.
+; It evaluates Boolean expressions entered in reverse Polish notation.
+; Input: a Boolean expression in reverse Polish.
+; Use 1,0,A,O,~ for true, false, and, or not, respectively, without spaces.
+; Example inputs:
+;   11A    - returns 1  (= 1 and 1)
+;   01~1OA - returns 0    (= (not 1 or 1) and 0)
+
+
+; Find next command
+0 _ _ r 0
+0 * * * 1
+1 x x r 1
+1 0 x l 100  ; found 0
+1 1 x l 110  ; found 1
+1 A x l 120  ; found A
+1 O x l 130  ; found O
+1 ~ x l 140  ; found ~
+1 _ _ l 2    ; reached end-of-input
+2 x _ l 2
+2 _ _ l halt ; finished
+
+; push a 0 onto the stack
+100 x x l 100
+100 _ _ l 101
+101 _ 0 r 102
+101 * * l 101
+102 _ _ r 0
+102 * * r 102
+
+; push a 1 onto the stack
+110 x x l 110
+110 _ _ l 111
+111 _ 1 r 112
+111 * * l 111
+112 _ _ r 0
+112 * * r 112
+
+; calculate A
+120 x x l 120
+120 _ _ l 121
+121 _ _ r 122
+121 * * l 121
+122 0 _ r 123 ; pop 0 - first argument
+122 1 _ r 124 ; pop 1 - first argument
+122 _ ! * halt ; error - reached bottom of stack
+123 0 0 r 127 ; pop 0, push 0
+123 1 0 r 127 ; pop 1, push 0
+124 0 0 r 127 ; pop 0, push 0
+124 1 1 r 127 ; pop 1, push 1
+124 * ! * halt ; error - reached bottom of stack
+127 _ _ r 0
+127 * * r 127
+
+; calculate O
+130 x x l 130
+130 _ _ l 131
+131 _ _ r 132
+131 * * l 131
+132 0 _ r 133 ; pop 0 - first element
+132 1 _ r 134 ; pop 1 - first element
+132 _ ! * halt ; error - reached bottom of stack
+133 0 0 r 137 ; pop 0, push 0
+133 1 1 r 137 ; pop 1, push 1
+133 _ ! * halt ; error - reached bottom of stack
+134 0 1 r 137 ; pop 0, push 1
+134 1 1 r 137 ; pop 1, push 1
+134 _ ! * halt ; error - reached bottom of stack
+137 _ _ r 0
+137 * * r 137
+
+; calculate ~
+140 x x l 140
+140 _ _ l 141
+141 _ _ r 142
+141 * * l 141
+142 0 1 r 147 ; pop 0, push 1
+142 1 0 r 147 ; pop 1, push 0
+142 _ ! * halt ; error - reached bottom of stack
+147 _ _ r 0
+147 * * r 147
+
+; Exercise: extend this to support other binary operators, eg XOR, NAND
+

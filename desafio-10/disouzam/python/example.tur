@@ -1,0 +1,5 @@
+* @ . * halt
+0 * * r 0
+0 / x r y
+y * * r y
+y / y r 0
