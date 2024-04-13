@@ -104,7 +104,8 @@ def obter_numero_convertido(base_entrada, numero_entrada, base_saida):
         numero_convertido.append(elemento)
 
     if numero_remanescente != 0:
-        numero_convertido.append((str(numero_remanescente)))
+        elemento = elementos_base_saida[numero_remanescente]
+        numero_convertido.append(elemento)
 
     numero_convertido = numero_convertido[::-1]
     numero_convertido = ''.join(numero_convertido)
