@@ -4,6 +4,7 @@ from ctypes import ArgumentError
 import os
 import pathlib
 import sys
+from typing import List
 
 
 def main(args):
@@ -93,7 +94,7 @@ def obter_regras(caminho_do_arquivo):
     caminho_do_arquivo: caminho do arquivo contendo as regras a serem aplicadas pela máquina de
                         Turing
     """
-    regras = []
+    regras: List[regra_da_maquina_de_turing] = []
 
     if not os.path.isfile(caminho_do_arquivo):
         return regras
