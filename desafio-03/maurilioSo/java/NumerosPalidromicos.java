@@ -6,9 +6,7 @@ public class NumerosPalidromicos {
       if (ehPalidromico(toString(i), i)) {
         System.out.println(i);
       }
-
     }
-
   }
 
   // Metodo para transformar o numero em String inverter a ordem do número
@@ -32,5 +30,4 @@ public class NumerosPalidromicos {
 
     return false;
   }
-
 }
