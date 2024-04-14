@@ -125,9 +125,10 @@ def processa_dados(regras, dados):
 
         if regra.direcao == "l":
             posicao_de_leitura -= 1
-
-        if regra.direcao == "r":
+        elif regra.direcao == "r":
             posicao_de_leitura += 1
+        elif regra.direcao != "*":
+            return "ERR"
 
         if posicao_de_leitura < 0:
             lista_de_dados = list(espaco_vazio) + lista_de_dados
