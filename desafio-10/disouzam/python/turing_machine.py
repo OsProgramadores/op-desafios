@@ -77,7 +77,60 @@ def processa_dados(regras, dados):
             sobre os dados
     dados: Informação que será consumida pela máquina de Turing
     """
-    resultado = 'resposta da funcao processa_dados'
+    resultado = ''
+    espaco_vazio = " "
+
+    # Define o estado inicial da máquina de Turing
+    estado_da_maquina_de_turing = '0'
+
+    # Initializa a posicao de leitura dos dados
+    posicao_de_leitura = 0
+
+    while 'halt' not in estado_da_maquina_de_turing:
+        simbolo_atual = dados[posicao_de_leitura]
+
+        regra_do_estado_atual: List[regra_da_maquina_de_turing] = [
+            r for r in regras if r.estado_atual == estado_da_maquina_de_turing]
+
+        if len(regra_do_estado_atual) == 1:
+            regra = regra_do_estado_atual[0]
+        else:
+            simbolo_atual_modificado = simbolo_atual
+            if simbolo_atual == espaco_vazio:
+                simbolo_atual_modificado = "_"
+
+            regra_especifica: List[regra_da_maquina_de_turing] = [
+                r for r in regra_do_estado_atual if r.simbolo_atual == simbolo_atual_modificado]
+
+            regra_geral: List[regra_da_maquina_de_turing] = [
+                r for r in regra_do_estado_atual if r.simbolo_atual == "*"]
+
+            if len(regra_especifica) == 1:
+                regra = regra_especifica[0]
+            elif len(regra_geral) == 1:
+                regra = regra_geral[0]
+
+        estado_da_maquina_de_turing = regra.novo_estado
+
+        if regra.novo_simbolo != "*" and regra.novo_simbolo != "_":
+            dados[posicao_de_leitura] = regra.novo_simbolo
+
+        if regra.novo_simbolo != "*" and regra.novo_simbolo == "_":
+            dados[posicao_de_leitura] = espaco_vazio
+
+        if regra.direcao == "l":
+            posicao_de_leitura -= 1
+
+        if regra.direcao == "r":
+            posicao_de_leitura += 1
+
+        if posicao_de_leitura < 0:
+            dados = espaco_vazio + dados
+            posicao_de_leitura = 0
+
+        if posicao_de_leitura > len(dados) - 1:
+            dados = dados + espaco_vazio
+
     return resultado
 
 
