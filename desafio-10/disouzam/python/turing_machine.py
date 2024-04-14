@@ -187,6 +187,9 @@ def obter_regras(caminho_do_arquivo):
 
             regras.append(regra)
 
+            # TODO: Remover antes de submeter o código final
+            # print(regra)
+
     return regras
 
 
