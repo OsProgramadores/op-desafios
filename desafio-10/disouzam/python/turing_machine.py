@@ -127,6 +127,14 @@ class regra_da_maquina_de_turing:
         self.direcao = direcao
         self.novo_estado = novo_estado
 
+    def __str__(self) -> str:
+        resultado = f"estado atual: {self.estado_atual}, "
+        resultado += f"simbolo atual: {self.simbolo_atual}, "
+        resultado += f"novo simbolo: {self.novo_simbolo}, "
+        resultado += f"direcao: {self.direcao}, "
+        resultado += f"novo estado: {self.novo_estado}"
+        return resultado
+
 
 if __name__ == "__main__":
     filtered_args = sys.argv[1:]
