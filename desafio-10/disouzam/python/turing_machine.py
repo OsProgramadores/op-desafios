@@ -91,8 +91,7 @@ def processa_dados(regras, dados):
         simbolo_atual = lista_de_dados[posicao_de_leitura]
 
         regra_do_estado_atual: List[regra_da_maquina_de_turing] = [
-            r for r in regras if
-            r.estado_atual == estado_da_maquina_de_turing or r.estado_atual == "*"]
+            r for r in regras if r.estado_atual in (estado_da_maquina_de_turing, '*')]
 
         if len(regra_do_estado_atual) == 1:
             regra = regra_do_estado_atual[0]
@@ -116,7 +115,7 @@ def processa_dados(regras, dados):
 
         estado_da_maquina_de_turing = regra.novo_estado
 
-        if regra.novo_simbolo != "*" and regra.novo_simbolo != "_":
+        if regra.novo_simbolo not in ('*', '_'):
             lista_de_dados[posicao_de_leitura] = regra.novo_simbolo
 
         if regra.novo_simbolo != "*" and regra.novo_simbolo == "_":
