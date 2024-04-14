@@ -137,6 +137,8 @@ def processa_dados(regras, dados):
             lista_de_dados = lista_de_dados + list(espaco_vazio)
 
     resultado = "".join(lista_de_dados)
+    resultado = resultado.strip()
+
     # TODO: Remover antes de submeter o código final
     print(steps)
 
