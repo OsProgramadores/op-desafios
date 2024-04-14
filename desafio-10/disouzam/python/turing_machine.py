@@ -69,6 +69,21 @@ def main(args):
         for regra in regras:
             print(regra)
 
+        resultado = processa_dados(regras, dados)
+
+
+def processa_dados(regras, dados):
+    """processa_dados(regras, dados):
+    Processa os dados usando as regras fornecidas e devolve uma string que representa o resultado
+
+    Parâmetro:
+    regras: Lista de regras para alterar o estado da máquina de Turing e executar transformações
+            sobre os dados
+    dados: Informação que será consumida pela máquina de Turing
+    """
+    resultado = ''
+    return resultado
+
 
 def obter_regras(caminho_do_arquivo):
     """obter_regras(caminho_do_arquivo):
