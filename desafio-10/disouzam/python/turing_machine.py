@@ -85,8 +85,24 @@ def obter_regras(caminho_do_arquivo):
 
     with open(caminho_do_arquivo, "r", encoding='utf-8') as arquivo:
         for linha in arquivo:
+            # Remove fim de linha
             linha_processada = linha.split("\n")
-            regra = linha_processada[0].split(" ")
+            linha_processada = linha_processada[0]
+
+            # Remove comentários
+            if ";" in linha_processada:
+                posicao_comentario = linha_processada.index(";")
+                linha_processada = linha_processada[0:posicao_comentario]
+
+            # Linha vazia
+            if len(linha_processada) == 0:
+                continue
+
+            # Remove espaços extras
+            linha_processada = linha_processada.strip()
+
+            linha_processada = linha_processada.split(" ")
+            regra = linha_processada
             regras.append(regra)
 
     return regras
