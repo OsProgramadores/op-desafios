@@ -1,6 +1,7 @@
 """Implementação de uma máquina de Turing
 """
 from ctypes import ArgumentError
+import dataclasses
 import os
 import pathlib
 import sys
@@ -131,6 +132,7 @@ def obter_regras(caminho_do_arquivo):
     return regras
 
 
+@dataclasses.dataclass()
 class regra_da_maquina_de_turing:
     """regra_da_maquina_de_turing:
     Classe que armazena as informaçoes de uma regra em propriedades bem definidas
