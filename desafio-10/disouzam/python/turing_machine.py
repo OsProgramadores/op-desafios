@@ -114,6 +114,8 @@ def processa_dados(regras, dados):
                 regra = regra_especifica[0]
             elif len(regra_geral) == 1:
                 regra = regra_geral[0]
+            elif len(regra_especifica) == 0 and len(regra_geral) == 0:
+                return "ERR"
 
         estado_da_maquina_de_turing = regra.novo_estado
 
@@ -141,7 +143,7 @@ def processa_dados(regras, dados):
     resultado = resultado.strip()
 
     # TODO: Remover antes de submeter o código final
-    print(steps)
+    # print(steps)
 
     return resultado
 
