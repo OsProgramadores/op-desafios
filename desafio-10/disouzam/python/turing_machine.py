@@ -80,8 +80,6 @@ def processa_dados(regras, dados):
     resultado = ''
     espaco_vazio = " "
     lista_de_dados = list(dados)
-    # TODO: Remover antes de submeter o código final
-    steps = 0
 
     # Define o estado inicial da máquina de Turing
     estado_da_maquina_de_turing = '0'
@@ -90,8 +88,6 @@ def processa_dados(regras, dados):
     posicao_de_leitura = 0
 
     while 'halt' not in estado_da_maquina_de_turing:
-        # TODO: Remover antes de submeter o código final
-        steps += 1
         simbolo_atual = lista_de_dados[posicao_de_leitura]
 
         regra_do_estado_atual: List[regra_da_maquina_de_turing] = [
@@ -141,10 +137,6 @@ def processa_dados(regras, dados):
 
     resultado = "".join(lista_de_dados)
     resultado = resultado.strip()
-
-    # TODO: Remover antes de submeter o código final
-    # print(steps)
-
     return resultado
 
 
@@ -189,9 +181,6 @@ def obter_regras(caminho_do_arquivo):
                 linha_processada[4])
 
             regras.append(regra)
-
-            # TODO: Remover antes de submeter o código final
-            # print(regra)
 
     return regras
 
