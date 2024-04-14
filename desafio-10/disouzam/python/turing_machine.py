@@ -102,10 +102,30 @@ def obter_regras(caminho_do_arquivo):
             linha_processada = linha_processada.strip()
 
             linha_processada = linha_processada.split(" ")
-            regra = linha_processada
+
+            regra = regra_da_maquina_de_turing(
+                linha_processada[0],
+                linha_processada[1],
+                linha_processada[2],
+                linha_processada[3],
+                linha_processada[4])
+
             regras.append(regra)
 
     return regras
+
+
+class regra_da_maquina_de_turing:
+    """regra_da_maquina_de_turing:
+    Classe que armazena as informaçoes de uma regra em propriedades bem definidas
+    """
+
+    def __init__(self, estado_atual, simbolo_atual, novo_simbolo, direcao, novo_estado) -> None:
+        self.estado_atual = estado_atual
+        self.simbolo_atual = simbolo_atual
+        self.novo_simbolo = novo_simbolo
+        self.direcao = direcao
+        self.novo_estado = novo_estado
 
 
 if __name__ == "__main__":
