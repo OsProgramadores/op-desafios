@@ -1,8 +1,0 @@
-pali.tur,1001001,:)
-pali.tur,1011100,:(
-prime.tur,101,101 is prime!
-prime.tur,100,100 is not prime.
-prime.tur,102,ERR
-binary_add.tur,110110 101011,1100001
-rpnbool.tur,10~1AO0O,1
-example.tur,A/B/C/D@,AxByCxD.
