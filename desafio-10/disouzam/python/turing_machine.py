@@ -59,19 +59,13 @@ def main(args):
 
         caminho_do_arquivo_de_regras = os.path.join(
             pasta_raiz.absolute(), arquivo_regras)
-        print(instrucao)
-        print(caminho_do_arquivo_de_regras)
-        print(dados)
 
         if not os.path.isfile(caminho_do_arquivo_de_regras):
             continue
 
         regras = obter_regras(caminho_do_arquivo_de_regras)
-
-        for regra in regras:
-            print(regra)
-
         resultado = processa_dados(regras, dados)
+        print(f"{arquivo_regras},{dados},{resultado}")
 
 
 def processa_dados(regras, dados):
@@ -83,7 +77,7 @@ def processa_dados(regras, dados):
             sobre os dados
     dados: Informação que será consumida pela máquina de Turing
     """
-    resultado = ''
+    resultado = 'resposta da funcao processa_dados'
     return resultado
 
 
