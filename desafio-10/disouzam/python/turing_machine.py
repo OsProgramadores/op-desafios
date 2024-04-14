@@ -79,6 +79,7 @@ def processa_dados(regras, dados):
     """
     resultado = ''
     espaco_vazio = " "
+    lista_de_dados = list(dados)
 
     # Define o estado inicial da máquina de Turing
     estado_da_maquina_de_turing = '0'
@@ -87,7 +88,7 @@ def processa_dados(regras, dados):
     posicao_de_leitura = 0
 
     while 'halt' not in estado_da_maquina_de_turing:
-        simbolo_atual = dados[posicao_de_leitura]
+        simbolo_atual = lista_de_dados[posicao_de_leitura]
 
         regra_do_estado_atual: List[regra_da_maquina_de_turing] = [
             r for r in regras if r.estado_atual == estado_da_maquina_de_turing]
@@ -113,10 +114,10 @@ def processa_dados(regras, dados):
         estado_da_maquina_de_turing = regra.novo_estado
 
         if regra.novo_simbolo != "*" and regra.novo_simbolo != "_":
-            dados[posicao_de_leitura] = regra.novo_simbolo
+            lista_de_dados[posicao_de_leitura] = regra.novo_simbolo
 
         if regra.novo_simbolo != "*" and regra.novo_simbolo == "_":
-            dados[posicao_de_leitura] = espaco_vazio
+            lista_de_dados[posicao_de_leitura] = espaco_vazio
 
         if regra.direcao == "l":
             posicao_de_leitura -= 1
@@ -125,12 +126,13 @@ def processa_dados(regras, dados):
             posicao_de_leitura += 1
 
         if posicao_de_leitura < 0:
-            dados = espaco_vazio + dados
+            lista_de_dados = list(espaco_vazio) + lista_de_dados
             posicao_de_leitura = 0
 
-        if posicao_de_leitura > len(dados) - 1:
-            dados = dados + espaco_vazio
+        if posicao_de_leitura > len(lista_de_dados) - 1:
+            lista_de_dados = lista_de_dados + list(espaco_vazio)
 
+    resultado = "".join(lista_de_dados)
     return resultado
 
 
