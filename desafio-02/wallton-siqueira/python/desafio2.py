@@ -1,4 +1,5 @@
-# Escreva um programa para listar todos os números primos entre 1 e 10000, na linguagem de sua preferência.
+# Escreva um programa para listar todos os números primos
+# entre 1 e 10000, na linguagem de sua preferência.
 # Lista vazia para armazenar os números primos
 primos = []
 # Loop para verificar os números
