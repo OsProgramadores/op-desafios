@@ -5,7 +5,7 @@ public class NumerosPalidromicos {
       verificarPalidromico(i);
     }
   }
-
+  // Verificar se o numero é palidromico
   public static void verificarPalidromico(int numero) {
     int numeroInvertido = 0;
     int resto;
