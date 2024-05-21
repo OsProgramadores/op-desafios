@@ -10,6 +10,8 @@ from dataclasses import dataclass
 
 @dataclass
 class PrimesPi:
+    """Classe para processar e encontrar a maior sequência de números primos em Pi"""
+
     filename: str
     pi_digits: str
     primes: Set[int]
@@ -58,13 +60,14 @@ class PrimesPi:
 
     def read_file(self) -> None:
         """Função para ler um arquivo"""
-        with open(self.filename, "r") as file:
+        with open(self.filename, encoding="utf-8") as file:
             self.pi_digits = file.read().strip()
 
         if self.pi_digits.startswith("3."):
             self.pi_digits = self.pi_digits[2:]
 
     def run(self) -> None:
+        """Função principal da classe, onde será feita leitura, busca e imprimir o resultado"""
         try:
             longer_seq = [""]
             self.primes = self.generate_primes(9973)
@@ -82,6 +85,5 @@ if __name__ == "__main__":
         print("Uso: python primos_pi.py caminho/do/arquivo.txt")
         sys.exit(1)
 
-    filename = sys.argv[1]
-    prime_finder = PrimesPi(filename, "", set())
+    prime_finder = PrimesPi(sys.argv[1], "", set())
     prime_finder.run()
