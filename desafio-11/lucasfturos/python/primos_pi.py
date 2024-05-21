@@ -60,24 +60,23 @@ class PrimesPi:
 
     def read_file(self) -> None:
         """Função para ler um arquivo"""
-        with open(self.filename, encoding="utf-8") as file:
-            self.pi_digits = file.read().strip()
-
-        if self.pi_digits.startswith("3."):
-            self.pi_digits = self.pi_digits[2:]
+        try:
+            with open(self.filename, encoding="utf-8") as file:
+                self.pi_digits = file.read().strip()
+            if self.pi_digits.startswith("3."):
+                self.pi_digits = self.pi_digits[2:]
+        except FileNotFoundError:
+            print(f"Arquivo: {self.filename} não encontrado.")
+            sys.exit(1)
 
     def run(self) -> None:
         """Função principal da classe, onde será feita leitura, busca e imprimir o resultado"""
-        try:
-            longer_seq = [""]
-            self.primes = self.generate_primes(9973)
-            self.read_file()
-            for index in range(len(self.pi_digits)):
-                self.find_longest_prime_sequence(index, "", longer_seq)
-            print(longer_seq[0])
-        except FileNotFoundError:
-            print(f"Arquivo: {self.filename} não encontrado")
-            sys.exit(1)
+        longer_seq = [""]
+        self.primes = self.generate_primes(9973)
+        self.read_file()
+        for index in range(len(self.pi_digits)):
+            self.find_longest_prime_sequence(index, "", longer_seq)
+        print(longer_seq[0])
 
 
 if __name__ == "__main__":
