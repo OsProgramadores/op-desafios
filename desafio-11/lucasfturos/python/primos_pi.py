@@ -4,17 +4,18 @@
 
 import sys
 from math import sqrt
-from typing import List, Set
-from dataclasses import dataclass
+from typing import List
 
 
-@dataclass
 class PrimesPi:
     """Classe para processar e encontrar a maior sequência de números primos em Pi"""
 
-    filename: str
-    pi_digits: str
-    primes: Set[int]
+    pi_digits = ""
+    primes = set()
+
+    def __init__(self, filename: str) -> None:
+        """Construtor"""
+        self.filename = filename
 
     def is_prime(self, num: int) -> bool:
         """Função para testar se é um número primo"""
@@ -28,13 +29,11 @@ class PrimesPi:
                 return False
         return True
 
-    def generate_primes(self, limit: int) -> Set[int]:
+    def generate_primes(self, limit: int) -> None:
         """Função para gerar os números primos"""
-        primes = set()
         for i in range(2, limit + 1):
             if self.is_prime(i):
-                primes.add(i)
-        return primes
+                self.primes.add(i)
 
     def find_longest_prime_sequence(
         self, begin: int, seq: str, longer_seq: List[str]
@@ -72,7 +71,7 @@ class PrimesPi:
     def run(self) -> None:
         """Função principal da classe, onde será feita leitura, busca e imprimir o resultado"""
         longer_seq = [""]
-        self.primes = self.generate_primes(9973)
+        self.generate_primes(9973)
         self.read_file()
         for index in range(len(self.pi_digits)):
             self.find_longest_prime_sequence(index, "", longer_seq)
@@ -84,5 +83,5 @@ if __name__ == "__main__":
         print("Uso: python primos_pi.py caminho/do/arquivo.txt")
         sys.exit(1)
 
-    prime_finder = PrimesPi(sys.argv[1], "", set())
+    prime_finder = PrimesPi(filename=sys.argv[1])
     prime_finder.run()
