@@ -4,7 +4,7 @@ run: build
     else \
         ./turing datafile; \
     fi
-build: 
+build:
 	@g++ -Wall -Wextra -Wpedantic -Werror -pedantic -g -o turing main.cpp
 download:
 	@if [ ! -f "turing.tar.gz" ]; then \
