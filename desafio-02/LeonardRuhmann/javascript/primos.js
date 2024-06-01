@@ -1,5 +1,4 @@
 const primos = [];
-const naoPrimos = [];
 
 for (let numero = 2; numero <= 1000; numero++) {
     let ehPrimo = true;
@@ -11,10 +10,6 @@ for (let numero = 2; numero <= 1000; numero++) {
     }
     if (ehPrimo) {
         primos.push(numero);
-    } else {
-        naoPrimos.push(numero);
     }
 }
-
 console.log(primos);
-console.log(naoPrimos);
