@@ -2,8 +2,9 @@ const primos = [];
 
 for (let numero = 2; numero <= 1000; numero++) {
     let ehPrimo = true;
-    for (let i = 2; i < numero; i++) {
-        if (numero % i === 0) {
+    const raiz = Math.sqrt(numero);
+    for (let i = 0; i < primos.length && primos[i] <= raiz; i++) {
+        if (numero % primos[i] === 0) {
             ehPrimo = false;
             break;
         }
@@ -12,4 +13,5 @@ for (let numero = 2; numero <= 1000; numero++) {
         primos.push(numero);
     }
 }
+
 console.log(primos);
