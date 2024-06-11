@@ -1,6 +1,6 @@
 const primos = [];
 
-for (let numero = 2; numero <= 1000; numero++) {
+for (let numero = 2; numero <= 10000; numero++) {
     let ehPrimo = true;
     const raiz = Math.sqrt(numero);
     for (let i = 0; i < primos.length && primos[i] <= raiz; i++) {
