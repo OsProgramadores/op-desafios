@@ -11,7 +11,6 @@ for (let numero = 2; numero <= 1000; numero++) {
     }
     if (ehPrimo) {
         primos.push(numero);
+        console.log(numero);
     }
-}
-
-console.log(primos);
+};
