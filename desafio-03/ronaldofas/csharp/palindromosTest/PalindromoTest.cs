@@ -9,10 +9,10 @@ public class PalindromoTest
     {
         // Given
         Palindromo palindromo = new Palindromo();
-    
+
         // When
         bool resultado = palindromo.EhPalindromo(1);
-    
+
         // Then
         Assert.True(resultado);
     }
@@ -22,10 +22,10 @@ public class PalindromoTest
     {
         // Given
         Palindromo palindromo = new Palindromo();
-    
+
         // When
         bool resultado = palindromo.EhPalindromo(11);
-    
+
         // Then
         Assert.True(resultado);
     }
@@ -35,11 +35,11 @@ public class PalindromoTest
     {
         //Given
         Palindromo palindromo = new Palindromo();
-        
+
         //
         List<ulong> resultado = palindromo.PalindromosEntre("0", "9");
         List<ulong> esperado = new List<ulong>() { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-    
+
         // Then
         Assert.Equal(esperado, resultado);
     }
@@ -50,10 +50,10 @@ public class PalindromoTest
     {
         // Given
         Palindromo palindromo = new Palindromo();
-    
+
         // When
         bool resultado = palindromo.EhPalindromo(numero);
-        
+
         // Then
         Assert.True(resultado);
     }
@@ -63,25 +63,25 @@ public class PalindromoTest
     {
         // Given
         Palindromo palindromo = new Palindromo();
-        
+
         // When and Then
         var excecao = Assert.Throws<OverflowException>(() => palindromo.PalindromosEntre("-1", "100"));
         Assert.Equal("Valor maior ou menor que o permitido", excecao.Message);
     }
-    
+
     [Fact]
     public void VerificarSeRecebeErroAoTentarConverterAPartirDeNumeroMaiorQueOPermitido()
     {
         // Given
         Palindromo palindromo = new Palindromo();
-        
+
         // When and Then
         var excecao = Assert.Throws<OverflowException>(
             () => palindromo.PalindromosEntre("0", "18446744073709551616")
         );
         Assert.Equal("Valor maior ou menor que o permitido", excecao.Message);
     }
-    
+
     public static IEnumerable<object[]> DadosDeTesteNumerosUmDigito()
     {
         yield return new object[] { 0 };

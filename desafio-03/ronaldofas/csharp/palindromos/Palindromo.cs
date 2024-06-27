@@ -23,7 +23,7 @@ public class Palindromo
     {
         ValidarParametros(inicio);
         ValidarParametros(fim);
-        
+
         List<ulong> resultado = new List<ulong>();
 
         for (ulong i = UInt64.Parse(inicio); i <= UInt64.Parse(fim); i++)
