@@ -28,12 +28,10 @@ int converteParaInteiro(std::vector<int> numeros){
 void verificaPalindromo(int numero){
    std::vector<int> numeros;
     std::string numeroStr = std::to_string(numero);
-
     for (char digitoChar : numeroStr) {
         numeros.insert(numeros.begin(), digitoChar - '0');
     }
     int novoValor = converteParaInteiro(numeros);
-    
     if(numero==novoValor){
         std::cout<<numero<<std::endl;
     }
@@ -53,4 +51,3 @@ int main()
     }
     return 0;
 }
-
