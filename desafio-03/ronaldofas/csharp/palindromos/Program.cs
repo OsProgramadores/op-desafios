@@ -8,22 +8,16 @@ class Program
     {
         Palindromo palindromo = new Palindromo();
         
-        Console.WriteLine("Palindromos entre 1 e 20: ");
-        foreach (ulong item in palindromo.PalindromosEntre("1", "20"))   
+        Console.WriteLine("Informe o número inicial para validação dos palíndromos: ");
+        string inicio = Console.ReadLine();
+        Console.WriteLine("Informe o número final para validação dos palíndromos: ");
+        string fim = Console.ReadLine();
+        
+        Console.WriteLine("\nNumeros palíndromos entre " + inicio + " e " + fim + ": ");
+        foreach (ulong item in palindromo.PalindromosEntre(inicio, fim))   
         {
             Console.WriteLine(item);
         }
         
-        Console.WriteLine("Palindromos entre 3000 e 3010: ");
-        foreach (ulong item in palindromo.PalindromosEntre("3000", "3010"))   
-        {
-            Console.WriteLine(item);
-        }
-        
-        Console.WriteLine("Palindromos entre 101 e 121: ");
-        foreach (ulong item in palindromo.PalindromosEntre("101", "121"))   
-        {
-            Console.WriteLine(item);
-        }
     }
 }
