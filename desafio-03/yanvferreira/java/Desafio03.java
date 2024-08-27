@@ -9,7 +9,6 @@ public class Desafio03 {
     }
 
     private static ArrayList<String> verificaPalindromicos(int numeroInicial, int numeroFinal) {
-        
         ArrayList<String> palindromico = new ArrayList<String>(); //Array para armazenar os números palindromicos
 
         while (numeroInicial <= numeroFinal) {
@@ -22,7 +21,7 @@ public class Desafio03 {
             if (reverteNumero(numeroInicial)){
                 palindromico.add(Integer.toString(numeroInicial));
             }
-            
+
             numeroInicial++;
         }
 
