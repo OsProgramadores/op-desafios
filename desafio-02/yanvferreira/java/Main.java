@@ -15,7 +15,7 @@ public class Main {
 
  public static void main(String[] args) {
 
-    
+
     int tamanhoDaLista = 10000;
     int numero = 1;
 
