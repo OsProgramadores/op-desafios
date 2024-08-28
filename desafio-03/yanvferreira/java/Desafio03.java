@@ -1,49 +1,53 @@
 import java.util.ArrayList;
 
 public class Desafio03 {
-    public static void main(String[] args) {
-        int numeroInicial = 1;
-        int numeroFinal = 20;
+  private static boolean reverteNumero(int numeroInicial) {
+    String numeroInvertido = "";
 
-        System.out.println("Números Palíndromicos: " + verificaPalindromicos(numeroInicial, numeroFinal));;
+    // converte em array de String
+    String numeroInicialString = Integer.toString(numeroInicial);
+
+    // inverte as posições dos números
+    for (int x = 0; x < numeroInicialString.length(); x++) {
+      numeroInvertido = numeroInicialString.charAt(x) + numeroInvertido;
     }
 
-    private static ArrayList<String> verificaPalindromicos(int numeroInicial, int numeroFinal) {
-        ArrayList<String> palindromico = new ArrayList<String>(); //Array para armazenar os números palindromicos
-
-        while (numeroInicial <= numeroFinal) {
-            if (numeroInicial < 10) { // por regra, de 1 a 9 são palindromicos
-                palindromico.add(Integer.toString(numeroInicial));
-                numeroInicial++;
-                continue;
-            }
-
-            if (reverteNumero(numeroInicial)){
-                palindromico.add(Integer.toString(numeroInicial));
-            }
-
-            numeroInicial++;
-        }
-
-        return palindromico;
+    // se o numeroInvertido for igual ao array de String do NumeroInicial, então adiciona no
+    // Arraylist Palindromico
+    if (numeroInvertido.equals(numeroInicialString)) {
+      return true;
     }
 
-    private static boolean reverteNumero(int numeroInicial) {
-        String numeroInvertido = "";
+    return false;
+  }
 
-        //converte em array de String
-        String numeroInicialString = Integer.toString(numeroInicial);
+  private static ArrayList<Integer> verificaPalindromicos(int numeroInicial, int numeroFinal) {
+    ArrayList<Integer> palindromico =
+        new ArrayList<Integer>(); // Array para armazenar os números palindromicos
 
-        // inverte as posições dos números
-        for (int x = 0; x < numeroInicialString.length(); x++){
-            numeroInvertido = numeroInicialString.charAt(x) + numeroInvertido;
-        }
+    while (numeroInicial <= numeroFinal) {
+      if (numeroInicial < 10) { // por regra, de 1 a 9 são palindromicos
+        palindromico.add(numeroInicial);
+        numeroInicial++;
+        continue;
+      }
 
-        // se o numeroInvertido for igual ao array de String do NumeroInicial, então adiciona no Arraylist Palindromico
-        if (numeroInvertido.equals(numeroInicialString)) {
-            return true;
-        }
+      if (reverteNumero(numeroInicial)) {
+        palindromico.add(numeroInicial);
+      }
 
-        return false;
+      numeroInicial++;
     }
+
+    return palindromico;
+  }
+
+  public static void main(String[] args) {
+    int numeroInicial = 1000;
+    int numeroFinal = 2000;
+
+    System.out.println(
+        "Números Palíndromicos: " + verificaPalindromicos(numeroInicial, numeroFinal));
+    ;
+  }
 }
