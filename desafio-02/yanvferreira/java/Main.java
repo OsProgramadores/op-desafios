@@ -1,29 +1,30 @@
 public class Main {
-
-    public static boolean verificaPrimos(int numero){
-        if (numero == 1){ //número 1 não é primo
-            return false;
-        }
-
-        for (int divisor = 2; divisor < numero; divisor++){
-            if (numero % divisor == 0){ //todo número é divisivel por ele mesmo, portanto, não precisa fazer essa operaçã. Caso a divisão pelo divisor seja zero, então não é
-                return false;
-            }
-        }
-        return true;
-    }
-
- public static void main(String[] args) {
-
+  public static void main(String[] args) {
 
     int tamanhoDaLista = 10000;
-    int numero = 1;
+    int inicioLista = 1;
+    boolean primos;
 
-    while (numero <= tamanhoDaLista) {
-        if (verificaPrimos(numero)){
-            System.out.println(numero);
+    for (int inicio = inicioLista; inicio <= tamanhoDaLista; inicio++) {
+      if (inicio == 1) {
+        continue;
+      }
+      if (inicio == 2) {
+        System.out.println(inicio);
+        continue;
+      }
+
+      primos = true;
+      for (int divisor = 2; divisor < inicio; divisor++) {
+        if (inicio % divisor == 0) {
+          primos = false;
+          break;
         }
-        numero++;
+      }
+
+      if (primos) {
+        System.out.println(inicio);
+      }
     }
- }
+  }
 }
