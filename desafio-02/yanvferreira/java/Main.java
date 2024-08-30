@@ -1,31 +1,33 @@
+import java.util.Arrays;
+
 public class Main {
   public static void main(String[] args) {
 
-    int tamanhoDaLista = 30;
-    int inicioLista = 1;
-    boolean primos;
+    // implementando o código seguindo a teroria do Crivo de Eratóstenes
+    int n = 50;
 
-    for (int inicio = inicioLista; inicio <= tamanhoDaLista; inicio++) {
-      if (inicio == 1) {
-        continue;
+    // iniciando um array setando todos os valores como true
+    Boolean[] ehPrimo = new Boolean[n + 1];
+    Arrays.fill(ehPrimo, true);
+
+    // número 0 e 1 não são número primos
+    ehPrimo[0] = false;
+    ehPrimo[1] = false;
+
+    for (int i = 2; i * i <= n; i++) {
+      if (ehPrimo[i]) {
+        // se o número for primo, seta todos os múltiplos dele como falso
+        for (int j = i * i; j <= n; j += i) {
+          ehPrimo[j] = false;
+        }
       }
-      if (inicio == 2 || inicio == 3 || inicio == 5) {
-        System.out.println(inicio);
-        continue;
-      }
+    }
 
-      // numeros 2, 3 e 5 são números primos conhecidos e serão usados para calcular a lista sem
-      // precisar percorrer todos os números
+    System.out.println("Números primos até: " + n);
 
-      if (inicio % 2 == 0 || inicio % 3 == 0 || inicio % 5 == 0) {
-        primos = false;
-        continue;
-      } else {
-        primos = true;
-      }
-
-      if (primos) {
-        System.out.println(inicio);
+    for (int i = 2; i <= n; i++) {
+      if (ehPrimo[i]) {
+        System.out.println(i + " ");
       }
     }
   }
