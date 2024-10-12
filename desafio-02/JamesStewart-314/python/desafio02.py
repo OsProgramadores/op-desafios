@@ -12,4 +12,4 @@ def check_primality(number: int, /) -> bool:
         
     return True
 
-{ print("• Prime Number Detected:\033[32m", number, "\033[0m") for number in range(10001) if check_primality(number) }
+[ print("• Prime Number Detected:\033[32m", number, "\033[0m") for number in range(10001) if check_primality(number) ]
