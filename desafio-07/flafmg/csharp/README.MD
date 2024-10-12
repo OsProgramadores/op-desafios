@@ -11,7 +11,7 @@ Este programa é uma implementação do unix tac em C#. feito por @flafmg
 1. **Clone o repositório:**
    ```bash
    git clone https://github.com/OsProgramadores/op-desafios.git
-   cd op-desafios/desafio-02/flafmg/csharp
+   cd op-desafios/desafio-07/flafmg/csharp
    ```
 2. **Compile o projeto:**
    ```bash
