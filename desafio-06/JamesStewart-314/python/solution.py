@@ -3,11 +3,7 @@ import sys
 import os
 import re
 from collections import Counter as ctr
-from typing import Dict, List, Set, Tuple, Callable
-
-
-
-isAnagram: Callable[[str, str], bool] = lambda word1, word2: ctr(word1) == ctr(word2)
+from typing import Dict, List, Set, Tuple
 
 
 def isSublist(superList: str, subList: str, /) -> bool:    
