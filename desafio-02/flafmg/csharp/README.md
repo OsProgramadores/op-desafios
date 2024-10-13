@@ -10,7 +10,7 @@ Este programa lista todos os números primos entre 1 e 10.000 utilizando C#. fei
 
 1. **Clone o repositório:**
    ```bash
-   git clone https://github.com/OsProgramadores/op-desafios.git
+   git clone https://github.com/flafmg/op-desafios.git
    cd op-desafios/desafio-02/flafmg/csharp
    ```
 2. **Compile o projeto:**
