@@ -36,7 +36,6 @@ class Program
         {
             return simpleNumber.ToString();
         }
-        
         string[] parts = input.Split('/');
         if (parts.Length == 2 && int.TryParse(parts[0], out int numerator) && int.TryParse(parts[1], out int denominator))
         {
@@ -57,12 +56,10 @@ class Program
             {
                 int wholePart = numerator / denominator;
                 int remainder = Math.Abs(numerator % denominator);
-                return $"{wholePart} {remainder}/{Math.Abs(denominator)}"; 
+                return $"{wholePart} {remainder}/{Math.Abs(denominator)}";
             }
             return $"{numerator}/{denominator}";
-            
         }
-        
         return "ERR";
     }
     static int GCD(int a, int b)
