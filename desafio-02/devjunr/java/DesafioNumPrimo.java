@@ -2,7 +2,6 @@ public class DesafioNumPrimo {
     public static void main(String[] args) {
         int quantMax = 10000;
         System.out.println("\n".repeat(2) + "Números primos de 1 a " + quantMax + "\n");
-        
         while(true){
             for(int i=2; i<=quantMax; i++){
                 int contador = 2;
