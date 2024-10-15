@@ -7,9 +7,6 @@ def eh_primo(n):
             return False
     return True
 
-primos = []
 for num in range(1, 10001):
     if eh_primo(num):
-        primos.append(num)
-
-print(primos)
+        print(num)
