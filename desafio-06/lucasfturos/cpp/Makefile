@@ -2,11 +2,11 @@ run: build
 	@if [ ! -f "words.txt" ]; then \
         echo "Arquivo words.txt não encontrado!\nPor favor, execute 'make download' para baixar."; \
     else \
-        ./anagrama "oi gente" words.txt; \
+        ./anagrama "barco" words.txt; \
     fi
 
 build:
-	@g++ -Wall -Wextra -Wpedantic -Werror -g -o anagrama main.cpp
+	@g++ -Wall -Wextra -Wpedantic -Werror -g -o anagrama main.cpp -std=c++2b
 
 download:
 	@if [ ! -f "words.txt" ]; then \
