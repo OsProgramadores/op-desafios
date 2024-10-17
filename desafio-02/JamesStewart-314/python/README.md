@@ -46,7 +46,7 @@ será um _Primo_ e a função retornará `True`.
 - Possuir um ambiente virtual Python instalado localmente em sua máquina com a
 versão `3.8` ou superior.
 
-    Para baixar esta e outras versões, visite o site 
+    Para baixar esta e outras versões, visite o site
     <a target="_blank" href="https://www.python.org/downloads/" style="color: lightgreen">Python.org</a> e siga os procedimentos de instalação para o
     seu sistema operacional.
 
