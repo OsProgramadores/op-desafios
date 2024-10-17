@@ -1,5 +1,5 @@
 # Solução Desafio 02 - Verificação de Primalidade
-![Python](https://img.shields.io/badge/Python-512BD4?style=flat&logo=python&logoColor=yellow) 
+![Python](https://img.shields.io/badge/Python-512BD4?style=flat&logo=python&logoColor=yellow)
 ![VS Code](https://img.shields.io/badge/VScode-007ACC?style=flat&logo=visualstudiocode&logoColor=white)
 
 ## Descrição do Projeto:
@@ -39,4 +39,3 @@ def check_primality(number:  int,  /)  →  bool:
 
 ## Formatação da Saída
 Os números primos são exibidos no terminal utilizando _Códigos ANSI_ e _Sequências de Escape_ para aplicar cores e formatação.
-

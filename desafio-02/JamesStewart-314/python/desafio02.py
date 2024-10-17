@@ -1,6 +1,6 @@
 def check_primality(number: int, /) -> bool:
     assert isinstance(number, int), "\'number\' must be of type \'int\'."
-    
+
     if number <= 1:
         return False
     if number == 2:
