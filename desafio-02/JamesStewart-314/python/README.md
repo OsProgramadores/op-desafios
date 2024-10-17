@@ -9,7 +9,7 @@ Este código tem como objetivo listar todos os números primos entre 0 e 10.000,
 A função `check_primality()`, definida por
 
 ```python
-def check_primality(number:  int,  /)  →  bool:
+def  check_primality(number:  int,  /)  →  bool:
     assert  isinstance(number,  int),  "\'number\' must be of type \'int\'."
 
     if  number  <=  1:
