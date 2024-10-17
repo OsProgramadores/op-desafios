@@ -18,7 +18,7 @@ def check_primality(number: int, /) -> bool:
 # Move o cursor do terminal duas linhas acima para
 # corrigir as quebras de linha excedentes:
 print("\033[2A")
-for currentNumber in range(10):
+for currentNumber in range(10_001):
     if check_primality(currentNumber):
         print(f"\n• \033[32m{currentNumber:,}\033[0m;", end="")
 print("\b \r")
