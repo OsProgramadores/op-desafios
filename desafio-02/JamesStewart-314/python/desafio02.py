@@ -20,10 +20,14 @@ def sieveofEratosthenesPrimeGenerator() -> Generator[int, None, None]:
     :rtype: Generator[int, None, None]
     """
 
+    # Yields the first
+    # and only even prime:
+    yield 2
+
     # Dictionary to allocate the numbers that isn't prime:
     sieveofEratosthenesDict: dict[int, int] = {}
     # Number currently analyzed:
-    currentNumber: int = 2
+    currentNumber: int = 3
 
     while True:
         # If number is not in the dict, it's Prime!
@@ -37,15 +41,17 @@ def sieveofEratosthenesPrimeGenerator() -> Generator[int, None, None]:
 
             # looks for the next multiple of the corresponding value that is
             # not previously in the dictionary and assigns it the prime associated
-            # with the previous value:
-            while sieveofEratosthenesDict.get(currentNumberKey, None) is not None:
+            # with the previous value. Even values for 'currentNumberKey' are skipped:
+            while (sieveofEratosthenesDict.get(currentNumberKey, None) is not None) or\
+                  (not currentNumberKey & 1):
+
                 currentNumberKey += sieveofEratosthenesDict[currentNumber]
 
             sieveofEratosthenesDict[currentNumberKey] = sieveofEratosthenesDict[currentNumber]
             # Deleting the old value to optimize memory usage:
             del sieveofEratosthenesDict[currentNumber]
 
-        currentNumber += 1
+        currentNumber += 2
 
 
 print("\033[1A", end="")

@@ -13,27 +13,30 @@ O gerador `sieveofEratosthenesPrimeGenerator()`, definido por
 
 ```python
 def sieveofEratosthenesPrimeGenerator() → Generator[int, None, None]:
+
+    yield 2
+
     sieveofEratosthenesDict: dict[int, int] = {}
-    currentNumber: int = 2
+    currentNumber: int = 3
 
     while True:
         if currentNumber not in sieveofEratosthenesDict:
-            
             yield currentNumber
-
             sieveofEratosthenesDict[currentNumber * currentNumber] = currentNumber
 
         else:
             currentNumberKey: int = currentNumber + sieveofEratosthenesDict[currentNumber]
 
-            while sieveofEratosthenesDict.get(currentNumberKey, None) is not None:
+            while (sieveofEratosthenesDict.get(currentNumberKey, None) is not None) or\
+                  (not currentNumberKey & 1):
+
                 currentNumberKey += sieveofEratosthenesDict[currentNumber]
 
             sieveofEratosthenesDict[currentNumberKey] = sieveofEratosthenesDict[currentNumber]
 
             del sieveofEratosthenesDict[currentNumber]
 
-        currentNumber += 1
+        currentNumber += 2
 ```
 
 consiste em uma estrutura iterável responsável por empregar a lógica de geração dos
@@ -58,9 +61,9 @@ versão `3.8` ou superior.
     seu sistema operacional.
 
 ## Instruções para Executar o Código
-- Certificando-se de ter instalado corretamente o <code>Python</code> em sua
+- Certificando-se de ter instalado corretamente o `Python` em sua
 máquina, abra o terminal de comando e navegue até o diretório contendo o arquivo
-<code>"desafio02.py"</code>. Em seguida, digite <code>python desafio02.py</code>
+`"desafio02.py"`. Em seguida, digite `python desafio02.py`
 e os resultados deverão ser impressos de maneira formatada na CLI.
 
 ## Formatação da Saída
