@@ -26,8 +26,6 @@ def erastostenesSievePrimeGenerator() -> Generator[int, None, None]:
             # Deleting the old value to optimize memory usage:
             del sieveofEratosthenesDict[currentNumber]
 
-        # Advancing two numbers at a time to
-        # avoid analyzing even integers redundantly:
         currentNumber += 1
 
 
