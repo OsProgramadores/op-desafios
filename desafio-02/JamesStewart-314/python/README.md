@@ -9,38 +9,45 @@ desenvolvido em linguagem Python com o uso de otimizações matemáticas visando
 aprimorar a eficácia da verificação de primalidade.
 
 ## Algoritmo Implementado
-A função `check_primality()`, definida por
+O gerador `erastostenesSievePrimeGenerator()`, definido por
 
 ```python
-def  check_primality(number:  int,  /)  →  bool:
-    assert  isinstance(number,  int),  "\'number\' must be of type \'int\'."
+def  erastostenesSievePrimeGenerator()  →  Generator[int,  None,  None]:
+    sieveofEratosthenesDict:  dict[int,  int]  =  {}
+    currentNumber:  int  =  2
 
-    if  number  <=  1:
-        return  False
-    if  number  ==  2:
-        return  True
-    if  number  %  2  ==  0:
-        return  False
+    while  True:
+        if  currentNumber  not  in sieveofEratosthenesDict:
 
-    for  i  in  range(3,  int(number  **  0.5)  +  1,  2):
-        if  not  number  %  i:
-            return  False
+            yield  currentNumber
 
-    return  True
+            sieveofEratosthenesDict[currentNumber  *  currentNumber]  =  currentNumber
+
+        else:
+            currentNumberKey:  int  =  currentNumber  +  sieveofEratosthenesDict[currentNumber]
+
+            while  sieveofEratosthenesDict.get(currentNumberKey,  None)  is  not  None:
+                currentNumberKey  +=  sieveofEratosthenesDict[currentNumber]
+
+            sieveofEratosthenesDict[currentNumberKey]  =  sieveofEratosthenesDict[currentNumber]
+
+            del  sieveofEratosthenesDict[currentNumber]
+
+        currentNumber  +=  1
 ```
 
-é responsável por empregar a lógica de verificação de primalidade para
-cada número inteiro fornecido como argumento principal. Sua rotina consiste
-em testar a divisibilidade do número que desejamos constatar a primalidade -
-digamos, o número $"n"$ - por todos os números
-<u style="font-weight: 500">ímpares</u> no intervalo
-$[\space 3, \sqrt{n} \space]$. Caso o resto da divisão de $n$ por
-$x \in [\space 3, \sqrt{n} \space]$ resulte em zero, ou seja, dê uma
-divisão inteira, isto significa que o valor analisado não corresponde a um
-número _Primo_ e a função retornará `False`, indicando que trata-se de um
-número composto. Caso contrário, se $n$ não for divisível por nenhum dos
-inteiros positivos contidos no intervalo supracitado, então $n$ certamente
-será um _Primo_ e a função retornará `True`.
+consiste em uma estrutura iterável responsável por empregar a lógica de geração dos
+números primos. Inspirado pelo
+<a href="https://pt.wikipedia.org/wiki/Crivo_de_Erat%C3%B3stenes" target="_blank" style="font-style: italic; color: lightgreen">Crivo de Eratóstenes</a>,
+esta função percorre todos os números $n \in \mathbb{N}$ e, caso $n \in \mathbb{P}$ -
+ou seja, $n$ for primo - associa o valor de $n$ à $n^{2}$ e armazena esta informação no
+dicionário `sieveofEratosthenesDict`. Em contrapartida, se $n \notin \mathbb{P}$, então
+significa que há uma chave correspondente com o mesmo valor no dicionário `sieveofEratosthenesDict` que contém um primo $p'$ divisor de $n$. Dessa maneira,
+substituímos portanto o valor de $n$ pelo próximo múltiplo de $p'$, digamos, $k$, tal que
+$k > n$ e reiteramos sobre este procedimento indefinidamente. A condição de parada é
+estabelecida com uma estrutura condional externa ao gerador, possibilitando uma
+flexibilidade ao produzir uma quantidade arbitrária e virtualmente infinita de números
+primos com altíssima eficiência.
 
 ## Requisitos para Execução
 - Possuir um ambiente virtual Python instalado localmente em sua máquina com a
