@@ -1,16 +1,15 @@
+def listar_primos(n_final):
+    
+    primos = [True] * (n_final + 1)
+    p = 2
+    
+    while (p * p <= n_final):
+        if primos[p] == True:
+            for i in range(p * p, n_final + 1, p):
+                primos[i] = False
+        p += 1
+        
+    return [p for p in range(2, n_final + 1) if primos[p]]
 
-def primos():
-    list_primos = []
-    numeros = list(range(1, 1001))
-
-    for n in numeros:
-        if n > 1:
-            for i in range(2, n):
-                if (n % i) == 0:
-                    break
-            else:
-                list_primos.append(n)
-    return list_primos
-
-for primo in primos():
+for primo in listar_primos(1000):
     print(primo)

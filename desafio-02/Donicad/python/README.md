@@ -9,71 +9,51 @@
 
 ## Funcionamento
 
-Ao executar o arquivo n_primos.py em uma IDE de sua preferência a função "primos" irá iniciar e impressão no terminal exibindo apenas os números primos
+Ao executar o arquivo n_primos.py em uma IDE de sua preferência a função "listar_primos" irá iniciar e imprimir no terminal apenas os números primos.
 
-## Estrutura da função primos()
+## Estrutura da função listar_primos(n_final)
 
-a função recebe duas listas, uma vazia para armazenar os números primos e outra para os números de 1 a 1000.
+a função recebe um parâmetro chamado "n_final", no qual representa o máximo de numeros que queremos listar. 
 
 ```python
-    def primos():
-    list_primos = [] 
-                  #range(start, stop)
-    numeros = list(range(1, 1001))
+    primos = [True] * (n_final + 1)
 ```
-- start : se inicia com o número 1
-- stop : finaliza no número 1001 para que a sequência siga até o 1000 pois o ultimo digito não é incluído.
+- é criado uma lista com n_final + 1 (de 0 a n_final).
+- é definido todas as posições como True. Dessa forma podemos marcar como False os que não são primos
 
 ___
 
 ```Python
-    for n in numeros:
+    p = 2
 ```
-Um laço é criado percorrendo todos os números na lista numeros de 1 a 1000. O número atual no laço é representado por n.
+A variável p é o número que será usado para identificar os múltiplos a serem eliminados. Iniciando com 2 pois números abaixo desse valor são inválidos para o cálculo.
 
 ___
 
 ```Python
-    if n > 1
+    while (p * p <= n_final):
+        if primos[p] == True:
+            for i in range(p * p, n_final + 1, p):
+                primos[i] = False
+        p += 1
 ```
-Uma condição é feita por o 1 não é considerado número primo, então o cálculo só deve ser feito com números maiores.
+Dentro desse laço, é feita uma verificação se o número p é considerado primo ainda. Se ele for, é marcado como "não primos" todos os mútiplos de p, começando de p * p. é feito isso pois qualquer múltiplo de p menor que p*p já foi marcado por múltiplos anteriores.
 
+Após marcar os múltiplos de p, é incrementando p para o próximo número e o processo se repete.
 ___
 
 ```Python
-    for i in range(2, n):
+    return [p for p in range(2, n_final + 1) if primos[p]]
+
 ```
-laço for começa no número 2 e vai até n-1. Ele verifica se o número n é divisível por algum número dentro dessa sequência.
+Após o laço terminar, a lista primos ainda contém valores True para todos os números que são primos. Agora, é criada uma nova lista, que vai conter apenas os números que ainda estão marcados como primos(ou seja, marcados como True).
 
 ___
 
-```Python
-    if (n % i) == 0:
-```
-Nesse if é verificado se n é divisível por i. O operador % retorna o resto da divisão. Se o resto for zero, isso significa que n é divisível por i, e por conta disso o n não é um número primo.
-
-___
 
 ```Python
-    break
-```
-Se n for divisível por qualquer número i no intervalo de 2 até n-1, o laço interno é interrompido com o comando break. Isso evita verificar mais divisores.
-
-___
-
-```Python
-    else:
-        list_primos.append(n)
-```
-
-A estrutura else está associada ao laço for. Esse bloco será executado se o laço for não for interrompido pelo break, ou seja, se o número n não tiver sido divisível por nenhum número entre 2 e n-1. Se isso acontecer, n é um número primo e, portanto, é adicionado à lista list_primos.
-
-Após o término dos laços, a função retorna a lista list_primos, que agora contém todos os números primos de 1 a 1000.
-
-___
-
-```Python
-    for primo in primos():
+    for primo in listar_primos(1000):
         print(primo)
+
 ```
-E para executar a função primos é feito um laço para percorrer todos os numeros armazenados na lista e exibir no terminal uma baixo do outro.
+E para executar a função listar_primos passando um numero final a ela, é feito um laço para percorrer todos os numeros armazenados na lista e exibir no terminal uma baixo do outro.
