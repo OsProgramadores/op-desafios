@@ -12,28 +12,28 @@ aprimorar a eficácia da verificação de primalidade.
 O gerador `erastostenesSievePrimeGenerator()`, definido por
 
 ```python
-def  erastostenesSievePrimeGenerator()  →  Generator[int,  None,  None]:
-    sieveofEratosthenesDict:  dict[int,  int]  =  {}
-    currentNumber:  int  =  2
+def erastostenesSievePrimeGenerator() → Generator[int, None, None]:
+    sieveofEratosthenesDict: dict[int, int] = {}
+    currentNumber: int = 2
 
-    while  True:
-        if  currentNumber  not  in sieveofEratosthenesDict:
+    while True:
+        if currentNumber not in sieveofEratosthenesDict:
+            
+            yield currentNumber
 
-            yield  currentNumber
-
-            sieveofEratosthenesDict[currentNumber  *  currentNumber]  =  currentNumber
+            sieveofEratosthenesDict[currentNumber * currentNumber] = currentNumber
 
         else:
-            currentNumberKey:  int  =  currentNumber  +  sieveofEratosthenesDict[currentNumber]
+            currentNumberKey: int = currentNumber + sieveofEratosthenesDict[currentNumber]
 
-            while  sieveofEratosthenesDict.get(currentNumberKey,  None)  is  not  None:
-                currentNumberKey  +=  sieveofEratosthenesDict[currentNumber]
+            while sieveofEratosthenesDict.get(currentNumberKey, None) is not None:
+                currentNumberKey += sieveofEratosthenesDict[currentNumber]
 
-            sieveofEratosthenesDict[currentNumberKey]  =  sieveofEratosthenesDict[currentNumber]
+            sieveofEratosthenesDict[currentNumberKey] = sieveofEratosthenesDict[currentNumber]
 
-            del  sieveofEratosthenesDict[currentNumber]
+            del sieveofEratosthenesDict[currentNumber]
 
-        currentNumber  +=  1
+        currentNumber += 1
 ```
 
 consiste em uma estrutura iterável responsável por empregar a lógica de geração dos
