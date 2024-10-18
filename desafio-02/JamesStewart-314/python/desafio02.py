@@ -1,6 +1,6 @@
 from typing import Generator
 
-def erastostenesSievePrimeGenerator() -> Generator[int, None, None]:
+def sieveofEratosthenesPrimeGenerator() -> Generator[int, None, None]:
     # Dictionary to allocate the numbers that isn't prime:
     sieveofEratosthenesDict: dict[int, int] = {}
     # Number currently analyzed:
@@ -30,7 +30,7 @@ def erastostenesSievePrimeGenerator() -> Generator[int, None, None]:
 
 
 print("\033[1A", end="")
-for number in erastostenesSievePrimeGenerator():
+for number in sieveofEratosthenesPrimeGenerator():
     if number > 10_000:
         break
 

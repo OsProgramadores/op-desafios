@@ -9,10 +9,10 @@ desenvolvido em linguagem Python com o uso de otimizações matemáticas visando
 aprimorar a eficácia da verificação de primalidade.
 
 ## Algoritmo Implementado
-O gerador `erastostenesSievePrimeGenerator()`, definido por
+O gerador `sieveofEratosthenesPrimeGenerator()`, definido por
 
 ```python
-def erastostenesSievePrimeGenerator() → Generator[int, None, None]:
+def sieveofEratosthenesPrimeGenerator() → Generator[int, None, None]:
     sieveofEratosthenesDict: dict[int, int] = {}
     currentNumber: int = 2
 
