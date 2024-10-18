@@ -14,12 +14,12 @@ Um número palíndromo é aquele que permanece igual quando lido de trás para f
 1. **Clone o repositório op-desafio**:
    ```
    git clone https://github.com/<seu_usuario_no_github>/op-desafios
-   ```   
+   ```
 
 Ou veja mais instruções [nesse Readme](https://github.com/osprogramadores/op-desafios/#readme)
 
 2. **Navegue até o diretório do projeto**:
-   ```   
+   ```
    cd op-desafios
    ```
 
