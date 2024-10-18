@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 # author: Alison  gh: @imalisoon
 
-def display_primes(limit: int) -> None:
-    dividers: int = 0
-    for n in range(2, limit+1):
-        for i in range(2, n+1):
-            if n % i == 0:
-                dividers += 1
+def crivo(limit: int) -> list:
+    primes: list = [True] * (limit+1)
+    primes[0], primes[1] = False, False
 
-        if dividers == 1:
-            print(n)
+    prime: int = 2
+    while (prime*prime) <= limit:
+        if primes[prime]:
+            for n in range(prime*prime, limit+1, prime):
+                primes[n] = False
 
-        dividers = 0
+        prime += 1
+
+    return primes
 
 
-display_primes(10_000)
+limit_numbers: int = 10_000
+
+for n, is_prime in enumerate(crivo(limit_numbers)):
+    if is_prime: print(n)

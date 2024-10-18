@@ -1,14 +1,21 @@
 # Desafio 02: Primos
+Solução usando algoritmo [crivo de eratostenes (Wikipedia)](https://pt.m.wikipedia.org/wiki/Crivo_de_Erat%C3%B3stenes)
 
 ## Sobre a solução
-primeiro, defini a função `display_primes` que recebe um `int`, que seria o limite de primos.
+Primeiramente, defini a função `crivo()` que recebe `limit`, um `int` que é o limite de números, e retorna `primes`, uma `list` que é um array com os números *primos* definidos como `True` e os não *primos* como `False`.
 
-No corpo da função a variavel `dividers` guarda a quantidade de divisores que aquele número especifico tem. detalhe que numeros *primos* tem apenas dois divisores(1 e ele mesmo).
+Dentro do escopo da função, defini a variável `primes` que inicia uma lista de tamanho `limit`, onde cada célula será definida como `True` inicialmente, assim informando que todos os números de 0 a `limit` são *primos*.
 
-O primeiro `for` loop cria um laço começando de **2** até o número limite. cada número vai ser divido por todos os números anteriores a ele (*for* aninhado) e então verificado se é um divisor caso o resto de sua divisão seja **zero**, caso seja divisivel adicina +1 a `dividers` informando que o numero(do primeiro `for`) tem mais um divisor.
+Como os números iniciais **0** e **1** não são primos, defini os valores de suas células como `False`.
 
-Quando a divisao for feita com todos os numeros anteriores, o segundo laço termina e agora verificamos se o numero é **primo**. Como? pelo numero de divisores.
+A variável `prime` vai servir como um iterador para o laço `while` e vai servir para calcularmos seus múltiplos. Já que cada iteração do laço seu valor sera o próximo *primo*.
 
-Como eu desconsiderei a divisao por *1* (jà que todo numero é divisivel por *1*) precisamos apenas saber se o numero tem **1** divisor, então mostre-o. Caso tenha mais de *1* divisor ele não é primo ebnaobsera mostrado.
+No laço while verificamos se o atual número (valor de `prime`) é menor que a raiz quadrada de `limit` (usando a equação `(prime*prime) <= limit)`). Enquanto for verdade, verificaremos os multiplos daquele número.
 
-Agora é só reiniciar a variavel `dividers` com o valor 0 (*zero*) para ser contado os divisores do proximo numero no laço `for`.
+Já no escopo do laço `while`, verificamos se o valor da célula do número na lista é `True` indicando que é *primo*. Então calculamos os múltiplos desse número e caso seja, marcamos o valor da célula como `False` informando que não são *primos*.
+
+> Inicialmente começamos com o **2**, então marcamos como `False` todos os múltiplos de **2**. Exceto, obviamente, ele mesmo.
+
+Já fora do escopo do `for` e do `if`, atualizamos a váriavel `prime` para que faça o mesmo com o proximo numero.
+
+Ja no `for` que fica fora do escopo da funcao `crivo()`, percorremos o retorno da funcao, nesse caso `primes`, e se a posicao conter `True` o nemero da posicao é *primo*.
