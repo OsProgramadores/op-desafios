@@ -16,4 +16,3 @@ while limite_a < limite_b+1 :
 print("Números palíndromos encontrados:")
 for palindromo in lista_pal:
     print(palindromo)
-
