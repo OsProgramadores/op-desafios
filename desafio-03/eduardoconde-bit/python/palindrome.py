@@ -18,8 +18,7 @@ def is_palindrome(_start: int, _end: int) -> None:
         print("Os limites devem ser números inteiros positivos.")
         return
 
-    # Limites maiores que o máximo suportado
-    if _start > MAX_INT and _end > MAX_INT:
+    if (_start > MAX_INT) or (_end > MAX_INT):
         print("Algum Limite > Máximo Inteiro Suportado")
         return
 
