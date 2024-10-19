@@ -41,7 +41,7 @@ if __name__ == "__main__":
             continue
 
         break
-    
+
     print(f"\nPalindromos de {first_number} a {last_number}")
     for n in range(first_number, last_number+1):
         if is_palindrome(n):
