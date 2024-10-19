@@ -12,7 +12,7 @@ aprimorar a eficácia da verificação de primalidade.
 O gerador `sieveofEratosthenesPrimeGenerator()`, definido por
 
 ```python
-def sieveofEratosthenesPrimeGenerator() → Generator[int, None, None]:
+def sieveofEratosthenesPrimeGenerator() -> Generator[int, None, None]:
 
     yield 2
 
@@ -25,15 +25,12 @@ def sieveofEratosthenesPrimeGenerator() → Generator[int, None, None]:
             sieveofEratosthenesDict[currentNumber * currentNumber] = currentNumber
 
         else:
-            currentNumberKey: int = currentNumber + sieveofEratosthenesDict[currentNumber]
+            currentNumberKey: int = currentNumber + (sieveofEratosthenesDict[currentNumber] << 1)
 
-            while (sieveofEratosthenesDict.get(currentNumberKey, None) is not None) or\
-                  (not currentNumberKey & 1):
-
-                currentNumberKey += sieveofEratosthenesDict[currentNumber]
+            while sieveofEratosthenesDict.get(currentNumberKey):
+                currentNumberKey += (sieveofEratosthenesDict[currentNumber] << 1)
 
             sieveofEratosthenesDict[currentNumberKey] = sieveofEratosthenesDict[currentNumber]
-
             del sieveofEratosthenesDict[currentNumber]
 
         currentNumber += 2

@@ -37,15 +37,13 @@ def sieveofEratosthenesPrimeGenerator() -> Generator[int, None, None]:
             sieveofEratosthenesDict[currentNumber * currentNumber] = currentNumber
 
         else:
-            currentNumberKey: int = currentNumber + sieveofEratosthenesDict[currentNumber]
+            currentNumberKey: int = currentNumber + (sieveofEratosthenesDict[currentNumber] << 1)
 
             # looks for the next multiple of the corresponding value that is
             # not previously in the dictionary and assigns it the prime associated
             # with the previous value. Even values for 'currentNumberKey' are skipped:
-            while (sieveofEratosthenesDict.get(currentNumberKey, None) is not None) or\
-                  (not currentNumberKey & 1):
-
-                currentNumberKey += sieveofEratosthenesDict[currentNumber]
+            while sieveofEratosthenesDict.get(currentNumberKey):
+                currentNumberKey += (sieveofEratosthenesDict[currentNumber] << 1)
 
             sieveofEratosthenesDict[currentNumberKey] = sieveofEratosthenesDict[currentNumber]
             # Deleting the old value to optimize memory usage:
