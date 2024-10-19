@@ -3,10 +3,10 @@ from typing import Generator
 def sieveofEratosthenesPrimeGenerator() -> Generator[int, None, None]:
 
     """
-     Generates an infinite sequence of prime numbers 
+     Generates an infinite sequence of prime numbers
     using the Sieve of Eratosthenes algorithm.
-     
-     This generator function uses a dictionary to keep track of 
+
+     This generator function uses a dictionary to keep track of
     non-prime numbers and their smallest prime factors.
     It starts from the number 2 and iteratively finds the next
     prime number by checking if the current number is
