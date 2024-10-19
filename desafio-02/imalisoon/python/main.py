@@ -18,5 +18,6 @@ def crivo(limit: int) -> list:
 
 limit_numbers: int = 10_000
 
-for n, is_prime in enumerate(crivo(limit_numbers)):
-    if is_prime: print(n)
+for number, is_prime in enumerate(crivo(limit_numbers)):
+    if is_prime:
+        print(number)
