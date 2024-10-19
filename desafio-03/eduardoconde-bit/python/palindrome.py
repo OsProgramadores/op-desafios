@@ -14,10 +14,6 @@ def is_palindrome(_start: int, _end: int) -> None:
 
     MAX_INT = (1 << 64) - 1
 
-    if _start < 1 or _end < 1:
-        print("Os limites devem ser números inteiros positivos.")
-        return
-
     if (_start > MAX_INT) or (_end > MAX_INT):
         print("Algum Limite > Máximo Inteiro Suportado")
         return
@@ -33,14 +29,32 @@ def is_palindrome(_start: int, _end: int) -> None:
             if inverse == num:
                 print(num)
 
+
 try:
-    print("---- Números Palíndromes sobre um Intervalo ----")
-    start = int(input("Digite o valor inicial do intervalo: "))
-    end = int(input("Digite o valor final do intervalo: "))
-    is_palindrome(start, end)
-except ValueError:
-    print("Por favor, digite apenas números inteiros!")
+    print("------- Números Palíndromes em um Intervalo ------\n" + '-' * 50)
+    while True:
+        MSG_INT_ERROR = 'Apenas números inteiros positivos!'
+
+        start = input("Digite o valor inicial do intervalo: ")
+
+        if not start.isdigit() or start == '0':
+            print(MSG_INT_ERROR)
+            continue
+
+        end = input("Digite o valor final do intervalo: ")
+
+        if not end.isdigit() or end == '0':
+            print(MSG_INT_ERROR)
+            continue
+
+        break
+
+    print('-'*50)
+    is_palindrome(int(start), int(end))
+    print('-'*50)
+
 except KeyboardInterrupt:
     print("\nProcesso terminado pelo usuário.")
+
 finally:
     print("Fim do Programa! :)")
