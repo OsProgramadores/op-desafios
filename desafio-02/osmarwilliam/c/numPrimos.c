@@ -2,24 +2,23 @@
 
 int main()
 {
-    for (int i = 1; i <= 10000; i++)
+    int numero_max = 10000;
+    int lista[numero_max]; // para resolver o problema usando o Crivo de Eratóstenes primeiro devemos criar um array com todos os elementos
+    for (int i = 0; i < numero_max; i++)
     {
-        // todo número primo é divido por ele mesmo e por 1, logo, só temos duas possibilidades (1 e o próprio número)
-        int count = 0;
-        for (int j = 2; j < i / 2; j++) // entretando, não é necessário iterar por todos números, para otimizar iremos análisar sempre até a metade do determinado número
-        // exemplo, dentre os divisores de 64, o 32 é o último número, uma vez que a partir do 32 nenhum número terá resto = 0, 
-        // assim como 15, a partir do 7,5 não é necessário procurar algum divisor
-        {
-            if (i % j == 0)
-            {
-                count++;
-                // iremos calcular quantas vezes um determinado número tem resto = 0.
-            }
-        }
-        if (count == 0)
-        {
-            printf("%i\n", i);
-        }
+        lista[i] = i + 2; // lista[2..10000]
     }
+    printf("%i\n", lista);
+    // implementando o Crivo de Eratóstenes
+    for (int i = 0; i < numero_max; i++)
+        if (lista[i] != 0)
+            for (int j = i + lista[i]; j < numero_max; j += lista[i])
+            {
+                lista[j] = 0; // toda vez que um número for múltiplo irá receber como valor 0
+            }
+    for (int i = 0; i < numero_max; i++)
+        if (lista[i] != 0)
+        // no array todo número que não é primo tem o valor de 0, logo iremos excluir esses e imprimir o restante
+            printf("%i\n", lista[i]);
     return 0;
 }
