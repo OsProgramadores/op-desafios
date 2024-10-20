@@ -1,14 +1,8 @@
 def eh_numero(val):
-    if val.isdigit():
-        return True
-    else:
-        return False
+    return val.isdigit()
 
 def eh_positivo(val):
-    if int(val) >= 0:
-        return True
-    else:
-        return False
+    return int(val) >= 0
 
 def check_numero(mensagem):
     while True:
