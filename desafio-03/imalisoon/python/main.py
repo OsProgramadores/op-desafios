@@ -13,31 +13,45 @@ def is_palindrome(number: int) -> bool:
 
     return number_reverse == number
 
-def get_input(msg) -> str:
-    return input(msg)
+def get_input(msg: str) -> int:
+    digit: int = int()
+    while True:
+        try:
+            digit = int(input(msg))
+        except ValueError:
+            print("Informe apenas NUMEROS!")
+            continue
+        break
+
+    return digit
 
 
 if __name__ == "__main__":
     MAX = (1 << 64) - 1
     while True:
-        try:
-            first_number: int = int(get_input("Informe o primeiro numero: "))
-            last_number: int = int(get_input("Informe o ultimo numero: "))
-
-        except ValueError:
-            print("O primeiro e ultimo numero precisam ser interios positivos, nao letras!")
+        first_number: int = get_input("Informe o primeiro numero: ")
+        if first_number <= 0:
+            print("Primeiro numero precisar ser um INTEIRO POSITIVO!")
             continue
 
-        if first_number <= 0 or last_number <= 0:
-            print("O primeiro e ultimo numero precisam ser POSITIVOS! nao negativos ou ZEROS.")
+        if first_number > MAX:
+            print("Primeiro numero excede o valor limite!")
+            continue
+
+        break
+
+    while True:
+        last_number: int = get_input("Informe o ultimo numero: ")
+        if last_number <= 0:
+            print("Ultimo numero precisar ser um INTEIRO POSITIVO!")
+
+            continue
+        if last_number > MAX:
+            print("Ultimo numero excede o valor limite!")
             continue
 
         if last_number < first_number:
-            print("O ultimo numero nao pode ser MENOR que o primeiro numero")
-            continue
-
-        if first_number > MAX or last_number > MAX:
-            print("EPA! primeiro ou segundo excedem o valor limite. Tente denovo.")
+            print("Ultimo numero nao pode ser menor que o Primeiro!")
             continue
 
         break
