@@ -31,8 +31,8 @@ A variável p é o número que será usado para identificar os múltiplos a sere
 ___
 
 ```Python
-    while (p * p <= n_final):
-        if primos[p] == True:
+    while p * p <= n_final:
+        if primos[p] is True:
             for i in range(p * p, n_final + 1, p):
                 primos[i] = False
         p += 1
