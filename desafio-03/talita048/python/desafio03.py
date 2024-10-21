@@ -18,11 +18,11 @@ print("\nBem-vindo(a) ao detector de números palíndromos!")
 print("Um número palíndromo é aquele que permanece igual quando lido de trás para frente.")
 print("Insira dois números e vou te informar todos os palíndromos que existem entre eles :D")
 
+limite_a = check_numero("\nDigite o primeiro número: ")
 while True:
-    limite_a = check_numero("Digite o primeiro número: ")
     limite_b = check_numero("Digite o segundo número: ")
     if limite_a >= limite_b:
-        print("O primeiro número deve ser menor que o segundo. Tente novamente.")
+        print("O segundo número deve ser maior que o primeiro!")
     else:
         break
 
