@@ -33,7 +33,7 @@ class Anagrams {
             if (!static_cast<bool>(std::isalpha(c))) {
                 return std::unexpected("Apenas caracteres de A-Z são válidos!");
             }
-        };
+        }
 
         std::transform(m_InputWord.begin(), m_InputWord.end(),
                        m_InputWord.begin(), ::toupper);
