@@ -81,14 +81,15 @@ def get_valid_number(*, message: str | None = None,
 def impress_palindromic_numbers_in_range(start: int, end: int, /) -> None:
     numbersFoundFlag: bool = False
 
-    print("[ ", end="")
+    palindromicNumbersFound: list[int] = []
+
     for number in range(start, end + 1):
         if number_is_palindromic(number):
-            print(number, ", ", sep="", end="")
-            numbersFoundFlag = True
+            palindromicNumbersFound.append(number)
 
-    print("\b\b", end="")
-    if numbersFoundFlag is True:
+    if palindromicNumbersFound:
+        print("[ ", end="")
+        print(*palindromicNumbersFound, sep=", ", end="")
         print(" ]")
     else:
         print("[ sorry, no palindromic numbers found in the given interval ]")
