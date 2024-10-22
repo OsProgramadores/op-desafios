@@ -3,6 +3,8 @@
 This module does stuff.
 """
 
+import sys
+
 
 def sieve_of_eratosthenes(limit: int) -> list[int]:
     """Return all primes smaller than or equal to N.
@@ -26,4 +28,13 @@ def sieve_of_eratosthenes(limit: int) -> list[int]:
 
 
 if __name__ == "__main__":
-    print(sieve_of_eratosthenes(10000))
+    number: int = 10000
+
+    if len(sys.argv) > 1:
+        try:
+            number = int(sys.argv[1])
+        except ValueError:
+            print('Provide a valid int for the limit,')
+            sys.exit(1)
+
+    print(sieve_of_eratosthenes(number))
