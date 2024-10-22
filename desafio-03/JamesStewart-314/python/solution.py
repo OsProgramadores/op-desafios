@@ -7,12 +7,12 @@ r"""
 
 import os
 import time
-from typing import Callable, TypeAlias
+from typing import Callable, TypeAlias, Final
 
 # NumberConstraint: Tuple containing the lower
 # and upper bound of the new input number, respectivaly:
 NumberConstraint: TypeAlias = tuple[int | None, int | None] | None
-
+MAXINTSIZE: Final[int] = (1 << 64) - 1
 
 number_is_palindromic: Callable[[int], bool] = lambda x: \
                (strNumber := str(x)) == strNumber[::-1]
@@ -105,10 +105,10 @@ print("\\\\\\", "_" * 53, "///\n", sep="")
 
 firstNumber: int = get_valid_number(message = "• Enter the "\
                                   "\033[33;1mFirst\033[0m Number: ",
-                                  constraints = (0, None))
+                                  constraints = (0, MAXINTSIZE))
 secondNumber: int = get_valid_number(message = "• Enter the "\
                                   "\033[34;1mSecond\033[0m Number: ",
-                                  constraints = (firstNumber, None))
+                                  constraints = (firstNumber, MAXINTSIZE))
 
 print()
 impress_palindromic_numbers_in_range(firstNumber, secondNumber)
