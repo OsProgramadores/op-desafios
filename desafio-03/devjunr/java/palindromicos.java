@@ -30,4 +30,5 @@ public class palindromicos {
         System.out.println(numero);
       }
     }
- }
+  }
+}
