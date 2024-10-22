@@ -9,5 +9,5 @@ def listar_primos(n_final):
         p += 1
     return [p for p in range(2, n_final + 1) if primos[p]]
 
-for primo in listar_primos(1000):
+for primo in listar_primos(10000):
     print(primo)

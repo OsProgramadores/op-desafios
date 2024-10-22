@@ -1,4 +1,4 @@
-# Script para exibir todos os números primos de 1 a 1000
+# Script para exibir todos os números primos de 1 a 10000
 
 ## Requisitos
 
@@ -52,7 +52,7 @@ ___
 
 
 ```Python
-    for primo in listar_primos(1000):
+    for primo in listar_primos(10000):
         print(primo)
 
 ```
