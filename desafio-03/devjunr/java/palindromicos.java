@@ -26,7 +26,7 @@ public class palindromicos {
     for (int i = valorInicial; i <= valorFinal; i++) {
       String numero = Integer.toString(i);
       String reversed = new StringBuilder(numero).reverse().toString();
-       if (reversed.equals(numero)) {
+      if (reversed.equals(numero)) {
         System.out.println(numero);
       }
     }
