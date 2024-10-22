@@ -30,7 +30,7 @@ if __name__ == "__main__":
     MAX = (1 << 64) - 1
     while True:
         first_number: int = get_input("Informe o primeiro numero: ")
-        if first_number <= 0:
+        if first_number < 0:
             print("Primeiro numero precisar ser um INTEIRO POSITIVO!")
             continue
 
@@ -42,7 +42,7 @@ if __name__ == "__main__":
 
     while True:
         last_number: int = get_input("Informe o ultimo numero: ")
-        if last_number <= 0:
+        if last_number < 0:
             print("Ultimo numero precisar ser um INTEIRO POSITIVO!")
 
             continue
