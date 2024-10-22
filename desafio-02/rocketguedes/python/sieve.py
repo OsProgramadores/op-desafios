@@ -1,6 +1,7 @@
-"""This is the example module.
+"""Sieve of Eratosthenes.
 
-This module does stuff.
+Find all the prime numbers less than or equal to a given integer n by Eratosthenes'
+method.
 """
 
 import sys
