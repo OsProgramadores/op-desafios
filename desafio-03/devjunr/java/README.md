@@ -34,7 +34,7 @@ Bash:
 java Palindromos.java 1 50
 ```
 
-Saída: 
+Saída:
 
 ```
 __________
@@ -42,7 +42,7 @@ Valor Inicial: 1
 Valor Final: 50
 __________
 
-Resultado: 
+Resultado:
 1
 2
 3
