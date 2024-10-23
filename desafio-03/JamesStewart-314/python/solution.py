@@ -138,7 +138,7 @@ def get_valid_number(*, message: str | None = None,
 
     :param constraints: Defines a tuple with two optional values that represent
      the lower and upper bounds for inputting a value. If there is no lower bound,
-     the first element of the tuple is None. If there is no upper bound, the 
+     the first element of the tuple is None. If there is no upper bound, the
      second element is None.
 
       E.g.: (10, None) means that the value must be greater than or equal to 10,
