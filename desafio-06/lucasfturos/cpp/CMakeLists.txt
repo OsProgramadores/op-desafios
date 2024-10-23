@@ -15,6 +15,6 @@ add_compile_options(
     -Wall -Wextra -Wpedantic -Werror -pedantic -g -Ofast
 )
 
-add_executable(${PROJECT_NAME} 
+add_executable(${PROJECT_NAME}
     main.cpp
 )

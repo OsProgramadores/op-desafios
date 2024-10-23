@@ -26,7 +26,6 @@ download() {
 
 run() {
     palavra=${1:-"barco"}
-    
     if [ ! -f "words.txt" ]; then
         echo "Arquivo words.txt não encontrado!"
         echo "Por favor, execute './build.sh -download' para baixar."
