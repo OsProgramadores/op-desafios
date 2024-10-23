@@ -41,4 +41,5 @@ if __name__ == "__main__":
             print('Provide a valid int for the limit,')
             sys.exit(1)
 
-    print(sieve_of_eratosthenes(number))
+    for result in sieve_of_eratosthenes(number):
+        print(result)
