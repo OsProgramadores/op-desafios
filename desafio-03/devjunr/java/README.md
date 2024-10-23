@@ -100,7 +100,7 @@ Nessa parte do código, caso não tenha ocorrido nenhum erro anteriomente, o có
     }
 ```
 
-Ainda no try, o código faz a verificação se os valores iniciais e final são maior ou igual a zero, uma vez que deve ser aceito apenas os números positivos. Após a verificação do else, entra dois blocos com o NumberFormatException e o 
+Ainda no try, o código faz a verificação se os valores iniciais e final são maior ou igual a zero, uma vez que deve ser aceito apenas os números positivos. Após a verificação do else, entra dois blocos com o NumberFormatException e o
 ArrayIndexOutOfBoundsException. O NumberFormatException será executado caso os valores passados como argumentos na execução do código, seja diferentes de int, exemplo: O usuário passa uma letra ao invés de um número. O ArrayIndexOutOfBoundsException é usado caso o usuário passe apenas um valor na execução.
 
 
