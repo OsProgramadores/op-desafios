@@ -61,7 +61,8 @@ def constraints_assertion(constraints: NumberConstraint, functionName: str, /) -
 
         assert all((isinstance((exc := element), int | None)) for element in constraints),\
               f"\'constraints\' parameter in \'{functionName}\' function must"\
-              f" contain only elements of type \'int\' or \'None\'. (Exception Caught: {exc})"
+              f" contain only elements of type \'int\' or \'None\'."\
+              f" (Exception Caught: \'{exc}\')"
 
 
 def clear_upper_lines(quantity: int, /) -> None:
