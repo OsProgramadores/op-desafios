@@ -34,6 +34,9 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         try:
             number = int(sys.argv[1])
+            if number < 2:
+                print('The limit must be greater than 1')
+                sys.exit(1)
         except ValueError:
             print('Provide a valid int for the limit,')
             sys.exit(1)
