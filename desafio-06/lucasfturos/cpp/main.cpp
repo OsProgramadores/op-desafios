@@ -3,8 +3,42 @@
 #include <fstream>
 #include <iostream>
 #include <string_view>
+#include <unordered_map>
 #include <unordered_set>
+#include <variant>
 #include <vector>
+
+struct MaxLengthError {
+    std::size_t length;
+    std::string message = "Tamanho máximo da palavra/frase é de 16 caracteres!";
+};
+
+struct InvalidCharacterError {
+    char invalidChar;
+    std::string message = "Apenas caracteres de A-Z são válidos!";
+};
+
+struct FileOpenError {
+    std::string fileName;
+    std::string message;
+
+    explicit FileOpenError(const std::string &name)
+        : fileName(name), message("Não foi possível abrir o arquivo: " + name) {
+    }
+};
+
+struct NoAnagramsError {
+    std::string word;
+    std::string message;
+
+    explicit NoAnagramsError(const std::string &w)
+        : word(w),
+          message("Nenhum anagrama válido encontrado para a palavra/frase: " +
+                  w) {}
+};
+
+using AnagramError = std::variant<MaxLengthError, InvalidCharacterError,
+                                  FileOpenError, NoAnagramsError>;
 
 class Anagrams {
   private:
@@ -13,27 +47,29 @@ class Anagrams {
     std::unordered_set<std::string> m_ValidWords;
     std::unordered_set<std::string> m_ValidAnagrams;
 
-    using ExpectedResult = std::expected<void, std::string>;
+    static std::unordered_map<char, int>
+    computeCharFrequency(const std::string &word) {
+        std::unordered_map<char, int> freq;
+        for (char c : word) {
+            freq[c]++;
+        }
+        return freq;
+    }
 
-  public:
-    Anagrams(std::string_view inputWord, std::string_view filename)
-        : m_InputWord(inputWord), m_Filename(filename) {}
-
-    ExpectedResult processInputWord() {
+    std::expected<void, AnagramError> processInputWord() {
         m_InputWord.erase(
             std::remove_if(m_InputWord.begin(), m_InputWord.end(), ::isspace),
             m_InputWord.end());
 
         if (m_InputWord.length() > 16) {
-            return std::unexpected(
-                "Tamanho máximo da palavra/frase é de 16 caracteres!");
+            return std::unexpected(MaxLengthError{m_InputWord.length()});
         }
 
         for (char &c : m_InputWord) {
             if (!static_cast<bool>(std::isalpha(c))) {
-                return std::unexpected("Apenas caracteres de A-Z são válidos!");
+                return std::unexpected(InvalidCharacterError{c});
             }
-        };
+        }
 
         std::transform(m_InputWord.begin(), m_InputWord.end(),
                        m_InputWord.begin(), ::toupper);
@@ -41,11 +77,10 @@ class Anagrams {
         return {};
     }
 
-    ExpectedResult loadValidWords() {
+    std::expected<void, AnagramError> loadValidWords() {
         std::ifstream file(m_Filename);
         if (!file.is_open()) {
-            return std::unexpected("Não foi possível abrir o arquivo: " +
-                                   m_Filename);
+            return std::unexpected(FileOpenError{m_Filename});
         }
 
         std::string line;
@@ -57,21 +92,19 @@ class Anagrams {
         return {};
     }
 
-    ExpectedResult generateValidAnagrams() {
-        std::string tempWord = m_InputWord;
-        std::sort(tempWord.begin(), tempWord.end());
-
-        do {
-            if (tempWord != m_InputWord &&
-                m_ValidWords.find(tempWord) != m_ValidWords.end()) {
-                m_ValidAnagrams.insert(tempWord);
+    std::expected<void, AnagramError> generateValidAnagrams() {
+        auto inputFreq = computeCharFrequency(m_InputWord);
+        for (const auto &word : m_ValidWords) {
+            if (word.length() == m_InputWord.length()) {
+                auto wordFreq = computeCharFrequency(word);
+                if (wordFreq == inputFreq && word != m_InputWord) {
+                    m_ValidAnagrams.insert(word);
+                }
             }
-        } while (std::next_permutation(tempWord.begin(), tempWord.end()));
+        }
 
         if (m_ValidAnagrams.empty()) {
-            return std::unexpected(
-                "Nenhum anagrama válido encontrado para a palavra: " +
-                m_InputWord);
+            return std::unexpected(NoAnagramsError{m_InputWord});
         }
 
         return {};
@@ -86,7 +119,11 @@ class Anagrams {
         }
     }
 
-    ExpectedResult run() {
+  public:
+    Anagrams(std::string_view inputWord, std::string_view filename)
+        : m_InputWord(inputWord), m_Filename(filename) {}
+
+    std::expected<void, AnagramError> run() {
         if (auto result = processInputWord(); !result) {
             return std::unexpected(result.error());
         }
@@ -119,7 +156,11 @@ int main(int argc, char **argv) {
 
     Anagrams anagram(inputWord, filename);
     if (auto result = anagram.run(); !result) {
-        std::cerr << "Erro: " << result.error() << '\n';
+        std::visit(
+            [](const auto &error) {
+                std::cerr << "Error: " << error.message << '\n';
+            },
+            result.error());
         return EXIT_FAILURE;
     }
 
