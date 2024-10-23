@@ -63,49 +63,46 @@ Resultado:
 O código foi escrito 100% em java. E possui caracteristicas que um iniciante consegue compreender.
 
 ```
-public class Palindromos {
-    public static void main(String[] args){
-        int valorInicial = Integer.parseInt(args[0]);
-        int valorFinal = Integer.parseInt(args[1]);
+public class palindromicos {
+  public static void main(String[] args) {
+    try {
+      int valorInicial = Integer.parseInt(args[0]);
+      int valorFinal = Integer.parseInt(args[1]);
+      if (valorInicial > 0 & valorFinal > 0) {
 ```
 
 O código inicia com a declaração da classe principal (Palindromos), e em seguida, é declarado o método main.
-Posteriormente é declarada duas variáveis que recebe números inteiros (valor inicial e valor final). Essas variáveis guardam os valores declarado nos argumentos da execução do código.
+Posteriormente é declarada duas variáveis que recebe números inteiros (valor inicial e valor final). Essas variáveis guardam os valores declarado nos argumentos da execução do código. O try-Catch será usado para o tratamento de erros
 
 
 ```
-if(args.length < 2) {
-            System.out.println("Forneça dois valores inteiros como argumento\nExemplo: java Palindromos.java 10 50");
-        }else if(valorInicial < 0 || valorFinal < 0){
-            System.out.println("Apenas números maior que 0 são aceitos");
-        }else{
-            System.out.println("_".repeat(10)+"\n"+"Valor Inicial: " + valorInicial + "\nValor Final: " + valorFinal +"\n"+ "_".repeat(10)+"\n");
-            tratamentoDosValores(valorInicial, valorFinal);
-        }
+System.out.println(
+            "_".repeat(15)
+                + "\nValor Inicial: "
+                + valorInicial
+                + "\nValor Final: "
+                + valorFinal
+                + "\n"
+                + "_".repeat(15));
+        tratamentoDosValores(valorInicial, valorFinal);
 ```
 
-Nessa parte o código faz uma simples verificação para que possa prosseguir. Verifica o total de argumentos que foi passado, se o número é maior que zero ou não, se passar nas verificações o ele executa o último else, onde printa no terminal o valor inicial e o valor final, para exibir ao usuário que o código conseguiu ler os dois valores. e em seguida, usa a função         tratamentoDosValores(valorInicial, valorFinal) para fazer o tratamento dos valores
+Nessa parte do código, caso não tenha ocorrido nenhum erro anteriomente, o código irá imprimir o valor inicial e o final, e posteriomente usar a função tratamentoDosValores para fazer toda a lógica e imprimir apenas os números palindromos.
 
 ```
-private static void tratamentoDosValores(int valorInicial, int valorFinal){
-        System.out.println("Resultado: ");
-        for(int i=valorInicial;i<=valorFinal;i++){
-            String numero = Integer.toString(i);
-            String reversed = new StringBuilder(numero).reverse().toString();
-            if (reversed.equals(numero)) {
-                System.out.println(numero);
-            }
-        }
+} else if (valorInicial <= 0 || valorFinal <= 0) {
+        System.out.println("São aceitos apenas valores positivos");
+      }
+    } catch (NumberFormatException e) {
+      System.out.println("Apenas números inteiros são aceitos");
+    } catch (ArrayIndexOutOfBoundsException e) {
+      System.out.println("É necessário pelo menos dois valores inteiros como argumento");
     }
 ```
 
-Na declaração do método tratamentoDosValores, ele recebe os valores inicial e final, em seguida printa no terminal a palavra "Resultado: "
+Ainda no try, o código faz a verificação se os valores iniciais e final são maior ou igual a zero, uma vez que deve ser aceito apenas os números positivos. Após a verificação do else, entra dois blocos com o NumberFormatException e o 
+ArrayIndexOutOfBoundsException. O NumberFormatException será executado caso os valores passados como argumentos na execução do código, seja diferentes de int, exemplo: O usuário passa uma letra ao invés de um número. O ArrayIndexOutOfBoundsException é usado caso o usuário passe apenas um valor na execução.
 
-Entrando no laço de repetição (for), ele é declarado com uma variavel do tipo inteiro (i), onde inicia com o valorInicial, vai até i ser igual valorFinal, e a cada loop ele adiciona mais um (i++). Na primeira linha do loop, é declarado uma String nomeada de número, a mesma recebe uma conversão do i (int) para String.
-
-Após a string numero, foi declarada uma outra string, chamada de reversed, ela é a responsável por reverter o "texto" para posteriormente fazer uma verificação.
-
-Entrando no if do método, ele faz a verificação se a variavel reversed é igual a váriavel número, se sim: Imprime o número no terminal, se não, não faz nada. Permitindo assim, exibir apenas os números que quando invertido, é igual ao valor normal
 
 ## Autores
 
