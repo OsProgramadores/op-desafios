@@ -10,10 +10,7 @@ import sys
 def is_palindrome(value: int | str) -> bool:
     """Check if a string or integer is a palindrome."""
 
-    if str(value) == str(value)[::-1]:
-        return True
-
-    return False
+    return str(value) == str(value)[::-1]
 
 
 if __name__ == "__main__":
