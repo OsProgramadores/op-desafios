@@ -49,21 +49,20 @@ def constraints_assertion(constraints: NumberConstraint, functionName: str, /) -
     """
 
     assert isinstance(functionName, str), \
-           "Assertion Error: \'functionName\' parameter in \'constraints_assertion\'"\
+           "\'functionName\' parameter in \'constraints_assertion\'"\
            " function must be of type \'str\'."
 
     assert isinstance(constraints, tuple | None), \
-           f"Assertion Error: \'constraints\' parameter in \'{functionName}\'"\
+           f"\'constraints\' parameter in \'{functionName}\'"\
            " function must be of type \'NumberConstraint\'."
 
     if constraints is not None:
-        assert len(constraints) == 2, "Assertion Error: \'constraints\'"\
-              f"parameter in \'{functionName}\' function must have lenght equal to two."
+        assert len(constraints) == 2, "\'constraints\'"\
+              f" parameter in \'{functionName}\' function must have lenght equal to two."
 
         assert all((isinstance((exc := element), int | None)) for element in constraints),\
-               "Assertion Error: \'constraints\'"\
-              f"parameter in \'{functionName}\' function must"\
-              f"contain only elements of type \'int\' or \'None\'. (Exception Caught: {exc})"
+              f"\'constraints\' parameter in \'{functionName}\' function must"\
+              f" contain only elements of type \'int\' or \'None\'. (Exception Caught: {exc})"
 
 
 def clear_upper_lines(quantity: int, /) -> None:
@@ -82,8 +81,8 @@ def clear_upper_lines(quantity: int, /) -> None:
     """
 
     # Type Assertions:
-    assert isinstance(quantity, int), "Assertion Error: \'quantity\'"\
-           "parameter in \'clear_upper_lines\' function must be of type \'int\'."
+    assert isinstance(quantity, int), "\'quantity\' parameter in "\
+           "\'clear_upper_lines\' function must be of type \'int\'."
 
     print("\r", end="")
     for _ in range(quantity + 1):
@@ -109,7 +108,7 @@ def validade_number_constraints(number: int,
     """
 
     # Type Assertions:
-    assert isinstance(number, int), "Assertion Error: \'number\' parameter in"\
+    assert isinstance(number, int), "\'number\' parameter in"\
            " \'validade_number_constraints\' function must be of type \'int\'."
     constraints_assertion(constraints, inspect.stack()[0][3])
 
@@ -153,8 +152,8 @@ def get_valid_number(*, message: str | None = None,
     """
 
     # Type Assertions:
-    assert isinstance(message, str | None), "Assertion Error: \'message\' parameter"\
-           " in \'get_valid_number\'function must be of type \'str\'."
+    assert isinstance(message, str | None), "\'message\' parameter"\
+           " in \'get_valid_number\' function must be of type \'str\'."
     constraints_assertion(constraints, inspect.stack()[0][3])
 
     while True:
@@ -197,10 +196,10 @@ def get_pal_numbers(start: int, end: int, /) -> None:
     """
 
     # Type Assertions:
-    assert isinstance(start, int), "Assertion Error: \'start\'"\
-           "parameter in \'get_pal_numbers\' function must be of type \'int\'."
-    assert isinstance(end, int), "Assertion Error: \'end\'"\
-           "parameter in \'get_pal_numbers\' function must be of type \'int\'."
+    assert isinstance(start, int), "\'start\' parameter in \'get_pal_numbers\'"\
+           " function must be of type \'int\'."
+    assert isinstance(end, int), "\'end\' parameter in \'get_pal_numbers\'"\
+           " function must be of type \'int\'."
 
     palindromicNumbersFound: list[int] = []
 
