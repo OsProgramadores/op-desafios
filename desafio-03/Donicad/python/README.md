@@ -38,8 +38,7 @@ Após preencher os dois números, o script irá percorrer do número inical ao f
 
 - Criei uma variável com uma lista vazia para armazenar todos os numeros polindromos.
 
-- Com um laço for inciando uma sequência do número inicial para o final. 
-O (+ 1) junto com o numero final serve para que o numero final digitado pelo usuario seja adicionado na leitura do range().
+- Com um laço for inciando uma sequência do número inicial para o final. O (+ 1) junto com o numero final serve para que o numero final digitado pelo usuario seja adicionado na leitura do range().
 
 - Depois do laço uma verificação é feita para saber se o número armazenado na variável "numero" é igual a ele mesmo, porém é utilizado o parametro"[::-1]" pois com isso o script vai comparar com a versão invertida do número. Para ajudar essa verificação os dois números armazenados são transformados em string(str) ou seja, em textos, pois dessa forma podemos até mesmo analisar números grandes com suas versões invertidas.
 
