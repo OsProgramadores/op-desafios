@@ -11,24 +11,23 @@ import inspect
 from typing import Callable, TypeAlias, Final
 
 
-# ------------------------------------ // Type Alias \\ ----------------------------------- ||
+# -------------------------------------- // Type Alias \\ -------------------------------------- ||
 # NumberConstraint: Tuple containing the lower
 # and upper bound of the new input number, respectivaly:
 NumberConstraint: TypeAlias = tuple[int | None, int | None] | None
-# ----------------------------------------------------------------------------------------- ||
+# ---------------------------------------------------------------------------------------------- ||
 
-# ------------------------------------ // Constants \\ ------------------------------------ ||
+# -------------------------------------- // Constants \\ --------------------------------------- ||
 MAXINTSIZE: Final[int] = (1 << 64) - 1
-# ----------------------------------------------------------------------------------------- ||
+# ---------------------------------------------------------------------------------------------- ||
 
-# --------------------------------- // Lambda Functions \\ -------------------------------- ||
-number_is_palindromic: Callable[[int], bool] = lambda x: \
-               (strNumber := str(x)) == strNumber[::-1]
+# ----------------------------------- // Lambda Functions \\ ----------------------------------- ||
+number_is_palindromic: Callable[[int], bool] = lambda x: (strNumber := str(x)) == strNumber[::-1]
 
 clear_terminal: Callable[[], int] = lambda: os.system("cls" if os.name == "nt" else "clear")
 
 skip_terminal_lines: Callable[[int], None] = lambda qty: print('\n' * qty, end="")
-# ----------------------------------------------------------------------------------------- ||
+# ---------------------------------------------------------------------------------------------- ||
 
 def constraints_assertion(constraints: NumberConstraint, functionName: str, /) -> None:
 
@@ -85,6 +84,7 @@ def clear_upper_lines(quantity: int, /) -> None:
            "\'clear_upper_lines\' function must be of type \'int\'."
 
     print("\r", end="")
+
     for _ in range(quantity + 1):
         print("\033[K\033[1A", end="")
     skip_terminal_lines(1)
@@ -121,7 +121,6 @@ def validade_number_constraints(number: int,
     if constraints[1] is not None and number > constraints[1]:
         raise ValueError(f"Last input number must be \033[32mless\033[0m"\
                          f" or equal to \'{constraints[1]}\'.")
-
     return
 
 
