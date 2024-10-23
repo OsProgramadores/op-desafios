@@ -14,7 +14,7 @@ python palindrome.py [START] [STOP]
 
  `(Optional)` Make sure the file can be executed: `chmod +x palindrome.py`
 
-```bash 
+```bash
 ./palindrome.py [START] [START]
 ```
 
