@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-"""This is the example module.
+"""tac
 
-This module does stuff.
+Concatenate and print files in reverse.
 """
 
 import os
@@ -10,7 +10,7 @@ import sys
 
 
 def tac(filename: str) -> None:
-    """Return an ex-parrot."""
+    """Write each FILE to standard output, last line first."""
 
     with open(filename, 'rb') as file:
         file.seek(0, os.SEEK_END)
@@ -42,16 +42,17 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print(
             "A tac(1) clone written in Python.\n\n"
-            "Usage: python tac.py [FILE]..."
-            "")
+            "Usage: python tac.py [FILE]...\n\n"
+            "Write each FILE to standard output, last line first.")
         sys.exit()
 
-    try:
-        if os.path.isdir(sys.argv[1]):
-            raise ValueError('Is a directory')
-        if not os.path.isfile(sys.argv[1]):
-            raise FileNotFoundError('No such file or directory')
-    except (ValueError, FileNotFoundError) as err:
-        sys.exit(f'\033[31m[tac error]\033[0m: {sys.argv[1]}: {str(err)}')
-    else:
-        tac(sys.argv[1])
+    for i in range(1, len(sys.argv)):
+        try:
+            if os.path.isdir(sys.argv[i]):
+                raise ValueError('Is a directory')
+            if not os.path.isfile(sys.argv[i]):
+                raise FileNotFoundError('No such file or directory')
+        except (ValueError, FileNotFoundError) as err:
+            sys.exit(f'\033[31m[tac error]\033[0m: {sys.argv[i]}: {str(err)}')
+        else:
+            tac(sys.argv[i])
