@@ -18,12 +18,12 @@ public class palindromicos {
           tratamentoDosValores(valorInicial, valorFinal);
         }
       } else if (valorInicial <= 0 || valorFinal <= 0) {
-        System.out.println("São aceitos apenas valores positivos");
+        System.out.println("Os dois valores precisam ser inteiros positivos");
       }
     } catch (NumberFormatException e) {
-      System.out.println("Apenas números inteiros são aceitos");
+      System.out.println("Apenas números inteiros positivos são aceitos");
     } catch (ArrayIndexOutOfBoundsException e) {
-      System.out.println("É necessário pelo menos dois valores inteiros como argumento");
+      System.out.println("É necessário pelo menos dois valores inteiros positivos como argumento");
     }
   }
 
