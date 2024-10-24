@@ -1,6 +1,5 @@
-## Desafio02/RaudnieiMauricio/Python
 
-## Crivo de Eratóstenes – Implementação em Python
+## Crivo de Eratóstenes – Implementação em python
 
 ## Descrição
 O **Crivo de Eratóstenes** é um algoritmo eficiente para encontrar todos os números primos até um certo limite. Ele elimina múltiplos de números primos, deixando apenas os próprios primos na lista. Este método é muito mais rápido do que verificar número a número, tornando-se ideal para encontrar muitos primos de uma vez.
