@@ -15,13 +15,13 @@ public class Program
 
         if (!File.Exists(filePath))
         {
-            Console.WriteLine("arquivo não encontrado.");
+            Console.WriteLine("Arquivo não encontrado.");
             return;
         }
 
         try
         {
-            var sr = new StreamReader(filePath);
+            using var sr = new StreamReader(filePath);
             string line;
 
             while ((line = sr.ReadLine()) != null)
@@ -37,17 +37,13 @@ public class Program
 
     private static string ProcessFraction(string input)
     {
-        if (int.TryParse(input, out int simpleNumber))
+        if (int.TryParse(input, out var simpleNumber))
         {
             return simpleNumber.ToString();
         }
-<<<<<<< HEAD
-        string[] parts = input.Split('/');
-=======
 
         var parts = input.Split('/');
->>>>>>> 5560d2a (corrige legibilidade do codigo)
-        if (parts.Length == 2 && int.TryParse(parts[0], out int numerator) && int.TryParse(parts[1], out int denominator))
+        if (parts.Length == 2 && int.TryParse(parts[0], out var numerator) && int.TryParse(parts[1], out var denominator))
         {
             if (denominator == 0)
             {
@@ -65,18 +61,14 @@ public class Program
 
             if (Math.Abs(numerator) > Math.Abs(denominator))
             {
-<<<<<<< HEAD
-                int wholePart = numerator / denominator;
-                int remainder = Math.Abs(numerator % denominator);
-=======
                 var wholePart = numerator / denominator;
                 var remainder = Math.Abs(numerator % denominator);
->>>>>>> 5560d2a (corrige legibilidade do codigo)
                 return $"{wholePart} {remainder}/{Math.Abs(denominator)}";
             }
 
             return $"{numerator}/{denominator}";
         }
+
         return "ERR";
     }
 
