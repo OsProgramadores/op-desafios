@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 
-class Program
+public class Program
 {
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
         if (args.Length < 1)
         {
@@ -11,17 +11,22 @@ class Program
             return;
         }
 
-        string filePath = args[0];
+        var filePath = args[0];
+
+        if (!File.Exists(filePath))
+        {
+            Console.WriteLine("arquivo não encontrado.");
+            return;
+        }
 
         try
         {
-            using (StreamReader sr = new StreamReader(filePath))
+            var sr = new StreamReader(filePath);
+            string line;
+
+            while ((line = sr.ReadLine()) != null)
             {
-                string line;
-                while ((line = sr.ReadLine()) != null)
-                {
-                    Console.WriteLine(ProcessFraction(line.Trim()));
-                }
+                Console.WriteLine(ProcessFraction(line.Trim()));
             }
         }
         catch (Exception ex)
@@ -30,13 +35,18 @@ class Program
         }
     }
 
-    static string ProcessFraction(string input)
+    private static string ProcessFraction(string input)
     {
         if (int.TryParse(input, out int simpleNumber))
         {
             return simpleNumber.ToString();
         }
+<<<<<<< HEAD
         string[] parts = input.Split('/');
+=======
+
+        var parts = input.Split('/');
+>>>>>>> 5560d2a (corrige legibilidade do codigo)
         if (parts.Length == 2 && int.TryParse(parts[0], out int numerator) && int.TryParse(parts[1], out int denominator))
         {
             if (denominator == 0)
@@ -44,7 +54,7 @@ class Program
                 return "ERR";
             }
 
-            int gcd = GCD(Math.Abs(numerator), Math.Abs(denominator));
+            var gcd = GCD(Math.Abs(numerator), Math.Abs(denominator));
             numerator /= gcd;
             denominator /= gcd;
 
@@ -52,21 +62,29 @@ class Program
             {
                 return numerator.ToString();
             }
+
             if (Math.Abs(numerator) > Math.Abs(denominator))
             {
+<<<<<<< HEAD
                 int wholePart = numerator / denominator;
                 int remainder = Math.Abs(numerator % denominator);
+=======
+                var wholePart = numerator / denominator;
+                var remainder = Math.Abs(numerator % denominator);
+>>>>>>> 5560d2a (corrige legibilidade do codigo)
                 return $"{wholePart} {remainder}/{Math.Abs(denominator)}";
             }
+
             return $"{numerator}/{denominator}";
         }
         return "ERR";
     }
-    static int GCD(int a, int b)
+
+    private static int GCD(int a, int b)
     {
         while (b != 0)
         {
-            int temp = b;
+            var temp = b;
             b = a % b;
             a = temp;
         }
