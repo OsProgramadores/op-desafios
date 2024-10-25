@@ -1,7 +1,9 @@
-# /-------------------------------------\
-#        Author: @JamesStewart-314
-#  Minimum python version required: 3.10
-# \-------------------------------------/
+"""
+|-------------------------------------|
+        Author: @JamesStewart-314
+  Minimum python version required: 3.10
+|-------------------------------------|
+"""
 
 from typing import Callable, TypeAlias, Final
 
