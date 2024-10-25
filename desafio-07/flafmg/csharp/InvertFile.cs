@@ -41,7 +41,6 @@ public class Program
             } while (fileLength > 0);
 
             PrintString(leftoverLine);
-        
         }
         catch (Exception e)
         {
@@ -66,7 +65,6 @@ public class Program
     {
         if (leftoverLine.Count == 0)
             return;
-    
         var bytes = new byte[leftoverLine.Count];
         var index = 0;
 
@@ -81,6 +79,5 @@ public class Program
 
         var output = Encoding.UTF8.GetString(bytes);
         Console.Write(output);
-    
     }
 }
