@@ -3,12 +3,12 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 
-class Program
+public class Program
 {
-    const int BlockSize = 100;
-    const int BufferSize = BlockSize * 1024 * 1024;
+    private const int BlockSize = 100;
+    private const int BufferSize = BlockSize * 1024 * 1024;
 
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
         if (args.Length != 1)
         {
@@ -16,33 +16,32 @@ class Program
             return;
         }
 
-        string filePath = args[0];
-        long fileLength, position;
-        byte[] buffer;
+        var filePath = args[0];
         var leftoverLine = new LinkedList<byte>();
 
         try
         {
-            using (var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+            var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            var fileLength = fs.Length;
+            var position = 0l;
+            var buffer = new byte[BufferSize];
+
+            do
             {
-                fileLength = fs.Length;
+                position = (fileLength - BufferSize) < 0 ? 0 : (fileLength - BufferSize);
+                fs.Seek(position, SeekOrigin.Begin);
 
-                do
-                {
-                    position = (fileLength - BufferSize) < 0 ? 0 : (fileLength - BufferSize);
-                    fs.Seek(position, SeekOrigin.Begin);
+                buffer = new byte[fileLength - position];
+                fs.Read(buffer, 0, buffer.Length);
 
-                    buffer = new byte[fileLength - position];
-                    fs.Read(buffer, 0, buffer.Length);
+                ProcessBuffer(buffer, leftoverLine);
 
-                    ProcessBuffer(buffer, leftoverLine);
+                fileLength = position;
 
-                    fileLength = position;
+            } while (fileLength > 0);
 
-                } while (fileLength > 0);
-
-                PrintString(leftoverLine);
-            }
+            PrintString(leftoverLine);
+        
         }
         catch (Exception e)
         {
@@ -50,7 +49,7 @@ class Program
         }
     }
 
-    static void ProcessBuffer(byte[] buffer, LinkedList<byte> leftoverLine)
+    private static void ProcessBuffer(byte[] buffer, LinkedList<byte> leftoverLine)
     {
         for (int i = buffer.Length - 1; i >= 0; i--)
         {
@@ -63,24 +62,25 @@ class Program
         }
     }
 
-    static void PrintString(LinkedList<byte> leftoverLine)
+    private static void PrintString(LinkedList<byte> leftoverLine)
     {
-        if (leftoverLine.Count > 0)
+        if (leftoverLine.Count == 0)
+            return;
+    
+        var bytes = new byte[leftoverLine.Count];
+        var index = 0;
+
+        while (leftoverLine.Count > 0)
         {
-            byte[] bytes = new byte[leftoverLine.Count];
-            int index = 0;
-
-            while (leftoverLine.Count > 0)
+            if (leftoverLine.First != null)
             {
-                if (leftoverLine.First != null)
-                {
-                    bytes[index++] = leftoverLine.First.Value;
-                    leftoverLine.RemoveFirst();
-                }
+                bytes[index++] = leftoverLine.First.Value;
+                leftoverLine.RemoveFirst();
             }
-
-            string output = Encoding.UTF8.GetString(bytes);
-            Console.Write(output);
         }
+
+        var output = Encoding.UTF8.GetString(bytes);
+        Console.Write(output);
+    
     }
 }
