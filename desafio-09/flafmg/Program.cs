@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Numerics;
 
-class Program
+public class Program
 {
     private const string Digits = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private static BigInteger MaxLimit = ConvertToBase10("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", 62);
 
-    static void Main(string[] args)
+    private static void Main(string[] args)
     {
         if (args.Length < 1)
         {
@@ -14,55 +16,44 @@ class Program
             return;
         }
 
-        string filePath = args[0];
+        var filePath = args[0];
+
+        if (!File.Exists(filePath))
+        {
+            Console.WriteLine("arquivo não encontrado.");
+            return;
+        }
 
         try
         {
-            var lines = System.IO.File.ReadAllLines(filePath);
-
-            BigInteger maxLimit = ConvertToBase10("zzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", 62);
+            var lines = File.ReadAllLines(filePath);
 
             foreach (var line in lines)
             {
-                string[] parts = line.Split(' ');
-                if (parts.Length != 3)
+                var parts = line.Split(' ');
+                if (parts.Length != 3 || 
+                    !int.TryParse(parts[0], out int baseInput) || 
+                    !int.TryParse(parts[1], out int baseOutput) || 
+                    baseInput < 2 || baseInput > 62 || 
+                    baseOutput < 2 || baseOutput > 62 || 
+                    !IsValidNumberForBase(parts[2], baseInput))
                 {
                     Console.WriteLine("???");
                     continue;
                 }
 
-                int baseInput, baseOutput;
-                string numberInput = parts[2];
-                
-                if (!int.TryParse(parts[0], out baseInput) || !int.TryParse(parts[1], out baseOutput))
-                {
-                    Console.WriteLine("???");
-                    continue;
-                }
-                
-                if (baseInput < 2 || baseInput > 62 || baseOutput < 2 || baseOutput > 62)
-                {
-                    Console.WriteLine("???");
-                    continue;
-                }
-                
-                if (!IsValidNumberForBase(numberInput, baseInput))
-                {
-                    Console.WriteLine("???");
-                    continue;
-                }
-
+                var numberInput = parts[2];
                 try
                 {
-                    BigInteger numberBase10 = ConvertToBase10(numberInput, baseInput);
-                    
-                    if (numberBase10 > maxLimit)
+                    var numberBase10 = ConvertToBase10(numberInput, baseInput);
+
+                    if (numberBase10 > MaxLimit)
                     {
                         Console.WriteLine("???");
                         continue;
                     }
-                    
-                    string result = ConvertFromBase10(numberBase10, baseOutput);
+
+                    var result = ConvertFromBase10(numberBase10, baseOutput);
                     Console.WriteLine(result);
                 }
                 catch
@@ -76,11 +67,12 @@ class Program
             Console.WriteLine($"erro: {ex.Message}");
         }
     }
-    static bool IsValidNumberForBase(string number, int baseInput)
+
+    private static bool IsValidNumberForBase(string number, int baseInput)
     {
-        foreach (char c in number)
+        foreach (var c in number)
         {
-            int digitValue = Digits.IndexOf(c);
+            var digitValue = Digits.IndexOf(c);
             if (digitValue == -1 || digitValue >= baseInput)
             {
                 return false;
@@ -88,23 +80,23 @@ class Program
         }
         return true;
     }
-    
-    static BigInteger ConvertToBase10(string number, int baseInput)
+
+    private static BigInteger ConvertToBase10(string number, int baseInput)
     {
         BigInteger result = 0;
-        foreach (char c in number)
+        foreach (var c in number)
         {
             result = result * baseInput + Digits.IndexOf(c);
         }
         return result;
     }
-    
-    static string ConvertFromBase10(BigInteger number, int baseOutput)
+
+    private static string ConvertFromBase10(BigInteger number, int baseOutput)
     {
         if (number == 0)
             return "0";
 
-        string result = "";
+        var result = "";
         while (number > 0)
         {
             int remainder = (int)(number % baseOutput);
