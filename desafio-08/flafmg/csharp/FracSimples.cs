@@ -15,13 +15,13 @@ public class Program
 
         if (!File.Exists(filePath))
         {
-            Console.WriteLine("Arquivo não encontrado.");
+            Console.WriteLine("arquivo não encontrado.");
             return;
         }
 
         try
         {
-            using var sr = new StreamReader(filePath);
+            var sr = new StreamReader(filePath);
             string line;
 
             while ((line = sr.ReadLine()) != null)
