@@ -1,15 +1,15 @@
+import sys
+
 def verificar_entrada(mensagem):
     entrada = input(mensagem)
     if not entrada.isdigit():
         print("Erro: Apenas números podem ser inseridos.")
-        exit()
-    
-    numero = int(entrada)
-    if numero < 0:
+        sys.exit()
+    digito = int(entrada)
+    if digito < 0:
         print("Erro: Apenas números positivos podem ser inseridos.")
-        exit()
-    
-    return numero
+        sys.exit()
+    return digito
 
 numero_incial = verificar_entrada("Digite um numero inicial: ")
 numero_final = verificar_entrada("Digite um numero final: ")

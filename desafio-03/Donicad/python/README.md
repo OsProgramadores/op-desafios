@@ -15,21 +15,23 @@ Após preencher os dois números, o script irá percorrer do número inical ao f
 ## Explicação do Código
 
 ```python
+    import sys
+
     def verificar_entrada(mensagem):
         entrada = input(mensagem)
         if not entrada.isdigit():
             print("Erro: Apenas números podem ser inseridos.")
-            exit()
-        
-        numero = int(entrada)
-        if numero < 0:
+            sys.exit()
+        digito = int(entrada)
+        if digito < 0:
             print("Erro: Apenas números positivos podem ser inseridos.")
-            exit()
-        
-        return numero
+            sys.exit()
+        return digito
+
 ```
 - essa função é responsavél por inciar os inputs do número inicial e final, e em seguida é feita uma verificação para ver se algum número digitado nos inputs é negativo ou um texto. Se for, então o programa alerta que apenas números positivos podem ser colocados e encerra o script.
 
+    - o importe da lib sys é feita apenas para usar a função exit(), na qual encerra o programa caso insira um texto ou número negativo.
 ---
 
 ```python
