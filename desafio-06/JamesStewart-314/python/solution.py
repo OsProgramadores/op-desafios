@@ -11,14 +11,12 @@ default_word: Final[str] = "VERMELHO"
 
 
 def is_sub_anagram(super_string: str, sub_string: str) -> bool:
-    super_string_elements: dict[str, int] = ctr(super_string)
-
-    return all((super_string_elements.get(kew, 0) >= value) for\
+    return all((ctr(super_string).get(kew, 0) >= value) for\
                 kew, value in ctr(sub_string).items())
 
 
 def search_palindromes(string_pattern: str,
-                      palindrome_set: set[str] | None = None) -> None:
+                       palindrome_set: set[str] | None = None) -> None:
 
     if palindrome_set is None:
         palindrome_set = set()
@@ -27,17 +25,17 @@ def search_palindromes(string_pattern: str,
         all_anagrams.add(tuple(sorted(palindrome_set)))
         return
 
-    for currentWord in all_valid_words:
-        if is_sub_anagram(string_pattern, currentWord):
-            newstring_pattern_letters = ''.join((ctr(string_pattern) - \
-                                        ctr(currentWord)).elements())
+    for current_word in all_valid_words:
+        if is_sub_anagram(string_pattern, current_word):
+            new_string_pattern_letters = ''.join((ctr(string_pattern) - \
+                                        ctr(current_word)).elements())
 
-            search_palindromes(newstring_pattern_letters,
-                              palindrome_set.union({currentWord}))
+            search_palindromes(new_string_pattern_letters,
+                              palindrome_set.union({current_word}))
 
 try:
-    input_word: str = tmpWord if \
-    (tmpWord := (''.join(sys.argv[1:])).upper().replace(" ", "")) else \
+    input_word: str = tmp_word if \
+    (tmp_word := (''.join(sys.argv[1:])).upper().replace(" ", "")) else \
     default_word
 
     if not bool(re.fullmatch(r'[A-Z]+', input_word)):
