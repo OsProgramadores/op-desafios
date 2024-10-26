@@ -6,10 +6,11 @@ Fiz uma função usando o crivo de Eratóstenes, com a otimização de iniciar o
 
 ## Modo de Usar
 
-Importe o arquivo e chame a função `list_primes` com o número de limite superior como argumento. Ela retorna um _generator_. Assim:
+Importe o arquivo e chame a função `list_primes` com o número de limite superior como argumento. Ela retorna um _generator_. Abra um terminal e inicie uma sessão do interpretador Python, assim:
 
 
 ```pycon
+$ python
 >>> import desafio02
 >>> list(desafio02.list_primes(100))
 [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
