@@ -1,5 +1,5 @@
 def list_primes(up_to):
-    """Return a tuple with all primes up to a given number."""
+    """Return a generator of all primes up to a given number."""
     primes_up_to = list(range(2, up_to+1))
     turn = 2
     while turn <= up_to:
