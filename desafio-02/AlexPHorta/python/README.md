@@ -16,9 +16,10 @@ $ python
 [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97]
 ```
 
-ou
+Outra maneira é usar um loop _for_:
 
 ```pycon
+$ python
 >>> import desafio02
 >>> for prime in desafio02.list_primes(100):
 ...		print(prime)
