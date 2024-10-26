@@ -2,7 +2,7 @@
 
 ## Desafio 2 (Linguagem: Python)
 
-Fiz uma função usando o crivo de Eratóstenes, com a otimização de iniciar os cortes pelo quadrado do número inicial. Tentei uma versão fazendo a extração dos elementos _in place_, mas ficou essa daí mesmo, só substituindo por _None_ e reduzindo a lista no final.
+Fiz uma função usando o crivo de Eratóstenes, com a otimização de iniciar os cortes pelo quadrado do número inicial. Tentei uma versão fazendo a extração dos elementos _in place_, mas ficou essa daí mesmo, só substituindo por `None` e reduzindo a lista no final.
 
 ## Modo de Usar
 
