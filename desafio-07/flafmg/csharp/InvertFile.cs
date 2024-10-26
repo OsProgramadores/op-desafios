@@ -19,7 +19,6 @@ public class Program
         var filePath = args[0];
         var leftoverLine = new LinkedList<byte>();
         var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-        
         try
         {
             var fileLength = fs.Length;
@@ -51,7 +50,6 @@ public class Program
             if (fs != null)
                 ((IDisposable)fs).Dispose();
         }
-
     }
 
     private static void ProcessBuffer(byte[] buffer, LinkedList<byte> leftoverLine)
