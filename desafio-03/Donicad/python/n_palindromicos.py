@@ -11,8 +11,18 @@ def verificar_entrada(mensagem):
         sys.exit()
     return digito
 
-numero_incial = verificar_entrada("Digite um numero inicial: ")
-numero_final = verificar_entrada("Digite um numero final: ")
+try:
+    numero_incial = verificar_entrada("Digite um numero inicial: ")
+    numero_final = verificar_entrada("Digite um numero final: ")
+
+    if numero_final < numero_incial:
+        print("Erro: O primeiro número deve ser menor que o segundo.")
+        sys.exit()
+    
+except ValueError:
+    print("Erro: Apenas números podem ser inseridos.")
+
+
 
 numeros_palindromicos = []
 
