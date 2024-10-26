@@ -5,9 +5,7 @@
 |-------------------------------------|
 """
 
-from typing import TypeAlias, Final
-
-number_constraint: TypeAlias = tuple[int | None, int | None] | None
+from typing import Final
 
 MAXINTSIZE: Final[int] = (1 << 64) - 1
 
@@ -16,8 +14,7 @@ def number_is_palindromic(number: int):
     return (strNumber := str(number)) == strNumber[::-1]
 
 
-def validade_number_constraints(number: int,
-                                constraints: number_constraint) -> None:
+def validade_number_constraints(number: int, constraints) -> None:
     if constraints is None:
         return
     if constraints[0] is not None and number < constraints[0]:
@@ -29,8 +26,7 @@ def validade_number_constraints(number: int,
     return
 
 
-def get_valid_number(message: str | None = None,
-                     constraints: number_constraint = None) -> int:
+def get_valid_number(message: str | None = None, constraints = None) -> int:
     while True:
         try:
             user_input: int = int(input(message if message else ""))
@@ -43,6 +39,7 @@ def get_valid_number(message: str | None = None,
             print("Invalid Input!", error)
             continue
         return user_input
+
 
 def get_pal_numbers(start: int, end: int) -> None:
     palindromic_numbers_found: list[int] = []
