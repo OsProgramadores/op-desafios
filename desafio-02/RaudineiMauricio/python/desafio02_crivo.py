@@ -20,4 +20,3 @@ def crivo_eratostenes(limite):
 # Encontra todos os primos entre 1 e 10.000
 num_primos = crivo_eratostenes(10000)
 print("\n".join(map(str, num_primos,)))
-
