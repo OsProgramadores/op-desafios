@@ -18,12 +18,12 @@ public class Program
 
         var filePath = args[0];
         var leftoverLine = new LinkedList<byte>();
-
+        var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+        
         try
         {
-            var fs = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             var fileLength = fs.Length;
-            var position = 0l;
+            var position = 0L;
             var buffer = new byte[BufferSize];
 
             do
@@ -46,6 +46,12 @@ public class Program
         {
             Console.WriteLine($"erro: {e.Message}");
         }
+        finally
+        {
+            if (fs != null)
+                ((IDisposable)fs).Dispose();
+        }
+
     }
 
     private static void ProcessBuffer(byte[] buffer, LinkedList<byte> leftoverLine)
