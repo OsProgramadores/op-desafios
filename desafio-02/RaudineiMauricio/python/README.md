@@ -29,8 +29,11 @@ Fácil de entender e implementar.
 . Pode não ser ideal para intervalos muito grandes (como bilhões) sem otimizações adicionais.
 
 
-## 🛠 Pré-requisitos
+## 🛠 Pré-requisitos para executar esse código.
 - **Python 3.x** instalado no sistema.
+- Verifique no seu terminal se o python está instalado usando o comando: python --version
+- Abra a pasta do arquivo.
+- Digite o Código no no vscode ou na Sua IDE, não copiei pois digitando voçê aprende, e execute.
 
 
 
