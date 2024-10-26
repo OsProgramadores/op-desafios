@@ -31,21 +31,26 @@ def check_word(string_pattern: str) -> Generator[tuple[str, str], None, None]:
 
 
 search_palindromes_memoization: dict[str, list[str]] = {}
+word_to_remove = None
 
 def search_palindromes(string_pattern: str,
                        palindrome_list: list[str] | None = None) -> None:
+    global word_to_remove
+    # print("Recursive Call: ", palindrome_list)
     if palindrome_list is None:
         palindrome_list = []
-
-    if not string_pattern:
-        all_anagrams.add(tuple(sorted(palindrome_list)))
-
+    
+    if len(palindrome_list) == 1:
         try:
-            all_valid_words.remove(tuple(sorted(palindrome_list))[0])
+            all_valid_words.remove(word_to_remove)
         except ValueError:
             pass
 
+    if not string_pattern:
+        all_anagrams.add(tuple(sorted(palindrome_list)))
+        word_to_remove = palindrome_list[0]
         return
+    
 
     if string_pattern in search_palindromes_memoization:
         all_check_words = search_palindromes_memoization[string_pattern]
