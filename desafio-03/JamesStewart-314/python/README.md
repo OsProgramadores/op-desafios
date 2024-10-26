@@ -12,7 +12,8 @@ tempo de execução, com $b \geq a$.
 A função responsável por verificar se um determinado número inteiro é palindrômico, cujo nome é `number_is_palindromic()`, definida por:
 
 ```python
-number_is_palindromic: Callable[[int], bool] = lambda x: (strNumber := str(x)) == strNumber[::-1]
+def number_is_palindromic(number: int):
+    return (strNumber := str(number)) == strNumber[::-1]
 ```
 
 converte o parâmetro de entrada, neste caso, um inteiro, para uma string e efetua a
@@ -40,6 +41,3 @@ versão `3.10` ou superior.
 máquina, abra o terminal de comando e navegue até o diretório contendo o arquivo
 `"desafio02.py"`. Em seguida, digite `python desafio02.py`
 e os resultados deverão ser impressos de maneira formatada na CLI.
-
-## Formatação da Saída
-Os números primos são exibidos no terminal utilizando _Códigos ANSI_ e _Sequências de Escape_ para aplicar cores e formatação.
