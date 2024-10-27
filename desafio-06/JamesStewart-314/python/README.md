@@ -21,6 +21,8 @@ Um _sub-anagrama_ de uma palavra $word_{1}$, denotado por $word_{2}$, é definid
 anagrama que pode ser construído utilizando **no máximo** todas as letras que constituem a
 palavra $word_{1}$, sem a necessidade de usar todas elas mandatoriamente.
 
+---
+
 O procedimento para varredura dos possíveis anagramas consiste primeiramente em definir um
 procedimento, a princípio sem memoização, para verificar se uma string $word_{1}$ é
 sub-anagrama de outra string $word_{2}$. Para isto, criamos a função `is_sub_anagram()`,
@@ -82,23 +84,23 @@ no conjunto de strings `all_anagrams`.  Segue abaixo a assinatura da função su
 
 ```python
 def search_palindromes(string_pattern: str,
-                       palindrome_list: list[str]) -> None:
+                       palindrome_set: set[str]) -> None:
     if not string_pattern:
-        all_anagrams.add(tuple(sorted(palindrome_list)))
+        all_anagrams.add(tuple(sorted(palindrome_set)))
         return
 
     if string_pattern in search_palindromes_memoization:
         all_check_words = search_palindromes_memoization[string_pattern]
 
         for word in all_check_words:
-            search_palindromes(word[0], palindrome_list + [word[1]])
+            search_palindromes(word[0], palindrome_set.union({word[1]}))
 
     else:
-        if not palindrome_list:
+        if not palindrome_set:
             for current_word in all_valid_words[::]:
                 if is_sub_anagram_memo(string_pattern, current_word):
                     search_palindromes(remove_characters(string_pattern, current_word),
-                                       palindrome_list + [current_word])
+                                       palindrome_set.union({current_word}))
                     all_valid_words.pop(0)
             return
 
@@ -106,7 +108,7 @@ def search_palindromes(string_pattern: str,
 
         for word in check_word(string_pattern):
             search_palindromes_memoization[string_pattern].append(word)
-            search_palindromes(word[0], palindrome_list + [word[1]])
+            search_palindromes(word[0], palindrome_set.union({word[1]}))
 ```
 
 Por fim, populamos o conjunto de strings `all_anagrams` com todos os anagramas encontrados

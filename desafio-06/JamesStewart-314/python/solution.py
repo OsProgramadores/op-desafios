@@ -55,23 +55,23 @@ def check_word(string_pattern: str) -> Generator[tuple[str, str], None, None]:
 search_palindromes_memoization: dict[str, list[str]] = {}
 
 def search_palindromes(string_pattern: str,
-                       palindrome_list: list[str]) -> None:
+                       palindrome_set: set[str]) -> None:
     if not string_pattern:
-        all_anagrams.add(tuple(sorted(palindrome_list)))
+        all_anagrams.add(tuple(sorted(palindrome_set)))
         return
 
     if string_pattern in search_palindromes_memoization:
         all_check_words = search_palindromes_memoization[string_pattern]
 
         for word in all_check_words:
-            search_palindromes(word[0], palindrome_list + [word[1]])
+            search_palindromes(word[0], palindrome_set.union({word[1]}))
 
     else:
-        if not palindrome_list:
+        if not palindrome_set:
             for current_word in all_valid_words[::]:
                 if is_sub_anagram_memo(string_pattern, current_word):
                     search_palindromes(remove_characters(string_pattern, current_word),
-                                       palindrome_list + [current_word])
+                                       palindrome_set.union({current_word}))
                     all_valid_words.pop(0)
             return
 
@@ -79,7 +79,7 @@ def search_palindromes(string_pattern: str,
 
         for word in check_word(string_pattern):
             search_palindromes_memoization[string_pattern].append(word)
-            search_palindromes(word[0], palindrome_list + [word[1]])
+            search_palindromes(word[0], palindrome_set.union({word[1]}))
 
 try:
     input_word: str = ''.join(sorted(tmp_word)) if \
@@ -117,7 +117,7 @@ for word_1 in all_valid_words:
 
 all_valid_words.sort(key=len)
 
-search_palindromes(input_word, [])
+search_palindromes(input_word, set())
 
 for anagramTuple in iter(all_anagrams):
     print(*anagramTuple)
