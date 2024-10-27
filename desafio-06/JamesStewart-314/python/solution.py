@@ -27,8 +27,8 @@ def is_sub_anagram(super_string: str, sub_string: str) -> bool:
 is_sub_anagram_memoization: dict[str, set[str]] = {}
 
 def is_sub_anagram_memo(super_string: str, sub_string: str) -> bool:
-    if super_string in is_sub_anagram_memoization and\
-        sub_string in is_sub_anagram_memoization[super_string]:
+    if super_string in is_sub_anagram_memoization:
+        if sub_string in is_sub_anagram_memoization[super_string]:
             return True
 
     super_string_count = ctr(super_string)
