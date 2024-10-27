@@ -1,12 +1,12 @@
 import sys
 import os
 import re
-from collections import Counter as ctr
+from collections import Counter as ctr, deque
 from typing import Final, Generator
 
-
 all_anagrams: set[tuple[str, ...]] = set()
-all_valid_words: list[str] = []
+all_valid_words: deque[str] = deque()
+all_valid_words_linked: dict[str, set[str]] = {}
 default_word: Final[str] = "VERMELHO"
 
 
@@ -24,33 +24,40 @@ def is_sub_anagram(super_string: str, sub_string: str) -> bool:
     return all(super_string_count[key] >= value for key, value in sub_string_count.items())
 
 
+is_sub_anagram_memoization: dict[str, set[str]] = {}
+
+def is_sub_anagram_memo(super_string: str, sub_string: str) -> bool:
+    if len(sub_string) > len(super_string):
+        return False
+
+    if super_string in is_sub_anagram_memoization:
+        if sub_string in is_sub_anagram_memoization[super_string]:
+            return True
+
+    super_string_count = ctr(super_string)
+    sub_string_count = ctr(sub_string)
+
+    return_value: bool = all(super_string_count[key] >= value for key, value in sub_string_count.items())
+
+    if return_value:
+        is_sub_anagram_memoization[super_string] = is_sub_anagram_memoization.setdefault(super_string, \
+                                                    set()).union(all_valid_words_linked[sub_string])
+
+    return return_value
+
+
 def check_word(string_pattern: str) -> Generator[tuple[str, str], None, None]:
     for current_word in all_valid_words:
-        if is_sub_anagram(string_pattern, current_word):
+        if is_sub_anagram_memo(string_pattern, current_word):
             yield (remove_characters(string_pattern, current_word), current_word)
 
-
 search_palindromes_memoization: dict[str, list[str]] = {}
-word_to_remove = None
 
 def search_palindromes(string_pattern: str,
-                       palindrome_list: list[str] | None = None) -> None:
-    global word_to_remove
-    # print("Recursive Call: ", palindrome_list)
-    if palindrome_list is None:
-        palindrome_list = []
-
-    if len(palindrome_list) == 1:
-        try:
-            all_valid_words.remove(word_to_remove)
-        except ValueError:
-            pass
-
+                       palindrome_list: list[str] | None) -> None:
     if not string_pattern:
         all_anagrams.add(tuple(sorted(palindrome_list)))
-        word_to_remove = palindrome_list[0]
         return
-
 
     if string_pattern in search_palindromes_memoization:
         all_check_words = search_palindromes_memoization[string_pattern]
@@ -59,22 +66,19 @@ def search_palindromes(string_pattern: str,
             search_palindromes(word[0], palindrome_list + [word[1]])
 
     else:
-        result = check_word(string_pattern)
-        search_palindromes_memoization[string_pattern] = []
-
-        try:
-            word: str = next(result)
-        except StopIteration:
+        if not palindrome_list:
+            for current_word in list(all_valid_words):
+                if is_sub_anagram_memo(string_pattern, current_word):
+                    search_palindromes(remove_characters(string_pattern, current_word),
+                                       palindrome_list + [current_word])
+                    all_valid_words.popleft()
             return
 
-        while True:
-            try:
-                search_palindromes_memoization[string_pattern].append(word)
-                search_palindromes(word[0], palindrome_list + [word[1]])
-                word = next(result)
+        search_palindromes_memoization[string_pattern] = []
 
-            except StopIteration:
-                break
+        for word in check_word(string_pattern):
+            search_palindromes_memoization[string_pattern].append(word)
+            search_palindromes(word[0], palindrome_list + [word[1]])
 
 try:
     input_word: str = ''.join(sorted(tmp_word)) if \
@@ -101,7 +105,15 @@ try:
 except (FileNotFoundError, PermissionError, IOError) as error:
     print("An Exception While Opening the File Occured:", error)
 
-search_palindromes(input_word)
 
-for anagramTuple in sorted(all_anagrams):
+for word_1 in all_valid_words:
+    all_valid_words_linked[word_1] = set()
+
+    for word_2 in all_valid_words:
+        if word_1 != word_2 and is_sub_anagram(word_1, word_2):
+            all_valid_words_linked[word_1].add(word_2)
+
+search_palindromes(input_word, [])
+
+for anagramTuple in all_anagrams:
     print(*anagramTuple)
