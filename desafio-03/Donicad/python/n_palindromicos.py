@@ -3,7 +3,7 @@ import sys
 def verificar_entrada(mensagem):
     entrada = input(mensagem)
     if not entrada.isdigit():
-        print("Erro: Apenas números podem ser inseridos.")
+        print("Erro: Apenas números positivos podem ser inseridos.")
         sys.exit()
     digito = int(entrada)
     if digito < 0:
@@ -14,15 +14,11 @@ def verificar_entrada(mensagem):
 try:
     numero_incial = verificar_entrada("Digite um numero inicial: ")
     numero_final = verificar_entrada("Digite um numero final: ")
-
     if numero_final < numero_incial:
         print("Erro: O primeiro número deve ser menor que o segundo.")
         sys.exit()
-    
 except ValueError:
-    print("Erro: Apenas números podem ser inseridos.")
-
-
+    print("Erro: Apenas números positivos podem ser inseridos.")
 
 numeros_palindromicos = []
 
