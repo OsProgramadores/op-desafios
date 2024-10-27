@@ -27,11 +27,8 @@ def is_sub_anagram(super_string: str, sub_string: str) -> bool:
 is_sub_anagram_memoization: dict[str, set[str]] = {}
 
 def is_sub_anagram_memo(super_string: str, sub_string: str) -> bool:
-    if len(sub_string) > len(super_string):
-        return False
-
-    if super_string in is_sub_anagram_memoization:
-        if sub_string in is_sub_anagram_memoization[super_string]:
+    if super_string in is_sub_anagram_memoization and\
+        sub_string in is_sub_anagram_memoization[super_string]:
             return True
 
     super_string_count = ctr(super_string)
@@ -50,13 +47,15 @@ def is_sub_anagram_memo(super_string: str, sub_string: str) -> bool:
 
 def check_word(string_pattern: str) -> Generator[tuple[str, str], None, None]:
     for current_word in all_valid_words:
+        if len(current_word) > len(string_pattern):
+            break
         if is_sub_anagram_memo(string_pattern, current_word):
             yield (remove_characters(string_pattern, current_word), current_word)
 
 search_palindromes_memoization: dict[str, list[str]] = {}
 
 def search_palindromes(string_pattern: str,
-                       palindrome_list: list[str] | None) -> None:
+                       palindrome_list: list[str]) -> None:
     if not string_pattern:
         all_anagrams.add(tuple(sorted(palindrome_list)))
         return
@@ -97,7 +96,7 @@ except ValueError as error:
     print("Error:", error)
 
 try:
-    with open(os.path.join(os.path.dirname(__file__), "anagramWords.txt"), "r") \
+    with open(os.path.join(os.path.dirname(__file__), "words.txt"), "r") \
         as txt_file:
 
         while (current_file_word := txt_file.readline().strip()):
@@ -112,10 +111,13 @@ for word_1 in all_valid_words:
     all_valid_words_linked[word_1] = set()
 
     for word_2 in all_valid_words:
-        if word_1 != word_2 and is_sub_anagram(word_1, word_2):
+        if is_sub_anagram(word_1, word_2):
             all_valid_words_linked[word_1].add(word_2)
+
+
+all_valid_words.sort(key=len)
 
 search_palindromes(input_word, [])
 
-for anagramTuple in all_anagrams:
+for anagramTuple in iter(all_anagrams):
     print(*anagramTuple)
