@@ -1,11 +1,11 @@
 import sys
 import os
 import re
-from collections import Counter as ctr, deque
+from collections import Counter as ctr
 from typing import Final, Generator
 
 all_anagrams: set[tuple[str, ...]] = set()
-all_valid_words: deque[str] = deque()
+all_valid_words: list[str] = []
 all_valid_words_linked: dict[str, set[str]] = {}
 default_word: Final[str] = "VERMELHO"
 
@@ -37,11 +37,13 @@ def is_sub_anagram_memo(super_string: str, sub_string: str) -> bool:
     super_string_count = ctr(super_string)
     sub_string_count = ctr(sub_string)
 
-    return_value: bool = all(super_string_count[key] >= value for key, value in sub_string_count.items())
+    return_value: bool = all(super_string_count[key] >= value for key, \
+                             value in sub_string_count.items())
 
     if return_value:
-        is_sub_anagram_memoization[super_string] = is_sub_anagram_memoization.setdefault(super_string, \
-                                                    set()).union(all_valid_words_linked[sub_string])
+        is_sub_anagram_memoization[super_string] = is_sub_anagram_memoization.\
+                                                    setdefault(super_string, \
+                                    set()).union(all_valid_words_linked[sub_string])
 
     return return_value
 
@@ -67,11 +69,11 @@ def search_palindromes(string_pattern: str,
 
     else:
         if not palindrome_list:
-            for current_word in list(all_valid_words):
+            for current_word in all_valid_words[::]:
                 if is_sub_anagram_memo(string_pattern, current_word):
                     search_palindromes(remove_characters(string_pattern, current_word),
                                        palindrome_list + [current_word])
-                    all_valid_words.popleft()
+                    all_valid_words.pop(0)
             return
 
         search_palindromes_memoization[string_pattern] = []
