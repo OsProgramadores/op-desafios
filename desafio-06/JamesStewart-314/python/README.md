@@ -11,7 +11,10 @@ acrescentar novas. Segue abaixo alguns exemplos de anagramas:
 - A palavra _mar_ **não** é um anagrama da palavra _roma_ (a letra “o” em “roma” não foi usada).
 - A palavra _sal_ **não** é um anagrama da palavra _mal_ (a letra “s” de “sal” não existe em “mal”).
 
-Intenta-se, com este código, listar todas as combinações possíveis de palavras contidas no arquivo [`words.txt`](https://osprogramadores.com/desafios/d06/words.txt), disponível em [`OsProgramadores.com`](https://osprogramadores.com/), que juntas formem um anagrama da palavra originalmente forncida como argumento do programa.
+Intenta-se, com este código, listar todas as combinações possíveis de palavras contidas no
+arquivo [`words.txt`](https://osprogramadores.com/desafios/d06/words.txt), disponível em
+[`OsProgramadores.com`](https://osprogramadores.com/), que juntas formem um anagrama da
+palavra originalmente forncida como argumento do programa.
 
 ## Algoritmo Implementado
 Um _sub-anagrama_ de uma palavra $word_{1}$, denotado por $word_{2}$, é definido como um
