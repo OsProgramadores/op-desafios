@@ -7,7 +7,7 @@ public class Program
     {
         if (args.Length < 1)
         {
-            Console.WriteLine("os argumentos estao vazios, passe o caminho do arquivo no argumento");
+            Console.WriteLine("os argumentos estão vazios, passe o caminho do arquivo no argumento");
             return;
         }
 
@@ -19,9 +19,9 @@ public class Program
             return;
         }
 
+        var sr = new StreamReader(filePath);
         try
         {
-            var sr = new StreamReader(filePath);
             string line;
 
             while ((line = sr.ReadLine()) != null)
@@ -32,6 +32,11 @@ public class Program
         catch (Exception ex)
         {
             Console.WriteLine($"erro: {ex.Message}");
+        }
+        finally
+        {
+            if (sr != null)
+                sr.Dispose();
         }
     }
 
