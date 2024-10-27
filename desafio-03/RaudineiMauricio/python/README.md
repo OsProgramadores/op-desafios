@@ -8,7 +8,7 @@ Apenas inteiros positivos podem ser usados como limites.
 Números de um algarismo são palíndromos por definição.
 Máximo número: (1 << 64) - 1 (máximo unsigned int de 64 bits).
 
-## limite_max = (1 << 64) - 1 
+## limite_max = (1 << 64) - 1
 
 . Utiliza operações de bitwise (bit a bit) para calcular o maior número inteiro que pode ser representado com 64 bits.
 . O operador << é o operador de deslocamento à esquerda. Ele desloca os bits do número 1 para a esquerda por 64 posições.
