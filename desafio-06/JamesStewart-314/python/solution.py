@@ -4,10 +4,6 @@ import re
 from collections import Counter as ctr
 from typing import Final, Generator
 
-all_anagrams: set[tuple[str, ...]] = set()
-all_valid_words: list[str] = []
-all_valid_words_linked: dict[str, set[str]] = {}
-default_word: Final[str] = "VERMELHO"
 
 
 def remove_characters(original_string: str, char_to_remove: str) -> str:
@@ -84,6 +80,11 @@ def search_palindromes(string_pattern: str,
 
 
 if __name__ == '__main__':
+    all_anagrams: set[tuple[str, ...]] = set()
+    all_valid_words: list[str] = []
+    all_valid_words_linked: dict[str, set[str]] = {}
+    default_word: Final[str] = "VERMELHO"
+
     try:
         input_word: str = ''.join(sorted(tmp_word)) if \
         (tmp_word := (''.join(sys.argv[1:])).upper().replace(" ", "")) else \

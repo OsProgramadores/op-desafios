@@ -124,7 +124,8 @@ for anagramTuple in iter(all_anagrams):
 versão `3.10` ou superior.
 
     Para baixar esta e outras versões, visite o site
-    <a target="_blank" href="https://www.python.org/downloads/" style="color: lightgreen">Python.org</a> e siga os procedimentos de instalação para o
+    <a target="_blank" href="https://www.python.org/downloads/" style="color: lightgreen">Python.org</a>
+    e siga os procedimentos de instalação para o
     seu sistema operacional.
 
     Após a instalação, abra o terminal de comando em sua máquina e digite o comando
