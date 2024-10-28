@@ -52,6 +52,7 @@ def check_word(string_pattern: str) -> Generator[tuple[str, str], None, None]:
         if is_sub_anagram_memo(string_pattern, current_word):
             yield (remove_characters(string_pattern, current_word), current_word)
 
+
 search_palindromes_memoization: dict[str, list[str]] = {}
 
 def search_palindromes(string_pattern: str,
@@ -119,5 +120,6 @@ all_valid_words.sort(key=len)
 
 search_palindromes(input_word, set())
 
-for anagramTuple in iter(all_anagrams):
-    print(*anagramTuple)
+if __name__ == '__main__':
+    for anagramTuple in iter(all_anagrams):
+        print(*anagramTuple)
