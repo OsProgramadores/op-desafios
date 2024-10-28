@@ -116,10 +116,11 @@ for word_1 in all_valid_words:
             all_valid_words_linked[word_1].add(word_2)
 
 
-all_valid_words.sort(key=len)
-
-search_palindromes(input_word, set())
 
 if __name__ == '__main__':
+    all_valid_words.sort(key=len)
+
+    search_palindromes(input_word, set())
+
     for anagramTuple in iter(all_anagrams):
         print(*anagramTuple)

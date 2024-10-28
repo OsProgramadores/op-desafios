@@ -115,9 +115,8 @@ Por fim, populamos o conjunto de strings `all_anagrams` com todos os anagramas e
 durante a execução da função anterior e exibimos os resultados através do laço
 
 ```python
-if __name__ == '__main__':
-    for anagramTuple in iter(all_anagrams):
-        print(*anagramTuple)
+for anagramTuple in iter(all_anagrams):
+    print(*anagramTuple)
 ```
 
 ## Requisitos para Execução
