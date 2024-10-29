@@ -5,7 +5,6 @@ from collections import Counter as ctr
 from typing import Final, Generator
 
 
-
 def remove_characters(original_string: str, char_to_remove: str) -> str:
     return ''.join(sorted((ctr(original_string) - ctr(char_to_remove)).elements()))
 
@@ -69,7 +68,7 @@ def search_palindromes(string_pattern: str,
                 if is_sub_anagram_memo(string_pattern, current_word):
                     search_palindromes(remove_characters(string_pattern, current_word),
                                        palindrome_set.union({current_word}))
-                    all_valid_words.pop(0)
+                    del all_valid_words[0]
             return
 
         search_palindromes_memoization[string_pattern] = []
