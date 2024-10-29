@@ -3,12 +3,30 @@
 Escreva um programa para listar todos os números primos entre 1 e 10000, na
 linguagem de sua preferência.
 
-Passo 1 : Criado uma variavel do tipo int com valor 10000;
-Passo 2 : Criar um laço for para realizar a contagem do valor maximo recebido for (int i = 1; i <= max; i++)
-Passo 3 : Criar a variavel quntDivis = 0; para que todas as vezes que o laço retornar a varivael seja reiniciada com o valor 0
-Passo 4 : Criar outro laço for pra realizar as divisões enquanto o valor de J for menor ou igual a i, cada vez que a linha 12 if (i % j == 0)
-realizar uma conta de divisao o contador (quntDivis ++) vai acrecentar + 1;
-Passo 5 : Apos realizar as divisoes, o codigo vai para linha 16 onde realiza a operação de comparação se o numero de quntDivis é igual a 2
-se ele for imprime no console o valor , caso não ele retorna para o primeiro laço for assim até a variavel i do primeiro tiver o mesmo valor
-que a variavel Max  criada no passo 1;
+Utilizando Crivo Eratóstenes
+
+Passo 1 : Declare uma variavel indicando o valor máximo;
+
+Passo 2 : Declare um array booleano com tamanho maximo + 1;
+
+Passo 3 : Use o Arrays.fills  para transformar todos valores do array em true como especificado numPrimos, true;
+
+Passo 4 : Crie um for para receber os valores e comecar a seleção atraves do metod
+crivo de eratóstenes
+
+Passo 5 : No for o [i] inicia com 2 ; 2 * 2 é menor que o max  e
+incrementa + 1 quando retornar nessa linha
+
+Passo 6 : Na proxima  linha é verificado se o numero é true , sendo true é imprimido
+
+Passo 7 : No proximo for o j inicia valendo 2 * 2 ; 4 <= max ; a incrementação sera j += i
+
+Passo 8 : O valor de j sendo 4 passa a ser false quando validado na proxima linha
+
+Passo 9 : Quando retornar no for o j vai  incrementar  4 + 2 = 6 e assim por diante até o valor max, com isso teremos todos os mutiplos de 2 e assim sucessivamente  pra todos os numero que forem primos os seus mutiplos serao descartados
+como falso.
+
+Passo 10 : E todos os numero que forem primos sera imprimido no terminal do  ultimo for,onde cada numPrimo encontrado até o maximo toda vez que passar pelo sysout
+
+
         

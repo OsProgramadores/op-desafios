@@ -1,18 +1,27 @@
-public class desafio2 {
+package desafioOsProgramadores;
+
+import java.util.Arrays;
+
+public class MeuDesafio2 {
 
     public static void main(String[] args) {
 
         int max = 10000;
+        boolean[] numPrimos = new boolean[max + 1];
 
-        for (int i = 1; i <= max; i++) {
-            int quntDivis = 0;
-            for (int j = 1; j <= i; j++){
-                if (i % j == 0) {
-                    quntDivis ++;
+        Arrays.fill(numPrimos, true);
+
+        for (int i = 2; i * i <= max; i++) {
+            if (numPrimos[i]) {
+                for (int j = i * i; j <= max; j += i) {
+                    numPrimos[j] = false;
                 }
             }
-            if (quntDivis == 2) {
-                System.out.print(i +" ");
+        }
+
+        for (int i = 2; i <= max; i++) {
+            if (numPrimos[i]) {
+                System.out.print(i + " ");
             }
         }
     }
