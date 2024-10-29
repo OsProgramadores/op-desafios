@@ -1,15 +1,15 @@
 def eh_palindromo(num):
     return str(num) == str(num)[::-1]
 
-def encontrar_palindromos(start, limit):
-    for num in range(start, limit + 1):
+def encontrar_palindromos(inicio, fim):
+    for num in range(inicio, fim + 1):
         if eh_palindromo(num):
             print(num)
 
 # Numero inicial
-start = 3000
+start = 1
 
 # Numero final
-limit = 3010
+limit = 20
 
 encontrar_palindromos(start, limit)
