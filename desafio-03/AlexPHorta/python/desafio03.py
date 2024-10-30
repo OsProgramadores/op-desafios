@@ -48,7 +48,7 @@ def is_palindrome(candidate):
             if length == 2:
                 palindrome = True
             else:
-                is_palindrome(candidate[1:-1])
+                palindrome = is_palindrome(candidate[1:-1])
 
     return palindrome
 
