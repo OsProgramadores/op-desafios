@@ -1,6 +1,3 @@
-import math
-
-
 MAX_INTEGER = 18446744073709551615
 
 def print_palindromes(begin, end, print_output=False):
@@ -12,24 +9,24 @@ def print_palindromes(begin, end, print_output=False):
     - print_output - Boolean
     """
     if not all((isinstance(begin, int), isinstance(end, int),
-                (begin >= 0 and begin <= MAX_INTEGER),
-                (end >= 0 and end <= MAX_INTEGER),
+                (begin >= 0), (begin <= MAX_INTEGER),
+                (end >= 0), (end <= MAX_INTEGER),
                 (begin < end))):
         raise ValueError("Argumentos inválidos.")
-        
+
     palindromes = []
-    
+
     for n in range(begin, end+1):
         if is_palindrome(n):
             palindromes.append(n)
         else:
             pass
-    
+
     if print_output:
         for p in palindromes:
             print(p)
-    else:
-        return palindromes
+
+    return palindromes
 
 
 def is_palindrome(candidate):
@@ -40,30 +37,29 @@ def is_palindrome(candidate):
     """
     candidate = str(candidate)
     length = len(candidate)
-    
-    if length == 1:
-        return True
-    
-    head = candidate[0]
-    tail = candidate[-1]
+    palindrome = False
 
-    if length > 1:
-        if length == 2:
-            return head == tail
-        else:
-            if head != tail:
-                return False
+    if length == 1:
+        palindrome = True
+    elif length > 1:
+        head = candidate[0]
+        tail = candidate[-1]
+        if head == tail:
+            if length == 2:
+                palindrome = True
             else:
-                middle = candidate[1:-1]
-                return is_palindrome(middle)
+                is_palindrome(candidate[1:-1])
+
+    return palindrome
 
 
 if __name__ == "__main__":
- 
+
     import builtins
-    import contextlib, io
+    import contextlib
+    import io
     import unittest
-    
+
     from unittest.mock import Mock
 
 
@@ -82,7 +78,7 @@ if __name__ == "__main__":
         def test_begin_and_end_must_be_lower_than_max_integer(self):
             self.assertRaises(ValueError, print_palindromes, MAX_INTEGER+1, MAX_INTEGER+2)
             self.assertRaises(ValueError, print_palindromes, 0, MAX_INTEGER+1)
-            
+
         def test_include_limits(self):
             self.assertEqual(print_palindromes(0, 1), [0, 1])
             self.assertEqual(print_palindromes(0, 9), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
@@ -125,6 +121,7 @@ if __name__ == "__main__":
         def test_more_than_two_digits(self):
             self.assertTrue(is_palindrome("101"))
             self.assertTrue(is_palindrome("1001"))
+            self.assertTrue(is_palindrome("3003"))
             self.assertTrue(is_palindrome("18446744066044764481"))
             self.assertFalse(is_palindrome(1.5))
             self.assertFalse(is_palindrome([0]))
