@@ -41,7 +41,7 @@ def is_palindrome(candidate):
 
     if length == 1:
         palindrome = True
-    elif length > 1:
+    else:
         head = candidate[0]
         tail = candidate[-1]
         if head == tail:
