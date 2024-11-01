@@ -62,10 +62,13 @@ def search_palindromes(string_pattern: str,
     else:
         if not palindrome_set:
             for current_word in all_valid_words[:]:
-                if is_sub_anagram_memo(string_pattern, current_word):
-                    search_palindromes(remove_characters(string_pattern, current_word),
+                del all_valid_words[0]
+                string_pattern_copy: str = string_pattern
+
+                while is_sub_anagram_memo(string_pattern_copy, current_word):
+                    string_pattern_copy = remove_characters(string_pattern_copy, current_word)
+                    search_palindromes(string_pattern_copy,
                                        palindrome_set.union({current_word}))
-                    del all_valid_words[0]
             return
 
         search_palindromes_memoization[string_pattern] = []
