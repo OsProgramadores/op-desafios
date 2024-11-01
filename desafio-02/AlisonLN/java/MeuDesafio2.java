@@ -3,7 +3,6 @@ package desafioOsProgramadores;
 import java.util.Arrays;
 
 public class MeuDesafio2 {
-
     public static void main(String[] args) {
 
         int max = 10000;
