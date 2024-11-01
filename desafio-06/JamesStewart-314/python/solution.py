@@ -9,10 +9,7 @@ def remove_characters(original_string: str, char_to_remove: str) -> str:
     return ''.join((ctr(original_string) - ctr(char_to_remove)).elements())
 
 
-def is_sub_anagram(super_string: str, sub_string: str) -> bool | None:
-    if len(sub_string) > len(super_string):
-        return None
-
+def is_sub_anagram(super_string: str, sub_string: str) -> bool:
     super_string_count: dict[str, int] = ctr(super_string)
     sub_string_count: dict[str, int] = ctr(sub_string)
 
@@ -115,10 +112,10 @@ if __name__ == '__main__':
         all_valid_words_linked[word_1] = set()
 
         for word_2 in all_valid_words:
-            if (result := is_sub_anagram(word_1, word_2)) is True:
-                all_valid_words_linked[word_1].add(word_2)
-            elif result is None:
+            if len(word_2) > len(word_1):
                 break
+            if is_sub_anagram(word_1, word_2):
+                all_valid_words_linked[word_1].add(word_2)
 
     search_palindromes(input_word, set())
 
