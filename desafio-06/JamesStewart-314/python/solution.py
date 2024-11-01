@@ -6,15 +6,15 @@ from typing import Final, Generator
 
 
 def remove_characters(original_string: str, char_to_remove: str) -> str:
-    return ''.join(sorted((ctr(original_string) - ctr(char_to_remove)).elements()))
+    return ''.join((ctr(original_string) - ctr(char_to_remove)).elements())
 
 
-def is_sub_anagram(super_string: str, sub_string: str) -> bool:
+def is_sub_anagram(super_string: str, sub_string: str) -> bool | None:
     if len(sub_string) > len(super_string):
-        return False
+        return None
 
-    super_string_count = ctr(super_string)
-    sub_string_count = ctr(sub_string)
+    super_string_count: dict[str, int] = ctr(super_string)
+    sub_string_count: dict[str, int] = ctr(sub_string)
 
     return all(super_string_count[key] >= value for key, value in sub_string_count.items())
 
@@ -26,8 +26,8 @@ def is_sub_anagram_memo(super_string: str, sub_string: str) -> bool:
         if sub_string in is_sub_anagram_memoization[super_string]:
             return True
 
-    super_string_count = ctr(super_string)
-    sub_string_count = ctr(sub_string)
+    super_string_count: dict[str, int] = ctr(super_string)
+    sub_string_count: dict[str, int] = ctr(sub_string)
 
     return_value: bool = all(super_string_count[key] >= value for key, \
                              value in sub_string_count.items())
@@ -48,7 +48,7 @@ def check_word(string_pattern: str) -> Generator[tuple[str, str], None, None]:
             yield (remove_characters(string_pattern, current_word), current_word)
 
 
-search_palindromes_memoization: dict[str, list[str]] = {}
+search_palindromes_memoization: dict[str, list[tuple[str, str]]] = {}
 
 def search_palindromes(string_pattern: str,
                        palindrome_set: set[str]) -> None:
@@ -64,7 +64,7 @@ def search_palindromes(string_pattern: str,
 
     else:
         if not palindrome_set:
-            for current_word in all_valid_words[::]:
+            for current_word in all_valid_words[:]:
                 if is_sub_anagram_memo(string_pattern, current_word):
                     search_palindromes(remove_characters(string_pattern, current_word),
                                        palindrome_set.union({current_word}))
@@ -85,7 +85,7 @@ if __name__ == '__main__':
     default_word: Final[str] = "VERMELHO"
 
     try:
-        input_word: str = ''.join(sorted(tmp_word)) if \
+        input_word: str = tmp_word if \
         (tmp_word := (''.join(sys.argv[1:])).upper().replace(" ", "")) else \
         default_word
 
@@ -103,22 +103,24 @@ if __name__ == '__main__':
             as txt_file:
 
             while (current_file_word := txt_file.readline().strip()):
-                if is_sub_anagram(input_word, current_file_word):
+                if is_sub_anagram(input_word, current_file_word) is True:
                     all_valid_words.append(current_file_word)
 
     except (FileNotFoundError, PermissionError, IOError) as error:
         print("An Exception While Opening the File Occured:", error)
 
+    all_valid_words.sort(key=len)
+
     for word_1 in all_valid_words:
         all_valid_words_linked[word_1] = set()
 
         for word_2 in all_valid_words:
-            if is_sub_anagram(word_1, word_2):
+            if (result := is_sub_anagram(word_1, word_2)) is True:
                 all_valid_words_linked[word_1].add(word_2)
-
-    all_valid_words.sort(key=len)
+            elif result is None:
+                break
 
     search_palindromes(input_word, set())
 
-    for anagramTuple in iter(all_anagrams):
+    for anagramTuple in sorted(all_anagrams):
         print(*anagramTuple)
