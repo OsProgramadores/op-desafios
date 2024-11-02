@@ -286,7 +286,7 @@ def is_valid_expression(expression):
 
     return re.match('^[a-zA-Z]+$', expression)
 
-def process_argument(argument: list) -> str or None:
+def process_argument(argument: list):
     if len(argument) <= 1:
         print("[USO]: python main.py 'argumento'")
         return
@@ -295,8 +295,7 @@ def process_argument(argument: list) -> str or None:
         print("[ERRO]: passe apenas 1 argumento")
         return
 
-    elif len(argument) == 2:
-        return argument[-1].upper().replace(" ", "")
+    return argument[-1].upper().replace(" ", "")
 
 def main(args):
     expression: str = ""
