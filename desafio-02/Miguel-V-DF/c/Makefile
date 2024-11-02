@@ -4,5 +4,6 @@ CFLAGS = -Wall -Wextra -Wshadow
 primos: primos.c
 	$(CC) $(CFLAGS) primos.c -o primos -lm
 
-.Phony: clean
+.PHONY: clean
+clean:
 	rm -f primos *.o
