@@ -289,11 +289,11 @@ def is_valid_expression(expression):
 def process_argument(argument: list):
     if len(argument) <= 1:
         print("[USO]: python main.py 'argumento'")
-        return
+        return False
 
-    elif len(argument) > 2:
+    if len(argument) > 2:
         print("[ERRO]: passe apenas 1 argumento")
-        return
+        return False
 
     return argument[-1].upper().replace(" ", "")
 
