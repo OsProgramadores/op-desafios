@@ -149,7 +149,10 @@ def generate_new_anagrams(
                 temp_list: list = []
                 temp_list.append(new_candidate[0])
                 potential_anagram = anagram_candidates[pos_candidate_anagram][0] + temp_list
-                missing_letters = count_letters_missing_anagram(letters_current_expression, potential_anagram)
+                missing_letters = count_letters_missing_anagram(
+                    letters_current_expression,
+                    potential_anagram
+                )
                 total_missing_letters = get_letters_total(missing_letters)
 
                 anagram_candidates.append((
@@ -253,7 +256,8 @@ def count_letters_missing_anagram(letters_current_expression, string_list) -> di
 
     for letter in letters_current_expression:
         if letter in current_list_letters:
-            missing_letters[letter] = letters_current_expression[letter] - current_list_letters[letter]
+            missing_letters[letter] = letters_current_expression[letter] \
+            - current_list_letters[letter]
 
         else:
             missing_letters[letter] = letters_current_expression[letter]
@@ -280,10 +284,7 @@ def is_valid_expression(expression):
         if letter in string.punctuation:
             return False
 
-    if not re.match('^[a-zA-Z]+$', expression):
-        return False
-
-    return True
+    return re.match('^[a-zA-Z]+$', expression)
 
 def process_argument(argument: list) -> str or None:
     if len(argument) <= 1:
