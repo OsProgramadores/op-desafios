@@ -106,7 +106,7 @@ desafio-XX/
   seu_usuario_no_github/
     linguagem/
       Seu código fonte(...)
-      README.md <-- comentários, opcional.
+      README.md
 ```
 
 Onde:
@@ -123,7 +123,9 @@ Onde:
   * `php`: PHP
   * `python`: Python (versão 3.x)
 
-> Nota: Apenas desafios feitos em uma das linguagens acima serão aceitos.
+* README.md é um arquivo com comentários sobre a sua implementação e instruções de como executá-la.
+
+> Nota: Apenas desafios feitos em uma das linguagens acima e que possuam o arquivo README.md serão aceitos.
 
 Exemplo de um desafio em Java:
 
