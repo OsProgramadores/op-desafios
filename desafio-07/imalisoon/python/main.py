@@ -1,12 +1,6 @@
 import sys
 
-
 def python_tac(file_path):
-    """Função principal tac
-
-    Args:
-        file_path (txt): recebe como argumento o arquivo a ser lido
-    """
     with open(file_path, 'rb') as file:
         file.seek(0, 2)
         file_size = file.tell()
@@ -41,11 +35,17 @@ def python_tac(file_path):
 
 
 def main():
-    """Função main, ponto de início  e de controle da execução do programa
-    """
-    file_path = sys.argv[1]
+    _file = sys.argv
 
-    python_tac(file_path)
+    if len(_file) == 2:
+        python_tac(_file)
+
+    elif len(_file) <= 1:
+        print("[USO] python main arquivo.txt")
+
+    else:
+        print("[ERRO] passe apenas 1 argumento.")
 
 
-main()
+if __name__ == "__main__":
+    main()
