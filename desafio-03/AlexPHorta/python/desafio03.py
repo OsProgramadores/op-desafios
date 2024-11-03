@@ -1,7 +1,7 @@
 MAX_INTEGER = 18446744073709551615
 
 def print_palindromes(begin, end, print_output=True):
-    """Retorna todos os palíndromos encontrados entre begin e end, inclusive.
+    """Imprime todos os palíndromos encontrados entre begin e end, inclusive.
 
     Argumentos:
     - begin - Int
@@ -165,5 +165,4 @@ if __name__ == "__main__":
                 self.assertFalse(is_palindrome("5025"))
                 self.assertFalse(is_palindrome(MAX_INTEGER))
 
-        print(args)
         unittest.main(argv=[sys.argv[0]])
