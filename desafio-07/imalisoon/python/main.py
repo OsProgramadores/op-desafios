@@ -1,12 +1,3 @@
-"""
-Main module
-
-Lê o texto invertendo as linhas (igual o comando tac)
-
- autor: guiribeirodev
-
- versão: 1.0
-"""
 import sys
 
 
