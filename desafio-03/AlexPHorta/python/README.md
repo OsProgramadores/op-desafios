@@ -6,26 +6,14 @@ Nesse desafio fiz duas funções. Uma delas, `is_palindrome`, testa se uma _stri
 
 ## Modo de Usar
 
-Para os fins a que se propõe o desafio, importe o arquivo e chame a função `print_palindromes` com os números para _begin_ e _end_ como argumentos. Abra um terminal e inicie uma sessão do interpretador Python, assim:
+Abra um terminal e execute o programa, assim:
 
-
-```pycon
-$ python
->>> import desafio03
->>> desafio03.print_palindromes(101, 121)
-[101, 111, 121]
-```
-
-Outra maneira é imprimir os resultados no terminal, usando _print_output_:
-
-```pycon
-$ python
->>> import desafio03
->>> desafio03.print_palindromes(101, 121, print_outpur=True)
+```bash
+$ python desafio03.py 101 121
 101
 111
 121
->>>
+$
 ```
 
 ## 1, 2, 3, Testando
@@ -33,11 +21,30 @@ $ python
 Os testes vêm integrados no próprio arquivo. Usei a biblioteca unittest. É só chamar o interpretador com o nome do arquivo.
 
 ```bash
-$ python desafio03.py
+$ python desafio03.py --test
 .........
 ----------------------------------------------------------------------
 Ran 9 tests in 0.001s
 
 OK
 $
+```
+
+## Ajuda
+
+Para consultar todas as opções do programa, é só executá-lo com a opção `--help`.
+
+```bash
+$ ./desafio03.py --help
+usage: desafio03.py [-h] [-n] [-t] [extremes ...]
+
+Lista todos os números palíndromos existentes entre dois extremos.
+
+positional arguments:
+  extremes       Os números inicial e final para a busca.
+
+options:
+  -h, --help     show this help message and exit
+  -n, --noprint  Somente retorne os resultados.
+  -t, --test     Roda os testes.
 ```
