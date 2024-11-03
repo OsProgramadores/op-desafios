@@ -84,10 +84,10 @@ if __name__ == "__main__":
 
     if args.extremes:
         try:
-            len(args.extremes) == 2
+            _ = len(args.extremes) == 2
             print_palindromes(*args.extremes, print_output=args.noprint)
-        except:
-            raise ValueError("Número inválido de argumentos.")
+        except Exception as err:
+            raise ValueError("Número inválido de argumentos.") from err
 
     if args.test:
 
@@ -115,13 +115,13 @@ if __name__ == "__main__":
                 self.assertRaises(ValueError, print_palindromes, 0, MAX_INTEGER+1)
 
             def test_include_limits(self):
-                self.assertEqual(print_palindromes(0, 1), [0, 1])
-                self.assertEqual(print_palindromes(0, 9), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-                self.assertEqual(print_palindromes(9, 11), [9, 11])
-                self.assertEqual(print_palindromes(1, 20), [1, 2, 3, 4, 5, 6, 7, 8, 9, 11])
-                self.assertEqual(print_palindromes(3000, 3010), [3003])
-                self.assertEqual(print_palindromes(101, 121), [101, 111, 121])
-                self.assertEqual(print_palindromes(101, 121), [101, 111, 121])
+                self.assertEqual(print_palindromes(0, 1, print_output=False), [0, 1])
+                self.assertEqual(print_palindromes(0, 9, print_output=False), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+                self.assertEqual(print_palindromes(9, 11, print_output=False), [9, 11])
+                self.assertEqual(print_palindromes(1, 20, print_output=False), [1, 2, 3, 4, 5, 6, 7, 8, 9, 11])
+                self.assertEqual(print_palindromes(3000, 3010, print_output=False), [3003])
+                self.assertEqual(print_palindromes(101, 121, print_output=False), [101, 111, 121])
+                self.assertEqual(print_palindromes(101, 121, print_output=False), [101, 111, 121])
 
             # Roubei de https://stackoverflow.com/a/62360735
             def test_really_print_palindromes(self):
