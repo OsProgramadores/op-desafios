@@ -122,6 +122,7 @@ Onde:
   * `go`: Go
   * `php`: PHP
   * `python`: Python (versão 3.x)
+  * `rust`: Rust
 
 * README.md é um arquivo com comentários sobre a sua implementação e instruções de como executá-la.
 
