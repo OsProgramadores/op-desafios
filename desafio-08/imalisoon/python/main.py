@@ -47,8 +47,8 @@ if __name__ == "__main__":
     _file = sys.argv
 
     if len(_file) == 2:
-        frac_list = load_file(_file[1])
-        main(frac_list)
+        _frac_list = load_file(_file[1])
+        main(_frac_list)
 
     elif len(_file) <= 1:
         print("[USO] python main.py arquivo.txt")
