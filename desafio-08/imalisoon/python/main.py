@@ -24,7 +24,6 @@ def main(frac_list):
 
         try:
             numerator, denominator = int(fraction[0]), int(fraction[1])
-            
             int_division = numerator // denominator
             rest_division = numerator % denominator
             max_division_common = math.gcd(numerator, denominator)
