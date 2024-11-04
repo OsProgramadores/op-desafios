@@ -83,8 +83,8 @@ def load_file(path: str):
     _file: list = []
 
     with open(path, "r") as f:
-        for line in f.readlines():
-            _file.append(line.strip())
+        for _l in f.readlines():
+            _file.append(_l.strip())
 
     return _file
 
