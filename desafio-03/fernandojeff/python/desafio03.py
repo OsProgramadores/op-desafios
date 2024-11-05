@@ -1,6 +1,6 @@
 def eh_palindromo(num):
     return str(num) == str(num)[::-1]
-10
+
 def encontrar_palindromos(inicio, fim):
     for num in range(inicio, fim + 1):
         if eh_palindromo(num):

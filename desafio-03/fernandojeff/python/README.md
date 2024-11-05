@@ -9,7 +9,7 @@ Olá! Meu nome é Fernando Jefferson e sou estudante de Ciência da Computação
 A solução implementada utiliza um algoritmo que verifica se um número é palíndromo e exibe os palíndromos dentro de um intervalo específico. A lógica básica é:
 
 1. **Verificação de Palíndromo**: Um número é considerado palíndromo se ele é igual a sua reversão. Para verificar isso, converti o número para uma string e comparei com seu reverso.
-   
+
 2. **Geração de Lista**: O programa solicita ao usuário um valor inicial e um valor final, então itera por todos os números dentro desse intervalo. Cada número é passado para a função de verificação, e, se for um palíndromo, ele é exibido na tela.
 
 ## Como Instalar o Python
