@@ -7,7 +7,7 @@ def encontrar_palindromos(inicio, fim):
             print(num)
 
 def verfi(entrada):
-    max = (1 << 64) - 1
+    maximo = (1 << 64) - 1
 
     try:
         numero = int(entrada)
@@ -19,7 +19,7 @@ def verfi(entrada):
         print("Digite um INTEIRO POSITIVO!")
         return False
 
-    if numero > max:
+    if numero > maximo:
         print("O numero execede o valor limite! Digite outro numero menor.")
         return False
 
