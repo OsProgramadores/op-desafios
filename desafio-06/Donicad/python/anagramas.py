@@ -1,5 +1,6 @@
 from collections import Counter
 import re
+import os
 
 def validar_entrada(expressao):
     expressao = expressao.upper().replace(" ", "")
@@ -53,7 +54,7 @@ def main():
         print(e)
         return
 
-    caminho_arquivo = r'.\desafio-06\Donicad\python\words.txt'
+    caminho_arquivo = os.path.join(os.path.dirname(__file__), 'words.txt')
     palavras = ler_palavras_validas(caminho_arquivo)
 
     palavras_filtradas = filtrar_palavras(palavras, expressao)
