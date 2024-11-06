@@ -30,7 +30,7 @@ while True:
 
     if verfi(primeiro_numero) is False:
         continue
-    
+
     start = verfi(primeiro_numero)
 
     break
