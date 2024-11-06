@@ -8,11 +8,22 @@ def print_palindromes(begin, end, print_output=True):
     - end - Int
     - print_output - Boolean
     """
-    if not all((isinstance(begin, int), isinstance(end, int),
-                (begin >= 0), (begin <= MAX_INTEGER),
-                (end >= 0), (end <= MAX_INTEGER),
-                (begin < end))):
-        raise ValueError("Argumentos inválidos.")
+    assert begin.isdigit() and end.isdigit(), "Argumentos devem ser números inteiros"
+    begin = int(begin)
+    end = int(end)
+    positive = (begin >=0 and end >=0)\
+                or "Argumentos devem ser números positivos"
+    less_than_max = (begin <= MAX_INTEGER and end <= MAX_INTEGER)\
+                or "Argumento excede MAX_INTEGER"
+    begin_less_than_end = (begin < end)\
+                or "Os argumentos devem ser fornecidos em ordem crescente"
+
+    err = first_true(
+        (positive, less_than_max, begin_less_than_end),
+        predicate=lambda x: isinstance(x, str))
+
+    if err:
+        raise ValueError(f"{err}")
 
     palindromes = []
 
@@ -46,6 +57,12 @@ def is_palindrome(candidate):
 
     return palindrome
 
+# Peguei de https://docs.python.org/3.8/library/itertools.html
+def first_true(iterable, default=False, predicate=None):
+    "Returns the first true value or the *default* if there is no true value."
+    # first_true([a,b,c], x) → a or b or c or x
+    # first_true([a,b], x, f) → a if f(a) else b if f(b) else x
+    return next(filter(predicate, iterable), default)
 
 
 if __name__ == "__main__":
@@ -60,7 +77,6 @@ if __name__ == "__main__":
     parser.add_argument(
         "extremes",
         nargs="*",
-        type=int,
         help="Os números inicial e final para a busca."
     )
 
@@ -82,12 +98,15 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+    if len(args.extremes) == 0 and not args.test:
+        parser.print_help()
+
     if args.extremes:
         try:
-            _ = len(args.extremes) == 2
+            assert len(args.extremes) == 2, "Número excessivo de argumentos."
             print_palindromes(*args.extremes, print_output=args.noprint)
-        except Exception as err:
-            raise ValueError("Número inválido de argumentos.") from err
+        except Exception as exc:
+            raise ValueError(f"{exc}") from exc
 
     if args.test:
 
