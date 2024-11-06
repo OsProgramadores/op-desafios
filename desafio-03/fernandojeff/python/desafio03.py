@@ -18,21 +18,21 @@ def verfi(entrada):
     if numero <= 0:
         print("Digite um INTEIRO POSITIVO!")
         return False
-    
+
     if numero > max:
         print("O numero execede o valor limite! Digite outro numero menor.")
         return False
-    
+
     return numero
 
 while True:
     primeiro_numero = input("Digite o numero INICIAL: ")
-    
+
     if verfi(primeiro_numero) is False:
         continue
     
-    start = verfi(primeiro_numero) 
-    
+    start = verfi(primeiro_numero)
+
     break
 
 while True:
@@ -43,11 +43,11 @@ while True:
         continue
 
     limit = verfi(ultimo_numero)
-    
+
     if limit < start:
         print("O ultimo numero deve ser menor que o primeiro.")
         continue
-    
+
     break
 
 encontrar_palindromos(start, limit)
