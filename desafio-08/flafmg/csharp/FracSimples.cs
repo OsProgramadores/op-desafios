@@ -20,7 +20,7 @@ public class Program
         }
 
         using var sr = new StreamReader(filePath);
-        
+
         while (sr.ReadLine() is { } line)
         {
             Console.WriteLine(ProcessFraction(line.Trim()));
