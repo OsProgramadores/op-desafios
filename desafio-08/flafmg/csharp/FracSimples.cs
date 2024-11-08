@@ -19,24 +19,15 @@ public class Program
             return;
         }
 
-        var sr = new StreamReader(filePath);
-        try
+        using var sr = new StreamReader(filePath);
+        
+        while (sr.ReadLine() is { } line)
         {
-            string line;
-
-            while ((line = sr.ReadLine()) != null)
-            {
-                Console.WriteLine(ProcessFraction(line.Trim()));
-            }
+            Console.WriteLine(ProcessFraction(line.Trim()));
         }
         catch (Exception ex)
         {
             Console.WriteLine($"erro: {ex.Message}");
-        }
-        finally
-        {
-            if (sr != null)
-                sr.Dispose();
         }
     }
 
