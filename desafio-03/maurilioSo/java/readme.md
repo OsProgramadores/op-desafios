@@ -17,7 +17,7 @@ O código está estruturado em duas partes principais:
 O método `main` é o ponto de entrada do programa e tem a seguinte funcionalidade:
 1. **Laço `for`**: O laço percorre todos os números inteiros entre 0 e 100.000.
    - A cada iteração, o número `i` é verificado para saber se é um número palíndromo.
-   
+
 2. **Chamada para `ehPalindromico(i)`**: Para cada número `i`, o programa chama o método `ehPalindromico` para verificar se o número é palíndromo.
 
 3. **Impressão dos números palíndromos**: Se o número for palíndromo, ele é impresso no console utilizando o `System.out.println(i)`.
@@ -75,7 +75,7 @@ Exemplo de saída (parte da execução):
 
 1. **Função `main`**:
    - A função principal que percorre os números e imprime os palíndromos.
-   
+
 2. **Função `ehPalindromico`**:
    - Verifica se um número é palíndromo, retornando `true` ou `false`.
 
