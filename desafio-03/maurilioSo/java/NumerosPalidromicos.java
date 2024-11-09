@@ -25,5 +25,4 @@ public class NumerosPalidromicos {
       return numeroOriginal == numeroInvertido;
     }
   }
-
 }
