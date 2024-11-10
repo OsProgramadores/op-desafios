@@ -13,7 +13,7 @@ O programa recebe uma expressão do usuário, valida a entrada, gera todas as co
 ### Como Funciona
 
 1. **Carregamento de Palavras Válidas**: O programa carrega as palavras válidas a partir de um arquivo chamado `words.txt`. Esse arquivo deve conter uma lista de palavras, com uma palavra por linha.
-   
+
 2. **Validação da Entrada**: A expressão fornecida pelo usuário é validada para garantir que ela contenha apenas caracteres alfabéticos e espaços. Se a entrada for inválida, o programa exibirá uma mensagem de erro e encerrará a execução.
 
 3. **Geração de Anagramas**: O programa gera as permutações possíveis da expressão, removendo letras à medida que as palavras válidas forem formadas. Apenas as combinações que formam palavras presentes no arquivo de palavras válidas são consideradas.
