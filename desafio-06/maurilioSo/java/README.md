@@ -1,7 +1,3 @@
-Claro! Aqui está o **README** atualizado com o autor:
-
----
-
 # Anagrama
 
 Este programa em Java gera anagramas válidos de uma expressão fornecida pelo usuário, utilizando um arquivo de palavras válidas. O programa pode ser utilizado para gerar anagramas tanto de uma palavra quanto de uma frase. Ele ignora os espaços e converte todas as letras para maiúsculas.
