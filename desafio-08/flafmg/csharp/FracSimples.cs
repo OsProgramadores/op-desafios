@@ -20,10 +20,12 @@ public class Program
         }
 
         using var sr = new StreamReader(filePath);
-
-        while (sr.ReadLine() is { } line)
+        try
         {
-            Console.WriteLine(ProcessFraction(line.Trim()));
+            while (sr.ReadLine() is { } line)
+            {
+                Console.WriteLine(ProcessFraction(line.Trim()));
+            }
         }
         catch (Exception ex)
         {
