@@ -4,11 +4,12 @@ def print_palindromes(begin, end, print_output=True):
     """Imprime todos os palíndromos encontrados entre begin e end, inclusive.
 
     Argumentos:
-    - begin - Int
-    - end - Int
+    - begin - Str
+    - end - Str
     - print_output - Boolean
     """
-    assert begin.isdigit() and end.isdigit(), "Argumentos devem ser números inteiros"
+    if not begin.isdigit() and end.isdigit():
+        raise ValueError("Argumentos devem ser números inteiros")
     begin = int(begin)
     end = int(end)
     positive = (begin >=0 and end >=0)\
@@ -59,7 +60,7 @@ def is_palindrome(candidate):
 
 # Peguei de https://docs.python.org/3.8/library/itertools.html
 def first_true(iterable, default=False, predicate=None):
-    "Returns the first true value or the *default* if there is no true value."
+    """Returns the first true value or the *default* if there is no true value."""
     # first_true([a,b,c], x) → a or b or c or x
     # first_true([a,b], x, f) → a if f(a) else b if f(b) else x
     return next(filter(predicate, iterable), default)
@@ -67,15 +68,29 @@ def first_true(iterable, default=False, predicate=None):
 
 if __name__ == "__main__":
 
-    import argparse
+    import gettext
     import sys
+
+    def translate(text):
+        text = text.replace("usage", "modo de usar")
+        text = text.replace("positional arguments", "argumentos posicionais")
+        text = text.replace("show this help message and exit",
+                            "Exibe esta mensagem de ajuda e termina a execução.")
+        text = text.replace("error", "erro")
+        text = text.replace("options", "opções")
+        text = text.replace("the following arguments are required",
+                            "os seguintes argumentos são obrigatórios")
+        return text
+    gettext.gettext = translate
+
+    import argparse
 
     parser = argparse.ArgumentParser(
         description="Lista todos os números palíndromos existentes entre dois extremos."
     )
 
     parser.add_argument(
-        "extremes",
+        "extremos",
         nargs="*",
         help="Os números inicial e final para a busca."
     )
@@ -85,7 +100,7 @@ if __name__ == "__main__":
         '--noprint',
         dest="noprint",
         action='store_false',
-        help="Somente retorne os resultados."
+        help="Somente retorna os resultados."
     )
 
     parser.add_argument(
@@ -93,18 +108,18 @@ if __name__ == "__main__":
         "--test",
         dest="test",
         action="store_true",
-        help="Roda os testes."
+        help="Executa os testes."
     )
 
     args = parser.parse_args()
 
-    if len(args.extremes) == 0 and not args.test:
+    if len(args.extremos) == 0 and not args.test:
         parser.print_help()
 
-    if args.extremes:
+    if args.extremos:
         try:
-            assert len(args.extremes) == 2, "Número excessivo de argumentos."
-            print_palindromes(*args.extremes, print_output=args.noprint)
+            assert len(args.extremos) == 2, "Número excessivo de argumentos."
+            print_palindromes(*args.extremos, print_output=args.noprint)
         except Exception as exc:
             raise ValueError(f"{exc}") from exc
 
@@ -120,33 +135,34 @@ if __name__ == "__main__":
         class TestPrintPalindromes(unittest.TestCase):
 
             def test_limits_are_positive_integers(self):
-                self.assertRaises(ValueError, print_palindromes, -1, -10)
+                self.assertRaises(ValueError, print_palindromes, "-1", "-10")
 
             def test_limits_are_ints(self):
-                self.assertRaises(ValueError, print_palindromes, 1.5, 10)
-                self.assertRaises(ValueError, print_palindromes, 1, 10.5)
+                self.assertRaises(ValueError, print_palindromes, "1.5", "10")
+                self.assertRaises(ValueError, print_palindromes, "1", "10.5")
 
             def test_begin_must_be_lower_than_end(self):
-                self.assertRaises(ValueError, print_palindromes, 10, 1)
+                self.assertRaises(ValueError, print_palindromes, "10", "1")
 
             def test_begin_and_end_must_be_lower_than_max_integer(self):
-                self.assertRaises(ValueError, print_palindromes, MAX_INTEGER+1, MAX_INTEGER+2)
-                self.assertRaises(ValueError, print_palindromes, 0, MAX_INTEGER+1)
+                self.assertRaises(ValueError, print_palindromes,
+                    str(MAX_INTEGER+1), str(MAX_INTEGER+2))
+                self.assertRaises(ValueError, print_palindromes, "0", str(MAX_INTEGER+1))
 
             def test_include_limits(self):
-                self.assertEqual(print_palindromes(0, 1, print_output=False),
+                self.assertEqual(print_palindromes("0", "1", print_output=False),
                     [0, 1])
-                self.assertEqual(print_palindromes(0, 9, print_output=False),
+                self.assertEqual(print_palindromes("0", "9", print_output=False),
                     [0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
-                self.assertEqual(print_palindromes(9, 11, print_output=False),
+                self.assertEqual(print_palindromes("9", "11", print_output=False),
                     [9, 11])
-                self.assertEqual(print_palindromes(1, 20, print_output=False),
+                self.assertEqual(print_palindromes("1", "20", print_output=False),
                     [1, 2, 3, 4, 5, 6, 7, 8, 9, 11])
-                self.assertEqual(print_palindromes(3000, 3010, print_output=False),
+                self.assertEqual(print_palindromes("3000", "3010", print_output=False),
                     [3003])
-                self.assertEqual(print_palindromes(101, 121, print_output=False),
+                self.assertEqual(print_palindromes("101", "121", print_output=False),
                     [101, 111, 121])
-                self.assertEqual(print_palindromes(101, 121, print_output=False),
+                self.assertEqual(print_palindromes("101", "121", print_output=False),
                     [101, 111, 121])
 
             # Roubei de https://stackoverflow.com/a/62360735
@@ -159,7 +175,7 @@ if __name__ == "__main__":
                 try:
                     str_io = io.StringIO()
                     with contextlib.redirect_stdout(str_io):
-                        print_palindromes(5, 11, print_output=True)
+                        print_palindromes("5", "11", print_output=True)
                     output = str_io.getvalue()
 
                     self.assertTrue(print.called)  # `called` is a Mock attribute
