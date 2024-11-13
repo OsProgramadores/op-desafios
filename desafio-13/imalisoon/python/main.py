@@ -5,7 +5,7 @@ import re
 import sys
 
 
-def is_valid(argument):
+def is_valid_arg(argument):
     _pattern = r"^[a-hA-H][1-8]$"
 
     if re.match(_pattern, argument):
@@ -108,7 +108,7 @@ def get_input():
     if len(sys.argv) > 1:
         arg = sys.argv[1]
 
-        if is_valid(arg):
+        if is_valid_arg(arg):
             return True, arg.strip().lower()
 
         print("argumento inválido. ex: a3")
