@@ -3,20 +3,19 @@
 Descrição
 Este programa em Java identifica números palíndromos em um intervalo especificado pelo usuário.
 Mas o que é um número palíndromo?
-Em termos simples, um palíndromo é uma palavra, número ou sequência de caracteres que pode ser lida da mesma forma da 
-esquerda para a direita e da direita para a esquerda.
-Alguns exemplos são a palavra “reviver” e o número “121”.
+Em termos simples, um palíndromo é uma palavra, número ou sequência de caracteres que pode ser lida da mesma forma da
+esquerda para a direita e da direita para a esquerda.Alguns exemplos são a palavra “reviver” e o número “121”.
 
 Funcionalidades
 
 Tratamento de Exceções para a Entrada:
 
-O uso de um laço while com tratamento de exceções (try-catch) assegura que o programa só continuará após receber duas 
+O uso de um laço while com tratamento de exceções (try-catch) assegura que o programa só continuará após receber duas
 entradas válidas do usuário.
 
 Conversão de Número para String:
 
-Cada número no intervalo é convertido para uma String, permitindo que cada caractere seja tratado individualmente, 
+Cada número no intervalo é convertido para uma String, permitindo que cada caractere seja tratado individualmente,
 semelhante a um array de caracteres.
 
 Método de Verificação de Palíndromo:
@@ -38,7 +37,7 @@ um valor inicial (numeroInicial) e um valor final (numeroFinal).
 Validação de Entradas:
 
 Antes de iniciar a busca, o programa valida os valores inseridos para garantir que ambos sejam inteiros não negativos.
-Caso o usuário insira um valor inválido (como um caractere não numérico ou um número negativo), o programa exibe uma 
+Caso o usuário insira um valor inválido (como um caractere não numérico ou um número negativo), o programa exibe uma
 mensagem de erro e solicita a entrada novamente.
 
 Identificação dos Palíndromos:
