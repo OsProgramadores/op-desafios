@@ -31,11 +31,11 @@ public class Program
             foreach (var line in lines)
             {
                 var parts = line.Split(' ');
-                if (parts.Length != 3 || 
-                    !int.TryParse(parts[0], out int baseInput) || 
-                    !int.TryParse(parts[1], out int baseOutput) || 
-                    baseInput < 2 || baseInput > 62 || 
-                    baseOutput < 2 || baseOutput > 62 || 
+                if (parts.Length != 3 ||
+                    !int.TryParse(parts[0], out int baseInput) ||
+                    !int.TryParse(parts[1], out int baseOutput) ||
+                    baseInput < 2 || baseInput > 62 ||
+                    baseOutput < 2 || baseOutput > 62 ||
                     !IsValidNumberForBase(parts[2], baseInput))
                 {
                     Console.WriteLine("???");
