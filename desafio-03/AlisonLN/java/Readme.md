@@ -1,28 +1,53 @@
 # Números palindrômicos
 
-Passo 1 : Crie um scanner para ler a entrada de dados Inicial e Final;
+Descrição
+Este programa em Java identifica números palíndromos em um intervalo especificado pelo usuário.
+Mas o que é um número palíndromo?
+Em termos simples, um palíndromo é uma palavra, número ou sequência de caracteres que pode ser lida da mesma forma da 
+esquerda para a direita e da direita para a esquerda.
+Alguns exemplos são a palavra “reviver” e o número “121”.
 
-Passo 2 : Crie um while para verificar se a entrada e a saida inseridas nao sao numeros negativos
+Funcionalidades
 
-Passo 3 : Crie um for onde o "i" vai receber a entrada (Inicial)  <= até o final ;
+Tratamento de Exceções para a Entrada:
 
-Passo 4 : Para conseguirmos ler o numero que é um int de tras para frente devemos transforma-lo em uma String
-entao na proxima linha apos criar o for vamos pegar o i e transformalo em uma string armazenando em uma variavel
-criada do tipo String;
+O uso de um laço while com tratamento de exceções (try-catch) assegura que o programa só continuará após receber duas 
+entradas válidas do usuário.
 
-Passo 5 : Crie uma variavel do tipo boolean para receber o metodo de verificacao que passa a variavel criada do tipo
-String como argumento;
+Conversão de Número para String:
 
-Passo 6 : A primeira verificacao no metodo que vamos realizar é se a variavel convertida contem apenas 1 algarismo
-Números de um algarismo são palíndromos por definição;
+Cada número no intervalo é convertido para uma String, permitindo que cada caractere seja tratado individualmente, 
+semelhante a um array de caracteres.
 
-Passo 7 : Se conter mais que 1 entao vamos realizar outro for onde o j inicia com o tamanho -1 vai iniciar o laço
-contando de tras para frente até o 0 onde 0 é o final da String
+Método de Verificação de Palíndromo:
 
-Passo 8 :  Para que possa capturar esses caracteres crie um StringBuilder para armazenar a string em uma variavel nova
+O método ePalindromo() utiliza a classe StringBuilder para inverter a String.
+Se a String invertida for idêntica à String original, o número é considerado palíndromo.
 
-Passo 9 : Crie um if para verficicar se a variavel criada para armazenar a nova string reversa é igual a string
-de entrada utilizando um equals para comparar se for igual entao é true se não é false;
+Armazenamento e Exibição:
 
-Passo 10 : Crie uma Lista para que possa armazenar os numero que são palindromos e depois imprimi-los em sequencia fora
-do laço for
+Os números palíndromos são adicionados a uma lista e exibidos ao final, organizados de forma clara para o usuário.
+
+Como o Programa Funciona
+
+Entrada de Intervalo:
+
+O programa solicita ao usuário dois números inteiros positivos que definem o intervalo de busca dos números palíndromos:
+um valor inicial (numeroInicial) e um valor final (numeroFinal).
+
+Validação de Entradas:
+
+Antes de iniciar a busca, o programa valida os valores inseridos para garantir que ambos sejam inteiros não negativos.
+Caso o usuário insira um valor inválido (como um caractere não numérico ou um número negativo), o programa exibe uma 
+mensagem de erro e solicita a entrada novamente.
+
+Identificação dos Palíndromos:
+
+Para cada número no intervalo [numeroInicial, numeroFinal], o programa verifica se ele é um palíndromo.
+Essa verificação é feita convertendo o número em uma String e usando um método auxiliar chamado ePalindromo():
+O método ePalindromo() inverte a String e compara a versão invertida com a original.
+Se ambas as versões forem idênticas, o número é considerado palíndromo.
+
+Exibição do Resultado:
+
+Todos os números palíndromos encontrados no intervalo são armazenados em uma lista, que é exibida ao final do programa.
