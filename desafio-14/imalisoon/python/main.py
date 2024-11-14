@@ -74,7 +74,8 @@ def remove_empty_parenthesis(exp):
     _exp_ = exp[:]
 
     for open_index, open_p in enumerate(_exp_):
-        if open_p == '(' and is_number_confirm(_exp_[open_index + 1]) and _exp_[open_index + 2] == ')':
+        if open_p == '(' and is_number_confirm(_exp_[open_index + 1]) \
+        and _exp_[open_index + 2] == ')':
             del _exp_[open_index]
             del _exp_[open_index + 1]
 
@@ -122,7 +123,9 @@ def evaluate(_expression_):
                 index += p_index
 
                 if item in operator:
-                    expression[index] = resolve_sub_eq(expression[index-1], item, expression[index+1])
+                    expression[index] = resolve_sub_eq(
+                    expression[index-1], item,
+                    expression[index+1])
                     expression[index] = str(expression[index])
                     del expression[index - 1]
                     del expression[index]
