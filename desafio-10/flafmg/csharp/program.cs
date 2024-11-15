@@ -149,7 +149,7 @@ class Program
 
     static Rule GetApplicableRule(List<Rule> rules, string currentState, char currentSymbol) //simplificação das rules
     {
-        return rules.FirstOrDefault(r => 
+        return rules.FirstOrDefault(r =>
                    r.CurrentState == currentState &&
                    (r.CurrentSymbol == currentSymbol.ToString() || (r.CurrentSymbol == "_" && currentSymbol == ' ')))
                ?? rules.FirstOrDefault(r =>
