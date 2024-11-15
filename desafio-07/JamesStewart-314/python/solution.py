@@ -1,9 +1,5 @@
 import os
-import sys
-import io
 from typing import Final, Generator
-
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 MEGABYTE_IN_BYTES: Final[int] = 1_048_576
 CHUNK_SIZE: int = 100
@@ -25,7 +21,7 @@ def tac_python(file_path: str) -> None:
 
     try:
         with open(file_path, "rb") as bin_file:
-            bin_file.seek(0, io.SEEK_END)
+            bin_file.seek(0, 2)
             bin_file.seek(bin_file.tell() - 1)
             file_cursor_position: int = bin_file.tell()
             string_buffer: str = b""
