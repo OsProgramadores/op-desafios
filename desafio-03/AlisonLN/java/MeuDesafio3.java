@@ -1,3 +1,5 @@
+package Desafio3;
+
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -15,11 +17,18 @@ public class MeuDesafio3 {
       try {
         System.out.println("Digite Numero Inicial");
         numeroInicial = sc.nextInt();
-        System.out.println("Digite Numero Final");
-        numeroFinal = sc.nextInt();
 
-        if (numeroInicial >= 0 && numeroFinal >= 0) {
-          break;
+        if (numeroInicial >= 0) {
+          System.out.println("Digite Numero Final");
+          numeroFinal = sc.nextInt();
+          if (numeroFinal >= 0) {
+            if (numeroInicial < numeroFinal) {
+              break;
+            }
+            System.out.println("O numero inicial deve ser menor que o final");
+          } else {
+            System.out.println("Você digitou um numero negativo");
+          }
         } else {
           System.out.println("Você digitou um numero negativo");
         }
