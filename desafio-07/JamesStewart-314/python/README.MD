@@ -31,7 +31,9 @@ Essa é a primeira linha
 
 O objetivo deste programa consiste em reproduzir o comando TAC na linguagem de programação `Python`, conforme veremos a seguir.
 
-Primeiro, especificamos três constantes que representam a quantidades de _bytes_ existente em um _megabyte_, a quantidade de _megabytes_ a ser lida a cada iteração de leitura e a quantidade total de _bytes_ a ser lida do arquivo em cada loop, respectivamente:
+Primeiro, especificamos três constantes que representam a quantidades de _bytes_ existente
+em um _megabyte_, a quantidade de _megabytes_ a ser lida a cada iteração de leitura e a
+quantidade total de _bytes_ a ser lida do arquivo em cada loop, respectivamente:
 
 ```python
 MEGABYTE_IN_BYTES: Final[int] = 1_048_576
@@ -58,7 +60,8 @@ def tac_python(file_path: str) -> None:
                 file_cursor_position = max(0, file_cursor_position - CHUNK_SIZE)
 
                 bin_file.seek(file_cursor_position)
-                string_buffer = bin_file.read(old_file_cursor_position - file_cursor_position) + string_buffer
+                string_buffer = bin_file.read(old_file_cursor_position - file_cursor_position)\
+                     + string_buffer
                 bin_file.seek(file_cursor_position)
 
                 for word in (str_gen := process_buffer(string_buffer)):
@@ -69,7 +72,7 @@ def tac_python(file_path: str) -> None:
                 string_buffer = next(str_gen)
             print(string_buffer.decode("utf-8"))
 
-    except FileNotFoundError as error:
+    except FileNotFoundError:
         print("Error: File path is invalid or doesn\'t exist.")
 ```
 
@@ -107,5 +110,5 @@ versão `3.10` ou superior.
 ## Instruções para Executar o Código
 - Certificando-se de ter instalado corretamente o `Python` em sua
 máquina, abra o terminal de comando e navegue até o diretório contendo o arquivo
-`"desafio06.py"`. Em seguida, digite `python desafio06.py`
+`"desafio07.py"`. Em seguida, digite `python desafio07.py`
 e os resultados deverão ser impressos de maneira formatada na CLI.
