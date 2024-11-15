@@ -17,8 +17,6 @@ def process_buffer(bin_string_buffer: str) -> Generator[str | bool, None, str]:
 
 
 def tac_python(file_path: str) -> None:
-    global MEGABYTE_IN_BYTES, CHUNK_SIZE, CHUNK_SIZE_IN_BYTES
-
     try:
         with open(file_path, "rb") as bin_file:
             bin_file.seek(0, 2)
@@ -31,7 +29,8 @@ def tac_python(file_path: str) -> None:
                 file_cursor_position = max(0, file_cursor_position - CHUNK_SIZE)
 
                 bin_file.seek(file_cursor_position)
-                string_buffer = bin_file.read(old_file_cursor_position - file_cursor_position) + string_buffer
+                string_buffer = bin_file.read(old_file_cursor_position - file_cursor_position)\
+                      + string_buffer
                 bin_file.seek(file_cursor_position)
 
                 for word in (str_gen := process_buffer(string_buffer)):
@@ -42,7 +41,7 @@ def tac_python(file_path: str) -> None:
                 string_buffer = next(str_gen)
             print(string_buffer.decode("utf-8"))
 
-    except FileNotFoundError as error:
+    except FileNotFoundError:
         print("Error: File path is invalid or doesn\'t exist.")
 
 
