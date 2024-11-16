@@ -2,6 +2,10 @@ import itertools
 import string
 
 
+def find_matches(expression, words_file):
+    candidates = shrink_search_field(expression, words_file)
+    return candidates
+
 def shrink_search_field(expression, words_file):
     # res = sieve_less_or_equal(expression, words_file)
     # res = sieve_starts_with(expression, res)
@@ -52,6 +56,17 @@ if __name__ == "__main__":
     import unittest
 
 
+    class TestFindMatches(unittest.TestCase):
+
+        def test_return_with_vermelho(self):
+            self.maxDiff = None
+            with open('./words.txt') as file:
+                self.assertCountEqual(find_matches("VERMELHO", file),
+                    [["ELM", "HO", "REV"], ["ELM", "OH", "REV"],
+                    ["OHM", "REVEL"], ["LEVER", "OHM"], ["ELM", "HOVER"],
+                    ["HOLM", "VEER"], ["HELM", "OVER"], ["HELM", "ROVE"]])
+
+
     class TestShrinkSearchField(unittest.TestCase):
 
         def test_return_with_single(self):
@@ -77,14 +92,15 @@ if __name__ == "__main__":
     class TestSieveDuplicateLetters(unittest.TestCase):
 
         def test_sieve_number_of_letters(self):
+            """If the word has more letters of the same type than what's in expression, it's not an anagram."""
             self.assertTrue(sieve_number_of_letters("AC", "A"))
             self.assertTrue(sieve_number_of_letters("AC", "C"))
             self.assertTrue(sieve_number_of_letters("AC", "CA"))
-            self.assertFalse(sieve_number_of_letters("AC", "AA"))
-            self.assertFalse(sieve_number_of_letters("AC", "CC"))
             self.assertTrue(sieve_number_of_letters("ACA", "A"))
             self.assertTrue(sieve_number_of_letters("ACA", "AA"))
             self.assertTrue(sieve_number_of_letters("ACA", "AC"))
+            self.assertFalse(sieve_number_of_letters("AC", "AA"))
+            self.assertFalse(sieve_number_of_letters("AC", "CC"))
 
 
     class TestSieveRemainingLetters(unittest.TestCase):
