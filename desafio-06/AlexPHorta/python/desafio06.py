@@ -7,9 +7,6 @@ def find_matches(expression, words_file):
     return candidates
 
 def shrink_search_field(expression, words_file):
-    # res = sieve_less_or_equal(expression, words_file)
-    # res = sieve_starts_with(expression, res)
-    # res = sieve_remaining(expression, res)
     res = []
     for w in words_file:
         w = w.strip()
