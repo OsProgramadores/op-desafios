@@ -1,5 +1,3 @@
-package Desafio3;
-
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -13,24 +11,30 @@ public class MeuDesafio3 {
 
     int numeroInicial;
     int numeroFinal;
+
     while (true) {
       try {
-        System.out.println("Digite Numero Inicial");
+        System.out.println("Digite numero inicial");
         numeroInicial = sc.nextInt();
-
         if (numeroInicial >= 0) {
-          System.out.println("Digite Numero Final");
-          numeroFinal = sc.nextInt();
-          if (numeroFinal >= 0) {
-            if (numeroInicial < numeroFinal) {
-              break;
-            }
-            System.out.println("O numero inicial deve ser menor que o final");
-          } else {
-            System.out.println("Você digitou um numero negativo");
-          }
+          break;
         } else {
-          System.out.println("Você digitou um numero negativo");
+          System.out.println("Voce digitou numero inicial negativo");
+        }
+      } catch (InputMismatchException e) {
+        System.out.println("Você digitou um caracter que nao é inteiro");
+        sc.next();
+      }
+    }
+
+    while (true) {
+      try {
+        System.out.println("Digite Numero Final");
+        numeroFinal = sc.nextInt();
+        if (numeroFinal >= 0) {
+          break;
+        } else {
+          System.out.println("Voce Digitou Numero Final negativo");
         }
       } catch (InputMismatchException e) {
         System.out.println("Você digitou um caracter que nao é inteiro");
