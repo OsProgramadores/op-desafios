@@ -46,11 +46,9 @@ ordem invertida:
 
 ```python
 def tac_python(file_path: str) -> None:
-    global MEGABYTE_IN_BYTES, CHUNK_SIZE, CHUNK_SIZE_IN_BYTES
-
     try:
         with open(file_path, "rb") as bin_file:
-            bin_file.seek(0, io.SEEK_END)
+            bin_file.seek(0, 2)
             bin_file.seek(bin_file.tell() - 1)
             file_cursor_position: int = bin_file.tell()
             string_buffer: str = b""
@@ -61,15 +59,17 @@ def tac_python(file_path: str) -> None:
 
                 bin_file.seek(file_cursor_position)
                 string_buffer = bin_file.read(old_file_cursor_position - file_cursor_position)\
-                     + string_buffer
+                      + string_buffer
                 bin_file.seek(file_cursor_position)
 
-                for word in (str_gen := process_buffer(string_buffer)):
-                    if word is not False:
-                        print(word.decode("utf-8"))
-                        continue
-                    break
-                string_buffer = next(str_gen)
+                str_gen: Generator[str | bool, None, str] = process_buffer(string_buffer)
+
+                try:
+                    while True:
+                        print(next(str_gen).decode("utf-8"))
+                except StopIteration as return_value:
+                    string_buffer = return_value.value
+
             print(string_buffer.decode("utf-8"))
 
     except FileNotFoundError:
@@ -85,12 +85,10 @@ encontra-se explicitada logo abaixo:
 ```python
 def process_buffer(bin_string_buffer: str) -> Generator[str | bool, None, str]:
     bin_string_buffer_list: list[str] = bin_string_buffer.split(b"\n")
-    while len(bin_string_buffer_list) > 1:
-        yield bin_string_buffer_list.pop()
+    for idx in range(len(bin_string_buffer_list) - 1, 0, -1):
+        yield bin_string_buffer_list[idx]
 
-    # Throws false to signal the sending of the remaining buffer contents.
-    yield False
-    yield bin_string_buffer_list[0]
+    return bin_string_buffer_list[0]
 ```
 
 ## Requisitos para Execução

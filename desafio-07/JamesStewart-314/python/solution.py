@@ -1,5 +1,9 @@
 import os
 from typing import Final, Generator
+import io
+import sys
+
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 
 MEGABYTE_IN_BYTES: Final[int] = 1_048_576
 CHUNK_SIZE: int = 100
@@ -8,12 +12,10 @@ CHUNK_SIZE_IN_BYTES: int = CHUNK_SIZE * MEGABYTE_IN_BYTES
 
 def process_buffer(bin_string_buffer: str) -> Generator[str | bool, None, str]:
     bin_string_buffer_list: list[str] = bin_string_buffer.split(b"\n")
-    while len(bin_string_buffer_list) > 1:
-        yield bin_string_buffer_list.pop()
+    for idx in range(len(bin_string_buffer_list) - 1, 0, -1):
+        yield bin_string_buffer_list[idx]
 
-    # Throws false to signal the sending of the remaining buffer contents.
-    yield False
-    yield bin_string_buffer_list[0]
+    return bin_string_buffer_list[0]
 
 
 def tac_python(file_path: str) -> None:
@@ -33,12 +35,14 @@ def tac_python(file_path: str) -> None:
                       + string_buffer
                 bin_file.seek(file_cursor_position)
 
-                for word in (str_gen := process_buffer(string_buffer)):
-                    if word is not False:
-                        print(word.decode("utf-8"))
-                        continue
-                    break
-                string_buffer = next(str_gen)
+                str_gen: Generator[str | bool, None, str] = process_buffer(string_buffer)
+
+                try:
+                    while True:
+                        print(next(str_gen).decode("utf-8"))
+                except StopIteration as return_value:
+                    string_buffer = return_value.value
+
             print(string_buffer.decode("utf-8"))
 
     except FileNotFoundError:
