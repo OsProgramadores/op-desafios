@@ -3,8 +3,12 @@ import string
 
 
 def find_matches(expression, words_file):
-    candidates = shrink_search_field(expression, words_file)
-    return candidates
+    candidates = sorted(shrink_search_field(expression, words_file), key=len)
+    res = []
+    grouped_by_len = []
+    for k, g in itertools.groupby(candidates, len):
+        grouped_by_len.append(list(g))
+    return grouped_by_len
 
 def shrink_search_field(expression, words_file):
     res = []
@@ -45,6 +49,30 @@ def sieve_starts_with(expression, word):
 
 def sieve_less_or_equal(expression, word):
     return len(expression) >= len(word)
+
+
+# Peguei de https://jeromekelleher.net/generating-integer-partitions.html
+def accel_asc(n):
+    a = [0 for i in range(n + 1)]
+    k = 1
+    y = n - 1
+    while k != 0:
+        x = a[k - 1] + 1
+        k -= 1
+        while 2 * x <= y:
+            a[k] = x
+            y -= x
+            k += 1
+        l = k + 1
+        while x <= y:
+            a[k] = x
+            a[l] = y
+            yield a[:k + 2]
+            x += 1
+            y -= 1
+        a[k] = x + y
+        y = x + y - 1
+        yield a[:k + 1]
 
 
 if __name__ == "__main__":
