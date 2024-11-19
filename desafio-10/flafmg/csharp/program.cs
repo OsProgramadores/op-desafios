@@ -1,10 +1,9 @@
 // .--------------------------.
 // | desafio 10 por @flafmg.  |
 // `--------------------------´
-class Program
-{
-    private static bool debug = false;
 
+public class Program
+{
     static void Main(string[] args)
     {
         if (args.Length < 1)
@@ -117,11 +116,9 @@ class Program
                 return "ERR";
             }
 
-            if (debug)
-            {
-                Console.WriteLine(
-                    $"Arquivo: {ruleFileName}, Estado: {state}, Símbolo: {currentSymbol}, Regra: {applicableRule}");
-            }
+#if DEBUG
+            Console.WriteLine($"Arquivo: {ruleFileName}, Estado: {state}, Símbolo: {currentSymbol}, Regra: {applicableRule}");
+#endif
 
             if (applicableRule.NewSymbol != "*")
             {
@@ -147,41 +144,21 @@ class Program
         return new string(tapeList.ToArray()).Trim();
     }
 
-    static Rule GetApplicableRule(List<Rule> rules, string currentState, char currentSymbol) //simplificação das rules
+    static Rule? GetApplicableRule(List<Rule> rules, string currentState, char currentSymbol) //simplificação das rules
     {
-        return rules.FirstOrDefault(r =>
+        return rules.Find(r =>
                    r.CurrentState == currentState &&
                    (r.CurrentSymbol == currentSymbol.ToString() || (r.CurrentSymbol == "_" && currentSymbol == ' ')))
-               ?? rules.FirstOrDefault(r =>
+               ?? rules.Find(r =>
                    r.CurrentState == "*" &&
                    (r.CurrentSymbol == currentSymbol.ToString() || (r.CurrentSymbol == "_" && currentSymbol == ' ')))
-               ?? rules.FirstOrDefault(r =>
+               ?? rules.Find(r =>
                    r.CurrentState == currentState &&
                    r.CurrentSymbol == "*")
-               ?? rules.FirstOrDefault(r =>
+               ?? rules.Find(r =>
                    r.CurrentState == "*" &&
                    r.CurrentSymbol == "*");
     }
 }
-class Rule
-{
-    public string CurrentState { get; }
-    public string CurrentSymbol { get; }
-    public string NewSymbol { get; }
-    public string Direction { get; }
-    public string NewState { get; }
 
-    public Rule(string currentState, string currentSymbol, string newSymbol, string direction, string newState)
-    {
-        CurrentState = currentState;
-        CurrentSymbol = currentSymbol;
-        NewSymbol = newSymbol;
-        Direction = direction;
-        NewState = newState;
-    }
-
-    public override string ToString()
-    {
-        return $"{CurrentState} {CurrentSymbol} {NewSymbol} {Direction} {NewState}";
-    }
-}
+public record Rule(string CurrentState, string CurrentSymbol, string NewSymbol, string Direction, string NewState);
