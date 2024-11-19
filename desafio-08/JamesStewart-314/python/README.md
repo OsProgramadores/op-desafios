@@ -5,7 +5,7 @@
 ## Descrição do Projeto:
 Este código efetua a leitura de frações simples contidas em um arquivo e retorna a fração
 simplificada correspondente para cada fração lida. Para calcular as simplificações, o
-programa utiliza o [algoritmo de euclides](https://pt.wikipedia.org/wiki/Algoritmo_de_Euclides), visando obter eficientemente o 
+programa utiliza o [algoritmo de euclides](https://pt.wikipedia.org/wiki/Algoritmo_de_Euclides), visando obter eficientemente o
 [MDC](https://pt.wikipedia.org/wiki/M%C3%A1ximo_divisor_comum)
 entre o numerador e denomidador de cada fração.
 Segue abaixo um exemplo de arquivo utilizado para testar o programa contendo frações válidas e, em sequência, suas respectivas saídas:
