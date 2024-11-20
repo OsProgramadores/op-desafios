@@ -1,6 +1,6 @@
 # Números primos em JavaScript 
 
-## O intuito código é analisar todos os números até 10000 para saber se são números primos.
+O intuito código é analisar todos os números até 10000 para saber se são números primos.
 
 ## Como funciona?
 

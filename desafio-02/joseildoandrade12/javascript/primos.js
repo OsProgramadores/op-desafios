@@ -8,10 +8,8 @@ function numerosPrimos(max) {
                 break;
             }
         }
-        if (numeroPrimo) 
-            arrayNumerosPrimos.push(num);
+        if (numeroPrimo) arrayNumerosPrimos.push(num);
     }
     return arrayNumerosPrimos;
 }
-
 console.log(numerosPrimos(10000));
