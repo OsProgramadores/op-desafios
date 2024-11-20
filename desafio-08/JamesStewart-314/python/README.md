@@ -11,7 +11,7 @@ entre o numerador e denomidador de cada fração.
 Segue abaixo um exemplo de arquivo utilizado para testar o programa contendo frações válidas e, em sequência, suas respectivas saídas:
 
 **Conteúdo do Arquivo:**
-```bash
+```
 14/3
 1/2
 3/8
@@ -30,7 +30,7 @@ Segue abaixo um exemplo de arquivo utilizado para testar o programa contendo fra
 ```
 
 **Saídas Esperadas:**
-```bash
+```
 4 2/3
 1/2
 3/8

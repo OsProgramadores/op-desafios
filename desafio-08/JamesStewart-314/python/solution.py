@@ -39,8 +39,8 @@ if __name__ == '__main__':
 
             mdcFromRemainingPart = GCD(fractionSimplified[1], fractionSplitted[1])
 
-            remainNum = str(fractionSimplified[1] // mdcFromRemainingPart)
-            remainDen = str(fractionSplitted[1] // mdcFromRemainingPart)
+            remainNum = fractionSimplified[1] // mdcFromRemainingPart
+            remainDen = fractionSplitted[1] // mdcFromRemainingPart
 
             remainingPart = f"{remainNum}/{remainDen}"
 
