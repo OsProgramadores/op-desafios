@@ -1,16 +1,87 @@
+import collections
+import functools
 import itertools
+import operator
 import string
 
 
 def find_matches(expression, words_file):
-    candidates = sorted(shrink_search_field(expression, words_file), key=len)
+    candidates = shrink_search_field(expression, words_file)
     res = []
-    grouped_by_len = []
-    for k, g in itertools.groupby(candidates, len):
-        grouped_by_len.append(list(g))
-    return grouped_by_len
+    grouped_by_len = group_by_len(candidates)
+    valid_partitions = shrink_partitions(expression, grouped_by_len)
+
+    for v in valid_partitions:
+        res.extend(find_in_partition(expression, v, grouped_by_len))
+
+    return res
+
+def find_in_partition(expression, partition, grouped):
+    letters_in_expression = quant_letters(expression)
+    res = []
+    iterator = [grouped[p] for p in partition]
+
+    for prod in itertools.product(*iterator):
+        letters_in_prod = quant_letters(''.join(prod))
+        if letters_in_prod == letters_in_expression:
+            prod = sorted(prod)
+            if prod not in res:
+                res.append(prod)
+
+    return res
+
+def group_by_len(candidates):
+    """Group the words by length."""
+    candidates = sorted(candidates, key=len)
+    res = {}
+    grouped = []
+    for _, g in itertools.groupby(candidates, len):
+        grouped.append(list(g))
+    lengths = [len(l[0]) for l in grouped]
+    for l, g in zip(lengths, grouped):
+        res[l] = g
+    return res
+
+def shrink_partitions(expression, grouped):
+    """Remove all partitions that need not be checked."""
+    partitions = [p for p in accel_asc(len(expression))]
+    available = list(grouped.keys())
+    res = []
+
+    # If a partition includes words whose length is not in one of the available partitions, don't include it.
+    for partition in partitions:
+        for e in partition:
+            if e not in available:
+                break
+        else:
+            res.append(partition)
+
+    rem = []
+    no_solo = not_solo(expression, grouped)
+
+    for r in res:
+        if set(r) <= set(no_solo):
+            rem.append(r)
+
+    for r in rem:
+        del res[res.index(r)]
+
+    return res
+
+def not_solo(expression, grouped):
+    """Return length groups that don't include all the letters in expression."""
+    in_expression = set(expression)
+    res = []
+    for k, g in grouped.items():
+        g = [list(i) for i in g]
+        available = set(functools.reduce(operator.iconcat, g, []))
+        remaining = in_expression - available
+        if len(remaining) > 0:
+            res.append(k)
+    return res
 
 def shrink_search_field(expression, words_file):
+    """Shrink the search field for possible anagrams, before considering partitions of expression."""
     res = []
     for w in words_file:
         w = w.strip()
@@ -23,6 +94,7 @@ def shrink_search_field(expression, words_file):
     return res
 
 def sieve_number_of_letters(expression, word):
+    """Check if a word is contained in expression. Remove those that can't be."""
     e = quant_letters(expression)
     w = quant_letters(word)
     for k, v in w.items():
@@ -31,6 +103,7 @@ def sieve_number_of_letters(expression, word):
     return True
 
 def quant_letters(a_word):
+    """Return the number of the different letters in a word."""
     keys = set(a_word)
     quanto = {k:0 for k in keys}
     for l in a_word:
@@ -38,21 +111,28 @@ def quant_letters(a_word):
     return quanto
 
 def sieve_remaining(expression, word):
+    """Remove any word that has letters that are not in expression."""
     letters = set(expression)
     uppercase = set(string.ascii_uppercase)
     remaining = uppercase - letters
     return not any([(l in remaining) for l in word])
 
 def sieve_starts_with(expression, word):
+    """Return only words that begin with one of the letters in expression."""
     letters = set(expression)
     return any([word.startswith(l) for l in letters])
 
 def sieve_less_or_equal(expression, word):
+    """Exclude words that are lengthier than expression."""
     return len(expression) >= len(word)
 
 
 # Peguei de https://jeromekelleher.net/generating-integer-partitions.html
 def accel_asc(n):
+    """Yield all partitions of a given integer.
+
+    E.g.: The partitions of three are: 1,1,1; 1,2; 2,1; 3
+    """
     a = [0 for i in range(n + 1)]
     k = 1
     y = n - 1
@@ -80,6 +160,24 @@ if __name__ == "__main__":
     import io
     import unittest
 
+    VERMELHO_GROUPED = { 2: ['HE', 'HO', 'ME', 'OH', 'OR'],
+                         3: ['EEL', 'ELM', 'EVE', 'HEE', 'HEM', 'HER', 'HOE', 'LEO',
+                             'MOE', 'OHM', 'OLE', 'ORE', 'REV'],
+                         4: ['HEEL', 'HELM', 'HERE', 'HERO', 'HOLE', 'HOLM', 'HOME',
+                             'HOVE', 'LEER', 'LOME', 'LORE', 'LOVE', 'MERE', 'MOHR',
+                             'MOLE', 'MORE', 'MOVE', 'OVER', 'REEL', 'ROLE', 'ROME',
+                             'ROVE', 'VEER'],
+                         5: ['ELMER', 'HOVEL', 'HOVER', 'LEVER', 'MERLE', 'MOREL', 'REVEL']}
+
+    VERMELHO_GROUPED_NO_V_IN_3 = { 2: ['HE', 'HO', 'ME', 'OH', 'OR'],
+                         3: ['EEL', 'ELM', 'HEE', 'HEM', 'HER', 'HOE', 'LEO',
+                             'MOE', 'OHM', 'OLE', 'ORE'],
+                         4: ['HEEL', 'HELM', 'HERE', 'HERO', 'HOLE', 'HOLM', 'HOME',
+                             'HOVE', 'LEER', 'LOME', 'LORE', 'LOVE', 'MERE', 'MOHR',
+                             'MOLE', 'MORE', 'MOVE', 'OVER', 'REEL', 'ROLE', 'ROME',
+                             'ROVE', 'VEER'],
+                         5: ['ELMER', 'HOVEL', 'HOVER', 'LEVER', 'MERLE', 'MOREL', 'REVEL']}
+
 
     class TestFindMatches(unittest.TestCase):
 
@@ -91,6 +189,39 @@ if __name__ == "__main__":
                     ["OHM", "REVEL"], ["LEVER", "OHM"], ["ELM", "HOVER"],
                     ["HOLM", "VEER"], ["HELM", "OVER"], ["HELM", "ROVE"]])
 
+    class TestFindInPartition(unittest.TestCase):
+
+        def test_find_in_partition(self):
+            self.maxDiff = None
+            self.assertEqual(find_in_partition("VERMELHO",
+                                                [2, 2, 4],
+                                                VERMELHO_GROUPED),
+                             [])
+            self.assertEqual(find_in_partition("VERMELHO",
+                                                [2, 3, 3],
+                                                VERMELHO_GROUPED),
+                             [["ELM", "HO", "REV"], ["ELM", "OH", "REV"]])
+    class TestGroupByLen(unittest.TestCase):
+
+        def test_vermelho_group_len(self):
+            self.maxDiff = None
+            with open('./words.txt') as file:
+                candidates = shrink_search_field("VERMELHO", file)
+                self.assertEqual(group_by_len(candidates), VERMELHO_GROUPED)
+
+    class TestNotSolo(unittest.TestCase):
+
+        def test_vermelho(self):
+            self.assertEqual(not_solo("VERMELHO", VERMELHO_GROUPED), [2])
+            self.assertEqual(not_solo("VERMELHO", VERMELHO_GROUPED_NO_V_IN_3), [2, 3])
+
+    class TestShrinkPartitions(unittest.TestCase):
+
+        def test_vermelho(self):
+            self.assertEqual(shrink_partitions("VERMELHO", VERMELHO_GROUPED),
+                             [[2, 2, 4], [2, 3, 3], [3, 5], [4, 4]])
+            self.assertEqual(shrink_partitions("VERMELHO", VERMELHO_GROUPED_NO_V_IN_3),
+                             [[2, 2, 4], [3, 5], [4, 4]])
 
     class TestShrinkSearchField(unittest.TestCase):
 
