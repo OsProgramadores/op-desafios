@@ -12,7 +12,7 @@ UPPERLIMIT: Final[int] = 62 ** 30 - 1
 def check_base(x: int) -> bool:
     return x < 2 or x > 62
 
-def from_decimal_to(number_to_convert: str, new_base: int) -> str:
+def from_decimal_to(number_to_convert: int, new_base: int) -> str:
     string_builder: deque[str] = deque()
 
     while (division_result := divmod(number_to_convert, new_base))[0] != 0:
