@@ -10,7 +10,7 @@ number_base_symbols_mapping: dict[str, int] = {key: value for value, key\
 UPPERLIMIT: Final[int] = 62 ** 30 - 1
 
 def check_base(x: int) -> bool:
-    return 2 <= x <= 62
+    return x < 2 or x > 62
 
 def from_decimal_to(number_to_convert: str, new_base: int) -> str:
     string_builder: deque[str] = deque()
@@ -35,12 +35,12 @@ def to_decimal_from(number_to_convert: str, number_base: int) -> int:
     return total_sum
 
 def validate_number_input(current_number: str, start_base_num: int, end_base_num: int) -> bool:
-    if not all((*map(check_base, (start_base_num, end_base_num)), current_number[0] != '-')):
+    if any((current_number[0] == '-', *map(check_base, (start_base_num, end_base_num)))):
         return False
 
-    for digit in current_number.lstrip('-'):
-        if number_base_symbols_mapping[digit] >= start_base_num:
-            return False
+    if any(map(lambda x: number_base_symbols_mapping[x] >= start_base_num,\
+               current_number.lstrip('-'))):
+        return False
 
     return True
 
