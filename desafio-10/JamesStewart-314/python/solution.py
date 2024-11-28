@@ -8,10 +8,14 @@ class TurMach:
         self._tape_position = 0
         self._current_state = '0'
 
+    def __repr__(self) -> str:
+        return f"{self.__class__.__name__}<{self._turing_rules = }, "\
+               f"{self._tape_position}, {self._current_state}>"
+
     def _convert_symbol(self, old_symbol: str, new_symbol: str) -> str:
         if new_symbol == '*':
             return old_symbol
-        elif new_symbol == '_':
+        if new_symbol == '_':
             return ' '
         return new_symbol
 
