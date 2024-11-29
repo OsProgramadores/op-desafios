@@ -6,9 +6,9 @@ Um palíndromo é uma palavra ou expressão que pode ser lida da esquerda para a
 
 Primeiro passo: defini uma variável com um valor vazio de array para colocar os números palindrômicos.
 
-Segundo passo: fazer uma validação se os valores passados nos parâmetros estão de acordo com o necessário para saber se é um número palindromo, retornando uma mensagem de qual erro o usuário cometeu.
+Segundo passo: fazer uma validação em uma função para saber valores passados nos parâmetros estão de acordo com o necessário para saber se é um número palindromo, retornando uma mensagem de qual erro o usuário cometeu.
 
-Terceiro passo: criei uma Função com dois parâmetros min(valor mínimo) e max(valor máximo).
+Terceiro passo: utilizei os valores que foram verificados em uma função com dois parâmetros min(valor mínimo) e max(valor máximo).
 
 Quarto passo: criei um loop que caso min fosse menor ou igual a max, ocorresse uma validação.
 
