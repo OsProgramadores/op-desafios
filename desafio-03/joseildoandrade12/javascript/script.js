@@ -20,7 +20,6 @@ function verificacao(min, max) {
         );
     } else if (!(Number.isInteger(min) && Number.isInteger(max))) {
         console.log("Adicione apenas números inteiros");
-        return;
     } else {
         palindromos(min, max);
     }
