@@ -1,6 +1,6 @@
 function palindromos(min, max) {
-    let valueMin = min;
-    let valueMax = max;
+    const valueMin = min;
+    const valueMax = max;
     const numerosPalidromos = [];
     for (; min <= max; min++) {
         const numInverso = +min.toString().split("").reverse().join("");
@@ -29,7 +29,7 @@ function verificacao(value) {
 const readline = require("node:readline");
 const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout,
+    output: process.stdout
 });
 
 rl.question("Informe o valor minimo: ", (min) => {
