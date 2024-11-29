@@ -13,7 +13,8 @@ class TurMach:
         return f"{self.__class__.__name__}<{self._turing_rules}, "\
                f"{self._tape_position}, {self._current_state}>"
 
-    def _convert_symbol(self, old_symbol: str, new_symbol: str) -> str:
+    @staticmethod
+    def _convert_symbol(old_symbol: str, new_symbol: str) -> str:
         if new_symbol == '*':
             return old_symbol
         if new_symbol == '_':
@@ -54,10 +55,9 @@ class TurMach:
                     pass
 
                 rule_line_splitted: list[str] = rule_line.split()
-                sym_dir_stt = (rule_line_splitted[2], rule_line_splitted[3], rule_line_splitted[4])
 
                 self._turing_rules.setdefault(rule_line_splitted[0], {}).\
-                                   setdefault(rule_line_splitted[1], sym_dir_stt)
+                                   setdefault(rule_line_splitted[1], rule_line_splitted[2:])
 
             turing_rules_file.close()
 
@@ -96,7 +96,7 @@ class TurMach:
 
                 transformation: tuple[str, str, str] = symbols_map.get(current_symbol) or\
                                                        symbols_map['*']
-                content_tape[self._tape_position] = self._convert_symbol(current_symbol,
+                content_tape[self._tape_position] = TurMach._convert_symbol(current_symbol,
                                                                          transformation[0])
 
                 if (new_pos := TurMach._direction_map.get(transformation[1])) is None:
@@ -114,7 +114,9 @@ class TurMach:
 
                 if transformation[2].startswith('halt'):
                     break
+
                 self._current_state = transformation[2]
+
             if valid_result:
                 print(f"{data_line[0]},{data_line[1]},{''.join(content_tape).strip()}")
 
