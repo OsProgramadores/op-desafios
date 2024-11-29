@@ -2,7 +2,7 @@ import os
 from typing import TextIO
 
 class TurMach:
-    _direction_map = {'l': (-1), 'r': 1, '*': 0}
+    _direction_map: dict[str, int] = {'l': (-1), 'r': 1, '*': 0}
 
     def __init__(self) -> None:
         self._turing_rules: dict[str, dict[str, tuple[str, str, str]]] = {}
@@ -57,7 +57,7 @@ class TurMach:
                 sym_dir_stt = (rule_line_splitted[2], rule_line_splitted[3], rule_line_splitted[4])
 
                 self._turing_rules.setdefault(rule_line_splitted[0], {}).\
-                                      setdefault(rule_line_splitted[1], sym_dir_stt)
+                                   setdefault(rule_line_splitted[1], sym_dir_stt)
 
             turing_rules_file.close()
 
@@ -97,7 +97,7 @@ class TurMach:
                 transformation: tuple[str, str, str] = symbols_map.get(current_symbol) or\
                                                        symbols_map['*']
                 content_tape[self._tape_position] = self._convert_symbol(current_symbol,
-                                                                            transformation[0])
+                                                                         transformation[0])
 
                 if (new_pos := TurMach._direction_map.get(transformation[1])) is None:
                     print(f"{data_line[0]},{data_line[1]},ERR")
