@@ -43,7 +43,6 @@ rl.question("Informe o valor minimo: ", (min) => {
                 console.log(
                     "O valor mínimo não pode ser maior ou igual ao valor máximo"
                 );
-                
             } else {
                 palindromos(+min, +max);
             }
