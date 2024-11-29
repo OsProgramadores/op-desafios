@@ -10,7 +10,7 @@ class TurMach:
         self._current_state: str = '0'
 
     def __repr__(self) -> str:
-        return f"{self.__class__.__name__}<{self._turing_rules = }, "\
+        return f"{self.__class__.__name__}<{self._turing_rules}, "\
                f"{self._tape_position}, {self._current_state}>"
 
     def _convert_symbol(self, old_symbol: str, new_symbol: str) -> str:
