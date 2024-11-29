@@ -1,12 +1,13 @@
 import os
+from typing import TextIO
 
 class TurMach:
     _direction_map = {'l': (-1), 'r': 1, '*': 0}
 
     def __init__(self) -> None:
-        self._turing_rules = {}
-        self._tape_position = 0
-        self._current_state = '0'
+        self._turing_rules: dict[str, dict[str, tuple[str, str, str]]] = {}
+        self._tape_position: int = 0
+        self._current_state: str = '0'
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}<{self._turing_rules = }, "\
@@ -21,23 +22,23 @@ class TurMach:
 
     def _restore_initial_state(self):
         self._turing_rules.clear()
-        self._tape_position: int = 0
-        self._current_state: str = '0'
+        self._tape_position = 0
+        self._current_state = '0'
 
     def process_datafile(self, file_path: str) -> None:
         try:
-            datafile_obj = open(file_path, "r")
+            datafile_obj: TextIO = open(file_path, "r")
         except FileNotFoundError:
             print(f"Error: Could not open datafile \'{file_path}\'.")
             return
 
         for data_line in datafile_obj:
             self._restore_initial_state()
-            data_line = data_line.strip().split(',')
+            data_line: list[str] = data_line.strip().split(',')
             turing_rules_file_path: str = os.path.join(os.path.dirname(file_path), data_line[0])
 
             try:
-                turing_rules_file = open(turing_rules_file_path, "r")
+                turing_rules_file: TextIO = open(turing_rules_file_path, "r")
             except FileNotFoundError:
                 print(f"Error: Could not open turing rules file \'{turing_rules_file_path}\'.")
                 continue
