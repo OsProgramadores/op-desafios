@@ -20,7 +20,7 @@ class TurMach:
             return ' '
         return new_symbol
 
-    def _restore_initial_state(self):
+    def _restore_initial_state(self) -> None:
         self._turing_rules.clear()
         self._tape_position = 0
         self._current_state = '0'
