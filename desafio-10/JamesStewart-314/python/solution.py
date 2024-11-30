@@ -66,7 +66,6 @@ class TurMach:
             while True:
                 if not (self._current_state in self._turing_rules or\
                         '*' in self._turing_rules):
-                    print(f"{data_line[0]},{data_line[1]},ERR")
                     valid_result = False
                     break
 
@@ -85,7 +84,6 @@ class TurMach:
                 elif '*' in self._turing_rules and '*' in self._turing_rules['*']:
                     symbols_map = self._turing_rules['*']
                 else:
-                    print(f"{data_line[0]},{data_line[1]},ERR")
                     valid_result = False
                     break
 
@@ -99,7 +97,6 @@ class TurMach:
                                                                          transformation[0])
 
                 if (new_pos := TurMach._direction_map.get(transformation[1])) is None:
-                    print(f"{data_line[0]},{data_line[1]},ERR")
                     valid_result = False
                     break
 
