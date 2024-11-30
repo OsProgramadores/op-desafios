@@ -113,8 +113,9 @@ class TurMach:
 
                 self._current_state = transformation[2]
 
-            final_message: str = f"{data_line[0]},{data_line[1]},{''.join(content_tape).strip()}"\
-                                 if valid_result else f"{data_line[0]},{data_line[1]},ERR"
+            final_message: str = f"{data_line[0]},{data_line[1]},"\
+                                 f"{''.join(content_tape).strip()\
+                                     if valid_result else "ERR"}"
             print(final_message)
 
         datafile_obj.close()
