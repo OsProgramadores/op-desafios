@@ -90,7 +90,6 @@ class TurMach:
                     break
 
                 if not (current_symbol in symbols_map or '*' in symbols_map):
-                    print(f"{data_line[0]},{data_line[1]},ERR")
                     valid_result = False
                     break
 
@@ -117,8 +116,9 @@ class TurMach:
 
                 self._current_state = transformation[2]
 
-            if valid_result:
-                print(f"{data_line[0]},{data_line[1]},{''.join(content_tape).strip()}")
+            final_message: str = f"{data_line[0]},{data_line[1]},{''.join(content_tape).strip()}"\
+                                 if valid_result else f"{data_line[0]},{data_line[1]},ERR"
+            print(final_message)
 
         datafile_obj.close()
         self._restore_initial_state()
