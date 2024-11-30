@@ -29,7 +29,7 @@ function verificacao(value) {
 const readline = require("node:readline");
 const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout,
+    output: process.stdout
 });
 
 rl.question("Informe o valor minimo: ", (min) => {
