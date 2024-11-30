@@ -1,6 +1,6 @@
 function palindromos(min, max) {
-    let valueMin = min;
-    let valueMax = max;
+    const valueMin = min;
+    const valueMax = max;
     const numerosPalidromos = [];
     for (; min <= max; min++) {
         const numInverso = +min.toString().split("").reverse().join("");
