@@ -6,7 +6,7 @@ public class Program
 {
     private static void Main(string[] args)
     {
-        if (args.Length < 1)
+        if (args.Length != 1)
         {
             Console.WriteLine("uso correto: dotnet run <arquivo>");
             return;
@@ -19,6 +19,18 @@ public class Program
             return;
         }
 
+        try
+        {
+            ProcessFile(fileName);
+        }
+        catch (IOException ex)
+        {
+            Console.WriteLine($"erro ao processar o arquivo: {ex.Message}");
+        }
+    }
+
+    private static void ProcessFile(string fileName)
+    {
         var lines = File.ReadAllLines(fileName);
         foreach (var line in lines)
         {
@@ -38,6 +50,7 @@ public class Program
             Console.WriteLine(isPowerOfTwo ? $"{number} true {exponent}" : $"{number} false");
         }
     }
+
     private static (bool, int) IsPowerOfTwo(BigInteger number)
     {
         var exponent = 0;
