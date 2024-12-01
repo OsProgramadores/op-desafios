@@ -71,5 +71,3 @@ Informe o valor máximo:
 Como no primeiro insira o valor, caso esteja fora dos requisitos ele irá retornar uma mensagem de erro.
 
 Após tudo isso ele retornará todos os números palíndromos no intervalo dos valores que o usuário escolheu.
-
-> > > > > > > desafio
