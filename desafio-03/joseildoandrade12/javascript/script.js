@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-let numerosPalidromos = [];
-function palindromos(min, max) {
-    for (; min <= max; min++) {
-        const numInverso = min.toString().split("").reverse().join("");
-        if (min == numInverso) {
-            numerosPalidromos.push(min);
-        }
-    }
-}
-palindromos(1, 2000);
-console.log(numerosPalidromos);
-=======
 function palindromos(min, max) {
     const valueMin = min;
     const valueMax = max;
@@ -42,7 +29,7 @@ function verificacao(value) {
 const readline = require("node:readline");
 const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
 });
 
 rl.question("Informe o valor minimo: ", (min) => {
@@ -63,4 +50,3 @@ rl.question("Informe o valor minimo: ", (min) => {
         });
     }
 });
->>>>>>> desafio
