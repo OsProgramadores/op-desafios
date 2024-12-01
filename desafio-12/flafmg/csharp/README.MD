@@ -9,7 +9,7 @@
 
 1. **Clone o repositório:**
    ```bash
-   git clone https://github.com/flafmg/op-desafios.git
+   git clone https://github.com/flafmg/op-desafios/tree/desafio-12.git
    cd op-desafios/desafio-12/flafmg/csharp
    ```
 2. **Compile o projeto:**
