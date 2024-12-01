@@ -20,15 +20,40 @@ Sétimo passo: fazer uma validação com um if, se o valor min é igual ao valor
 
 ## Teste e execução
 
-Para testar a solução, é necessário ter o [Node.js](https://nodejs.org/) instalado em sua máquina.
+Para testar a solução, é necessário ter o [Node.js](https://nodejs.org/) com a versão mais recente instalada em sua máquina.
+
+Faça um clone do repositório para a sua máquina:
 
 ```bash
 $ git clone git@github.com:OsProgramadores/op-desafios.git
-
-$ cd .\op-desafios\
-
-$ node .\desafio-03\joseildoandrade12\javascript script.js
-
-"Informe o valor minimo: "
-"Informe o valor máximo: "
 ```
+
+Acesse o diretório com:
+
+```bash
+$ cd .\op-desafios\
+```
+
+Rode o arquivo no node da seguinte forma:
+
+```bash
+$ node .\desafio-03\joseildoandrade12\javascript script.js
+```
+
+Após iniciar o arquivo irá aparecer as seguintes perguntas:
+
+```bash
+Informe o valor minimo:
+```
+
+Na primeira pegunta insira o valor mínimo, caso ele não tem os requisitos necessários irá retornar uma mensagem mostrando seu erro.
+
+Depois irá aparecer:
+
+```bash
+Informe o valor máximo:
+```
+
+como no primeiro valor insira o valor, caso esteja fora dos requisitos ele irá retornar uma mensagem de erro.
+
+Após tudo isso ele retornará todos os números palíndromos no intervalo dos valores que o usuário escolheu.
