@@ -34,6 +34,12 @@ class TurMach:
         state = state if state is not None else self._current_state
         return symbol in self._turing_rules[state]
 
+    def _check_exists_valid_rule(self) -> bool:
+        current_state_rule: bool = self._current_state in self._turing_rules
+        generic_state_rule: bool = '*' in self._turing_rules
+
+        return current_state_rule or generic_state_rule
+
     def process_datafile(self, file_path: str) -> None:
         try:
             datafile_obj: TextIO = open(file_path, "r")
@@ -69,11 +75,9 @@ class TurMach:
 
             content_tape: list[str] = list(data_line[1])
             is_valid_result: bool = True
+            # print(self._current_state, self._turing_rules)
             while True:
-                if not self._current_state in self._turing_rules:
-                    is_valid_result = False
-                    break
-                if not '*' in self._turing_rules:
+                if not self._check_exists_valid_rule():
                     is_valid_result = False
                     break
 
