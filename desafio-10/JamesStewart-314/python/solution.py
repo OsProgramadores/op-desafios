@@ -25,17 +25,24 @@ class TurMach:
         self._turing_rules.clear()
         self._tape_position = 0
         self._current_state = '0'
+    
+    def _check_state(self, state: str | None = None) -> bool:
+        state = state if state is not None else self._current_state
+        return state in self._turing_rules
+
+    def _check_symbol(self, symbol: str, state: str | None = None) -> bool:
+        state = state if state is not None else self._current_state
+        return symbol in self._turing_rules[state]
 
     def process_datafile(self, file_path: str) -> None:
         try:
             datafile_obj: TextIO = open(file_path, "r")
-        except FileNotFoundError:
-            print(f"Error: Could not open datafile \'{file_path}\'.")
-            return
+        except FileNotFoundError as error:
+            raise Exception(f"Error: Could not open datafile \'{file_path}\'.") from error
 
         for data_line in datafile_obj:
             self._restore_initial_state()
-            data_line: list[str] = data_line.strip().split(',')
+            data_line: list[str] = data_line.rstrip().split(',')
             turing_rules_file_path: str = os.path.join(os.path.dirname(file_path), data_line[0])
 
             try:
@@ -45,12 +52,12 @@ class TurMach:
                 continue
 
             for rule_line in turing_rules_file:
-                rule_line = rule_line.strip()
+                rule_line = rule_line.rstrip()
                 if not rule_line or rule_line[0] == ';':
                     continue
 
                 try:
-                    rule_line = rule_line[:rule_line.index(';')].strip()
+                    rule_line = rule_line[:rule_line.index(';')].rstrip()
                 except ValueError:
                     pass
 
@@ -59,36 +66,34 @@ class TurMach:
                 self._turing_rules.setdefault(rule_line_splitted[0], {}).\
                                    setdefault(rule_line_splitted[1], rule_line_splitted[2:])
 
-            turing_rules_file.close()
 
             content_tape: list[str] = list(data_line[1])
-            valid_result: bool = True
+            is_valid_result: bool = True
             while True:
-                if not (self._current_state in self._turing_rules or\
-                        '*' in self._turing_rules):
-                    valid_result = False
+                if not self._current_state in self._turing_rules:
+                    is_valid_result = False
+                    break
+                if not '*' in self._turing_rules:
+                    is_valid_result = False
                     break
 
                 symbols_map: dict[str, tuple[str, str, str]]
-                current_symbol: str = content_tape[self._tape_position] if\
-                                      content_tape[self._tape_position] != ' ' else '_'
+                current_symbol: str = content_tape[self._tape_position].replace(' ', '_')
 
-                if self._current_state in self._turing_rules and current_symbol in\
-                   self._turing_rules[self._current_state]:
+                if self._check_state() and self._check_symbol(current_symbol):
                     symbols_map = self._turing_rules[self._current_state]
-                elif '*' in self._turing_rules and current_symbol in self._turing_rules['*']:
+                elif self._check_state('*') and self._check_symbol(current_symbol, '*'):
                     symbols_map = self._turing_rules['*']
-                elif self._current_state in self._turing_rules and\
-                     '*' in self._turing_rules[self._current_state]:
+                elif self._check_state() and self._check_symbol('*'):
                     symbols_map = self._turing_rules[self._current_state]
-                elif '*' in self._turing_rules and '*' in self._turing_rules['*']:
+                elif self._check_state('*') and self._check_symbol('*', '*'):
                     symbols_map = self._turing_rules['*']
                 else:
-                    valid_result = False
+                    is_valid_result = False
                     break
 
                 if not (current_symbol in symbols_map or '*' in symbols_map):
-                    valid_result = False
+                    is_valid_result = False
                     break
 
                 transformation: tuple[str, str, str] = symbols_map.get(current_symbol) or\
@@ -97,7 +102,7 @@ class TurMach:
                                                                          transformation[0])
 
                 if (new_pos := TurMach._direction_map.get(transformation[1])) is None:
-                    valid_result = False
+                    is_valid_result = False
                     break
 
                 if new_pos == (-1) and self._tape_position == 0:
@@ -113,12 +118,14 @@ class TurMach:
 
                 self._current_state = transformation[2]
 
-            final_message: str = f"{data_line[0]},{data_line[1]},"\
-                                 f"{''.join(content_tape).strip()\
-                                     if valid_result else "ERR"}"
+            final_message: str = f"{data_line[0]},{data_line[1]},"
+            if is_valid_result:
+                final_message += f"{''.join(content_tape).strip()}"
+            else:
+                final_message += "ERR"
+                                 
             print(final_message)
 
-        datafile_obj.close()
         self._restore_initial_state()
 
         return
