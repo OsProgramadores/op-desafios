@@ -25,7 +25,7 @@ class TurMach:
         self._turing_rules.clear()
         self._tape_position = 0
         self._current_state = '0'
-    
+
     def _check_state(self, state: str | None = None) -> bool:
         state = state if state is not None else self._current_state
         return state in self._turing_rules
@@ -127,7 +127,7 @@ class TurMach:
                 final_message += f"{''.join(content_tape).strip()}"
             else:
                 final_message += "ERR"
-                                 
+
             print(final_message)
 
         self._restore_initial_state()
