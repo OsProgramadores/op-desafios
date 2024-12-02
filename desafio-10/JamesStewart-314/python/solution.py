@@ -54,7 +54,8 @@ class TurMach:
             try:
                 turing_rules_file: TextIO = open(turing_rules_file_path, "r")
             except FileNotFoundError as error:
-                raise Exception(f"Error: Could not open turing rules file \'{turing_rules_file_path}\'.") from error
+                raise Exception(f"Error: Could not open file \'{turing_rules_file_path}\'.")\
+                      from error
 
             for rule_line in turing_rules_file:
                 rule_line = rule_line.rstrip()
