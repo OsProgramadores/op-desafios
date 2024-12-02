@@ -53,9 +53,8 @@ class TurMach:
 
             try:
                 turing_rules_file: TextIO = open(turing_rules_file_path, "r")
-            except FileNotFoundError:
-                print(f"Error: Could not open turing rules file \'{turing_rules_file_path}\'.")
-                continue
+            except FileNotFoundError as error:
+                raise Exception(f"Error: Could not open turing rules file \'{turing_rules_file_path}\'.") from error
 
             for rule_line in turing_rules_file:
                 rule_line = rule_line.rstrip()
@@ -72,10 +71,8 @@ class TurMach:
                 self._turing_rules.setdefault(rule_line_splitted[0], {}).\
                                    setdefault(rule_line_splitted[1], rule_line_splitted[2:])
 
-
             content_tape: list[str] = list(data_line[1])
             is_valid_result: bool = True
-            # print(self._current_state, self._turing_rules)
             while True:
                 if not self._check_exists_valid_rule():
                     is_valid_result = False
