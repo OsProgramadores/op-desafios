@@ -25,7 +25,7 @@ def find_biggest_seq(pi_digits: str, upper_limit: int | float = 10e4) -> str:
     for prime_number in sieve_of_eratosthenes_prime_generator():
         if prime_number >= upper_limit:
             break
-        str_num = str(prime_number)
+        str_num: str = str(prime_number)
         prime_numbers.update(str_num.zfill(z_qty) for z_qty in range(1, 5))
 
     prim_seq: defaultdict[int, str] = defaultdict(str)
