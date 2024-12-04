@@ -33,11 +33,11 @@ def find_biggest_seq(pi_digits: str, upper_limit: int | float = 10e4) -> str:
         curent_num: str = ""
         for qty in range(4):
             try:
-                curent_num += pi_digits[idx + qty]
+                curent_num += pi_digits[(s := idx + qty)]
                 if not curent_num in prime_numbers:
                     continue
-                if len(prim_seq[idx + qty + 1]) < (len(prim_seq[idx]) + len(curent_num)):
-                    prim_seq[idx + qty + 1] = prim_seq[idx] + curent_num
+                if len(prim_seq[(t := s + 1)]) < (len(prim_seq[idx]) + len(curent_num)):
+                    prim_seq[t] = prim_seq[idx] + curent_num
             except IndexError:
                 continue
 

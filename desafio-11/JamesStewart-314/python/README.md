@@ -30,8 +30,11 @@ versão `3.10` ou superior.
 ## Instruções para Executar o Código
 - Certificando-se de ter instalado corretamente o `Python` em sua
 máquina, execute os seguintes comandos:
-1. Abra o terminal e navegue até a pasta em que deseja copiar este repositório com o comando `cd <caminho_absoluto_do_diretótio>`;
-2. Em seguida, copie e cole o seguinte código: `git clone https://github.com/OsProgramadores/op-desafios.git`;
-3. Navegue até a pasta contendo o arquivo `solution.py` na árvore do repositório - se necessário, utilize o comando `cd ".\op-desafios\desafio-11\JamesStewart-314"`
+1. Abra o terminal e navegue até a pasta em que deseja copiar este repositório com o
+comando `cd <caminho_absoluto_do_diretótio>`;
+2. Em seguida, copie e cole o seguinte código:
+`git clone https://github.com/OsProgramadores/op-desafios.git`;
+3. Navegue até a pasta contendo o arquivo `solution.py` na árvore do repositório - se
+necessário, utilize o comando `cd ".\op-desafios\desafio-11\JamesStewart-314"`
 4. Execute o script `"solution.py"` com o comando `python solution.py`
 e os resultados deverão ser impressos de maneira formatada na CLI.
