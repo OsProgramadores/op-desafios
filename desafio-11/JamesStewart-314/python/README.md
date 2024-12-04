@@ -10,8 +10,6 @@ A estratégia utilizada consiste em utilizar uma abordagem extremamente eficient
 [Algorítmo de Kadane](https://pt.wikipedia.org/wiki/Sublista_cont%C3%ADgua_de_soma_m%C3%A1xima) para localizar, em complexidade
 temporal linear, a maior subsequência possível de números primos.
 
-
-
 ## Requisitos para Execução
 - Possuir um ambiente virtual Python instalado localmente em sua máquina com a
 versão `3.10` ou superior.
