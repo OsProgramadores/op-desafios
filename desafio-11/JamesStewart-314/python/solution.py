@@ -4,21 +4,21 @@ from typing import Generator
 
 def sieve_of_eratosthenes_prime_generator() -> Generator[int, None, None]:
     yield 2
-    sieveofEratosthenesDict: dict[int, int] = {}
-    currentNumber: int = 3
+    sieve_dict: dict[int, int] = {}
+    current_num: int = 3
 
     while True:
-        if currentNumber not in sieveofEratosthenesDict:
-            yield currentNumber
-            sieveofEratosthenesDict[currentNumber * currentNumber] = currentNumber
+        if current_num not in sieve_dict:
+            yield current_num
+            sieve_dict[current_num * current_num] = current_num
         else:
-            currentNumberKey: int = currentNumber + (sieveofEratosthenesDict[currentNumber] << 1)
-            while sieveofEratosthenesDict.get(currentNumberKey):
-                currentNumberKey += (sieveofEratosthenesDict[currentNumber] << 1)
-            sieveofEratosthenesDict[currentNumberKey] = sieveofEratosthenesDict[currentNumber]
-            del sieveofEratosthenesDict[currentNumber]
+            current_num_key: int = current_num + (sieve_dict[current_num] << 1)
+            while sieve_dict.get(current_num_key):
+                current_num_key += (sieve_dict[current_num] << 1)
+            sieve_dict[current_num_key] = sieve_dict[current_num]
+            del sieve_dict[current_num]
 
-        currentNumber += 2
+        current_num += 2
 
 
 def find_biggest_seq(pi_digits: str, upper_limit: int | float = 10e4) -> str:
