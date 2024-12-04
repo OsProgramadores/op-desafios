@@ -1,13 +1,14 @@
 import os
+from itertools import count
 from collections import defaultdict
 from typing import Generator
 
 def sieve_of_eratosthenes_prime_generator() -> Generator[int, None, None]:
     yield 2
     sieve_dict: dict[int, int] = {}
-    current_num: int = 3
+    num_counter: count = count(start=3, step=2)
 
-    while True:
+    for current_num in num_counter:
         if current_num not in sieve_dict:
             yield current_num
             sieve_dict[current_num * current_num] = current_num
@@ -17,8 +18,6 @@ def sieve_of_eratosthenes_prime_generator() -> Generator[int, None, None]:
                 current_num_key += (sieve_dict[current_num] << 1)
             sieve_dict[current_num_key] = sieve_dict[current_num]
             del sieve_dict[current_num]
-
-        current_num += 2
 
 
 def find_biggest_seq(pi_digits: str, upper_limit: int | float = 10e4) -> str:
