@@ -6,9 +6,14 @@
 Intenta-se com este projeto identificar a maior sequência de números primos consecutivos
 compostos por até quatro dígitos no primeiro 1 milhão de casas decimais de pi. Os dígitos serão extraídos do arquivo `pi-1M.txt` disponível no site [OsProgramadores](https://osprogramadores.com/).
 
-A estratégia utilizada consiste em utilizar uma abordagem extremamente eficiente inspirada no
+A estratégia utilizada consiste em empregar uma variante do
 [Algorítmo de Kadane](https://pt.wikipedia.org/wiki/Sublista_cont%C3%ADgua_de_soma_m%C3%A1xima) para localizar, em complexidade
 temporal linear, a maior subsequência possível de números primos.
+
+Para a verificação de primalidade, utiliza-se o [Crivo de Eratóstenes](https://pt.wikipedia.org/wiki/Crivo_de_Erat%C3%B3stenes#:~:text=O%20Crivo%20de%20Erat%C3%B3stenes%20%C3%A9,Biblioteca%20de%20Alexandria%20desde%20247)
+para gerar todos os primos de até quatro dígitos e armazená-los em um conjunto, no qual
+esta ação permite performar o teste de primalidade de cada número em tempo constante
+$O(1)$ com uma simples operação de pertencimento ao conjunto produzido.
 
 ## Requisitos para Execução
 - Possuir um ambiente virtual Python instalado localmente em sua máquina com a
