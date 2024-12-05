@@ -20,7 +20,7 @@ def sieve_of_eratosthenes_prime_generator() -> Generator[int, None, None]:
             del sieve_dict[current_num]
 
 
-def find_biggest_seq(pi_digits: str, upper_limit: int | float = 10e4) -> str:
+def find_biggest_seq(pi_digits: str, upper_limit: int | float = 1e4) -> str:
     prime_numbers: set[str] = set()
     for prime_number in sieve_of_eratosthenes_prime_generator():
         if prime_number >= upper_limit:
@@ -30,14 +30,14 @@ def find_biggest_seq(pi_digits: str, upper_limit: int | float = 10e4) -> str:
 
     prim_seq: defaultdict[int, str] = defaultdict(str)
     for idx in range(2, len(pi_digits)):
-        curent_num: str = ""
+        current_num: str = ""
         for qty in range(4):
             try:
-                curent_num += pi_digits[(s := idx + qty)]
-                if not curent_num in prime_numbers:
+                current_num += pi_digits[(s := idx + qty)]
+                if not current_num in prime_numbers:
                     continue
-                if len(prim_seq[(t := s + 1)]) < len(prim_seq[idx]) + len(curent_num):
-                    prim_seq[t] = prim_seq[idx] + curent_num
+                if len(prim_seq[(t := s + 1)]) < len(prim_seq[idx]) + len(current_num):
+                    prim_seq[t] = prim_seq[idx] + current_num
             except IndexError:
                 break
 
@@ -47,6 +47,6 @@ def find_biggest_seq(pi_digits: str, upper_limit: int | float = 10e4) -> str:
 if __name__ == '__main__':
     file_path: str = os.path.join(os.path.dirname(__file__), "pi-1M.txt")
     try:
-        print(find_biggest_seq(open(file_path, "r").readline().strip()))
+        print(find_biggest_seq(open(file_path, "r").readline().rstrip()))
     except FileNotFoundError as error:
         raise Exception(f"Error: Could open file \'{file_path}\'.") from error
