@@ -7,7 +7,6 @@ def sieve_of_eratosthenes_prime_generator() -> Generator[int, None, None]:
     yield 2
     sieve_dict: dict[int, int] = {}
     num_counter: count = count(start=3, step=2)
-
     for current_num in num_counter:
         if current_num not in sieve_dict:
             yield current_num
@@ -34,15 +33,14 @@ def find_biggest_seq(pi_digits: str, upper_limit: int | float = 1e4) -> str:
         for qty in range(4):
             try:
                 current_num += pi_digits[(s := idx + qty)]
-                if not current_num in prime_numbers:
-                    continue
-                if len(prim_seq[(t := s + 1)]) < len(prim_seq[idx]) + len(current_num):
-                    prim_seq[t] = prim_seq[idx] + current_num
             except IndexError:
                 break
+            if not current_num in prime_numbers:
+                continue
+            if len(prim_seq[(t := s + 1)]) < len(prim_seq[idx]) + len(current_num):
+                prim_seq[t] = prim_seq[idx] + current_num
 
     return max(prim_seq.values(), key=len, default='')
-
 
 if __name__ == '__main__':
     file_path: str = os.path.join(os.path.dirname(__file__), "pi-1M.txt")
