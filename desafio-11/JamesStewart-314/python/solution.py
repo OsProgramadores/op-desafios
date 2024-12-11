@@ -2,13 +2,14 @@ import os
 import math
 from itertools import count
 from collections import defaultdict
-from typing import Generator
+
 
 def get_set_primes(num_digits: int, upper_limit: int) -> set[str]:
     primes_set: set[str] = set()
     primes_set.update('2'.zfill(z_qty) for z_qty in range(1, num_digits))
     sieve_dict: dict[int, int] = {}
     num_counter: count = count(start=3, step=2)
+
     for current_num in num_counter:
         if current_num >= upper_limit:
             return primes_set
@@ -48,6 +49,7 @@ def print_biggest_seq(file_path: str, upper_limit: int = 10 ** 4) -> str:
                 prim_seq[t] = prim_seq[idx] + current_num
 
     print(max(prim_seq.values(), key=len, default=''))
+
 
 if __name__ == '__main__':
     file_path: str = os.path.join(os.path.dirname(__file__), "pi-1M.txt")
