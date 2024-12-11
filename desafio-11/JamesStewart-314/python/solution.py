@@ -51,4 +51,7 @@ def print_biggest_seq(file_path: str, upper_limit: int = 10 ** 4) -> str:
 
 if __name__ == '__main__':
     file_path: str = os.path.join(os.path.dirname(__file__), "pi-1M.txt")
-    print_biggest_seq(file_path)
+    try:
+        print_biggest_seq(file_path)
+    except Exception as error:
+        print(error)
