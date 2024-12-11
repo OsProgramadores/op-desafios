@@ -6,8 +6,7 @@ from typing import Generator
 
 def get_set_primes(num_digits: int, upper_limit: int) -> set[str]:
     primes_set: set[str] = set()
-    current_num: str = '2'
-    primes_set.update(current_num.zfill(z_qty) for z_qty in range(1, num_digits))
+    primes_set.update('2'.zfill(z_qty) for z_qty in range(1, num_digits))
     sieve_dict: dict[int, int] = {}
     num_counter: count = count(start=3, step=2)
     for current_num in num_counter:
