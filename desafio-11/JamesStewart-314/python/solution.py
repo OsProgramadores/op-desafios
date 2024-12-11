@@ -30,7 +30,7 @@ def print_biggest_seq(file_path: str, upper_limit: int = 10 ** 4) -> str:
         pi_digits: str = open(file_path, "r").readline().rstrip()
     except FileNotFoundError as error:
         raise Exception(f"Error: Could open file \'{file_path}\'.") from error
-    
+
     try:
         pi_digits: str = pi_digits[pi_digits.index('.') + 1:]
     except ValueError:
