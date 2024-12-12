@@ -29,7 +29,7 @@ def print_biggest_seq(file_path: str, upper_limit: int = 10 ** 4) -> str:
     try:
         pi_digits: str = (t := open(file_path, "r").readline().rstrip())[t.index('.') + 1:]
     except FileNotFoundError as error:
-        raise Exception(f"Error: Could open file \'{file_path}\'.") from error
+        raise ValueError(f"Error: Could open file \'{file_path}\'.") from error
     except ValueError:
         pi_digits: str = t
 
@@ -52,8 +52,8 @@ def print_biggest_seq(file_path: str, upper_limit: int = 10 ** 4) -> str:
 
 
 if __name__ == '__main__':
-    file_path: str = os.path.join(os.path.dirname(__file__), "pi-1M.txt")
+    pi_digits_file_path: str = os.path.join(os.path.dirname(__file__), "pi-1M.txt")
     try:
-        print_biggest_seq(file_path)
-    except Exception as error:
-        print(error)
+        print_biggest_seq(pi_digits_file_path)
+    except ValueError as valError:
+        print(valError)
