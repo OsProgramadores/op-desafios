@@ -12,7 +12,7 @@ def get_set_primes(num_digits: int, upper_limit: int) -> set[str]:
 
     for current_num in num_counter:
         if current_num >= upper_limit:
-            return primes_set
+            break
         if current_num not in sieve_dict:
             sieve_dict[current_num * current_num] = current_num
             current_num: str = str(current_num)
@@ -23,6 +23,8 @@ def get_set_primes(num_digits: int, upper_limit: int) -> set[str]:
                 current_num_key += (sieve_dict[current_num] << 1)
             sieve_dict[current_num_key] = sieve_dict[current_num]
             del sieve_dict[current_num]
+
+    return primes_set
 
 
 def print_biggest_seq(file_path: str, upper_limit: int = 10 ** 4) -> str:
