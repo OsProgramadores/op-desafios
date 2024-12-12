@@ -6,7 +6,7 @@ from collections import defaultdict
 
 def get_set_primes(num_digits: int, upper_limit: int) -> set[str]:
     primes_set: set[str] = set()
-    primes_set.update('2'.zfill(z_qty) for z_qty in range(1, num_digits))
+    primes_set.update('2'.zfill(z_qty) for z_qty in range(1, num_digits + 1))
     sieve_dict: dict[int, int] = {}
     num_counter: count = count(start=3, step=2)
 
@@ -16,7 +16,7 @@ def get_set_primes(num_digits: int, upper_limit: int) -> set[str]:
         if current_num not in sieve_dict:
             sieve_dict[current_num * current_num] = current_num
             current_num: str = str(current_num)
-            primes_set.update(current_num.zfill(z_qty) for z_qty in range(1, num_digits))
+            primes_set.update(current_num.zfill(z_qty) for z_qty in range(1, num_digits + 1))
         else:
             current_num_key: int = current_num + (sieve_dict[current_num] << 1)
             while sieve_dict.get(current_num_key):
