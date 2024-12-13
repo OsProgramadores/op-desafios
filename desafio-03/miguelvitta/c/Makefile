@@ -1,4 +1,4 @@
-	CC = gcc 
+	CC = gcc
 CFLAGS = -Wall -Wextra -Wshadow
 
 desafio-03: desafio-03.c
@@ -7,4 +7,3 @@ desafio-03: desafio-03.c
 .PHONY: clean
 clean:
 	rm -f desafio-03 *.o
-
