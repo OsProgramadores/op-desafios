@@ -70,7 +70,6 @@ class Program
             {
                 return true;
             }
-            
             visited.Remove(move.Next);
             path.RemoveAt(path.Count - 1);
         }
