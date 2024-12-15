@@ -100,7 +100,7 @@ if __name__ == '__main__':
         raise ValueError(f"Error: Could not open file \'{file_path}\'.") from error
 
     for line in expressions_file:
-        line = line.strip().replace(' ', '')
+        line = line.rstrip().replace(' ', '')
 
         if not validate_expresssion(line):
             print("ERR SYNTAX")
