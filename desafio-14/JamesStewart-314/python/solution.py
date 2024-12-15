@@ -12,8 +12,8 @@ def get_op_index(math_expression: str, operator: str, exp_s: set[str]) -> int:
 def eval_flat_expression(expression: str) -> str:
     numb_exp: list[str] = re.split(r'[\+\-\*\/\^]', expression)
     exp_oper: list[str] = re.findall(r'[\+\-\*\/\^]', expression)
+    exp_set: set[str] = set(exp_oper)
     while exp_oper:
-        exp_set: set[str] = set(exp_oper)
         if "^" in exp_oper:
             oper_idx: int = exp_oper.index('^')
             op_a, op_b = map(int, (numb_exp[oper_idx], numb_exp[oper_idx + 1]))
