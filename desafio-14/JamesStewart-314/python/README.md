@@ -7,7 +7,7 @@ Expressões numéricas consistem numa sequências de operações aplicadas a um 
 valores em ordem de precedência com base nas regras aritméticas preestabelecidas.
 O objetivo deste projeto consiste em efetuar a leitura de um arquivo textual contendo uma
 expresão numérica por linha e exibir seu respectivo resultado final. Se o programa
-encontrar um divisão por zero deverá imprimir ERR DIVBYZERO. 
+encontrar um divisão por zero deverá imprimir ERR DIVBYZERO.
 Se o programa encontrar um erro de sintaxe na expressão deverá imprimir ERR SYNTAX.
 
 ## Exemplo do Conteúdo Lido do Arquivo:
