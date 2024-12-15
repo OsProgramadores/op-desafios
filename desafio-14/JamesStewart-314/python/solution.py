@@ -105,6 +105,7 @@ if __name__ == '__main__':
         if not validate_expresssion(line):
             print("ERR SYNTAX")
             continue
+
         try:
             operation_result: str = normalize_expression(line)
         except ZeroDivisionError:
