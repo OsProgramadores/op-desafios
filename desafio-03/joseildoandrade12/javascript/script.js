@@ -16,13 +16,13 @@ function palindromos(min, max) {
 
 function verificacao(value) {
     if (isNaN(value)) {
-        console.log("Coloque apenas valores númericos");
+        console.log("Digite apenas valores númericos");
         return false;
     } else if (value < 1) {
-        console.log("Adicione apenas valores positivos ou maior que 0");
+        console.log("Digite apenas valores maiores que 0");
         return false;
     } else if (!Number.isInteger(value)) {
-        console.log("Adicione apenas números inteiros");
+        console.log("Digite apenas números inteiros");
         return false;
     } else {
         return true;
