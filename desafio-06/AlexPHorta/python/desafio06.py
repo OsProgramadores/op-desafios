@@ -5,14 +5,39 @@ import operator
 import string
 
 
+def anagrams(expression, words_file):
+    expression = prep(expression)
+    with open(words_file) as words:
+        print("Searching...")
+        anagrams = find_matches(expression, words)
+        print("Found!")
+        for anagram in anagrams:
+            print(' '.join(anagram))
+
+def prep(expression):
+    res = ""
+
+    for c in expression:
+        if c not in string.ascii_letters:
+            continue
+        res += c.upper()
+
+    return res
+
 def find_matches(expression, words_file):
     candidates = shrink_search_field(expression, words_file)
+    print("Search field ok")
     res = []
     grouped_by_len = group_by_len(candidates)
+    print("Everything grouped")
+    print(grouped_by_len)
     valid_partitions = shrink_partitions(expression, grouped_by_len)
+    print("Partitioned")
+    print(valid_partitions)
 
     for v in valid_partitions:
         res.extend(find_in_partition(expression, v, grouped_by_len))
+    print("Separated by partition")
 
     return res
 
@@ -62,6 +87,12 @@ def shrink_partitions(expression, grouped):
     for r in res:
         if set(r) <= set(no_solo):
             rem.append(r)
+
+    # If there's a group 1, remove all partitions that have more ones than the length of group 1.
+    if '1' in available:
+        for r in res:
+            if r.count(1) > len(grouped['1']):
+                rem.append(r)
 
     for r in rem:
         del res[res.index(r)]
@@ -169,6 +200,19 @@ if __name__ == "__main__":
                              'ROVE', 'VEER'],
                          5: ['ELMER', 'HOVEL', 'HOVER', 'LEVER', 'MERLE', 'MOREL', 'REVEL']}
 
+    VERMELHA_GROUPED = {1: ['A'], 2: ['AH', 'AM', 'HA', 'HE', 'MA', 'ME'],
+                        3: ['ALE', 'ARE', 'ARM', 'AVE', 'EAR', 'EEL', 'ELM',
+                            'ERA', 'EVA', 'EVE', 'HAM', 'HEE', 'HEM', 'HER',
+                            'LAM', 'MAR', 'RAE', 'RAH', 'RAM', 'REV'],
+                        4: ['AHEM', 'AVER', 'EARL', 'EAVE', 'HALE', 'HARE',
+                            'HARM', 'HAVE', 'HEAL', 'HEAR', 'HEEL', 'HELM',
+                            'HERA', 'HERE', 'LAME', 'LEAR', 'LEER', 'MALE',
+                            'MARE', 'MEAL', 'MERE', 'RAVE', 'REAL', 'REAM',
+                            'REEL', 'RHEA', 'VALE', 'VEAL', 'VEER', 'VERA'],
+                        5: ['ELMER', 'HALVE', 'HAREM', 'HEAVE', 'LEAVE', 'LEVER',
+                            'MERLE', 'RAVEL', 'REALM', 'REAVE', 'REVEL', 'VELAR'],
+                        6: ['HARLEM', 'MARVEL', 'REVEAL']}
+
     VERMELHO_GROUPED_NO_V_IN_3 = { 2: ['HE', 'HO', 'ME', 'OH', 'OR'],
                          3: ['EEL', 'ELM', 'HEE', 'HEM', 'HER', 'HOE', 'LEO',
                              'MOE', 'OHM', 'OLE', 'ORE'],
@@ -222,6 +266,9 @@ if __name__ == "__main__":
                              [[2, 2, 4], [2, 3, 3], [3, 5], [4, 4]])
             self.assertEqual(shrink_partitions("VERMELHO", VERMELHO_GROUPED_NO_V_IN_3),
                              [[2, 2, 4], [3, 5], [4, 4]])
+            self.assertEqual(shrink_partitions("VERMELHA", VERMELHA_GROUPED),
+                             [[1, 2, 2, 3], [1, 2, 5], [1, 3, 4], [2, 2, 4],
+                              [2, 3, 3], [2, 6], [3, 5], [4, 4]])
 
     class TestShrinkSearchField(unittest.TestCase):
 
