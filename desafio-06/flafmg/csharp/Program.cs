@@ -64,7 +64,6 @@ public class AnagramGenerator
         var result = new HashSet<string>();
         var charCounts = GetCharCounts(expression);
         GenerateAnagramsRecursive(expression, validWords, new List<string>(), result, charCounts);
-        
         return result.OrderBy(x => x).ToList();
     }
 
