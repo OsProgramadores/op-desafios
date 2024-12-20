@@ -89,13 +89,20 @@ def shrink_partitions(expression, grouped):
             rem.append(r)
 
     # If there's a group 1, remove all partitions that have more ones than the length of group 1.
-    if '1' in available:
+    ones = 1 in available
+    if ones:
+        gg = grouped.get('1')
+        len_ones = len(gg) if gg is not None else 1
         for r in res:
-            if r.count(1) > len(grouped['1']):
+            if r.count(1) > len_ones:
                 rem.append(r)
 
     for r in rem:
-        del res[res.index(r)]
+        try:
+            remover = res.index(r)
+            del res[remover]
+        except ValueError:
+            continue
 
     return res
 
