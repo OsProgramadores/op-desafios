@@ -1,7 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Text;
 
 public class AnagramGenerator
 {
@@ -16,14 +18,14 @@ public class AnagramGenerator
         var expression = string.Join("", args).ToUpper().Replace(" ", "");
         if (!IsValidExpression(expression))
         {
-            Console.WriteLine("erro: aexpressão contem caracteres inváaidos");
+            Console.WriteLine("rro: a expressão contém caracteres inválidos. somente letras de A a Z são permitidas");
             return;
         }
 
         var validWords = LoadValidWords("words.txt");
         if (validWords == null || validWords.Count == 0)
         {
-            Console.WriteLine("erro: words.txt esta vazio ou nao foi possivel ler");
+            Console.WriteLine("erro: words.txt está vazio ou não foi possível ler");
             return;
         }
 
@@ -38,20 +40,22 @@ public class AnagramGenerator
         }
         else
         {
-            Console.WriteLine("nenhum anagrama encontrado,");
+            Console.WriteLine("nenhum anagrama encontrado.");
         }
     }
-
     private static bool IsValidExpression(string expression)
     {
-        return expression.All(char.IsLetter);
+        return expression.All(c => c >= 'A' && c <= 'Z'); //para garantir que seja so de A a Z
     }
 
     private static HashSet<string> LoadValidWords(string filePath)
     {
         try
         {
-            return File.ReadAllLines(filePath).Select(line => line.Trim().ToUpper()).Where(line => line.All(char.IsLetter)).ToHashSet();
+            return File.ReadAllLines(filePath)
+                .Select(line => line.Trim().ToUpper())
+                .Where(line => line.All(char.IsLetter))
+                .ToHashSet();
         }
         catch
         {
@@ -63,12 +67,12 @@ public class AnagramGenerator
     {
         var result = new HashSet<string>();
         var charCounts = GetCharCounts(expression);
-        GenerateAnagramsRecursive(expression, validWords, new List<string>(), result, charCounts);
+        GenerateAnagramsRecursive(expression, validWords, new HashSet<string>(), result, charCounts);
         return result.OrderBy(x => x).ToList();
     }
 
     private static void GenerateAnagramsRecursive(string remaining, HashSet<string> validWords,
-        List<string> currentWords, HashSet<string> result, Dictionary<char, int> charCounts)
+        HashSet<string> currentWords, HashSet<string> result, Dictionary<char, int> charCounts)
     {
         if (string.IsNullOrEmpty(remaining))
         {
@@ -84,7 +88,7 @@ public class AnagramGenerator
                 var newCharCounts = UpdateCharCounts(charCounts, word, -1);
                 currentWords.Add(word);
                 GenerateAnagramsRecursive(RemoveUsedChars(remaining, word), validWords, currentWords, result, newCharCounts);
-                currentWords.RemoveAt(currentWords.Count - 1);
+                currentWords.Remove(word);
                 UpdateCharCounts(charCounts, word, 1);
             }
         }
