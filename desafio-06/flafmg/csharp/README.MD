@@ -30,7 +30,6 @@ YOU
 CODERS
 ...
 ```
-```
 
 ### 3. Executar o programa
 ```bash
