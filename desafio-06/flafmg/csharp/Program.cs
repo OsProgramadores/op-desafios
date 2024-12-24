@@ -18,7 +18,7 @@ public class AnagramGenerator
         var expression = string.Join("", args).ToUpper().Replace(" ", "");
         if (!IsValidExpression(expression))
         {
-            Console.WriteLine("rro: a expressão contém caracteres inválidos. somente letras de A a Z são permitidas");
+            Console.WriteLine("erro: a expressão contém caracteres inválidos. somente letras de A a Z são permitidas");
             return;
         }
 
@@ -89,7 +89,6 @@ public class AnagramGenerator
                 currentWords.Add(word);
                 GenerateAnagramsRecursive(RemoveUsedChars(remaining, word), validWords, currentWords, result, newCharCounts);
                 currentWords.Remove(word);
-                UpdateCharCounts(charCounts, word, 1);
             }
         }
     }
