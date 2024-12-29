@@ -141,7 +141,7 @@ public class Program
         }
         return output;
     }
-    
+
     private static string EvaluateRPN(List<string> rpn)
     {
         var stack = new Stack<double>();
