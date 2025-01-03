@@ -1,7 +1,7 @@
 const readline = require("node:readline");
 const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout,
+    output: process.stdout
 });
 
 const { error } = require("node:console");
@@ -11,7 +11,6 @@ function valoresWord(palavraUsuario) {
     fs.readFile("./words.txt", "utf8", (err, texto) => {
         if (err) {
             console.log(error(err));
-            return;
         } else {
             const arrayDePalavras = separarTexto(texto);
             compararComLista(arrayDePalavras, palavraUsuario);
@@ -57,7 +56,7 @@ function validarValores(palavra) {
 
     if (validarTamanho && validarCaracteres) return true;
     else {
-        console.log(`Digite palavras sem acentos e sem pontuações`);
+        console.log("Digite palavras sem acentos e sem pontuações");
         return false;
     }
 }
