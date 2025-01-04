@@ -22,8 +22,7 @@ Quando concluído, o código deverá ser capaz de gerar anagramas validos, tendo
 
 
 ### Execução
-Para rodar o código você deve ter em seu PC: 
-
+Para rodar o código você deve ter em seu PC:
 1. Java JVM
 2. Arquivo words.txt - [clique aqui para baixar](https://osprogramadores.com/desafios/d06/words.txt)
 
