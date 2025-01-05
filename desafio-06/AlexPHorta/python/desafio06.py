@@ -64,17 +64,15 @@ def find_in_partition(expression, partition, grouped):
     counter = 0
 
     for g in itertools.product(*group_lengths):
-        letters_in_prod = {k:0 for k in letters_in_expression.keys()}
+        letters_in_prod = dict(letters_in_expression)
         words = []
         fits = True
         for i, j in enumerate(g):
             word = grouped[partition[i]][j]
             word_sum = quant_letters(word)
-            summed_dict = {key: letters_in_prod.get(key, 0) + word_sum.get(key, 0)
-                           for key in set(letters_in_prod) | set(word_sum)}
-            letters_in_prod.update(summed_dict)
-            for k, v in letters_in_expression.items():
-                if summed_dict[k] > v:
+            for k, v in word_sum.items():
+                letters_in_prod[k] -= v
+                if letters_in_prod[k] < 0:
                     fits = False
                     break
             if not fits:
