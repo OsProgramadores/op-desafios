@@ -1,4 +1,6 @@
+import functools
 import io
+import operator
 import unittest
 
 from desafio06 import (anagrams,
@@ -52,7 +54,8 @@ class TestFindMatches(unittest.TestCase):
     def test_return_with_vermelho(self):
         self.maxDiff = None
         with open('./words.txt') as file:
-            self.assertCountEqual(find_matches("VERMELHO", file),
+            resp = functools.reduce(operator.iconcat, list(find_matches("VERMELHO", file)), [])
+            self.assertCountEqual(resp,
                 [["ELM", "HO", "REV"], ["ELM", "OH", "REV"],
                 ["OHM", "REVEL"], ["LEVER", "OHM"], ["ELM", "HOVER"],
                 ["HOLM", "VEER"], ["HELM", "OVER"], ["HELM", "ROVE"]])

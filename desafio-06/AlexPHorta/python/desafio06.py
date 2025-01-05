@@ -3,16 +3,20 @@ import functools
 import itertools
 import operator
 import string
+import time
 
 
 def anagrams(expression, words_file):
+    start = time.time()
     expression = prep(expression)
     with open(words_file) as words:
-        print("Searching...")
-        anagrams = find_matches(expression, words)
-        print("Found!")
+        print("Finding the matches")
+        anagrams = (m for m in find_matches(expression, words))
         for anagram in anagrams:
-            print(' '.join(anagram))
+            for a in anagram:
+                print(' '.join(a))
+    end = time.time()
+    print(f"Execution time: {end - start}")
 
 def prep(expression):
     if expression == "":
@@ -29,33 +33,16 @@ def prep(expression):
 
 def find_matches(expression, words_file):
     candidates = shrink_search_field(expression, words_file)
-    print("Search field ok")
     res = []
     grouped_by_len = group_by_len(candidates)
-    print("Everything grouped")
     valid_partitions = shrink_partitions(expression, grouped_by_len)
     print(f"Partitioned: {len(valid_partitions)} partitions")
 
     for v in valid_partitions:
         print(f"Partition {v}")
         res.extend(find_in_partition(expression, v, grouped_by_len))
-    print("Separated by partition")
 
-    return res
-
-# def find_in_partition(expression, partition, grouped):
-#     letters_in_expression = quant_letters(expression)
-#     res = []
-#     iterator = [grouped[p] for p in partition]
-# 
-#     for prod in itertools.product(*iterator):
-#         letters_in_prod = quant_letters(''.join(prod))
-#         if letters_in_prod == letters_in_expression:
-#             prod = sorted(prod)
-#             if prod not in res:
-#                 res.append(prod)
-# 
-#     return res
+    yield res
 
 def find_in_partition(expression, partition, grouped):
     letters_in_expression = quant_letters(expression)
@@ -67,6 +54,9 @@ def find_in_partition(expression, partition, grouped):
         letters_in_prod = dict(letters_in_expression)
         words = []
         fits = True
+        selected_words = sorted([grouped[partition[i]][j] for i, j in enumerate(g)])
+        if selected_words in words:
+            continue
         for i, j in enumerate(g):
             word = grouped[partition[i]][j]
             word_sum = quant_letters(word)
@@ -82,7 +72,9 @@ def find_in_partition(expression, partition, grouped):
         if not fits:
             continue
         else:
-            res.append(words)
+            words = sorted(words)
+            if words not in res:
+                res.append(words)
 
     return res
 
@@ -174,9 +166,7 @@ def sieve_number_of_letters(expression, word):
 def quant_letters(a_word):
     """Return the number of the different letters in a word."""
     keys = set(a_word)
-    quanto = {k:0 for k in keys}
-    for l in a_word:
-        quanto[l] += 1
+    quanto = {k:a_word.count(k) for k in keys}
     return quanto
 
 def sieve_remaining(expression, word):
