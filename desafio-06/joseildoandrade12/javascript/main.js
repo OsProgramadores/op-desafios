@@ -1,3 +1,4 @@
+//métodos de node
 const readline = require("node:readline");
 const rl = readline.createInterface({
     input: process.stdin,
@@ -7,6 +8,7 @@ const rl = readline.createInterface({
 const { error } = require("node:console");
 const fs = require("node:fs");
 
+// puxa os valores de word e retora uma array com os valores
 function valoresWord(palavraUsuario) {
     fs.readFile("./words.txt", "utf8", (err, texto) => {
         if (err) {
@@ -18,21 +20,7 @@ function valoresWord(palavraUsuario) {
     });
 }
 
-function compararComLista(lista, valorUsuario) {
-    const anagramas = fazendoAnagramas(valorUsuario);
-    const anagramasValidos = anagramas.filter((anagrama) =>
-        lista.includes(anagrama)
-    );
-
-    if (anagramasValidos.length === 0) {
-        console.log("nenhum anagrama encontrado");
-    } else {
-        anagramasValidos.forEach((item) => {
-            console.log(item);
-        });
-    }
-}
-
+// Recebe os valores do usuário e armazena ele
 function pegandoValoresUsuario() {
     rl.question("Informe a palavra: ", (value) => {
         const palavraResetada = resetPalavra(value);
@@ -46,21 +34,69 @@ function pegandoValoresUsuario() {
 }
 pegandoValoresUsuario();
 
+// compara os anagramas da palavra passada pelo usuário com a lista word e retorna uma lista
+function compararComLista(lista, valorUsuario) {
+    let arrayItensAnagrama = [];
+    const anagramas = fazendoAnagramas(valorUsuario);
+    anagramas.forEach((anagrama) => {
+        lista.forEach((item) => {
+            if (anagrama.includes(item) && !arrayItensAnagrama.includes(item)) {
+                arrayItensAnagrama.push(item.trim());
+            }
+        });
+    });
+
+    const arrayJuncoes = encontrarCombinações(
+        arrayItensAnagrama,
+        valorUsuario.length
+    );
+
+    arrayJuncoes.sort().forEach((item) => {
+        console.log(item);
+    });
+}
+
+// junta os valores até chegar no tamanho da palavra passada pelo usuário
+function encontrarCombinações(palavras, tamanhoPalavra) {
+    let resultados = new Set();
+    function combinar(palavra, array) {
+        if (palavra.length === tamanhoPalavra) {
+            resultados.add(palavra);
+        } else if (palavra.length < tamanhoPalavra) {
+            for (let i = 0; i < array.length; i++) {
+                combinar(palavra + array[i], array.slice(i + 1));
+                combinar(array[i] + palavra, array.slice(i + 1));
+            }
+        }
+    }
+
+    for (let i = 0; i < palavras.length; i++) {
+        const palavra = palavras[i];
+        if (palavra.length === tamanhoPalavra) {
+            resultados.add(palavra);
+        } else if (palavra.length < tamanhoPalavra) {
+            combinar(palavra, palavras.slice(i + 1));
+        }
+    }
+    return Array.from(resultados);
+}
+
+// reseta valor passado pelo usuário deixando ele sem espaços e em maiúsculo
 function resetPalavra(palavra) {
     return palavra.toUpperCase().split(" ").join("");
 }
 
+// Valida os valores passados pelo usuário
 function validarValores(palavra) {
-    const validarTamanho = palavra.length <= 16;
-    const validarCaracteres = /^[A-Za-z_]+$/gi.test(palavra);
-
-    if (validarTamanho && validarCaracteres) return true;
+    const validarCaracteres = /^[A-Za-z]+$/gi.test(palavra);
+    if (validarCaracteres) return true;
     else {
-        console.log("Digite palavras sem acentos e sem pontuações");
+        console.log("Digite apenas palavras(sem acentos e sem pontuações)");
         return false;
     }
 }
 
+// função para puxar os valores de anagramas passados pelo usuário
 function fazendoAnagramas(value) {
     const arrayPalavra = value.split("");
     const anagramas = [];
@@ -69,6 +105,7 @@ function fazendoAnagramas(value) {
     return anagramas;
 }
 
+// permutação dos valores utilizados pelo usuário
 function permutar(arr, l, indexArray, anagramas) {
     if (l === indexArray) {
         anagramas.push(arr.join(""));
@@ -81,6 +118,7 @@ function permutar(arr, l, indexArray, anagramas) {
     }
 }
 
+// Retorna os valores da lista word dentro de uma array
 function separarTexto(texto) {
     return texto.split(/\n/);
 }
