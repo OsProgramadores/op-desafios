@@ -47,6 +47,12 @@ def find_matches(expression, words_file):
 def find_in_partition(expression, partition, grouped):
     letters_in_expression = quant_letters(expression)
     group_lengths = [range(len(grouped[p])) for p in partition]
+
+    group_letters = {}
+    for k, v in grouped.items():
+         letters = [quant_letters(w) for w in v]
+         group_letters.update({k:letters})
+    
     res = []
     counter = 0
 
@@ -59,7 +65,7 @@ def find_in_partition(expression, partition, grouped):
             continue
         for i, j in enumerate(g):
             word = grouped[partition[i]][j]
-            word_sum = quant_letters(word)
+            word_sum = group_letters[partition[i]][j]
             for k, v in word_sum.items():
                 letters_in_prod[k] -= v
                 if letters_in_prod[k] < 0:
