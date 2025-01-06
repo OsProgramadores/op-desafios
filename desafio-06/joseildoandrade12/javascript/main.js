@@ -1,4 +1,4 @@
-//métodos de node
+// métodos de node
 const readline = require("node:readline");
 const rl = readline.createInterface({
     input: process.stdin,
@@ -36,7 +36,7 @@ pegandoValoresUsuario();
 
 // compara os anagramas da palavra passada pelo usuário com a lista word e retorna uma lista
 function compararComLista(lista, valorUsuario) {
-    let arrayItensAnagrama = [];
+    const arrayItensAnagrama = [];
     const anagramas = fazendoAnagramas(valorUsuario);
     anagramas.forEach((anagrama) => {
         lista.forEach((item) => {
@@ -58,7 +58,7 @@ function compararComLista(lista, valorUsuario) {
 
 // junta os valores até chegar no tamanho da palavra passada pelo usuário
 function encontrarCombinações(palavras, tamanhoPalavra) {
-    let resultados = new Set();
+    const resultados = new Set();
     function combinar(palavra, array) {
         if (palavra.length === tamanhoPalavra) {
             resultados.add(palavra);
