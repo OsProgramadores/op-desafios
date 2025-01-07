@@ -3,7 +3,6 @@ import itertools
 import operator
 import string
 import sys
-import time
 
 
 WORDS = 'words.txt'
