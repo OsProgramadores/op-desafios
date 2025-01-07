@@ -1,22 +1,21 @@
-import collections
 import functools
 import itertools
 import operator
 import string
+import sys
 import time
 
 
+WORDS = 'words.txt'
+
+
 def anagrams(expression, words_file):
-    start = time.time()
     expression = prep(expression)
     with open(words_file) as words:
-        print("Finding the matches")
-        anagrams = (m for m in find_matches(expression, words))
-        for anagram in anagrams:
+        _anagrams = (m for m in find_matches(expression, words))
+        for anagram in _anagrams:
             for a in anagram:
                 print(' '.join(a))
-    end = time.time()
-    print(f"Execution time: {end - start}")
 
 def prep(expression):
     if expression == "":
@@ -36,25 +35,23 @@ def find_matches(expression, words_file):
     res = []
     grouped_by_len = group_by_len(candidates)
     valid_partitions = shrink_partitions(expression, grouped_by_len)
-    print(f"Partitioned: {len(valid_partitions)} partitions")
 
     for v in valid_partitions:
-        print(f"Partition {v}")
         res.extend(find_in_partition(expression, v, grouped_by_len))
 
     yield res
 
 def find_in_partition(expression, partition, grouped):
+    """Search possible matches in each partition group."""
     letters_in_expression = quant_letters(expression)
     group_lengths = [range(len(grouped[p])) for p in partition]
 
     group_letters = {}
     for k, v in grouped.items():
-         letters = [quant_letters(w) for w in v]
-         group_letters.update({k:letters})
-    
+        letters = [quant_letters(w) for w in v]
+        group_letters.update({k:letters})
+
     res = []
-    counter = 0
 
     for g in itertools.product(*group_lengths):
         letters_in_prod = dict(letters_in_expression)
@@ -73,14 +70,12 @@ def find_in_partition(expression, partition, grouped):
                     break
             if not fits:
                 break
-            else:
-                words.append(word)
+            words.append(word)
         if not fits:
             continue
-        else:
-            words = sorted(words)
-            if words not in res:
-                res.append(words)
+        words = sorted(words)
+        if words not in res:
+            res.append(words)
 
     return res
 
@@ -98,11 +93,12 @@ def group_by_len(candidates):
 
 def shrink_partitions(expression, grouped):
     """Remove all partitions that need not be checked."""
-    partitions = [p for p in accel_asc(len(expression))]
+    partitions = list(accel_asc(len(expression)))
     available = list(grouped.keys())
     res = []
 
-    # If a partition includes words whose length is not in one of the available partitions, don't include it.
+    # If a partition includes words whose length is not in one of the available
+    # partitions, don't include it.
     for partition in partitions:
         for e in partition:
             if e not in available:
@@ -148,7 +144,8 @@ def not_solo(expression, grouped):
     return res
 
 def shrink_search_field(expression, words_file):
-    """Shrink the search field for possible anagrams, before considering partitions of expression."""
+    """Shrink the search field for possible anagrams, before considering
+    partitions of expression."""
     res = []
     for w in words_file:
         w = w.strip()
@@ -180,12 +177,12 @@ def sieve_remaining(expression, word):
     letters = set(expression)
     uppercase = set(string.ascii_uppercase)
     remaining = uppercase - letters
-    return not any([(l in remaining) for l in word])
+    return not any((l in remaining) for l in word)
 
 def sieve_starts_with(expression, word):
     """Return only words that begin with one of the letters in expression."""
     letters = set(expression)
-    return any([word.startswith(l) for l in letters])
+    return any(word.startswith(l) for l in letters)
 
 def sieve_less_or_equal(expression, word):
     """Exclude words that are lengthier than expression."""
@@ -219,3 +216,7 @@ def accel_asc(n):
         y = x + y - 1
         yield a[:k + 1]
 
+
+if __name__ == "__main__":
+
+    anagrams(sys.argv[1], WORDS)

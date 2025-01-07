@@ -3,8 +3,7 @@ import io
 import operator
 import unittest
 
-from desafio06 import (anagrams,
-                       find_in_partition,
+from desafio06 import (find_in_partition,
                        find_matches,
                        group_by_len,
                        not_solo,
@@ -128,7 +127,8 @@ class TestShrinkSearchField(unittest.TestCase):
 class TestSieveDuplicateLetters(unittest.TestCase):
 
     def test_sieve_number_of_letters(self):
-        """If the word has more letters of the same type than what's in expression, it's not an anagram."""
+        """If the word has more letters of the same type than what's in
+        expression, it's not an anagram."""
         self.assertTrue(sieve_number_of_letters("AC", "A"))
         self.assertTrue(sieve_number_of_letters("AC", "C"))
         self.assertTrue(sieve_number_of_letters("AC", "CA"))
