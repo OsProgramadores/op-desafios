@@ -22,8 +22,6 @@ Sétimo passo: fazer uma validação com um if, se o valor min é igual ao valor
 
 Para testar a solução, é necessário ter o [Node.js](https://nodejs.org/) com a versão mais recente instalada em sua máquina.
 
-É necessário ter uma IDE, recomendo o [VsCode](https://code.visualstudio.com/) com a versão mais recente.
-
 É necessário ter o GIT em sua máquina [GIT](https://git-scm.com/downloads) com a versão mais recente.
 
 Entre no Git e faça um clone do repositório para a sua máquina:
@@ -32,7 +30,7 @@ Entre no Git e faça um clone do repositório para a sua máquina:
 $ git clone https://github.com/joseildoandrade12/op-desafios.git
 ```
 
-Após ter clonado, abra a pasta no VsCode e no VsCode abra o terminal e digite o código esse para acessar a pasta que contém o arquivo :
+Após ter clonado, abra o terminal e digite o código para acessar a pasta que contém o arquivo :
 
 ```bash
 cd desafio-03/joseildoandrade12/javascript
@@ -50,7 +48,7 @@ Quando você inicializar o código, vai aparecer a seguinte mensagem:
 Informe o valor minimo:
 ```
 
-Na primeira pegunta insira o valor mínimo, caso ele não tenha os requisitos necessários irá retornar uma mensagem mostrando seu erro.
+Na primeira pergunta insira o valor mínimo, caso ele não tenha os requisitos necessários irá retornar uma mensagem mostrando seu erro.
 
 Depois irá aparecer:
 
@@ -58,6 +56,6 @@ Depois irá aparecer:
 Informe o valor máximo:
 ```
 
-Como no primeiro insira o valor, caso esteja fora dos requisitos ele irá retornar uma mensagem de erro.
+Como no primeiro, insira o valor, caso esteja fora dos requisitos ele irá retornar uma mensagem de erro.
 
 Após tudo isso ele retornará todos os números palíndromos no intervalo dos valores que o usuário escolheu.
