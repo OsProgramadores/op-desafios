@@ -2,16 +2,18 @@ import functools
 import itertools
 import operator
 import string
-import sys
 
 
 WORDS = 'words.txt'
 
 
-def anagrams(expression, words_file):
+def print_anagrams(expression, words_file):
+    """Print all anagrams from expression, found in words_file."""
     expression = prep(expression)
     with open(words_file) as words:
-        _anagrams = (m for m in find_matches(expression, words))
+        _anagrams = list(m for m in find_matches(expression, words))
+        if len(_anagrams) == 1 and len(_anagrams[0]) == 0:
+            print(f"Nenhum anagrama encontrado para a expressão: {expression}")
         for anagram in _anagrams:
             for a in anagram:
                 print(' '.join(a))
@@ -91,7 +93,7 @@ def group_by_len(candidates):
     return res
 
 def shrink_partitions(expression, grouped):
-    """Remove all partitions that need not be checked."""
+    """Remove all partitions that dont't need to be checked."""
     partitions = list(accel_asc(len(expression)))
     available = list(grouped.keys())
     res = []
@@ -158,15 +160,15 @@ def shrink_search_field(expression, words_file):
 
 def sieve_number_of_letters(expression, word):
     """Check if a word is contained in expression. Remove those that can't be."""
-    e = quant_letters(expression)
-    w = quant_letters(word)
-    for k, v in w.items():
-        if e.get(k) is not None and v > e[k]:
+    expression_quant = quant_letters(expression)
+    word_quant = quant_letters(word)
+    for k, v in word_quant.items():
+        if expression_quant.get(k) is not None and v > expression_quant[k]:
             return False
     return True
 
 def quant_letters(a_word):
-    """Return the number of the different letters in a word."""
+    """Return a mapping of the number of the different letters in a word."""
     keys = set(a_word)
     quanto = {k:a_word.count(k) for k in keys}
     return quanto
@@ -218,4 +220,43 @@ def accel_asc(n):
 
 if __name__ == "__main__":
 
-    anagrams(sys.argv[1], WORDS)
+    import gettext
+    import sys
+
+    def translate(text):
+        text = text.replace("usage", "modo de usar")
+        text = text.replace("positional arguments", "argumentos posicionais")
+        text = text.replace("show this help message and exit",
+                            "Exibe esta mensagem de ajuda e termina a execução.")
+        text = text.replace("error", "erro")
+        text = text.replace("options", "opções")
+        text = text.replace("the following arguments are required",
+                            "os seguintes argumentos são obrigatórios")
+        return text
+    gettext.gettext = translate
+
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Imprime todos os anagramas de EXPRESSÃO encontrados no\
+        arquivo 'words.txt' (Deve estar na mesma pasta do programa.)."
+    )
+
+    parser.add_argument(
+        "termo",
+        nargs = 1,
+        help="A expressão a ser usada para a busca de anagramas."
+    )
+
+    args = parser.parse_args()
+
+    if len(args.termo) == 0:
+        parser.print_help()
+
+    if args.termo:
+        try:
+            assert len(args.termo) == 1, "Número excessivo de argumentos."
+            print_anagrams(sys.argv[1], WORDS)
+        except Exception as exc:
+            raise ValueError(f"{exc}") from exc
+

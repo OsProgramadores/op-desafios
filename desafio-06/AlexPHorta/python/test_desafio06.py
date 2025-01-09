@@ -13,7 +13,8 @@ from desafio06 import (find_in_partition,
                        sieve_number_of_letters,
                        sieve_remaining,
                        shrink_partitions,
-                       shrink_search_field)
+                       shrink_search_field,
+                       WORDS)
 
 
 VERMELHO_GROUPED = { 2: ['HE', 'HO', 'ME', 'OH', 'OR'],
@@ -50,9 +51,14 @@ VERMELHO_GROUPED_NO_V_IN_3 = { 2: ['HE', 'HO', 'ME', 'OH', 'OR'],
 
 class TestFindMatches(unittest.TestCase):
 
+    def test_return_with_no_anagrams(self):
+        with open(WORDS) as file:
+            resp = functools.reduce(operator.iconcat, list(find_matches("XXXXXX", file)), [])
+            self.assertEqual(resp, [])
+
     def test_return_with_vermelho(self):
         self.maxDiff = None
-        with open('./words.txt') as file:
+        with open(WORDS) as file:
             resp = functools.reduce(operator.iconcat, list(find_matches("VERMELHO", file)), [])
             self.assertCountEqual(resp,
                 [["ELM", "HO", "REV"], ["ELM", "OH", "REV"],
@@ -78,7 +84,7 @@ class TestGroupByLen(unittest.TestCase):
 
     def test_vermelho_group_len(self):
         self.maxDiff = None
-        with open('./words.txt') as file:
+        with open(WORDS) as file:
             candidates = shrink_search_field("VERMELHO", file)
             self.assertEqual(group_by_len(candidates), VERMELHO_GROUPED)
 
@@ -114,7 +120,7 @@ class TestShrinkSearchField(unittest.TestCase):
 
     def test_return_with_many(self):
         self.maxDiff = None
-        with open('./words.txt') as file:
+        with open(WORDS) as file:
             self.assertCountEqual(shrink_search_field("VERMELHO", file), ["ELM", "HELM", "HO",
                 "HOLM", "HOVER", "LEVER", "OH", "OHM", "OVER", "REV", "REVEL",
                 "ROVE", "VEER", "EEL", "ELMER", "EVE", "HE", "HEE", "HEEL",
