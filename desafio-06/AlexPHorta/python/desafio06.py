@@ -259,4 +259,3 @@ if __name__ == "__main__":
             print_anagrams(sys.argv[1], WORDS)
         except Exception as exc:
             raise ValueError(f"{exc}") from exc
-
