@@ -238,14 +238,14 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(
-        description="Imprime todos os anagramas de EXPRESSÃO encontrados no\
-        arquivo 'words.txt' (Deve estar na mesma pasta do programa.)."
+        description="Imprime todos os anagramas de TERMO encontrados no\
+        arquivo 'words.txt' (Que deverá estar na mesma pasta do programa.)."
     )
 
     parser.add_argument(
-        "termo",
+        "TERMO",
         nargs = 1,
-        help="A expressão a ser usada para a busca de anagramas."
+        help="O termo a ser usado para a busca de anagramas."
     )
 
     args = parser.parse_args()
