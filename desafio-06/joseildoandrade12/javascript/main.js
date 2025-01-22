@@ -17,7 +17,7 @@ function separarTexto(texto) {
 const { createInterface } = require("node:readline");
 const rl = createInterface({
     input: process.stdin,
-    output: process.stdout,
+    output: process.stdout
 });
 
 function questionUsuario() {
