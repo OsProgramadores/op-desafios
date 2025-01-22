@@ -1,4 +1,4 @@
-## Desafio 03: Anagramas
+## Desafio 06: Anagramas
 
 Anagrama é uma palavra ou frase formada a partir da reorganização das letras de outra palavra ou frase, sem a omissão ou adição de nenhuma letra.
 
