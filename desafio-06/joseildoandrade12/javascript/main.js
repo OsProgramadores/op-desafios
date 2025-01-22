@@ -1,87 +1,106 @@
-const readline = require("node:readline");
-const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
-
-const { error } = require("node:console");
+let arrayWords = [];
 const fs = require("node:fs");
+fs.readFile("./words.txt", "utf8", repostaWord);
 
-function valoresWord(palavraUsuario) {
-    fs.readFile("./words.txt", "utf8", (err, texto) => {
-        if (err) {
-            console.log(error(err));
-            return;
-        } else {
-            const arrayDePalavras = separarTexto(texto);
-            compararComLista(arrayDePalavras, palavraUsuario);
-        }
-    });
-}
-
-function compararComLista(lista, valorUsuario) {
-    const anagramas = fazendoAnagramas(valorUsuario);
-    const anagramasValidos = anagramas.filter((anagrama) =>
-        lista.includes(anagrama)
-    );
-
-    if (anagramasValidos.length === 0) {
-        console.log("nenhum anagrama encontrado");
-    } else {
-        anagramasValidos.forEach((item) => {
-            console.log(item);
-        });
+function repostaWord(err, data) {
+    if (err) {
+        console.log(err);
     }
-}
-
-function pegandoValoresUsuario() {
-    rl.question("Informe a palavra: ", (value) => {
-        const palavraResetada = resetPalavra(value);
-        const validacaoValor = validarValores(palavraResetada);
-        if (validacaoValor) {
-            valoresWord(palavraResetada);
-        } else {
-            pegandoValoresUsuario();
-        }
-    });
-}
-pegandoValoresUsuario();
-
-function resetPalavra(palavra) {
-    return palavra.toUpperCase().split(" ").join("");
-}
-
-function validarValores(palavra) {
-    const validarTamanho = palavra.length <= 16;
-    const validarCaracteres = /^[A-Za-z_]+$/gi.test(palavra);
-
-    if (validarTamanho && validarCaracteres) return true;
-    else {
-        console.log(`Digite palavras sem acentos e sem pontuações`);
-        return false;
-    }
-}
-
-function fazendoAnagramas(value) {
-    const arrayPalavra = value.split("");
-    const anagramas = [];
-
-    permutar(arrayPalavra, 0, arrayPalavra.length - 1, anagramas);
-    return anagramas;
-}
-
-function permutar(arr, l, indexArray, anagramas) {
-    if (l === indexArray) {
-        anagramas.push(arr.join(""));
-    } else {
-        for (let i = l; i <= indexArray; i++) {
-            [arr[l], arr[i]] = [arr[i], arr[l]];
-            permutar(arr, l + 1, indexArray, anagramas);
-            [arr[l], arr[i]] = [arr[i], arr[l]];
-        }
-    }
+    arrayWords.push(...separarTexto(data));
+    return data;
 }
 
 function separarTexto(texto) {
-    return texto.split(/\n/);
+    return texto.split(/\n?\r/).map((word) => word.trim());
 }
+
+const { createInterface } = require("node:readline");
+const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout
+});
+
+function questionUsuario() {
+    rl.question("Digite uma palavra: ", (palavra) => {
+        if (validarPalavra(palavra)) {
+            const palavraResetada = resetarPalavra(palavra);
+            const arrayValoresComparados = compararValores(palavraResetada, arrayWords);
+            const valoresCorretosWord = arrayValoresComparados.filter((item) => {
+                return verificarRepeticaoLetras(item, palavraResetada) == 0;
+            });
+            const combinacoesPalavras = fazerCombinacoes(valoresCorretosWord, palavraResetada);
+            const valoresCorretos = combinacoesPalavras.filter((item) => {
+                const itemResetado = item.split(' ').join('');
+                return verificarRepeticaoLetras(itemResetado, palavraResetada) == 0;
+            });
+            for (const palavra of valoresCorretos) {
+                console.log(palavra);
+            }
+        } else {
+            questionUsuario();
+        }
+    });
+}
+questionUsuario();
+
+const validarPalavra = (palavra) => {
+    const palavraResetada = palavra.split(' ').join('')
+    const validarCaracteres = /^[A-Za-z]+$/gi.test(palavraResetada);
+    if (validarCaracteres) {
+        return true;
+    } else {
+        console.log("Digite apenas palavras(sem acentos e sem pontuações)");
+        return false;
+    }
+};
+
+const resetarPalavra = (palavra) => {
+    return palavra.toUpperCase().replace(" ", "");
+};
+
+const compararValores = (palavra, listaWords) => {
+    const regex = new RegExp(`^[${palavra}]+$`, "g");
+    const palavrasComparadas = listaWords.filter((itemWords) => {
+        if (itemWords.length <= palavra.length) {
+            return regex.test(itemWords);
+        }
+    });
+    return palavrasComparadas;
+};
+
+const verificarRepeticaoLetras = (palavraWords, palavraUser) => {
+    const arrayPalavra = palavraUser.split("");
+    const arrayPalavraWords = palavraWords.split("");
+    arrayPalavra.forEach((letra) => {
+        const index = arrayPalavraWords.indexOf(letra);
+        if (index > -1) {
+            arrayPalavraWords.splice(index, 1);
+        }
+    });
+    return arrayPalavraWords.length;
+};
+
+const fazerCombinacoes = (array, palavraUser) => {
+    let resultados = [];
+
+    const combinar = (palavra, arrayPalavra) => {
+        const palavraResetada = palavra.split(' ').join('');
+        if (palavraResetada.length == palavraUser.length) {
+            resultados.push(palavra);
+        } else if (palavraResetada.length < palavraUser.length) {
+            for (let i = 0; i < arrayPalavra.length; i++) {
+                combinar(palavra + " " + arrayPalavra[i], arrayPalavra);
+            }
+        }
+    };
+
+    for (let i = 0; i < array.length; i++) {
+        const palavra = array[i];
+        if (palavra.length === palavraUser.length) {
+            resultados.push(palavra);
+        } else if (palavra.length < palavraUser.length) {
+            combinar(palavra, array);
+        }
+    }
+    return resultados;
+};
