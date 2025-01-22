@@ -1,4 +1,4 @@
-let arrayWords = [];
+const arrayWords = [];
 const fs = require("node:fs");
 fs.readFile("./words.txt", "utf8", repostaWord);
 
@@ -17,7 +17,7 @@ function separarTexto(texto) {
 const { createInterface } = require("node:readline");
 const rl = createInterface({
     input: process.stdin,
-    output: process.stdout,
+    output: process.stdout
 });
 
 function questionUsuario() {
@@ -26,17 +26,17 @@ function questionUsuario() {
             const palavraResetada = resetarPalavra(palavra);
             const arrayValoresComparados = compararValores(palavraResetada, arrayWords);
             const valoresCorretosWord = arrayValoresComparados.filter((item) => {
-                return verificarRepeticaoLetras(item, palavraResetada) == 0;
+                return verificarRepeticaoLetras(item, palavraResetada) === 0;
             });
             const combinacoesPalavras = fazerCombinacoes(valoresCorretosWord, palavraResetada);
             const valoresCorretos = combinacoesPalavras.filter((item) => {
                 const itemResetado = item.split(" ").join("");
-                return verificarRepeticaoLetras(itemResetado, palavraResetada) == 0;
+                return verificarRepeticaoLetras(itemResetado, palavraResetada) === 0;
             });
             for (const palavra of valoresCorretos) {
                 console.log(palavra);
             }
-            rl.close()
+            rl.close();
         } else {
             questionUsuario();
         }
@@ -82,11 +82,11 @@ const verificarRepeticaoLetras = (palavraWords, palavraUser) => {
 };
 
 const fazerCombinacoes = (array, palavraUser) => {
-    let resultados = [];
+    const resultados = [];
 
     const combinar = (palavra, arrayPalavra) => {
         const palavraResetada = palavra.split(" ").join("");
-        if (palavraResetada.length == palavraUser.length) {
+        if (palavraResetada.length === palavraUser.length) {
             resultados.push(palavra);
         } else if (palavraResetada.length < palavraUser.length) {
             for (let i = 0; i < arrayPalavra.length; i++) {
