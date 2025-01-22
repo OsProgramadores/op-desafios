@@ -17,7 +17,7 @@ function separarTexto(texto) {
 const { createInterface } = require("node:readline");
 const rl = createInterface({
     input: process.stdin,
-    output: process.stdout
+    output: process.stdout,
 });
 
 function questionUsuario() {
@@ -62,9 +62,7 @@ const resetarPalavra = (palavra) => {
 const compararValores = (palavra, listaWords) => {
     const regex = new RegExp(`^[${palavra}]+$`, "g");
     const palavrasComparadas = listaWords.filter((itemWords) => {
-        if (itemWords.length <= palavra.length) {
-            return regex.test(itemWords);
-        }
+        return itemWords.length <= palavra.length && regex.test(itemWords);
     });
     return palavrasComparadas;
 };
