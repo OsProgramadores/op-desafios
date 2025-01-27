@@ -8,8 +8,12 @@ WORDS = 'words.txt'
 
 
 def print_anagrams(expression, words_file):
-    """Print all anagrams from expression, found in words_file."""
-    expression = prep(expression)
+    """Print all anagrams from expression, found in words_file.
+
+    Positional arguments:
+    expression -- the expression to be used for the search of anagrams
+    words_file -- path to the file with words
+    """
     with open(words_file) as words:
         _anagrams = list(m for m in find_matches(expression, words))
         if len(_anagrams) == 1 and len(_anagrams[0]) == 0:
@@ -19,6 +23,11 @@ def print_anagrams(expression, words_file):
                 print(' '.join(a))
 
 def prep(expression):
+    """Prepare user input to be used by the program.
+
+    Positional arguments:
+    expression -- the expression to be used for the search of anagrams
+    """
     if expression == "":
         return expression
 
@@ -32,6 +41,12 @@ def prep(expression):
     return res
 
 def find_matches(expression, words_file):
+    """Find all anagram matches for, found in words_file.
+
+    Positional arguments:
+    expression -- the expression to be used for the search of anagrams
+    words_file -- path to the file with words
+    """
     candidates = shrink_search_field(expression, words_file)
     res = []
     grouped_by_len = group_by_len(candidates)
@@ -43,7 +58,13 @@ def find_matches(expression, words_file):
     yield res
 
 def find_in_partition(expression, partition, grouped):
-    """Search possible matches in each partition group."""
+    """Search possible matches in each partition group.
+
+    Positional arguments:
+    expression -- the expression to be used for the search of anagrams
+    partition -- the expression's partition to be used for the search
+    grouped -- dictionary with the word matches, grouped by length
+    """
     letters_in_expression = quant_letters(expression)
     group_lengths = [range(len(grouped[p])) for p in partition]
 
@@ -81,7 +102,11 @@ def find_in_partition(expression, partition, grouped):
     return res
 
 def group_by_len(candidates):
-    """Group the words by length."""
+    """Group the words by length.
+
+    Positional arguments
+    candidates -- a list with the possible words to make the anagrams
+    """
     candidates = sorted(candidates, key=len)
     res = {}
     grouped = []
@@ -93,7 +118,12 @@ def group_by_len(candidates):
     return res
 
 def shrink_partitions(expression, grouped):
-    """Remove all partitions that dont't need to be checked."""
+    """Remove all partitions that dont't need to be checked.
+
+    Positional arguments
+    expression -- the expression to be used for the search of anagrams
+    grouped -- dictionary with the word matches, grouped by length
+    """
     partitions = list(accel_asc(len(expression)))
     available = list(grouped.keys())
     res = []
@@ -133,7 +163,12 @@ def shrink_partitions(expression, grouped):
     return res
 
 def not_solo(expression, grouped):
-    """Return length groups that don't include all the letters in expression."""
+    """Return length groups that don't include all the letters in expression.
+
+    Positional arguments
+    expression -- the expression to be used for the search of anagrams
+    grouped -- dictionary with the word matches, grouped by length
+    """
     in_expression = set(expression)
     res = []
     for k, g in grouped.items():
@@ -146,7 +181,12 @@ def not_solo(expression, grouped):
 
 def shrink_search_field(expression, words_file):
     """Shrink the search field for possible anagrams, before considering
-    partitions of expression."""
+    partitions of expression.
+
+    Positional arguments
+    expression -- the expression to be used for the search of anagrams
+    words_file -- path to the file with words
+    """
     res = []
     for w in words_file:
         w = w.strip()
@@ -159,7 +199,12 @@ def shrink_search_field(expression, words_file):
     return res
 
 def sieve_number_of_letters(expression, word):
-    """Check if a word is contained in expression. Remove those that can't be."""
+    """Check if a word is contained in expression. Remove those that can't be.
+
+    Positional arguments
+    expression -- the expression to be used for the search of anagrams
+    word -- the word to be compared
+    """
     expression_quant = quant_letters(expression)
     word_quant = quant_letters(word)
     for k, v in word_quant.items():
@@ -168,33 +213,53 @@ def sieve_number_of_letters(expression, word):
     return True
 
 def quant_letters(a_word):
-    """Return a mapping of the number of the different letters in a word."""
+    """Return a mapping of the number of the different letters in a word.
+
+    Positional arguments
+    a_word -- the word to be mapped
+    """
     keys = set(a_word)
     quanto = {k:a_word.count(k) for k in keys}
     return quanto
 
 def sieve_remaining(expression, word):
-    """Remove any word that has letters that are not in expression."""
+    """Remove any word that has letters that are not in expression.
+
+    Positional arguments
+    expression -- the expression to be used for the search of anagrams
+    word -- the word to be evaluated
+    """
     letters = set(expression)
     uppercase = set(string.ascii_uppercase)
     remaining = uppercase - letters
     return not any((l in remaining) for l in word)
 
 def sieve_starts_with(expression, word):
-    """Return only words that begin with one of the letters in expression."""
+    """Return only words that begin with one of the letters in expression.
+
+    Positional arguments
+    expression -- the expression to be used for the search of anagrams
+    word -- the word to be evaluated
+    """
     letters = set(expression)
     return any(word.startswith(l) for l in letters)
 
 def sieve_less_or_equal(expression, word):
-    """Exclude words that are lengthier than expression."""
-    return len(expression) >= len(word)
+    """Exclude words that are lengthier than expression.
 
+    Positional arguments
+    expression -- the expression to be used for the search of anagrams
+    word -- the word to be evaluated
+    """
+    return len(expression) >= len(word)
 
 # Peguei de https://jeromekelleher.net/generating-integer-partitions.html
 def accel_asc(n):
     """Yield all partitions of a given integer.
-
     E.g.: The partitions of three are: 1,1,1; 1,2; 2,1; 3
+
+    Positional arguments
+    n -- the integer to be used
     """
     a = [0 for i in range(n + 1)]
     k = 1
