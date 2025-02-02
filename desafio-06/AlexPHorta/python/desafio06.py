@@ -294,7 +294,6 @@ def accel_asc(n):
 if __name__ == "__main__":
 
     import gettext
-    import sys
 
     def translate(text):
         text = text.replace("usage", "modo de usar")
@@ -332,4 +331,3 @@ if __name__ == "__main__":
             print_anagrams(sys.argv[1], WORDS)
         except Exception as exc:
             raise ValueError(f"{exc}") from exc
-
