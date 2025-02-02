@@ -209,7 +209,9 @@ class TestPrep(unittest.TestCase):
         self.assertEqual(prep("A"), "A")
         self.assertEqual(prep("vermelho"), "VERMELHO")
         self.assertEqual(prep("VERMELHO"), "VERMELHO")
-        self.assertEqual(prep("VERMELHO!"), "VERMELHO")
+        self.assertEqual(prep("oi gente"), "OIGENTE")
+        self.assertRaises(SystemExit, prep, "VERMELHO!")
+        self.assertRaises(SystemExit, prep, "123456")
 
 if __name__ == "__main__":
 
