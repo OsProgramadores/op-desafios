@@ -20,14 +20,14 @@ commandInline();
 
 function pullData(path) {
     return new Promise((resolve, reject) => {
-        let arrayItens = [];
+        const arrayItens = [];
         const reader = fs.createReadStream(path, {
             highWaterMark: 512000000,
             encoding: "utf-8"
         });
 
         reader.on("error", (err) => {
-            console.log('Arquivo não encontrado!')
+            console.log("Arquivo não encontrado!");
             reject(err);
         });
 
