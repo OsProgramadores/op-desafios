@@ -4,10 +4,8 @@ from collections import Counter
 def expressao_valida(expression):
     """
     Verifica se a expressão contém apenas letras de A a Z e espaços.
-    
     Args:
         expression (str): A string a ser validada.
-    
     Returns:
         bool: True se for válida, False caso contrário.
     """
@@ -16,10 +14,8 @@ def expressao_valida(expression):
 def contagens_de_letras(expression):
     """
     Conta a ocorrência de cada letra na expressão, ignorando espaços.
-    
     Args:
         expression (str): A string de entrada.
-    
     Returns:
         Counter: Um dicionário com a contagem de cada letra.
     """
@@ -29,7 +25,6 @@ def encontrar_anagramas(expressao_parametro, palavras_validas,
                          parcial=None, contagem_restante=None, resultados=None):
     """
     Encontra e imprime os anagramas possíveis da expressão dada uma lista de palavras.
-    
     Args:
         expressao_parametro (str): A string original.
         palavras_validas (dict): Um dicionário de palavras válidas e suas contagens de letras.
@@ -67,7 +62,6 @@ def encontrar_anagramas(expressao_parametro, palavras_validas,
 def possiveis_anagramas(expressao_parametro, lista_de_palavras_parametro):
     """
     Filtra as palavras possíveis e inicia a busca por anagramas.
-    
     Args:
         expressao_parametro (str): A string original.
         lista_de_palavras_parametro (list): Lista de palavras disponíveis.
