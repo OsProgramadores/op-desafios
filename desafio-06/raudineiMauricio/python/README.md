@@ -23,9 +23,10 @@ Este programa Python gera anagramas para uma expressão fornecida pelo usuário,
 
 ```bash
 python anagrama.py "oi gente"
+python anagrama.py "vermelho"
 
 Dependências
 Python 3.x
-Módulos sys e itertools (já incluídos na instalação padrão do Python).
+Módulos sys e collections
 
 Ambos o exemplo foi extraído do texto original do desafio no site [OsProgramadores](https://osprogramadores.com/desafios/d06/)
