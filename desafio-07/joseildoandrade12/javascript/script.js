@@ -23,8 +23,8 @@ commandInline();
 async function pushLines(path, quantityLines) {
     const size = 512000;
     try {
-        for (let finallyLine = quantityLines; quantityLines > 0; finallyLine -= size) {
-            const arrayLines = await pullData(path, quantityLines, finallyLine);
+        for (let initLines = quantityLines; initLines > 0; initLines -= size) {
+            const arrayLines = await pullData(path, quantityLines, initLines);
             arrayLines.reverse();
             arrayLines.forEach((line) => {
                 console.log(line);
