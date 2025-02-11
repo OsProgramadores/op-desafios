@@ -3,13 +3,13 @@ from collections import Counter
 
 def expressao_valida(expression):
     """
-    Verifica se a expressão contém apenas letras de A a Z e espaços.
+    Verifica se a expressão contém apenas letras maiúsculas e espaços.
     Args:
-        expression (str): A string a ser validada.
+        expressao: A string a ser validada.
     Returns:
-        bool: True se for válida, False caso contrário.
+        True se a expressão for válida, False caso contrário.
     """
-    return all('A' <= char <= 'Z' or char == ' ' for char in expression)
+    return all(char.isupper() or char.isspace() for char in expression)
 
 def contagens_de_letras(expression):
     """
@@ -19,7 +19,17 @@ def contagens_de_letras(expression):
     Returns:
         Counter: Um dicionário com a contagem de cada letra.
     """
-    return Counter(char for char in expression if 'A' <= char <= 'Z')
+    return Counter(char for char in expression)
+
+def todas_letras_iguais(expression):
+    """
+    Verifica se todas as letras na expressão são iguais.
+    Args:
+        expression (str): A string de entrada.
+    Returns:
+        bool: True se todas as letras forem iguais, False caso contrário.
+    """
+    return len(set(expression.replace(" ", ""))) == 1
 
 def encontrar_anagramas(expressao_parametro, palavras_validas,
                          parcial=None, contagem_restante=None, resultados=None):
@@ -34,10 +44,13 @@ def encontrar_anagramas(expressao_parametro, palavras_validas,
     """
     if contagem_restante is None:
         contagem_restante = contagens_de_letras(expressao_parametro)
+
     if parcial is None:
         parcial = []
+
     if resultados is None:
         resultados = set()
+
     # Se não há mais letras para combinar, imprime o anagrama encontrado
     if not contagem_restante:
         anagrama = " ".join(sorted(parcial))
@@ -45,14 +58,23 @@ def encontrar_anagramas(expressao_parametro, palavras_validas,
             print(anagrama)
             resultados.add(anagrama)
         return
+    #Se todas as letras forem iguais.
+    if todas_letras_iguais(expressao_parametro):
+        letra = expressao_parametro[0]
+        if letra in palavras_validas and letra not in resultados:
+            print(letra)
+            resultados.add(letra)
+            return
+
     # Percorre as palavras válidas e verifica se podem ser usadas na combinação
     for palavra, contagem_palavra in palavras_validas.items():
         if all(contagem_palavra[char] <= contagem_restante.get(char, 0)
             for char in contagem_palavra):
             nova_contagem = contagem_restante.copy()
             # Reduz a contagem das letras da palavra usada
-            for char in palavra:
-                nova_contagem[char] -= 1
+
+            for char in list(nova_contagem):
+                nova_contagem[char] -= contagem_palavra[char]
                 if nova_contagem[char] == 0:
                     del nova_contagem[char]
             # Chamada recursiva com a nova contagem e palavra adicionada
@@ -76,7 +98,7 @@ def possiveis_anagramas(expressao_parametro, lista_de_palavras_parametro):
     # Filtra palavras que podem ser usadas nos anagramas
     palavras_validas = {
         word: contagens_de_letras(word)
-        for word in lista_de_palavras_parametro
+        for word in set(lista_de_palavras_parametro)
         if len(word) <= tamanho_expressao and all(char in cont_letras for char in word)
     }
     # Inicia a busca por anagramas
