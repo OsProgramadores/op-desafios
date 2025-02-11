@@ -1,16 +1,18 @@
 const fs = require("fs");
+const readline = require("readline");
 
 async function commandInline() {
     const command = process.argv.slice(2);
     if (command[0] === "tac") {
-        try {
-            const arr = await pullData(command[1]);
-            arr.reverse();
-            for (const item of arr) {
-                console.log(item);
+        if (command[1]) {
+            try {
+                const quantityLines = await countingLines(command[1]);
+                await pushLines(command[1], quantityLines);
+            } catch (err) {
+                console.error(err);
             }
-        } catch (err) {
-            console.error(err);
+        } else {
+            console.log("Use: node script.js tac <caminho_do_arquivo>");
         }
     } else {
         console.log("Comando inválido");
@@ -18,12 +20,29 @@ async function commandInline() {
 }
 commandInline();
 
-function pullData(path) {
+async function pushLines(path, quantityLines) {
+    const size = 512000;
+    try {
+        for (let finallyLine = quantityLines; quantityLines > 0; finallyLine -= size) {
+            const arrayLines = await pullData(path, quantityLines, finallyLine);
+            arrayLines.reverse();
+            arrayLines.forEach((line) => {
+                console.log(line);
+            });
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+function pullData(path, quantityLines, finallyLine) {
     return new Promise((resolve, reject) => {
         const arrayItens = [];
-        const reader = fs.createReadStream(path, {
-            highWaterMark: 512000000,
-            encoding: "utf-8"
+        let indexLine = 0;
+        const fileStream = fs.createReadStream(path);
+        const reader = readline.createInterface({
+            input: fileStream,
+            crlfDelay: Infinity
         });
 
         reader.on("error", (err) => {
@@ -31,20 +50,38 @@ function pullData(path) {
             reject(err);
         });
 
-        reader.on("data", (chunck) => {
-            const lineReset = breakText(chunck);
-            arrayItens.push(...lineReset);
+        reader.on("line", (line) => {
+            indexLine++;
+            if (indexLine > finallyLine && indexLine < quantityLines) {
+                arrayItens.push(line);
+            }
         });
 
-        reader.on("end", () => {
+        reader.on("close", () => {
             resolve(arrayItens);
         });
     });
 }
 
-const breakText = (text) => {
-    return text
-        .trim()
-        .split(/\n/)
-        .map((item) => item.trim());
-};
+async function countingLines(path) {
+    return new Promise((resolve, reject) => {
+        let quantityLine = 0;
+        const fileStream = fs.createReadStream(path, { encoding: "utf8" });
+        const reader = readline.createInterface({
+            input: fileStream,
+            crlfDelay: Infinity
+        });
+        reader.on("error", (err) => {
+            console.log("Arquivo não encontrado!");
+            reject(err);
+        });
+
+        reader.on("line", () => {
+            quantityLine++;
+        });
+
+        reader.on("close", () => {
+            resolve(quantityLine);
+        });
+    });
+}
