@@ -3,25 +3,21 @@ const readline = require("readline");
 
 async function commandInline() {
     const command = process.argv.slice(2);
-    if (command[0] === "tac") {
-        if (command[1]) {
-            try {
-                const quantityLines = await countingLines(command[1]);
-                await pushLines(command[1], quantityLines);
-            } catch (err) {
-                console.error(err);
-            }
-        } else {
-            console.log("Use: node script.js tac <caminho_do_arquivo>");
+    if (command[0]) {
+        try {
+            const quantityLines = await countingLines(command[0]);
+            await pushLines(command[0], quantityLines);
+        } catch (err) {
+            console.error(err);
         }
     } else {
-        console.log("Comando inválido");
+        console.log("Use: node script.js <caminho_do_arquivo>");
     }
 }
 commandInline();
 
 async function pushLines(path, quantityLines) {
-    const size = 512000;
+    const size = 400000;
     try {
         for (let initLines = quantityLines; initLines > 0; initLines -= size) {
             const arrayLines = await pullData(path, quantityLines, initLines);

@@ -27,5 +27,5 @@ cd desafio-07/joseildoandrade12/javascript
 Depois disso, ainda no terminal digite o seguinte para inicializar o código:
 
 ```bash
-node script.js tac [arquivo]
+node script.js [arquivo]
 ```
