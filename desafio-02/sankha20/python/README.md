@@ -7,9 +7,10 @@ Para rodar, use Python na versão 3.12 ou superior e utilize o comando:
 
 ## Como funciona
 ```
-    if n in primes: return True
-    if n < 2: return False
-    if n % 2 == 0: return False
+if n in primes:
+    return True
+if n < 2 or n % 2 == 0:
+    return False
 ```
 Realiza testes rápidos para detectar se é ou não primo
 

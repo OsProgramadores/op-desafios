@@ -1,9 +1,10 @@
 primes = [2]
-def is_prime(n: int) -> bool:    
-    if n in primes: return True
-    if n < 2: return False
-    if n % 2 == 0: return False
-    
+def is_prime(n: int) -> bool:
+    if n in primes:
+        return True
+    if n < 2 or n % 2 == 0:
+        return False
+
     for prime in primes:
         if prime > n ** 0.5:
             break
