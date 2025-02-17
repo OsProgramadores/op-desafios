@@ -2,7 +2,7 @@
 Programa que irá listar todos os números primos até 10.000
 
 ## Como rodar
-Para rodar, use Python na versão 3.12 ou superior e utilize o comando: 
+Para rodar, use Python na versão 3.12 ou superior e utilize o comando:
 `python desafio-02.py`
 
 ## Como funciona
@@ -16,7 +16,7 @@ Realiza testes rápidos para detectar se é ou não primo
 
 ```
 if prime > n ** 0.5:
-``` 
+```
 
 Seguindo a teoria dos pares de divisores, por exemplo os de 100:
 * 1 e 100
