@@ -1,6 +1,5 @@
 const fs = require("fs");
 const readline = require("readline");
-const { start } = require("repl");
 
 async function commandInline() {
     const command = process.argv.slice(2);
