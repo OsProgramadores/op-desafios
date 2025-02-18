@@ -35,19 +35,42 @@ Se sim, imprime o número na tela
 
 ```
 def read_int() -> int:
-    try:
-        string = input("> ")
-        assert string.isnumeric(), "Apenas números naturais"
+    while True:
+        try:
+            string = input("Digite um número natural [S ou 0 para sair]: ")
 
-        return int(string)
-    except Exception as error:
-        print(error)
+            if string.upper() == "S":
+                return 0
 
-    return None
+            assert string.isnumeric(), "Apenas números naturais"
+
+            return int(string)
+        except AssertionError as error:
+            print(error)
 ```
 Função que lê uma string e verifica se os caracteres são numéricos.
 Neste caso, isso significa que não aceitará letras, símbolos, pontos, sinais, etc.
 
 Se sim, a converte em inteiros e retorna.
 
-Se não, lança um erro e encerra o programa.
+Se não, dá a opção para o usuário tentar novamente ou sair do programa, digitando "S" ou 0 (zero).
+
+
+```
+def main():
+    start = read_int()
+    if not start:
+        return
+
+    end = read_int()
+    if not end:
+        return
+
+    if start > end:
+        start, end = end, start
+
+    all_palindromes_between(start, end)
+```
+Função que lê as entradas do usuário e as valida.
+
+Se as entradas estiverem corretas e não forem nulas, as ordena e roda o algoritmo principal para gerar os palíndromos.
