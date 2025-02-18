@@ -9,11 +9,28 @@ def all_palindromes_between(start: int, end: int):
 
 
 def read_int() -> int:
-    string = input("> ")
-    assert string.isnumeric(), "Apenas números naturais"
+    try:
+        string = input("> ")
+        assert string.isnumeric(), "Apenas números naturais"
 
-    return int(string)
+        return int(string)
+    except AssertionError as error:
+        print(error)
+
+    return None
+
+
+def main():
+    start = read_int()
+    if not start:
+        return
+
+    end = read_int()
+    if not end:
+        return
+
+    all_palindromes_between(start, end)
 
 
 if __name__ == "__main__":
-    all_palindromes_between(read_int(), read_int())
+    main()

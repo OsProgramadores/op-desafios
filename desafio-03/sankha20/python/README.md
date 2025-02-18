@@ -35,14 +35,19 @@ Se sim, imprime o número na tela
 
 ```
 def read_int() -> int:
-    string = input("> ")
-    assert string.isnumeric(), "Apenas números naturais"
+    try:
+        string = input("> ")
+        assert string.isnumeric(), "Apenas números naturais"
 
-    return int(string)
+        return int(string)
+    except Exception as error:
+        print(error)
+
+    return None
 ```
 Função que lê uma string e verifica se os caracteres são numéricos.
 Neste caso, isso significa que não aceitará letras, símbolos, pontos, sinais, etc.
 
 Se sim, a converte em inteiros e retorna.
 
-Se não, lança um erro.
+Se não, lança um erro e encerra o programa.
