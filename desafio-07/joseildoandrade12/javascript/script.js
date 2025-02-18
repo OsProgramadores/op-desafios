@@ -1,5 +1,6 @@
 const fs = require("fs");
 const readline = require("readline");
+const { start } = require("repl");
 
 async function commandInline() {
     const command = process.argv.slice(2);
@@ -17,21 +18,20 @@ async function commandInline() {
 commandInline();
 
 async function pushLines(path, quantityLines) {
-    const size = 400000;
-    try {
-        for (let initLines = quantityLines; initLines > 0; initLines -= size) {
-            const arrayLines = await pullData(path, quantityLines, initLines);
+    const size = 512000;
+    for (let finallyLine = quantityLines; finallyLine > 0; finallyLine -= size) {
+        try {
+            const initLines = Math.max(finallyLine - size + 1, 1);
+            const arrayLines = await pullData(path, initLines, finallyLine);
             arrayLines.reverse();
-            arrayLines.forEach((line) => {
-                console.log(line);
-            });
+            console.log(arrayLines.join("\n"));
+        } catch (error) {
+            console.log(error);
         }
-    } catch (error) {
-        console.log(error);
     }
 }
 
-function pullData(path, quantityLines, finallyLine) {
+function pullData(path, initLines, finallyLine) {
     return new Promise((resolve, reject) => {
         const arrayItens = [];
         let indexLine = 0;
@@ -48,7 +48,7 @@ function pullData(path, quantityLines, finallyLine) {
 
         reader.on("line", (line) => {
             indexLine++;
-            if (indexLine > finallyLine && indexLine < quantityLines) {
+            if (indexLine >= initLines && indexLine <= finallyLine) {
                 arrayItens.push(line);
             }
         });
@@ -62,7 +62,7 @@ function pullData(path, quantityLines, finallyLine) {
 async function countingLines(path) {
     return new Promise((resolve, reject) => {
         let quantityLine = 0;
-        const fileStream = fs.createReadStream(path, { encoding: "utf8" });
+        const fileStream = fs.createReadStream(path);
         const reader = readline.createInterface({
             input: fileStream,
             crlfDelay: Infinity
