@@ -42,7 +42,7 @@ def read_int() -> int:
             if string.upper() == "S":
                 return 0
 
-            assert string.isnumeric(), "Apenas números naturais"
+            assert string.isnumeric(), "Por favor, digite apenas números naturais."
 
             return int(string)
         except AssertionError as error:
