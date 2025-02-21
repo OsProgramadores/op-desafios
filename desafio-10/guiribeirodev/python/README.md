@@ -1,6 +1,6 @@
 # Versão do Python :snake:
 
-Utilizado a versão mais recente do Python (3,13), mas deve funcionar em qualquer versão 3.x
+Utilizado a versão Python 3.13.
 
 # Como rodar o programa :wrench:
 
