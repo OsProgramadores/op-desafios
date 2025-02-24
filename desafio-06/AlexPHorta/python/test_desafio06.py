@@ -53,7 +53,7 @@ class TestFindMatches(unittest.TestCase):
 
     def test_return_with_no_anagrams(self):
         with open(WORDS) as file:
-            resp = functools.reduce(operator.iconcat, list(find_matches("XXXXXX", file)), [])
+            resp = functools.reduce(operator.iconcat, list(find_matches("X", file)), [])
             self.assertEqual(resp, [])
 
     def test_return_with_vermelho(self):
@@ -65,6 +65,19 @@ class TestFindMatches(unittest.TestCase):
                 ["OHM", "REVEL"], ["LEVER", "OHM"], ["ELM", "HOVER"],
                 ["HOLM", "VEER"], ["HELM", "OVER"], ["HELM", "ROVE"]])
 
+    def test_return_with_goa(self):
+        self.maxDiff = None
+        with open(WORDS) as file:
+            resp = functools.reduce(operator.iconcat, list(find_matches("GOA", file)), [])
+            self.assertCountEqual(resp,
+                [["A", "GO"], ["AGO"], ["GOA"]])
+
+    def test_return_with_aaa(self):
+        self.maxDiff = None
+        with open(WORDS) as file:
+            resp = functools.reduce(operator.iconcat, list(find_matches("AAA", file)), [])
+            self.assertCountEqual(resp,
+                [["A"]])
 
 class TestFindInPartition(unittest.TestCase):
 
@@ -78,9 +91,19 @@ class TestFindInPartition(unittest.TestCase):
                                             [2, 3, 3],
                                             VERMELHO_GROUPED),
                          [["ELM", "HO", "REV"], ["ELM", "OH", "REV"]])
+        self.assertEqual(find_in_partition("GOA",
+                                            [1, 2],
+                                            {1: ["A"], 2: ["GO"], 3: ["AGO", "GOA"]}),
+                         [["A", "GO"]])
 
 
 class TestGroupByLen(unittest.TestCase):
+
+    def test_goa_group_len(self):
+        self.maxDiff = None
+        with open(WORDS) as file:
+            candidates = shrink_search_field("GOA", file)
+            self.assertEqual(group_by_len(candidates), {1: ["A"], 2: ["GO"], 3: ["AGO", "GOA"]})
 
     def test_vermelho_group_len(self):
         self.maxDiff = None
@@ -129,6 +152,10 @@ class TestShrinkSearchField(unittest.TestCase):
                 "MERLE", "MOE", "MOHR", "MOLE", "MORE", "MOREL", "MOVE",
                 "OLE", "OR", "ORE", "REEL", "ROLE", "ROME",])
 
+    def test_return_with_goa(self):
+        self.maxDiff = None
+        with open(WORDS) as file:
+            self.assertCountEqual(shrink_search_field("GOA", file), ["A", "GO", "AGO", "GOA"])
 
 class TestSieveDuplicateLetters(unittest.TestCase):
 
@@ -215,4 +242,4 @@ class TestPrep(unittest.TestCase):
 
 if __name__ == "__main__":
 
-    unittest.main()
+    unittest.main(verbosity=3)

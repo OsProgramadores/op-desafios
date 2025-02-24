@@ -73,14 +73,19 @@ def find_in_partition(expression, partition, grouped):
     grouped -- All possible anagrams grouped by length
     """
     letters_in_expression = quant_letters(expression)
-    group_lengths = [range(len(grouped[p])) for p in partition]
+    group_lengths = []
+    res = []
+
+    for p in partition:
+        if (gp := grouped.get(p)) is not None:
+            group_lengths.append(range(len(gp)))
+        else:
+            return res
 
     group_letters = {}
     for k, v in grouped.items():
         letters = [quant_letters(w) for w in v]
         group_letters.update({k:letters})
-
-    res = []
 
     for g in itertools.product(*group_lengths):
         letters_in_prod = dict(letters_in_expression)
@@ -133,6 +138,12 @@ def shrink_partitions(expression, grouped):
     """
     partitions = list(accel_asc(len(expression)))
     available = list(grouped.keys())
+    letters = set(expression)
+
+    # Ugly hack to deal with the 'AAA' case.
+    if len(letters) == 1: # It obviously is the letter A...
+        return [[1]]
+
     res = []
 
     # If a partition includes words whose length is not in one of the available
@@ -148,7 +159,7 @@ def shrink_partitions(expression, grouped):
     no_solo = not_solo(expression, grouped)
 
     for r in res:
-        if set(r) <= set(no_solo):
+        if set(r) < set(no_solo):
             rem.append(r)
 
     # If there's a group 1, remove all partitions that have more ones than the length of group 1.
@@ -159,6 +170,16 @@ def shrink_partitions(expression, grouped):
         for r in res:
             if r.count(1) > len_ones:
                 rem.append(r)
+
+    # If a partition group doesn't include all letters in expression, remove it
+    for r in res:
+        letters_in_partition_group = set()
+        for p in set(r):
+            words = grouped[p]
+            for word in words:
+                letters_in_partition_group.update(l for l in word)
+        if letters_in_partition_group < letters:
+            rem.append(r)
 
     for r in rem:
         try:
