@@ -230,8 +230,11 @@ class TestSieveLessOrEqual(unittest.TestCase):
 class TestPrep(unittest.TestCase):
     """If expression is not only uppercase characters, convert it."""
 
+    def test_prep_empty_string(self):
+        with self.assertRaises(TypeError):
+            prep("")
+
     def test_prep(self):
-        self.assertEqual(prep(""), "")
         self.assertEqual(prep("a"), "A")
         self.assertEqual(prep("A"), "A")
         self.assertEqual(prep("vermelho"), "VERMELHO")

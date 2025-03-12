@@ -31,7 +31,7 @@ def prep(expression):
     expression -- The expression to be analysed
     """
     if expression == "":
-        return expression
+        raise TypeError("Não é possível buscar anagramas de uma expressão vazia. Abortando.")
 
     _expression = expression
     res = ""
@@ -54,6 +54,10 @@ def find_matches(expression, words_file):
     expression -- The expression to be analysed
     words_file -- The path to the file with words
     """
+    if expression == "":
+        raise TypeError("Não é possível buscar anagramas a partir de uma "
+                        "expressão vazia. Abortando.")
+
     candidates = shrink_search_field(expression, words_file)
     res = []
     grouped_by_len = group_by_len(candidates)
