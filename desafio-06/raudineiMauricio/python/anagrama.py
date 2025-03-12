@@ -1,6 +1,9 @@
 import sys
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 3eddca4fc25c066e3dd30610da081d48a38f4b90
 from collections import Counter
 
 def expressao_valida(expression):
@@ -106,6 +109,7 @@ def possiveis_anagramas(expressao_parametro, lista_de_palavras_parametro):
     # Inicia a busca por anagramas
     encontrar_anagramas(expressao_parametro, palavras_validas)
 
+<<<<<<< HEAD
 =======
 import itertools
 =======
@@ -242,12 +246,15 @@ def possiveis_anagramas(expressao_parametro, lista_de_palavras_parametro):
 >>>>>>> 1e0c6a5 (Desafio 06 feito por @RaudineiMauricio)
 =======
 >>>>>>> 921f710 (Otimizei a impressão do meu código, e atualei o README.MD)
+=======
+>>>>>>> 3eddca4fc25c066e3dd30610da081d48a38f4b90
 if __name__ == "__main__":
     if len(sys.argv) != 2:
         print("Uso: python anagrama.py <expressão>", file=sys.stderr)
         sys.exit(1)
 
     expressao_principal = sys.argv[1]
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     try:
@@ -264,10 +271,16 @@ if __name__ == "__main__":
         with open("words.txt", "r", encoding="utf-8") as f:
             lista_de_palavras_principal = [line.strip() for line in f if line.strip().isalpha()]
 >>>>>>> 921f710 (Otimizei a impressão do meu código, e atualei o README.MD)
+=======
+    try:
+        with open("words.txt", "r", encoding="utf-8") as f:
+            lista_de_palavras_principal = [line.strip() for line in f if line.strip().isalpha()]
+>>>>>>> 3eddca4fc25c066e3dd30610da081d48a38f4b90
     except FileNotFoundError:
         print("Erro: Arquivo words.txt não encontrado.", file=sys.stderr)
         sys.exit(1)
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
     possiveis_anagramas(expressao_principal, lista_de_palavras_principal)
@@ -277,3 +290,6 @@ if __name__ == "__main__":
 =======
     possiveis_anagramas(expressao_principal, lista_de_palavras_principal)
 >>>>>>> 921f710 (Otimizei a impressão do meu código, e atualei o README.MD)
+=======
+    possiveis_anagramas(expressao_principal, lista_de_palavras_principal)
+>>>>>>> 3eddca4fc25c066e3dd30610da081d48a38f4b90

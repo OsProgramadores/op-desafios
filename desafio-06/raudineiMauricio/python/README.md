@@ -21,17 +21,6 @@ Este programa Python gera anagramas para uma expressão fornecida pelo usuário,
 
 ## Exemplo
 
-```bash
-python anagrama.py "oi gente"
-<<<<<<< HEAD
-<<<<<<< HEAD
-python anagrama.py "vermelho"
-
-Dependências
-Python 3.x
-Módulos sys e collections
-=======
-
 Dependências
 Python 3.x
 Módulos sys e itertools (já incluídos na instalação padrão do Python).
@@ -43,5 +32,7 @@ Dependências
 Python 3.x
 Módulos sys e collections
 >>>>>>> 921f710 (Otimizei a impressão do meu código, e atualei o README.MD)
+=======
+>>>>>>> 3eddca4fc25c066e3dd30610da081d48a38f4b90
 
 Ambos o exemplo foi extraído do texto original do desafio no site [OsProgramadores](https://osprogramadores.com/desafios/d06/)
