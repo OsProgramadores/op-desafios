@@ -14,35 +14,40 @@ class TuringMachine:
 
 
     def _read_rules(self, rules_file):
-        rules = []
+        rules = {}
+
         with open(rules_file, "r") as file:
             lines = file.read().splitlines()
 
         for rule in lines:
             rule = rule.split(";")[0].strip()
             rule_parts = rule.split(" ")
-            if rule_parts and len(rule_parts) == 5:
-                rules.append({
-                    "current_state": rule_parts[0],
-                    "current_symbol": rule_parts[1],
-                    "new_symbol": rule_parts[2],
-                    "direction": rule_parts[3],
-                    "new_state": rule_parts[4],
-                })
+
+            if len(rule_parts) == 5:
+                current_state, current_symbol, new_symbol, direction, new_state = rule_parts
+
+                if current_state not in rules:
+                    rules[current_state] = {}
+
+                rules[current_state][current_symbol] = {
+                    "new_symbol": new_symbol,
+                    "direction": direction,
+                    "new_state": new_state,
+                }
 
         self._rules = rules
 
 
     def _match_rule(self, state, symbol):
-        for rule in self._rules:
-            if rule["current_state"] == state and rule["current_symbol"] == symbol:
-                return rule
+        if state in self._rules and symbol in self._rules[state]:
+            return self._rules[state][symbol]
 
-        for rule in self._rules:
-            if (rule["current_state"] == state or rule["current_state"] == "*") and (
-                rule["current_symbol"] == symbol or rule["current_symbol"] == "*"
-            ):
-                return rule
+
+        if "*" in self._rules and symbol in self._rules["*"]:
+            return self._rules["*"][symbol]
+
+        if state in self._rules and "*" in self._rules[state]:
+            return self._rules[state]["*"]
 
         return None
 
@@ -88,6 +93,7 @@ class TuringMachine:
 
 
 def main(datafile):
+
     with open(datafile, "r") as file:
         programs = file.read().splitlines()
 
