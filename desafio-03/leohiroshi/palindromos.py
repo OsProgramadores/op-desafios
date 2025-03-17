@@ -3,7 +3,7 @@ num02 = int(input('Digite o segundo valor: '))
 palindromos = []
 
 for i in range(num01, num02 + 1):
-    if str(i) == str(i)[::-1]: 
+    if str(i) == str(i)[::-1]:
         palindromos.append(str(i))
 
 if palindromos:
