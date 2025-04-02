@@ -19,7 +19,7 @@ async function readFileByLine(file) {
     const fileStream = fs.createReadStream(file);
     const rl = readline.createInterface({
         input: fileStream,
-        crlfDelay: Infinity,
+        crlfDelay: Infinity
     });
 
     rl.on("line", (line) => {
