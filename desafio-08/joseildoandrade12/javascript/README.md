@@ -1,6 +1,6 @@
 ## Desafio 08: Frações simples
 
-Uma fração simples é uma fração que representa a mesma quantidade que outra fração, mas com numerador e denominador menores. 
+Uma fração simples é uma fração que representa a mesma quantidade que outra fração, mas com numerador e denominador menores.
 
 ## Proposta:
 
