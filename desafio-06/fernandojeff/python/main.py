@@ -3,7 +3,7 @@ import itertools
 # Função para ler o arquivo de palavras
 def carregar_palavras():
     with open("words.txt") as arquivo:
-        palavras_arquivo = arquivo.read().split()  
+        palavras_arquivo = arquivo.read().split()
     return set(palavras_arquivo)  # Retorna um conjunto de palavras únicas
 
 # Função para encontrar anagramas
@@ -16,7 +16,7 @@ def encontrar_anagramas(expressao, palavras):
     for tamanho in range(1, len(expressao) + 1):
         for combinacao in itertools.permutations(expressao, tamanho):
             palavra = "".join(combinacao)  # Junta as letras
-            if palavra in palavras: 
+            if palavra in palavras:
                 anagramas_resultado.add(palavra)
 
     return anagramas_resultado
