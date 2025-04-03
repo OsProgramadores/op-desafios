@@ -34,7 +34,8 @@ function valueReset(value) {
 
 function validateValues(value) {
     if (value.length === 1) return value[0];
-    if (+value[0] === 0 || +value[1] === 0) return "ERR";
+    if ((+value[0] === 0 && +value[1] === 0) || +value[1] === 0) return "ERR";
+    if (+value[0] === 0) return 0
     return divisionValues(value);
 }
 
