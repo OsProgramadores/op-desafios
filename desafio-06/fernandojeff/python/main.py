@@ -11,14 +11,14 @@ def encontrar_anagramas(expressao, palavras):
     expressao = expressao.upper()  # Converte tudo para maiúsculas
     expressao = "".join(letra for letra in expressao if letra.isalpha())  # Remove espaços e símbolos
     anagramas = set()
-    
+
     # Testa diferentes combinações de letras
     for tamanho in range(1, len(expressao) + 1):
         for combinacao in itertools.permutations(expressao, tamanho):
             palavra = "".join(combinacao)  # Junta as letras para formar palavras
             if palavra in palavras:  # Verifica se a palavra existe na lista
                 anagramas.add(palavra)
-    
+
     return anagramas
 
 # Pede uma expressão ao usuário
