@@ -5,7 +5,6 @@ for (let i = 1; i <= 10000; i++) {
 };
 
 const cousinNumber = numbers.filter((num) => {
-
     if (num > 1) {
         let count = 0;
         for (let i = 1; i <= num; i++) {
