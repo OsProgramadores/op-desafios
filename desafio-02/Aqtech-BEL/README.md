@@ -13,4 +13,4 @@ Teste o seu programa localmente e verifique que está operando de forma desejada
 Se o desafio necessitar de validação (desafio-08 em diante), siga os procedimentos de validação descritos acima.
 Crie um Pull Request (PR) seguindo as instruções na documentação no repositório op-desafios.
 Envie o PR para revisão. Um dos admins irá aprovar o PR ou requisitar modificações.
-Após o PR ter sido aprovado, a pontuação será automaticamente contabilizada na página de hi-scores a cada 15 minutos.
+Após o PR ter sido aprovado, a pontuação será automaticamente contabilizada na página de hi-scores a cada 15 minutos. 

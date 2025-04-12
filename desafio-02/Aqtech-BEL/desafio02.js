@@ -17,4 +17,4 @@ const cousinNumber = numbers.filter((num) => {
     return false;
 });
 
-console.log(cousinNumber);
+console.log(cousinNumber); 
