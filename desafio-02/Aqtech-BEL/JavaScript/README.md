@@ -1,16 +1,21 @@
-<h1>Listando números primos.</h1>
-</br>
-Escreva um programa para listar todos os números primos entre 1 e 10000, na linguagem de sua preferência.
-</br>
-Se não souber por qual linguagem começar, recomendamos a leitura deste post no nosso site.
-</br>
-Pontuação 
-20 pontos.
-</br>
-<h2>Enviando os resultados</h2> 
-</br>
-Teste o seu programa localmente e verifique que está operando de forma desejada.
-Se o desafio necessitar de validação (desafio-08 em diante), siga os procedimentos de validação descritos acima.
-Crie um Pull Request (PR) seguindo as instruções na documentação no repositório op-desafios.
-Envie o PR para revisão. Um dos admins irá aprovar o PR ou requisitar modificações.
-Após o PR ter sido aprovado, a pontuação será automaticamente contabilizada na página de hi-scores a cada 15 minutos. 
+    <h1>Desafio 02 - Os Programadores</h1>
+    <p><strong>Autor:</strong> Aqtech-BEL</p>
+    <p><strong>Proposto por:</strong> <a href="https://github.com/OsProgramadores" target="_blank">Os Programadores</a></p>
+
+    <h2>📌 Descrição</h2>
+    <p>Este desafio consiste em identificar e listar todos os números primos entre 1 e 10.000. O algoritmo percorre um intervalo de números e utiliza uma função de filtragem para determinar se cada número é primo, com base na quantidade de divisores inteiros positivos.</p>
+
+    <h2>🧠 Lógica utilizada</h2>
+    <p>Um número é considerado primo se for maior que 1 e tiver exatamente dois divisores: 1 e ele mesmo. O algoritmo percorre o intervalo de 1 a 10.000, testa cada número e conta quantos divisores ele possui. Se tiver apenas dois, ele é incluído na lista de saída.</p>
+
+    <h2>🛠️ Como usar</h2>
+    <ol>
+        <li>Certifique-se de ter o Node.js instalado.</li>
+        <li>Salve o código JavaScript em um arquivo (ex: <code>desafio02.js</code>).</li>
+        <li>Execute o arquivo usando o comando:</li>
+    </ol>
+    <pre><code>node desafio02.js</code></pre>
+    <p>O programa imprimirá no console todos os números primos entre 1 e 10.000.</p>
+
+    <h2>✅ Exemplo de saída</h2>
+    <pre><code>[2, 3, 5, 7, 11, 13, 17, ... 9973]</code></pre>
