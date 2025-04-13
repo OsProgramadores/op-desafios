@@ -16,5 +16,3 @@ const palindromicos = numbers.filter((num) => {
     return original === reversed;
 });
 console.log(palindromicos);
-
-
