@@ -1,16 +1,4 @@
-strLimite = ""
-i = 1
-
-for i in range(i, 63):
-    strLimite += "9"
-
-# definindo numero maximo
-limite = int(strLimite)
-
-i = 1
-strPalindromos = ""
-
-for i in range(i, limite):
+for i in range(1, (1 << 64) - 1):
     strNum = str(i)
     tamanho = len(strNum)
     palindromo = False
@@ -23,13 +11,8 @@ for i in range(i, limite):
         prefixo += strNum[j]
         sufixo += strNum[k]
         
-        if j == k:
-            if strNum[j] == strNum[k] and prefixo == sufixo[::-1]:
-                palindromo = True
-            break
-
-        if j > tamanho / 2 and k < tamanho / 2:
-            if prefixo == sufixo[::-1]:
+        if j == k or j == (tamanho / 2) -1:
+            if prefixo == sufixo:
                 palindromo = True
             break
         
@@ -37,8 +20,4 @@ for i in range(i, limite):
         k -= 1
 
     if palindromo:
-        strPalindromos += strNum + ", "
-
-strPalindromos = strPalindromos.rsplit(", ")
-
-print(strPalindromos)
+        print(i)
