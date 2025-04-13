@@ -34,10 +34,13 @@
 <h2>🔧 Código otimizado</h2>
 <pre><code>
 const cousinNumber = numbers.filter((num) => {
-    if (num < 2) return false; // Números menores que 2 não são primos
+    if (num < 2) {
+        return false; // Números menores que 2 não são primos
+    }
 
     for (let i = 2; i <= Math.sqrt(num); i++) {
-        if (num % i === 0) return false; // Se achar um divisor, o número não é primo
+        if (num % i === 0) {
+        return false; // Se achar um divisor, o número não é primo
     }
 
     return true; // Caso contrário, o número é primo
