@@ -1,14 +1,13 @@
-i = 1
 stringNumeros = ""
 
-for i in range(1, 1000):
-    j = 1
+for i in range(1, 10000):
     primo = True
+    j = 1
     
-    while j <= i:
+    while j <= i and primo:
         if i != j and i % j == 0 and j != 1:
             primo = False
-            break
+            
         j += 1
         
     if primo:
