@@ -10,12 +10,12 @@ for i in range(1, (1 << 64) - 1):
     while True:
         prefixo += strNum[j]
         sufixo += strNum[k]
-        
-        if j == k or j == (tamanho / 2) -1:
+
+        if j in(k, (tamanho / 2) -1):
             if prefixo == sufixo:
                 palindromo = True
             break
-        
+
         j += 1
         k -= 1
 
