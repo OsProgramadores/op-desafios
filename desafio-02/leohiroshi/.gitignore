@@ -1,0 +1,35 @@
+# Ignore bin and obj folders
+bin/
+obj/
+
+# Ignore build results
+*.dll
+*.exe
+*.log
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Visual Studio Code settings
+.vscode/
+
+# macOS
+.DS_Store
+
+# Windows thumbnails
+Thumbs.db
+
+# Ignore temporary files
+*.tmp
+*.bak
+*.swp
+
+# Ignore compiled files
+*.class
+
+# Ignore Rider / JetBrains IDE files
+.idea/
+*.iml
