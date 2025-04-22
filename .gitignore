@@ -9,3 +9,4 @@ node_modules
 *.pyc
 [Bb]in/
 [Oo]bj/
+*.*
