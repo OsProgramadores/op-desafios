@@ -39,7 +39,7 @@ void counting_sort(char *sorted_key, const char *word);
 unsigned int create_hash(const char *word, unsigned int buckets);
 node *create_node(node **table, unsigned int hash, char *sorted_key, size_t word_len);
 void debug(node **table, unsigned int buckets, unsigned int min_words_count);
-void find_anagrams(const char *token);
+void find_anagrams();
 node *get_node(node **table, unsigned int hash, char *sorted_key);
 node *get_or_create_node(node **table, unsigned int hash, char *sorted_key, size_t word_len);
 bool load_file(FILE *input_file, unsigned int *token_chars_count);
@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
     clock_t start_time = clock();
 
     unsigned int token_chars_count[ALPHABET_SIZE] = {0};
-    for (int c = 0; token[c] != '\0'; c++)
+    for (unsigned int c = 0; token[c] != '\0'; c++)
     {
         token_chars_count[token[c] - 'A']++;
     }
@@ -90,7 +90,7 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    find_anagrams(token);
+    find_anagrams();
 
     char **solutions = malloc(100 * sizeof(char *));
     if (solutions == NULL)
@@ -168,12 +168,12 @@ unsigned int *token_chars_count, unsigned int token_len)
         return;
     }
     
-    for (int i = 0; i < buckets; i++)
+    for (unsigned int i = 0; i < buckets; i++)
     {
         node *cursor = table[i];
         while (cursor != NULL)
         {
-            for (int w = 0; w < cursor->count; w++)
+            for (unsigned int w = 0; w < cursor->count; w++)
             {
                 char *word = cursor->words[w];
                 
@@ -186,7 +186,7 @@ unsigned int *token_chars_count, unsigned int token_len)
                     continue;
                 }
                 
-                for (int c = 0; word[c] != '\0'; c++)
+                for (unsigned int c = 0; word[c] != '\0'; c++)
                 {
                     token_chars_count[word[c] - 'A']--;
                     token_len--;
@@ -196,7 +196,7 @@ unsigned int *token_chars_count, unsigned int token_len)
 
                 backtrack(solutions, depth, table, buckets, token_chars_count, token_len);
     
-                for (int c = 0; word[c] != '\0'; c++)
+                for (unsigned int c = 0; word[c] != '\0'; c++)
                 {
                     token_chars_count[word[c] - 'A']++;
                     token_len++;
@@ -219,7 +219,7 @@ unsigned int *token_chars_count, unsigned int token_len)
 void banana(char **solutions, unsigned int depth)
 {
     char line[MAX_EXP_SIZE] = "";
-    for (int i = 0; i < depth; i++)
+    for (unsigned int i = 0; i < depth; i++)
     {
         anagrams_count++;
         strcat(line, solutions[i]);
@@ -240,7 +240,7 @@ void counting_sort(char *sorted_key, const char *word)
     size_t len = strlen(word);
     
     int count_chars[ALPHABET_SIZE] = {0};
-    for (int i = 0; i < len; i++)
+    for (unsigned int i = 0; i < len; i++)
     {
         count_chars[word[i] - 'A']++;
     }
@@ -268,7 +268,7 @@ void counting_sort(char *sorted_key, const char *word)
 unsigned int create_hash(const char *word, unsigned int buckets)
 {
     unsigned int hash = 0;
-    for (int i =0; word[i] != '\0'; i++)
+    for (unsigned int i =0; word[i] != '\0'; i++)
     {
         hash = (hash * 31) + (toupper(word[i]));
     }
@@ -326,7 +326,7 @@ node *create_node(node **table, unsigned int hash, char *sorted_key, size_t word
 void debug(node **table, unsigned int buckets, unsigned int min_words_count)
 {
     unsigned int words_count = 0, nodes_count = 0, empty_buckets = 0, filled_buckets = 0;
-    for (int i = 0; i < buckets; i++)
+    for (unsigned int i = 0; i < buckets; i++)
     {
         node *cursor = table[i];
 
@@ -339,7 +339,7 @@ void debug(node **table, unsigned int buckets, unsigned int min_words_count)
             if (cursor->count >= min_words_count)
             {
                 char **word = cursor->words;
-                for (int j = 0; j < cursor->count; j++)
+                for (unsigned int j = 0; j < cursor->count; j++)
                 {
                     if (j > 0) printf("\033[;34m");
                     printf("[DEBUG (%d)] cursor->words[%d]: [\033[1;33m%s\033[0m], key: [\033[1;33m%s\033[0m], @node: \033[1;30;47m 0x%p \033[0m\n", words_count++ + 1, j, word[j], cursor->key, cursor);
@@ -367,16 +367,16 @@ void debug(node **table, unsigned int buckets, unsigned int min_words_count)
  *        performance gain here. backtrack() loves candy...
  * @param token the token computed by tokenize()
  */
-void find_anagrams(const char *token)
+void find_anagrams()
 {
-    for (int i = 0; i < DIC_BUCKETS; i++)
+    for (unsigned int i = 0; i < DIC_BUCKETS; i++)
     {
         node *cursor = dict[i];        
         while (cursor != NULL)
         {
             unsigned int hash = create_hash(cursor->key, ANA_BUCKETS);
             
-            for (int j = 0; j < cursor->count; j++)
+            for (unsigned int j = 0; j < cursor->count; j++)
             {
                 char *word = cursor->words[j];
 
@@ -526,7 +526,7 @@ const char *tokenize(const char *expression)
     // sizeof(char) is aways 1, yeah, i know...
     char *token = calloc(len + 1, sizeof(char));
 
-    for (int c = 0, shift = 0; c <= len; c++)
+    for (unsigned int c = 0, shift = 0; c <= len; c++)
     {
         if (expression[c] == '\0') break;
         
@@ -559,7 +559,7 @@ bool unload_node(node *ptr)
     {
         if (ptr->words != NULL)
         {
-            for (int j = 0; j < ptr->count; j++)
+            for (unsigned int j = 0; j < ptr->count; j++)
             {
                 // printf("[child vector] Cleaning vector words[%d] = \"%s\"\n", j, ptr->words[j]);
                 free(ptr->words[j]);
@@ -587,7 +587,7 @@ bool unload_node(node *ptr)
  */
 bool unload_table(node **table, unsigned int buckets)
 {
-    for (int i = 0; i < buckets; i++)
+    for (unsigned int i = 0; i < buckets; i++)
     {
         unload_node(table[i]);
     }
@@ -613,7 +613,7 @@ bool viable_word(unsigned int *token_chars_count, const char *word)
     unsigned int tmp[ALPHABET_SIZE];
     memcpy(tmp, token_chars_count, sizeof(tmp));
 
-    for (int i = 0; word[i] != '\0'; i++)
+    for (unsigned int i = 0; word[i] != '\0'; i++)
     {
         int c = word[i] - 'A';
         if (tmp[c] == 0)
