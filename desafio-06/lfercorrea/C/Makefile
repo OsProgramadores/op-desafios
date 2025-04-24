@@ -2,7 +2,7 @@ SRC := $(wildcard *.c)
 BIN := $(basename $(SRC))
 
 CC := clang
-CFLAGS := -Wall -Wextra -O3
+CFLAGS := -Wall -Wextra -O2
 
 all: $(BIN)
 

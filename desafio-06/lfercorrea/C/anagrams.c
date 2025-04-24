@@ -20,9 +20,10 @@ typedef struct node
     struct node *next;
 
     char **words;
-    unsigned int word_len;
+    size_t word_len;
     unsigned int capacity;
     unsigned int count;
+    unsigned int word_chars_count[ALPHABET_SIZE];
     char key[MAX_WORD_LEN + 1];
 } node;
 
@@ -32,16 +33,21 @@ long long anagrams_count = 0;
 
 
 void add_word(node *ptr, const char *word);
-void backtrack(char **solutions, unsigned int depth, node **table, unsigned int buckets,
-    unsigned int *token_chars_count, unsigned int token_len);
+void backtrack(
+    char **solutions, unsigned int depth, 
+    node **table, unsigned int buckets,
+    unsigned int *token_chars_count, 
+    unsigned int token_len
+);
 void banana(char **solutions, unsigned int depth);
+size_t count_chars(unsigned int *word_chars_count, const char *word);
 void counting_sort(char *sorted_key, const char *word);
 unsigned int create_hash(const char *word, unsigned int buckets);
-node *create_node(node **table, unsigned int hash, char *sorted_key, size_t word_len);
+node *create_node(node **table, unsigned int hash, char *sorted_key);
 void debug(node **table, unsigned int buckets, unsigned int min_words_count);
 void find_anagrams();
 node *get_node(node **table, unsigned int hash, char *sorted_key);
-node *get_or_create_node(node **table, unsigned int hash, char *sorted_key, size_t word_len);
+node *get_or_create_node(node **table, unsigned int hash, char *sorted_key);
 bool load_file(FILE *input_file, unsigned int *token_chars_count);
 node *realloc_words(node *ptr);
 const char *tokenize(const char *expression);
@@ -158,8 +164,14 @@ void add_word(node *ptr, const char *word)
  * @param   token_chars_count an (unsigned int *) representing the current token state,
  *          parameterized as an arr[26] with the count of its chars for use in viable_word()
  */
-void backtrack(char **solutions, unsigned int depth, node **table, unsigned int buckets,
-unsigned int *token_chars_count, unsigned int token_len)
+void backtrack(
+    char **solutions, 
+    unsigned int depth, 
+    node **table, 
+    unsigned int buckets,
+    unsigned int *token_chars_count, 
+    unsigned int token_len
+)
 {
     if (token_len == 0)
     {
@@ -186,20 +198,20 @@ unsigned int *token_chars_count, unsigned int token_len)
                     continue;
                 }
                 
-                for (unsigned int c = 0; word[c] != '\0'; c++)
+                for (unsigned int c = 0; c < ALPHABET_SIZE; c++)
                 {
-                    token_chars_count[word[c] - 'A']--;
-                    token_len--;
+                    token_chars_count[c] -= cursor->word_chars_count[c];
+                    token_len -= cursor->word_chars_count[c];
                 }
 
                 solutions[depth++] = word;
 
                 backtrack(solutions, depth, table, buckets, token_chars_count, token_len);
     
-                for (unsigned int c = 0; word[c] != '\0'; c++)
+                for (unsigned int c = 0; c < ALPHABET_SIZE; c++)
                 {
-                    token_chars_count[word[c] - 'A']++;
-                    token_len++;
+                    token_chars_count[c] += cursor->word_chars_count[c];
+                    token_len += cursor->word_chars_count[c];
                 }
 
                 depth--;
@@ -231,24 +243,40 @@ void banana(char **solutions, unsigned int depth)
 
 
 /**
+ * @brief this function allows storing in the struct an array with
+ *      the count of each char in a word. it is used both in
+ *      load_file(), create_node(), and counting_sort() 
+ * @param word_chars_count the array to store the count
+ * @param word the word to be measured
+ * @return an unsigned int with the length of the word. the buffer[26]
+ *      (unsigned int) also holds its count of each char
+ */
+size_t count_chars(unsigned int *word_chars_count, const char *word)
+{
+    size_t i = 0;
+    while(word[i] != '\0')
+    {
+        word_chars_count[word[i++] - 'A']++;
+    }
+
+    return i;
+}
+
+
+/**
 * @brief Sort the string using counting_sort algorithm
 * @param sorted_key the sorted string
 * @param word the string to be sorted
 */
 void counting_sort(char *sorted_key, const char *word)
-{
-    size_t len = strlen(word);
-    
-    int count_chars[ALPHABET_SIZE] = {0};
-    for (unsigned int i = 0; i < len; i++)
-    {
-        count_chars[word[i] - 'A']++;
-    }
+{   
+    unsigned int word_chars_count[ALPHABET_SIZE] = {0};
+    count_chars(word_chars_count, word);
 
     int k = 0;
     for (int i = 0; i < ALPHABET_SIZE; i++)
     {
-        for (int j = 0; j < count_chars[i]; j++)
+        for (unsigned int j = 0; j < word_chars_count[i]; j++)
         {
             sorted_key[k++] = i + 'A';
         }
@@ -291,7 +319,7 @@ unsigned int create_hash(const char *word, unsigned int buckets)
  *          backtrack() smiled at this too
  * @return  the created (node *) or NULL
  */
-node *create_node(node **table, unsigned int hash, char *sorted_key, size_t word_len)
+node *create_node(node **table, unsigned int hash, char *sorted_key)
 {
     node *n = malloc(sizeof(node));
     if (n == NULL)
@@ -307,8 +335,13 @@ node *create_node(node **table, unsigned int hash, char *sorted_key, size_t word
      * the own limit, to avoid realloc() for every word.
      * This will cost us O(log2n)
      */
+    
     strcpy(n->key, sorted_key);
-    n->word_len = word_len;
+
+    unsigned int word_chars_count[ALPHABET_SIZE] = {0};
+    n->word_len = count_chars(word_chars_count, sorted_key);    
+    memcpy(n->word_chars_count, word_chars_count, ALPHABET_SIZE * sizeof(unsigned int));
+
     n->words = NULL;
     n->capacity = 4;
     n->count = 0;
@@ -380,7 +413,7 @@ void find_anagrams()
             {
                 char *word = cursor->words[j];
 
-                node *anagram = get_or_create_node(anagrams, hash, cursor->key, cursor->word_len);                
+                node *anagram = get_or_create_node(anagrams, hash, cursor->key);                
                 add_word(anagram, word);
             }
             
@@ -424,7 +457,7 @@ node *get_node(node **table, unsigned int hash, char *sorted_key)
  * @param   word_len the size_t length for the word
  * @return  a pointer to the found or newly created node, or NULL if memory allocation fails.
  */
-node *get_or_create_node(node **table, unsigned int hash, char *sorted_key, size_t word_len)
+node *get_or_create_node(node **table, unsigned int hash, char *sorted_key)
 {
     /***
      * Browse an search for the key into the provided hash. If found
@@ -439,7 +472,7 @@ node *get_or_create_node(node **table, unsigned int hash, char *sorted_key, size
     /**
      * If failed in searching, create a new node and deliver his ptr
      */
-    return create_node(table, hash, sorted_key, word_len);
+    return create_node(table, hash, sorted_key);
 }
 
 
@@ -456,13 +489,13 @@ bool load_file(FILE *input_file, unsigned int *token_chars_count)
         word[strcspn(word, "\r\n")] = '\0';
 
         if (!viable_word(token_chars_count, word)) continue;
-
-        size_t word_len = strlen(word);        
+             
+        size_t word_len = strlen(word);
         char sorted_key[word_len + 1];
         counting_sort(sorted_key, word);        
         unsigned int hash = create_hash(word, DIC_BUCKETS);        
 
-        node *ptr = get_or_create_node(dict, hash, sorted_key, word_len);
+        node *ptr = get_or_create_node(dict, hash, sorted_key);
         add_word(ptr, word);
     }
 
@@ -610,18 +643,31 @@ bool unload_table(node **table, unsigned int buckets)
  */
 bool viable_word(unsigned int *token_chars_count, const char *word)
 {
-    unsigned int tmp[ALPHABET_SIZE];
-    memcpy(tmp, token_chars_count, sizeof(tmp));
+    unsigned int shift = 0;
+    unsigned int endpoint = 0;
 
-    for (unsigned int i = 0; word[i] != '\0'; i++)
+    while (word[shift] != '\0')
     {
-        int c = word[i] - 'A';
-        if (tmp[c] == 0)
-        {
-            return false;
-        }
+        unsigned int c = word[shift++] - 'A';
 
-        tmp[c]--;
+        if (token_chars_count[c] == 0)
+        {
+            break;
+        }
+        
+        token_chars_count[c]--;
+        endpoint++;
+    }
+    
+    for (unsigned int i = 0; i < endpoint; i++)
+    {
+        unsigned int c = word[i] - 'A';
+        token_chars_count[c]++;
+    }
+    
+    if (shift != endpoint)
+    {
+        return false;
     }
 
     return true;
