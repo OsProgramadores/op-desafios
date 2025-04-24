@@ -668,11 +668,6 @@ bool viable_word(unsigned int *token_chars_count, const char *word)
         unsigned int c = word[i] - 'A';
         token_chars_count[c]++;
     }
-    
-    if (shift != endpoint)
-    {
-        return false;
-    }
 
-    return true;
+    return shift == endpoint;
 }
