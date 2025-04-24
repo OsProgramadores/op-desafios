@@ -200,6 +200,8 @@ void backtrack(
                 
                 for (unsigned int c = 0; c < ALPHABET_SIZE; c++)
                 {
+                    if (cursor->word_chars_count[c] == 0) continue;
+
                     token_chars_count[c] -= cursor->word_chars_count[c];
                     token_len -= cursor->word_chars_count[c];
                 }
@@ -210,6 +212,8 @@ void backtrack(
     
                 for (unsigned int c = 0; c < ALPHABET_SIZE; c++)
                 {
+                    if (cursor->word_chars_count[c] == 0) continue;
+
                     token_chars_count[c] += cursor->word_chars_count[c];
                     token_len += cursor->word_chars_count[c];
                 }
@@ -248,7 +252,7 @@ void banana(char **solutions, unsigned int depth)
  *      load_file(), create_node(), and counting_sort() 
  * @param word_chars_count the array to store the count
  * @param word the word to be measured
- * @return an unsigned int with the length of the word. the buffer[26]
+ * @return a size_t with the length of the word. the buffer[26]
  *      (unsigned int) also holds its count of each char
  */
 size_t count_chars(unsigned int *word_chars_count, const char *word)
