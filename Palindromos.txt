@@ -1,0 +1,15 @@
+public class Palindromos{
+	public static void main(String[]args){
+		for(int i = 1; i<=20;i++){
+			if(ehParametro(i)){
+				System.out.println(i+" ");
+                        }
+                }
+         }
+
+	public static boolean ehPalindromo(int num){
+		String numeroStr=string.valueOf(numero);
+		StringBuilder sd = new StringBuilder(numeroStr).reverse();
+		return numero Str.equals(sb.toString());
+	}
+}
