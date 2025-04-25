@@ -8,7 +8,7 @@
 
 
 #define ALPHABET_SIZE 26
-#define ANA_BUCKETS 137
+#define ANA_BUCKETS 1
 #define DIC_BUCKETS 937
 #define MAX_EXP_SIZE 50
 #define MAX_WORD_LEN 50
