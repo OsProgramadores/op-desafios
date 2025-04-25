@@ -1,0 +1,14 @@
+public Palindromo{
+	public static void main(String[]args){
+		for(int i = 1; i<=20; i++){
+			if(ehPalindromo(i)){
+				System.out.println(i+" ");
+			}
+		}
+	}
+	public static boolean ehPalindromo(int numero){
+		String numeroStr = String.valueOf(numero);
+		StringBuilder sd = new StringBuilder(numeroStr).reverse();
+		return numeroStr.equals(sb.toString());
+	}
+}
