@@ -43,11 +43,11 @@ void banana(char **solutions, unsigned int depth);
 size_t count_chars(unsigned int *word_chars_count, const char *word);
 void counting_sort(char *sorted_key, const char *word);
 unsigned int create_hash(const char *word, unsigned int buckets);
-node *create_node(node **table, unsigned int hash, char *sorted_key);
+node *create_node(node **table, unsigned int hash, char *sorted_key, unsigned int buckets);
 void debug(node **table, unsigned int buckets, unsigned int min_words_count);
 void find_anagrams();
 node *get_node(node **table, unsigned int hash, char *sorted_key);
-node *get_or_create_node(node **table, unsigned int hash, char *sorted_key);
+node *get_or_create_node(node **table, unsigned int hash, char *sorted_key, unsigned int buckets);
 bool load_file(FILE *input_file, unsigned int *token_chars_count);
 node *realloc_words(node *ptr);
 const char *tokenize(const char *expression);
@@ -101,6 +101,9 @@ int main(int argc, char *argv[])
     char **solutions = malloc(100 * sizeof(char *));
     if (solutions == NULL)
     {
+        unload_table(anagrams, ANA_BUCKETS);
+        unload_table(dict, DIC_BUCKETS);
+
         printf("FAILED ALLOCATING MEMORY TO SOLUTIONS\n");
 
         return 1;
@@ -323,12 +326,13 @@ unsigned int create_hash(const char *word, unsigned int buckets)
  *          backtrack() smiled at this too
  * @return  the created (node *) or NULL
  */
-node *create_node(node **table, unsigned int hash, char *sorted_key)
+node *create_node(node **table, unsigned int hash, char *sorted_key, unsigned int buckets)
 {
     node *n = malloc(sizeof(node));
     if (n == NULL)
     {
-        fprintf(stderr, "FAEILED ALLOCATING MEMORY TO A NEW NODE\n");
+        unload_table(table, buckets);
+        fprintf(stderr, "FAILED ALLOCATING MEMORY TO A NEW NODE\n");
 
         return NULL;
     }
@@ -417,7 +421,7 @@ void find_anagrams()
             {
                 char *word = cursor->words[j];
 
-                node *anagram = get_or_create_node(anagrams, hash, cursor->key);                
+                node *anagram = get_or_create_node(anagrams, hash, cursor->key, ANA_BUCKETS);                
                 add_word(anagram, word);
             }
             
@@ -461,7 +465,7 @@ node *get_node(node **table, unsigned int hash, char *sorted_key)
  * @param   word_len the size_t length for the word
  * @return  a pointer to the found or newly created node, or NULL if memory allocation fails.
  */
-node *get_or_create_node(node **table, unsigned int hash, char *sorted_key)
+node *get_or_create_node(node **table, unsigned int hash, char *sorted_key, unsigned int buckets)
 {
     /***
      * Browse an search for the key into the provided hash. If found
@@ -476,7 +480,7 @@ node *get_or_create_node(node **table, unsigned int hash, char *sorted_key)
     /**
      * If failed in searching, create a new node and deliver his ptr
      */
-    return create_node(table, hash, sorted_key);
+    return create_node(table, hash, sorted_key, buckets);
 }
 
 
@@ -499,7 +503,7 @@ bool load_file(FILE *input_file, unsigned int *token_chars_count)
         counting_sort(sorted_key, word);        
         unsigned int hash = create_hash(word, DIC_BUCKETS);        
 
-        node *ptr = get_or_create_node(dict, hash, sorted_key);
+        node *ptr = get_or_create_node(dict, hash, sorted_key, DIC_BUCKETS);
         add_word(ptr, word);
     }
 
@@ -560,8 +564,7 @@ const char *tokenize(const char *expression)
         return NULL;
     }
 
-    // sizeof(char) is aways 1, yeah, i know...
-    char *token = calloc(len + 1, sizeof(char));
+    char *token = calloc(len + 1, 1);
 
     for (unsigned int c = 0, shift = 0; c <= len; c++)
     {
