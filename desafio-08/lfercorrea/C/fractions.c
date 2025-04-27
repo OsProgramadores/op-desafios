@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
             continue;
         }
 
-        else if (den == 1)
+        if (den == 1)
         {
             printf("%d\n", num);
 
