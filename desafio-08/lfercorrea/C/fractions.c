@@ -96,11 +96,8 @@ int main(int argc, char *argv[])
 
         else if (num < den)
         {
-            if (((num / mdc) / (den / mdc)) == num / den)
-            {
-                num /= mdc;
-                den /= mdc;
-            }
+            num /= mdc;
+            den /= mdc;
 
             printf("%d/%d\n", num, den);
         }
