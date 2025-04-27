@@ -15,17 +15,7 @@ typedef struct node
 } node;
 
 
-void unload_llist(node *ptr)
-{
-    while (ptr != NULL)
-    {
-        node *tmp = ptr->next;
-        // printf("freeing %p\n", ptr);
-        free(ptr);
-
-        ptr = tmp;
-    }
-}
+void unload_llist(node *ptr);
 
 
 int main(int argc, char *argv[])
@@ -102,4 +92,17 @@ int main(int argc, char *argv[])
     unload_llist(list);
 
     return 0;
+}
+
+
+void unload_llist(node *ptr)
+{
+    while (ptr != NULL)
+    {
+        node *tmp = ptr->next;
+        // printf("freeing %p\n", ptr);
+        free(ptr);
+
+        ptr = tmp;
+    }
 }
