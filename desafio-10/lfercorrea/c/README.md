@@ -11,11 +11,11 @@ No diretório raiz, compilar com `make turing` e rodar com `./turing`.
 
 * `main`
   * `compute`: processa a fita de acordo com as regras na heap;
+    * `print`: imprime a fita, delimitando as fronteiras manualmente, já que não existe '\0', antes de compute() possa liberar a fita da heap;
+    * `lookup_rule`: procura uma regra que case, de acordo com o estado e a posicao do cabeçote na fita;
+    * `set_tape`: inicializa adequadamente a fita na heap;
+    * `realloc_tape`: garante a infinitude da fita;
   * `load_file`: carrega o arquivo de regras na heap e o input na stack;
-  * `log_rule`: helper de load_file() que faz uma liked list com cada regra;
-  * `lookup_rule`: procura uma regra que case, de acordo com o estado e a posicao do cabeçote na fita;
-  * `print`: imprime a fita, delimitando as fronteiras manualmente, já que não existe '\0', antes de compute() possa liberar a fita da heap;
-  * `realloc_tape`: garante a infinitude da fita;
-  * `set_tape`: inicializa adequadamente a fita na heap;
+    * `log_rule`: helper de load_file() que faz uma liked list com cada regra;
   * `unload_llist`: limpa as regras da heap.
   
