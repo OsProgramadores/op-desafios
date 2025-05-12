@@ -27,6 +27,9 @@ public class Palindromo {
   }
 
   public static boolean ehPalindromo(int numero) {
+    if (numero >= 0 && numero < 10) {
+      return true;
+    }
     String numeroStr = String.valueOf(numero);
     StringBuilder sb = new StringBuilder(numeroStr).reverse();
     return numeroStr.equals(sb.toString());
