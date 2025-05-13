@@ -20,9 +20,10 @@ public class Palindromo {
     for (int i = n1; i <= n2; i++) {
       if (ehPalindromo(i)) {
         System.out.print(i + " ");
-       }
+      }
     }
   }
+
   public static boolean ehPalindromo(int numero) {
     if (numero >= 0 && numero < 10) {
       return true;
