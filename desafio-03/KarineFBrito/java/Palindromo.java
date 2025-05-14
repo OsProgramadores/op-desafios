@@ -10,12 +10,12 @@ public class Palindromo {
     if (n1 < 0 || n2 < 0) {
       System.out.println("Os números não podem ser negativos!");
       sc.close();
-      return;
+      System.exit(0);
     }
     if (n1 >= n2) {
       System.out.println("O número inicial não pode ser maior ou igual que o final!");
       sc.close();
-      return;
+      System.exit(0);
     }
     for (int i = n1; i <= n2; i++) {
       if (ehPalindromo(i)) {
