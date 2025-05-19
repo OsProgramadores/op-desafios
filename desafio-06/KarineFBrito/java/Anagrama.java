@@ -9,7 +9,7 @@ public class Anagrama {
   public static void main(String[] args) {
     Scanner scanner = new Scanner(System.in);
     System.out.print("Digite a expressão (somente letras e espaços): ");
-    String entrada = scanner.nextLine().toUpperCase().replaceAll(" ","");
+    String entrada = scanner.nextLine().toUpperCase().replaceAll(" ", "");
     scanner.close();
 
     if (!entrada.matches("[A-Z]+")) {
