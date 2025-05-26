@@ -7,7 +7,7 @@ def encontrar_primos(limite_inferior, limite_superior):
                 if num % i == 0:
                     primo = False
                     break
-            if primo: 
+            if primo:
                 primos.append(num)
     return primos
 
