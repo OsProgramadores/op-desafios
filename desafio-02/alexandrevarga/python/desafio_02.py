@@ -1,7 +1,12 @@
-# Números primos
+"""
+Este módulo encontra e imprime todos os números primos em um intervalo especificado.
+"""
 
 
 def encontrar_primos(limite_inferior, limite_superior):
+    """
+    Retorna uma lista com os números primos no intervalo especificado.
+    """
     lista_primos = []
     for num in range(limite_inferior, limite_superior + 1):
         if num > 1:
