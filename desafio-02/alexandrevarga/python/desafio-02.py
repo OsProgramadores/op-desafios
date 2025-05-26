@@ -1,14 +1,17 @@
+# Números primos
+
+
 def encontrar_primos(limite_inferior, limite_superior):
-    primos = []
+    lista_primos = []
     for num in range(limite_inferior, limite_superior + 1):
-        if num > 1:  # Números primos
+        if num > 1:
             primo = True
             for i in range(2, int(num ** 0.5) + 1):
                 if num % i == 0:
                     primo = False
                     break
             if primo:
-                primos.append(num)
+                lista_primos.append(num)
     return primos
 
 # Encontrar números primos entre 1 e 10000
