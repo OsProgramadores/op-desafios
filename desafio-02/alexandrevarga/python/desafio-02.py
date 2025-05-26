@@ -12,7 +12,7 @@ def encontrar_primos(limite_inferior, limite_superior):
                     break
             if primo:
                 lista_primos.append(num)
-    return primos
+    return lista_primos
 
 # Encontrar números primos entre 1 e 10000
 primos = encontrar_primos(1, 10000)
