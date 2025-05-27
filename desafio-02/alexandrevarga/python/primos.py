@@ -20,7 +20,7 @@ def encontrar_primos(limite_inferior, limite_superior):
     return lista_primos
 
 # Encontrar números primos entre 1 e 10000
-primos = encontrar_primos(1, 10000)
-
-for primo in primos:
-    print(primo)
+if __name__ == "__main__": ## Pytest
+    primos = encontrar_primos(1, 10000)
+    for primo in primos:
+        print(primo)
