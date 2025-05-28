@@ -68,3 +68,20 @@ pylint primos.py
 Ao executar o comando acima, você verá:
 - Uma lista de mensagens indicando pontos para melhoria
 - Uma nota geral para o código
+
+
+## 🧪 Testes Automatizados
+
+Este projeto inclui testes automatizados utilizando o pytest.
+
+### Como rodar os testes
+
+No diretório onde estão os arquivos `primos.py` e `test_primos.py`, execute:
+
+pytest test_primos.py
+
+O pytest irá rodar automaticamente todos os testes definidos no arquivo `test_primos.py`.
+
+### Sobre o teste
+
+- O teste principal (`test_primos_intervalo_pequeno`) verifica se a função `encontrar_primos` retorna corretamente os números primos entre 1 e 10.
