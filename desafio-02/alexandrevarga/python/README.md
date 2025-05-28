@@ -33,7 +33,7 @@ cd op-desafios/desafio-02/alexandrevarga/python/
 
 python3 primos.py
 
-3. **Saída esperada:**  
+3. **Saída esperada:**
 
 Todos os números primos entre 1 e 10.000 serão impressos, um por linha.
 
