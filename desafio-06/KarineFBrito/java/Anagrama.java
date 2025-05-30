@@ -11,9 +11,9 @@ public class Anagrama {
 
   public static void main(String[] args) {
     if (args.length == 0) {
-            System.out.println("Nenhuma expressão foi fornecida.");
-            return;
-        }
+      System.out.println("Nenhuma expressão foi fornecida.");
+      return;
+    }
     String expressao = String.join(" ", args).toUpperCase();
     String entrada = expressao.replaceAll(" ", "");
     if (!entrada.matches("[A-Z]+")) {
@@ -24,7 +24,7 @@ public class Anagrama {
     String caminho = System.getenv("CAMINHO");
     System.out.println(caminho);
     if (caminho == null) {
-       System.out.println("O caminho do arquivo não foi definido");
+      System.out.println("O caminho do arquivo não foi definido");
       return;
     }
 
@@ -64,7 +64,13 @@ public class Anagrama {
       }
     }
   }
-  private static void permutar(TreeSet<String> caminhoAtual, Map<Character, Integer> letrasRestantes, List<String> palavrasCabem, Map<String, Map<Character, Integer>> mapAnagramas, TreeSet<String> anagramas) {
+
+  private static void permutar(
+      TreeSet<String> caminhoAtual,
+      Map<Character, Integer> letrasRestantes,
+      List<String> palavrasCabem,
+      Map<String, Map<Character, Integer>> mapAnagramas,
+      TreeSet<String> anagramas) {
     if (letrasRestantes.isEmpty()) {
       anagramas.add(String.join(" ", caminhoAtual));
       return;
@@ -79,7 +85,9 @@ public class Anagrama {
       }
     }
   }
-  private static Map<Character, Integer> verificar(Map<Character, Integer> expressao, Map<Character, Integer> palavra) {
+
+  private static Map<Character, Integer> verificar(
+      Map<Character, Integer> expressao, Map<Character, Integer> palavra) {
     Map<Character, Integer> resultado = new HashMap<>(expressao);
     for (Map.Entry<Character, Integer> entry : palavra.entrySet()) {
       char letra = entry.getKey();
@@ -92,20 +100,22 @@ public class Anagrama {
     }
     return resultado;
   }
+
   private static boolean cabe(Map<Character, Integer> expressao, Map<Character, Integer> palavra) {
-    for (Map.Entry<Character, Integer> entry : palavra.entrySet()){
+    for (Map.Entry<Character, Integer> entry : palavra.entrySet()) {
       char letra = entry.getKey();
       int qtdP = entry.getValue();
-      int qtdE =expressao.getOrDefault(letra, 0);
-      if(qtdP > qtdE){
-       return false;
+      int qtdE = expressao.getOrDefault(letra, 0);
+      if (qtdP > qtdE) {
+        return false;
       }
     }
     return true;
   }
-  private static Map<Character, Integer> contarLetras(String expressao){
-    Map <Character, Integer> letras = new HashMap<>();
-    for(char c : expressao.toCharArray()){
+
+  private static Map<Character, Integer> contarLetras(String expressao) {
+    Map<Character, Integer> letras = new HashMap<>();
+    for (char c : expressao.toCharArray()) {
       letras.put(c, letras.getOrDefault(c, 0) + 1);
     }
     return letras;
