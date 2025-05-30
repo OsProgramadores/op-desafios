@@ -78,7 +78,8 @@ public class Anagrama {
     }
     for (String palavra : palavrasCabem) {
       Map<Character, Integer> letrasPalavra = mapAnagramas.get(palavra);
-      if (cabe(letrasRestantes, letrasPalavra)) {
+
+      if (cabe(letrasRestantes, letrasPalavra) && !caminhoAtual.contains(palavra)) {
         TreeSet<String> caminhoNovo = new TreeSet<>(caminhoAtual);
         caminhoNovo.add(palavra);
         Map<Character, Integer> novasLetras = verificar(letrasRestantes, letrasPalavra);
