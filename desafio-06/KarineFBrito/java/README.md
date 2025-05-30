@@ -2,10 +2,11 @@
  - O programa pede para o usuário que digite uma expressão, depois remove os espaços em branco e converte a expressão para letras maiúsculas. Também verifica se a expressão contém apenas letras. Se não, exibe uma mensagem de erro. As palavras válidas são lidas a partir de um arquivo de texto (words.txt) pelo comando File. E o programa usa o "arquivoScanner.hasNextLine()" para percorrer cada linha do arquivo e armazena as palavras em uma lista.  Se o arquivo não for encontrado, o programa imprime uma mensagem e finaliza.
 
 
-  No código temos quatro funções:
+  No código temos cinco métodos:
 
   - permutar: que gera todos os anagramas da expressão;
-  - verificar: ele subtrai a quantodade de letras da expressão e da palavra, e atualiza o conjunto de letras restantes ao usar uma palavra;
+  - verificacao: verifica se o anagrama formado possui todas as letras da expressão;
+  - verificar: ele subtrai a quantidade de letras da expressão e da palavra, e atualiza o conjunto de letras restantes ao usar uma palavra;
   - cabe: ele verifica se a palavra cabe dentro da expressão;
   - contarLetras: ele conta quantas vezes cada letra aparece na string.
 
