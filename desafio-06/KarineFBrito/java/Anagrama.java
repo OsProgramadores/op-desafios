@@ -55,7 +55,7 @@ public class Anagrama {
       }
     }
     TreeSet<String> anagramas = new TreeSet<>();
-    permutar(new ArrayList<>(), letrasExpressao, palavrasCabem, mapAnagramas, anagramas);
+    permutar(new TreeSet<>(), letrasExpressao, palavrasCabem, mapAnagramas, anagramas);
     if (anagramas.isEmpty()) {
       System.out.println("Nenhum anagrama válido encontrado.");
     } else {
@@ -64,7 +64,7 @@ public class Anagrama {
       }
     }
   }
-  private static void permutar(List<String> caminhoAtual, Map<Character, Integer> letrasRestantes, List<String> palavrasCabem, Map<String, Map<Character, Integer>> mapAnagramas, TreeSet<String> anagramas) {
+  private static void permutar(TreeSet<String> caminhoAtual, Map<Character, Integer> letrasRestantes, List<String> palavrasCabem, Map<String, Map<Character, Integer>> mapAnagramas, TreeSet<String> anagramas) {
     if (letrasRestantes.isEmpty()) {
       anagramas.add(String.join(" ", caminhoAtual));
       return;
@@ -75,7 +75,7 @@ public class Anagrama {
         caminhoAtual.add(palavra);
         Map<Character, Integer> novasLetras = verificar(letrasRestantes, letrasPalavra);
         permutar(caminhoAtual, novasLetras, palavrasCabem, mapAnagramas, anagramas);
-        caminhoAtual.remove(caminhoAtual.size() - 1);
+        caminhoAtual.remove(palavra);
       }
     }
   }
