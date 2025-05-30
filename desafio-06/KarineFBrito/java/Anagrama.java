@@ -14,9 +14,8 @@ public class Anagrama {
       System.out.println("Nenhuma expressão foi fornecida.");
       return;
     }
-    String expressao = String.join(" ", args).toUpperCase();
-    String entrada = expressao.replaceAll(" ", "");
-    if (!entrada.matches("[A-Z]+")) {
+    String expressao = String.join("", args).toUpperCase();
+    if (!expressao.matches("[A-Z]+")) {
       System.out.println("Expressão inválida! Apenas letras são permitidas.");
       return;
     }
@@ -28,34 +27,32 @@ public class Anagrama {
       return;
     }
 
-    ArrayList<String> palavrasValidas = new ArrayList<>();
     Map<String, Map<Character, Integer>> mapAnagramas = new HashMap<>();
     try (Scanner arquivoScanner = new Scanner(new File(caminho))) {
       while (arquivoScanner.hasNextLine()) {
         String palavra = arquivoScanner.nextLine().trim().toUpperCase();
         if (!palavra.isEmpty()) {
-          palavrasValidas.add(palavra);
+          mapAnagramas.put(palavra, contarLetras(palavra));
         }
-        mapAnagramas.put(palavra, contarLetras(palavra));
       }
     } catch (FileNotFoundException e) {
       System.out.println("Arquivo words.txt não encontrado!");
       return;
     }
 
-    if (palavrasValidas.isEmpty()) {
+    if (mapAnagramas.isEmpty()) {
       System.out.println("Erro: Nenhuma palavra válida encontrada no arquivo.");
       return;
     }
-    Map<Character, Integer> letrasExpressao = contarLetras(entrada);
+    Map<Character, Integer> letrasExpressao = contarLetras(expressao);
     List<String> palavrasCabem = new ArrayList<>();
-    for (String palavra : palavrasValidas) {
-      if (cabe(letrasExpressao, contarLetras(palavra))) {
-        palavrasCabem.add(palavra);
+    for (Map.Entry<String, Map<Character, Integer>> palavraLetras : mapAnagramas.entrySet()) {
+      if (cabe(letrasExpressao, palavraLetras.getValue())) {
+        palavrasCabem.add(palavraLetras.getKey());
       }
     }
     TreeSet<String> anagramas = new TreeSet<>();
-    permutar(new TreeSet<>(), letrasExpressao, palavrasCabem, mapAnagramas, anagramas);
+    permutar(new TreeSet<>(), letrasExpressao, palavrasCabem, mapAnagramas, anagramas, expressao);
     if (anagramas.isEmpty()) {
       System.out.println("Nenhum anagrama válido encontrado.");
     } else {
@@ -70,20 +67,30 @@ public class Anagrama {
       Map<Character, Integer> letrasRestantes,
       List<String> palavrasCabem,
       Map<String, Map<Character, Integer>> mapAnagramas,
-      TreeSet<String> anagramas) {
+      TreeSet<String> anagramas, String expressao) {
     if (letrasRestantes.isEmpty()) {
-      anagramas.add(String.join(" ", caminhoAtual));
-      return;
+      String p = String.join("", caminhoAtual);
+      if (verificacao(p, expressao)) {
+        anagramas.add(String.join(" ", caminhoAtual));
+        return;
+      }
+
     }
     for (String palavra : palavrasCabem) {
       Map<Character, Integer> letrasPalavra = mapAnagramas.get(palavra);
       if (cabe(letrasRestantes, letrasPalavra)) {
-        caminhoAtual.add(palavra);
+        TreeSet<String> caminhoNovo = new TreeSet<>(caminhoAtual);
+        caminhoNovo.add(palavra);
         Map<Character, Integer> novasLetras = verificar(letrasRestantes, letrasPalavra);
-        permutar(caminhoAtual, novasLetras, palavrasCabem, mapAnagramas, anagramas);
-        caminhoAtual.remove(palavra);
+        permutar(caminhoNovo, novasLetras, palavrasCabem, mapAnagramas, anagramas, expressao);
       }
     }
+  }
+  private static boolean verificacao (String palavra, String expressao) {
+  Map<Character , Integer> contaExpressao = contarLetras(expressao);
+  Map<Character , Integer> contaPalavra = contarLetras(palavra);
+  return contaExpressao.equals(contaPalavra);
+
   }
 
   private static Map<Character, Integer> verificar(
@@ -116,7 +123,7 @@ public class Anagrama {
   private static Map<Character, Integer> contarLetras(String expressao) {
     Map<Character, Integer> letras = new HashMap<>();
     for (char c : expressao.toCharArray()) {
-      letras.put(c, letras.getOrDefault(c, 0) + 1);
+      letras.compute(c, (chave, valorAtual) -> (valorAtual == null ? 1 : valorAtual + 1));
     }
     return letras;
   }
