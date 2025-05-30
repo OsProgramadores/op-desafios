@@ -67,14 +67,14 @@ public class Anagrama {
       Map<Character, Integer> letrasRestantes,
       List<String> palavrasCabem,
       Map<String, Map<Character, Integer>> mapAnagramas,
-      TreeSet<String> anagramas, String expressao) {
+      TreeSet<String> anagramas,
+      String expressao) {
     if (letrasRestantes.isEmpty()) {
       String p = String.join("", caminhoAtual);
       if (verificacao(p, expressao)) {
         anagramas.add(String.join(" ", caminhoAtual));
         return;
       }
-
     }
     for (String palavra : palavrasCabem) {
       Map<Character, Integer> letrasPalavra = mapAnagramas.get(palavra);
@@ -86,11 +86,11 @@ public class Anagrama {
       }
     }
   }
-  private static boolean verificacao (String palavra, String expressao) {
-  Map<Character , Integer> contaExpressao = contarLetras(expressao);
-  Map<Character , Integer> contaPalavra = contarLetras(palavra);
-  return contaExpressao.equals(contaPalavra);
 
+  private static boolean verificacao(String palavra, String expressao) {
+    Map<Character, Integer> contaExpressao = contarLetras(expressao);
+    Map<Character, Integer> contaPalavra = contarLetras(palavra);
+    return contaExpressao.equals(contaPalavra);
   }
 
   private static Map<Character, Integer> verificar(
