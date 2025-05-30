@@ -1,22 +1,24 @@
 #include <stdio.h>
 
-static void desafio_prime_numbers_between(unsigned int min, unsigned int max) {
-  for (int i = min; i < max; ++i) {
-    if (i < 2)
-      continue;  // va para o próximo, pois números menores que 2 não sao primos
-    int is_prime = 1;
-    for (int j = 2; j <= i / 2; ++j) {
-      if (i % j == 0) {
-        is_prime = 0;
+#define bool  char
+#define false 0
+#define true  1
+
+static void desafio_prime_numbers_between(unsigned int max) {
+  for (int num = 2; num < max; ++num) {
+    bool is_prime = true;
+    for (int divider = 2; divider <= num / 2; ++divider) {
+      if (num % divider == 0) {
+        is_prime = false;
         break;
       }
     }
     if (is_prime)
-      printf("%d\n", i);
+      printf("%d\n", num);
   }
 }
 
 int main() {
-  desafio_prime_numbers_between(1, 10000);
+  desafio_prime_numbers_between(10000);
   return 0;
 }
