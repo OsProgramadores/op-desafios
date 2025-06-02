@@ -2,7 +2,7 @@
 - Prime Number Between 1...10000
 
 # How program works
-This program executes a loop starting at 2 up to 10000  
+This program executes a loop starting at 2 up to 10000
 inside this loop, program try the possible divisors of num expect by 0, 1, 2
 if the number is divisible by these divisors, then it is not prime
 
