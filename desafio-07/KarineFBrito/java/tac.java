@@ -1,27 +1,33 @@
-import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
-import java.util.ArrayDeque;
-import java.util.Deque;
+import java.io.RandomAccessFile;
 
 public class tac {
   public static void main(String[] args) {
-    String caminho = System.getenv("CAMINHO");
-    System.out.println(caminho);
-    if (caminho == null) {
-      System.out.println("O caminho do arquivo não foi definido");
+    if (args.length == 0){
+      System.out.println("Nenhum caminho foi fornecido");
       return;
     }
-    Path c = Paths.get(caminho);
-    try (BufferedReader reader = Files.newBufferedReader(c)) {
-      Deque<String> linhas = new ArrayDeque<>();
-      String linha;
-      while ((linha = reader.readLine()) != null) {
-        linhas.push(linha);
+    File caminho = new File(String.join(File.separator, args));
+    if (!caminho.exists()) {
+      System.out.println("Arquivo não encontrado.");
+      return;
+    }
+    try (RandomAccessFile aq = new RandomAccessFile(caminho, "r")) {
+      long tamanho = aq.length();
+      StringBuilder linha = new StringBuilder();
+      for (long i = tamanho - 1; i >= 0; i--) {
+        aq.seek(i);
+        int c = aq.read();
+        if (c == '\n') {
+          System.out.println(linha.reverse().toString());
+          linha.setLength(0);
+        } else if (c != '\r') {
+          linha.append((char) c);
+        }
       }
-
-      for (String l : linhas) {
-        System.out.println(l);
+      if (linha.length() > 0) {
+        System.out.println(linha.reverse().toString());
       }
     } catch (IOException e) {
       e.printStackTrace();
