@@ -4,7 +4,7 @@ import java.io.RandomAccessFile;
 
 public class tac {
   public static void main(String[] args) {
-    if (args.length == 0){
+    if (args.length == 0) {
       System.out.println("Nenhum caminho foi fornecido");
       return;
     }
