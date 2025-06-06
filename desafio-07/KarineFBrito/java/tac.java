@@ -20,8 +20,10 @@ public class tac {
         aq.seek(i);
         int c = aq.read();
         if (c == '\n') {
-          System.out.println(linha.reverse().toString());
-          linha.setLength(0);
+          if(linha.length() != 0){
+            System.out.println(linha.reverse().toString());
+            linha.setLength(0);
+          }  
         } else if (c != '\r') {
           linha.append((char) c);
         }
