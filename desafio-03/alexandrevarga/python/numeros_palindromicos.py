@@ -32,10 +32,11 @@ def palindromos_entre(inicio, fim):
             resultado.append(n)
     return resultado
 
-# Solicita os valores ao usuário
-minimo = int(input("Digite o número mínimo: "))
-maximo = int(input("Digite o número máximo: "))
+if __name__ == "__main__":
+    # Solicita os valores ao usuário
+    minimo = int(input("Digite o número mínimo: "))
+    maximo = int(input("Digite o número máximo: "))
 
-# Exibe os palíndromos no intervalo informado
-for palindromo in palindromos_entre(minimo, maximo):
-    print(palindromo)
+    # Exibe os palíndromos no intervalo informado
+    for palindromo in palindromos_entre(minimo, maximo):
+        print(palindromo)
