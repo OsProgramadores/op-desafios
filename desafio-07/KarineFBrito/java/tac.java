@@ -18,10 +18,11 @@ public class tac {
     }
     try (RandomAccessFile aq = new RandomAccessFile(caminho, "r")) {
       long tamanho = aq.length();
+      byte[] buffer = new byte[(int) tamanho];
+      aq.readFully(buffer);
       List <Byte> linha = new ArrayList<>();
-      for (long i = tamanho - 1; i >= 0; i--) {
-        aq.seek(i);
-        int c = aq.read();
+      for (int i = buffer.length - 1; i >= 0; i--) {
+        byte c = buffer[i];
         if (c == '\n') {
           if(linha.size() != 0){
             Collections.reverse(linha);
@@ -30,27 +31,23 @@ public class tac {
             for (int j = 0; j < linha.size(); j++) {
               array[j] = linha.get(j);
             }
-
-            System.out.print(new String(array, StandardCharsets.UTF_8));
+            System.out.println(new String(array, StandardCharsets.UTF_8));
             linha.clear();
           }
-                     linha.add((byte) c);
- 
-          
         } else{
-          linha.add((byte) c);
-        } 
-      } 
-      if (linha.size() > 0) {
-        byte[] array = new byte[linha.size()];
-        Collections.reverse(linha);
-        for (int j = 0; j < linha.size(); j++) {
-              array[j] = linha.get(j);
+            linha.add((byte) c);
         }
         System.out.print(new String(array, StandardCharsets.UTF_8));
       }
-
-    } catch (IOException e) {
+      if (!linha.isEmpty()) {
+            Collections.reverse(linha);
+            byte[] array = new byte[linha.size()];
+            for (int j = 0; j < linha.size(); j++) {
+               array[j] = linha.get(j);
+            }
+            System.out.println(new String(array, StandardCharsets.UTF_8));
+      }
+    }catch (IOException e) {
       e.printStackTrace();
     }
   }
