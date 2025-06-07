@@ -1,11 +1,11 @@
 # Desafio 03 — Números Palindrômicos
 
-Este projeto contém um programa em Python que identifica e exibe todos os números palíndromos dentro de um intervalo informado pelo usuário.  
+Este projeto contém um programa em Python que identifica e exibe todos os números palíndromos dentro de um intervalo informado pelo usuário.
 O código está de acordo com o padrão de estilo PEP 8.
 
 ## O que é um número palíndromo?
 
-Um número palíndromo é aquele que permanece o mesmo quando seus dígitos são invertidos.  
+Um número palíndromo é aquele que permanece o mesmo quando seus dígitos são invertidos.
 Exemplo: 121, 1331, 44.
 
 ## Como executar
