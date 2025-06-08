@@ -18,6 +18,12 @@ Exemplo: 121, 1331, 44.
     source .venv/bin/activate
     ```
 
+    **Uma vez que tenha efetuado todos os testes, para sair do ambiente virtual, digite:**
+
+    ```bash
+    deactivate
+    ```
+
 3. No terminal, navegue até esta pasta.
 4. Execute o programa:
 
