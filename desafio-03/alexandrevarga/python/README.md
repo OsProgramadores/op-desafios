@@ -28,7 +28,7 @@ Exemplo: 121, 1331, 44.
 4. Execute o programa:
 
     ```bash
-    python numeros_palindromicos.py
+    python numeros_palindromos.py
     ```
 
 5. Informe o número mínimo e o número máximo quando solicitado.
@@ -75,7 +75,7 @@ Este projeto inclui testes automatizados utilizando o framework `pytest`.
 2. Execute os testes na pasta do projeto:
 
     ```bash
-    pytest teste_palindromicos.py
+    pytest teste_palindromos.py
     ```
 
 Os testes verificam o funcionamento das funções principais do programa.
