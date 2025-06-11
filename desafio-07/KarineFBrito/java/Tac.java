@@ -8,24 +8,25 @@ import java.util.List;
 
 public class Tac {
   public static void main(String[] args) {
-    if (args.length == 0) {
+    if (args.length != 1) {
       System.out.println("Nenhum caminho foi fornecido");
       return;
     }
-    File caminho = new File(String.join(File.separator, args));
+
+    File caminho = new File(args[0]);
     if (!caminho.exists()) {
       System.out.println("Arquivo não encontrado.");
       return;
     }
-    int tam = 4096;
+    int tamanhoBuffer = 4096;
     try (RandomAccessFile aq = new RandomAccessFile(caminho, "r")) {
-      long tamanho = aq.length();
-      byte[] buffer = new byte[tam];
+      long tamanhoRestante = aq.length();
+      byte[] buffer = new byte[tamanhoBuffer];
       List<Byte> linha = new ArrayList<>();
-      while (tamanho > 0) {
-        int aLer = (int) Math.min(tam, tamanho);
-        tamanho -= aLer;
-        aq.seek(tamanho);
+      while (tamanhoRestante > 0) {
+        int aLer = (int) Math.min(tamanhoBuffer, tamanhoRestante);
+        tamanhoRestante -= aLer;
+        aq.seek(tamanhoRestante);
         aq.readFully(buffer, 0, aLer);
 
         for (int i = aLer - 1; i >= 0; i--) {
