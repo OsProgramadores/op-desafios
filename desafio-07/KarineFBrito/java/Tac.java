@@ -22,41 +22,39 @@ public class Tac {
       long tamanho = aq.length();
       byte[] buffer = new byte[tam];
       List<Byte> linha = new ArrayList<>();
-       while (tamanho > 0) {
+      while (tamanho > 0) {
         int aLer = (int) Math.min(tam, tamanho);
         tamanho -= aLer;
         aq.seek(tamanho);
         aq.readFully(buffer, 0, aLer);
 
-      for (int i = aLer - 1; i >= 0; i--) {
-        byte c = buffer[i];
-        if (c == '\n') {
-          if (linha.size() != 0) {
-            Collections.reverse(linha);
-            byte[] array = new byte[linha.size()];
-
-            for (int j = 0; j < linha.size(); j++) {
-              array[j] = linha.get(j);
+        for (int i = aLer - 1; i >= 0; i--) {
+          byte c = buffer[i];
+          if (c == '\n') {
+            if (linha.size() != 0) {
+              imprimir(linha);
+              linha.clear();
             }
-            System.out.print(new String(array, StandardCharsets.UTF_8));
-            linha.clear();
+            linha.add(c);
+          } else {
+            linha.add((byte) c);
           }
-          linha.add(c);
-        } else {
-          linha.add((byte) c);
         }
-      }
       }
       if (!linha.isEmpty()) {
-        Collections.reverse(linha);
-        byte[] array = new byte[linha.size()];
-        for (int j = 0; j < linha.size(); j++) {
-          array[j] = linha.get(j);
-        }
-        System.out.print(new String(array, StandardCharsets.UTF_8));
+        imprimir(linha);
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
+  }
+
+  private static void imprimir(List<Byte> linha) {
+    Collections.reverse(linha);
+    byte[] array = new byte[linha.size()];
+    for (int j = 0; j < linha.size(); j++) {
+      array[j] = linha.get(j);
+    }
+    System.out.print(new String(array, StandardCharsets.UTF_8));
   }
 }
