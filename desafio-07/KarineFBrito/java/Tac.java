@@ -9,7 +9,9 @@ import java.util.List;
 public class Tac {
   public static void main(String[] args) {
     if (args.length != 1) {
-      System.out.println("Nenhum caminho foi fornecido, , execute o programa usando 'java Tac <caminho-absoluto>'");
+      System.out.println(
+          "Nenhum caminho foi fornecido,  execute o programa usando 'java Tac"
+              + " <caminho-absoluto>'");
       return;
     }
 
