@@ -15,7 +15,8 @@ public class Tac {
 
     File caminho = new File(args[0]);
     if (!caminho.exists()) {
-      System.out.println("Nenhum caminho foi fornecido, execute o programa usando 'java Tac <caminho-absoluto>'");
+      System.out.println(
+          "Nenhum caminho foi fornecido, execute o programa usando 'java Tac <caminho-absoluto>'");
       return;
     }
     int tamanhoBuffer = 4096;
