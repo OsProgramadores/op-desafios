@@ -6,7 +6,7 @@ public class Fracoes {
   public static void main(String[] args) {
     if (args.length != 1) {
       System.out.println(
-          "Nenhum caminho foi fornecido,  execute o programa usando 'java Tac"
+          "Nenhum caminho foi fornecido,  execute o programa usando 'java Fracoes"
               + " <caminho-absoluto>'");
       return;
     }
