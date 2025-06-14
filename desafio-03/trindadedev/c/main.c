@@ -33,7 +33,7 @@ void check_palindromes(unsigned int min, unsigned int max) {
   for (int i = min; i < max; ++i) {
     unsigned int reversed = reverse_int(i);
     if (reversed == i) {
-      printf("Palindrome: %d\n", reversed);
+      printf("%d\n", reversed);
     }
   }
 }
