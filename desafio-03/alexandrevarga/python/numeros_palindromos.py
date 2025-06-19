@@ -4,49 +4,61 @@ Fornece funções para verificar se um número é palíndromo e para listar todo
 palíndromos em um intervalo especificado.
 """
 
-import sys
-
-def is_palindromo(num):
-    """Verifica se um número é palíndromo."""
-    s = str(num)
+def eh_palindromo(numero):
+    """Verifica se um número é palíndromo comparando com sua inversão."""
+    s = str(numero)
     return s == s[::-1]
 
 def palindromos_entre(inicio, fim):
-    """Retorna uma lista de números palíndromos dentro de um intervalo."""
-    return [n for n in range(inicio, fim + 1) if is_palindromo(n)]
+    """Retorna uma lista de palíndromos no intervalo [inicio, fim]."""
+    return [
+        num for num in range(inicio, fim + 1)
+        if eh_palindromo(num)
+    ]
 
-def ler_limite(mensagem):
-    """Lê um número inteiro positivo do usuário ou permite sair com 'q'."""
-    while True:
-        entrada = input(mensagem)
-        if entrada.lower() == 'q':
-            print("Saindo do programa.")
-            sys.exit(0)
-        try:
-            valor = int(entrada)
-            if valor < 0:
-                print("Erro: Não são permitidos números negativos como limites.")
+def solicitar_numero(mensagem, tipo='inicial', minimo=None):
+    """Solicita um número ao usuário e realiza validações."""
+    entrada = input(mensagem)
+    if entrada.lower() == 'q':
+        print("Encerrando o programa.")
+        return None
+    try:
+        valor = int(entrada)
+        if tipo == 'final' and minimo is not None and valor < minimo:
+            print("Erro: O número final tem que ser maior ou igual ao número inicial.")
+            return None
+        if valor == 0:
+            if tipo == 'final':
+                print("Erro: O número final tem que ser maior ou igual ao número inicial.")
             else:
-                return valor
-        except ValueError:
-            print("Erro: Por favor, digite apenas números inteiros ou 'q' para sair.")
+                print(f"Erro: O número {tipo} tem que ser maior que zero.")
+            return None
+        if valor < 0:
+            print(f"Erro: O número {tipo} não pode ser negativo.")
+            return None
+        return valor
+    except ValueError:
+        print(
+            "Entradas inválidas. Certifique-se de que ambos são positivos e final >= inicial."
+        )
+        return None
+
+def main():
+    """Executa o programa principal."""
+    inicio = solicitar_numero("Digite o número inicial (ou 'q' para sair): ", tipo='inicial')
+    if inicio is None:
+        return
+    fim = solicitar_numero(
+        "Digite o número final (ou 'q' para sair): ",
+        tipo='final',
+        minimo=inicio
+    )
+    if fim is None:
+        return
+    resultado = palindromos_entre(inicio, fim)
+    print("Números palíndromos no intervalo:")
+    for num in resultado:
+        print(num)
 
 if __name__ == "__main__":
-    print(
-        "Este programa exibe todos os números palíndromos dentro de um intervalo "
-        "informado pelo usuário."
-    )
-    print("Informe apenas números inteiros positivos para os limites ou 'q' para sair.\n")
-
-    while True:
-        minimo = ler_limite("Digite o número mínimo (ou 'q' para sair): ")
-        maximo = ler_limite("Digite o número máximo (ou 'q' para sair): ")
-        if minimo > maximo:
-            print("Erro: O número mínimo não pode ser maior que o número máximo.")
-        else:
-            break
-
-    resultado = palindromos_entre(minimo, maximo)
-    if resultado:
-        for palindromo in resultado:
-            print(palindromo)
+    main()
