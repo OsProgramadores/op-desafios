@@ -22,7 +22,7 @@ public class Fracoes {
         if (linha.isEmpty()) {
           continue;
         }
-        contador(linha);
+        processarLinha(linha);
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -36,7 +36,7 @@ public class Fracoes {
     return mdc(b, a % b);
   }
 
-  public static void contador(String linha) {
+  public static void processarLinha(String linha) {
     String[] partes = linha.split("/");
     int numerador;
     int denominador;
