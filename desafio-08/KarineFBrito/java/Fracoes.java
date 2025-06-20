@@ -35,36 +35,37 @@ public class Fracoes {
     }
     return mdc(b, a % b);
   }
-  public static void contador (String linha){
-     String[] partes = linha.split("/");
-        int numerador;
-        int denominador;
-        if (partes.length == 1) {
-          numerador = Integer.parseInt(partes[0]);
-          denominador = 1;
-        } else {
-          numerador = Integer.parseInt(partes[0]);
-          denominador = Integer.parseInt(partes[1]);
-        }
-        if (denominador == 0) {
-          System.out.println("ERR");
-          return;
-        }
-        int divisor = mdc(numerador, denominador);
-        numerador /= divisor;
-        denominador /= divisor;
-        if (denominador == 1) {
-          System.out.println(numerador);
-        } else if (numerador >= denominador) {
-          int inteiro = numerador / denominador;
-          int resto = numerador % denominador;
-          if (resto == 0) {
-            System.out.println(inteiro);
-          } else {
-            System.out.println(inteiro + " " + resto + "/" + denominador);
-          }
-        } else {
-          System.out.println(numerador + "/" + denominador);
-        }
+
+  public static void contador(String linha) {
+    String[] partes = linha.split("/");
+    int numerador;
+    int denominador;
+    if (partes.length == 1) {
+      numerador = Integer.parseInt(partes[0]);
+      denominador = 1;
+    } else {
+      numerador = Integer.parseInt(partes[0]);
+      denominador = Integer.parseInt(partes[1]);
+    }
+    if (denominador == 0) {
+      System.out.println("ERR");
+      return;
+    }
+    int divisor = mdc(numerador, denominador);
+    numerador /= divisor;
+    denominador /= divisor;
+    if (denominador == 1) {
+      System.out.println(numerador);
+    } else if (numerador >= denominador) {
+      int inteiro = numerador / denominador;
+      int resto = numerador % denominador;
+      if (resto == 0) {
+        System.out.println(inteiro);
+      } else {
+        System.out.println(inteiro + " " + resto + "/" + denominador);
+      }
+    } else {
+      System.out.println(numerador + "/" + denominador);
+    }
   }
 }
