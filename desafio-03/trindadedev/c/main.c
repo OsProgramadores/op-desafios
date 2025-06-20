@@ -49,7 +49,7 @@ int main(int argc, char *argv[]) {
   char *minStr = argv[1];
   char *maxStr = argv[2];
   if (!strisdigits(minStr) || !strisdigits(maxStr)) {
-    printf("%s[ERROR]%s Min and Max values should be Integers!\n", RED, RESET);
+    printf("%s[ERROR]%s Min and Max values should be Positive Integers!\n", RED, RESET);
     return 0;
   }
   // atoi: converts string(char*) to int
