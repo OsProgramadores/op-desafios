@@ -22,7 +22,21 @@ public class Fracoes {
         if (linha.isEmpty()) {
           continue;
         }
-        String[] partes = linha.split("/");
+        contador(linha);
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  }
+
+  public static int mdc(int a, int b) {
+    if (b == 0) {
+      return a;
+    }
+    return mdc(b, a % b);
+  }
+  public static void contador (String linha){
+     String[] partes = linha.split("/");
         int numerador;
         int denominador;
         if (partes.length == 1) {
@@ -34,7 +48,7 @@ public class Fracoes {
         }
         if (denominador == 0) {
           System.out.println("ERR");
-          continue;
+          return;
         }
         int divisor = mdc(numerador, denominador);
         numerador /= divisor;
@@ -52,16 +66,5 @@ public class Fracoes {
         } else {
           System.out.println(numerador + "/" + denominador);
         }
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
-  public static int mdc(int a, int b) {
-    if (b == 0) {
-      return a;
-    }
-    return mdc(b, a % b);
   }
 }
