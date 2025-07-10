@@ -21,7 +21,6 @@ public class BigBase {
         try (RandomAccessFile aq = new RandomAccessFile(caminho, "r")) {
             String linha;
             BigInteger limiteMax = converter(Limite, 62); // Transforma a string limite em um numero decimal
-
             while ((linha = aq.readLine()) != null) { // Verifico se a linha não está vazia, se não estiver ele continua rodando;
                 String[] partes = linha.split(" ");
                 if (partes.length != 3) { // Divido a linha em três partes Base_Entrada, Base_Saída e Numero
@@ -47,11 +46,9 @@ public class BigBase {
              e.printStackTrace();
         }
     }
-
     static boolean negativo(String numero) { // Uso esse método para verificar se o numero e negativo
         return numero.startsWith("-"); //verifica se o numero inicia com o sinal negativo (-)
     }
-
     public static BigInteger converter(String numero, int Base_Entrada) { // Uso esse método para converter os numeros com a Base_Entrada para base decimal(10)
         BigInteger resultado = BigInteger.ZERO;
         BigInteger base = BigInteger.valueOf(Base_Entrada); ///base recebe o valor de Base_Entrada
@@ -79,7 +76,6 @@ public class BigBase {
         }
         return resultado.reverse().toString();
     }
-
     public static int Valor_Digito(char c) { //converte um caracter em valor um valor numerico
         if (c >= '0' && c <= '9') {
             return c - '0';
