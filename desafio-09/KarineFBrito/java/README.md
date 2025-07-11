@@ -11,11 +11,12 @@
 - Java 21 (JDK 21).
 
 ## Como executar o código
+  - Para compilar o código execute o comando abaixo:
+
   ```
-   javac BigBase.java
+  javac BigBase.java
   ```
-- Para compilar o código.
+  - Para executar o código, utilize o seguinte comando:
 ```
 java BigBase <caminho-absoluto>
 ```
-- Para executar o código.
