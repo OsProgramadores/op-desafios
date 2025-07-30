@@ -29,7 +29,7 @@ using namespace std;
     {
         
             if(VerificandoEprimo(i) == 1){
-                cout<<i;
+                cout<<i<<", ";
             }
         
     }
