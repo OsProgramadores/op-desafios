@@ -4,57 +4,41 @@
 using namespace std;
 
 
+ int VerificandoEprimo(int n){
 
-vector<int> StoregeArray(int n){
-    
-    vector<int>array;
-
-    for(int i = 0; i<=n; i++){
-        array.push_back(i);
+    int counter = 0;
+    for (int i = 1; i <= n; i++)
+    {
+         if(n % i == 0){
+           counter ++;
+         } 
     }
 
-    return array;
-}
+    if(counter == 2){
+        return 1;
 
-
-void numerosPrimos(int n, int total){
-
-
- vector<int> nPrimos  =  StoregeArray(total);
-
- for(int i = n; i<=total; i++){
-
-    if(nPrimos[i] % 2 == 0){
-       
     }else{
-       
-        if(nPrimos[i] == 1){
-            nPrimos[i] = 2;
-        }else
-        if(nPrimos[i] % 3 == 0){
-           if(nPrimos[i]== 3){
-            nPrimos[i]==3;
-           }else{
-            
-           }
-
-            
-        }
-
-        cout<< nPrimos[i];
-
-       
-        
+        return 0;
     }
     
  }
 
-  
+ void ListarPrimos(int inicio, int fim){
 
-}
+    for (int i = inicio; i <= fim; i++)
+    {
+        
+            if(VerificandoEprimo(i) == 1){
+                cout<<i;
+            }
+        
+    }
+    
+
+ }
 
 int main(){
     
-    numerosPrimos(1, 10);
+    ListarPrimos(1, 100);
 
 }
