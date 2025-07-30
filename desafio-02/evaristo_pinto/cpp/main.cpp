@@ -38,7 +38,9 @@ using namespace std;
  }
 
 int main(){
-    
-    ListarPrimos(1, 100);
+    int iniciaNumero, finalNumero;
+    iniciaNumero = 0;
+    finalNumero = 1000;
+    ListarPrimos(iniciaNumero, finalNumero);
 
 }
