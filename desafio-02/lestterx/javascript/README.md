@@ -1,7 +1,9 @@
 ## DESAFIO 02 - Primos
 
 Eu percorro os numeros de 2 à 10.000 verificando se cada um é divisível por 2.
-Se não for, eu verifico se ele é divisível pelos primos anteriores até sua raiz quadrada, sendo primo, se não for divisível
+Se não for, eu verifico se ele é divisível pelos primos anteriores até sua raiz quadrada, sendo primo, se não for divisível.
+
+Sua raiz quadrada é um limite padrão para confirmar se o número é primo
 
 ### Execução
 
