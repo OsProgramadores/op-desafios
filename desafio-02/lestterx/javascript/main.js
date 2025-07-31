@@ -3,7 +3,7 @@ const primos = [];
 for (let i = 2; i <= 10000; i++) {
     let isPrimo = true;
     if (i % 2 !== 0) {
-        const raizQuadrada = Math.floor(Math.sqrt(i))
+        const raizQuadrada = Math.floor(Math.sqrt(i));
         for (let st = 2; st <= raizQuadrada; st++) {
             if (i % st === 0) {
                 isPrimo = false;
@@ -16,6 +16,6 @@ for (let i = 2; i <= 10000; i++) {
     }
 }
 
-for (let p of primos) {
+for (const p of primos) {
     console.log(p);
 }
