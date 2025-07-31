@@ -16,6 +16,6 @@ for (let i = 2; i <= 10000; i++) {
     }
 }
 
-for (let i = 0; i < primos.length; i++) {
-    console.log(`Primo Nº${i + 1}: ${primos.at(i)}`);
+for (let p of primos) {
+    console.log(p);
 }
