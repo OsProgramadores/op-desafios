@@ -1,7 +1,7 @@
 ## DESAFIO 03 - PALÍNDROMOS
 
 ### Funcionamento
-Obtenho os argumentos de início e fim passados na execução do código e os valido antes de executar de fato a lógica. 
+Obtenho os argumentos de início e fim passados na execução do código e os valido antes de executar de fato a lógica.
 Após isso, eu sigo com a lógica, passando por cada valor e criando uma cópia intertida para comparação. Se a cópia
 for igual ao original, o número é adicionado ao array Palíndromos, que os exibo na tela através de um outro FOR.
 
