@@ -1,4 +1,4 @@
-## Desafio 03 - Palíndromos 
+## Desafio 03 - Palíndromos
 
 Minha ideia principal é obter uma cópia invertida o número da vez em um array, transformar
 de volta em uma string e comparar os dois para ver se são iguais invertido e original.
