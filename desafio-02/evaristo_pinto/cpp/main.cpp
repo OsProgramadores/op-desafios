@@ -15,7 +15,6 @@ for (int i = inicio; i <= fim; i++)
 if(VerificandoEprimo(i) == 1){
                 cout<<i;}
     }}
-
 int main(){
     int iniciaNumero, finalNumero;
     iniciaNumero = 0;
