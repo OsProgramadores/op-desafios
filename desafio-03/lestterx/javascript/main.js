@@ -5,14 +5,22 @@ let FINAL;
 
 try {
     const args = process.argv.slice(2);
-    if (args.length === 0 || args.length > 2) {
-        throw new Error("Forneça no máximo 2 argumentos numéricos ao executar o código");
+    if (args.length < 2 || args.length > 2) {
+        throw new Error("Forneça no máximo 2 parâmetros numéricos ao executar o código");
     }
 
     INICIO = Number(args[0]);
     FINAL = Number(args[1]);
-    if (isNaN(INICIO + FINAL)) {
+    if (isNaN(INICIO) || isNaN(FINAL)) {
         throw new Error("Forneça apenas números");
+    }
+
+    if (INICIO <= 0 || FINAL <= 0) {
+        throw new Error("Apenas números maiores que zero são aceitos");
+    }
+
+    if (FINAL <= INICIO) {
+        throw new Error("O segundo parâmetro deve ser maior que o primeiro");
     }
 
     for (let i = INICIO; i <= FINAL; i++) {

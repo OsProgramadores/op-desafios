@@ -1,5 +1,9 @@
 ## DESAFIO 03 - PALÍNDROMOS
 
+### Autor
+- Nome: Lestter Gabriel
+- Área: Desenvolvimento Web
+
 ### Funcionamento
 Obtenho os argumentos de início e fim passados na execução do código e os valido antes de executar de fato a lógica.
 Após isso, eu sigo com a lógica, passando por cada valor e criando uma cópia intertida para comparação. Se a cópia
@@ -29,3 +33,6 @@ ou
 ```shell
 node main.js 100 1000 2000
 ```
+
+### Licença
+Este código é público e qualquer pessoa está livre para usar e modificar conforme suas necessidades sem quais burocracias jurídicas
