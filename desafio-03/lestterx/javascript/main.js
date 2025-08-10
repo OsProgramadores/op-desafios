@@ -6,7 +6,7 @@ let FINAL;
 try {
     const args = process.argv.slice(2);
     if (args.length < 2 || args.length > 2) {
-        throw new Error("Forneça no máximo 2 parâmetros numéricos ao executar o código");
+        throw new Error("A aplicação espera que dois parâmetros numéricos sejam passados via linha de comando");
     }
 
     INICIO = Number(args[0]);
