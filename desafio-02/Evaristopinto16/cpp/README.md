@@ -18,7 +18,7 @@ Como o principal Objectivo do desafio é listar os numeros primos que estão no 
 
 1. Para compilar e executar em C++, você precisará ter instalado:
 
-2. Um compilador C++ (como g++, clang++ ou MSVC)
+2. Um compilador C++ (como g++, clang++)
 
  
 
