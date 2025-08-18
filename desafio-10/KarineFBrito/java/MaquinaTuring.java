@@ -88,16 +88,13 @@ public class MaquinaTuring {
         if (mapaEstado != null) {
             Regra regra = mapaEstado.get(String.valueOf(simboloLido));
             if (regra != null) return regra;
-            regra = mapaEstado.get("_");
-            if (regra != null) return regra;
+
             regra = mapaEstado.get("*");
             if (regra != null) return regra;
         }
         mapaEstado = regras.get("*");
         if (mapaEstado != null) {
             Regra regra = mapaEstado.get(String.valueOf(simboloLido));
-            if (regra != null) return regra;
-            regra = mapaEstado.get("_");
             if (regra != null) return regra;
             regra = mapaEstado.get("*");
             if (regra != null) return regra;
@@ -117,9 +114,7 @@ public class MaquinaTuring {
             String novoSimbolo = regra.novoSimbolo;
             String direcao = regra.direcao;
             String estadoNovo = regra.estadoNovo;
-            if (novoSimbolo.equals("*") && direcao.equals("*") && estadoNovo.equals(estadoAtual)) {
-                return "ERR";
-            }
+
             if (!novoSimbolo.equals("*")) {
                 fita.escrever(novoSimbolo.charAt(0));
             }
@@ -164,9 +159,6 @@ class Fita {
     }
 
     public char ler() {
-        if (posicaoCabeca >= fita.size()) {
-            return '_';
-        }
         return fita.get(posicaoCabeca);
     }
 
@@ -190,9 +182,8 @@ class Fita {
                 fita.add(0, '_');
                 posicaoCabeca = 0;
             }
-        } else if (direcao.equals("*")) {
-        } else {
-            throw new IllegalArgumentException("Direção inválida: " + direcao);
+        }
+        if (direcao.equals("*")) {
         }
     }
     @Override
