@@ -38,7 +38,7 @@ public class MaquinaTuring {
                 String fitaEntrada = partes[1].trim();
 
                 File arquivoRegra = new File(pastaRegras, arquivoRegras);
-                Map<String, Map<String, Regra>> regras = CarregaRegras(arquivoRegra.getAbsolutePath());
+                Map<String, Map<String, List<Regra>>> regras = CarregaRegras(arquivoRegra.getAbsolutePath());
 
                 Fita fita = new Fita(fitaEntrada);
                 String saida = IniciarMaquina(regras, fita, "0");
@@ -49,8 +49,9 @@ public class MaquinaTuring {
         }
     }
 
-    public static Map<String, Map<String, Regra>> CarregaRegras(String ArquivoRegras) {
-        Map<String, Map<String, Regra>> regras = new HashMap<>();
+    public static Map<String, Map<String, List<Regra>>> CarregaRegras(String ArquivoRegras) {
+        Map<String, Map<String, List<Regra>>> regras = new HashMap<>();
+        int posicao = 0; 
         try (BufferedReader br = new BufferedReader(new FileReader(ArquivoRegras))) {
             String linha;
             while ((linha = br.readLine()) != null) {
@@ -73,8 +74,9 @@ public class MaquinaTuring {
                     String novoSimbolo = partes[2];
                     String direcao = partes[3];
                     String estadoNovo = partes[4];
-                    Regra regra = new Regra(estadoAtual, simboloLido, novoSimbolo, direcao, estadoNovo);
-                    regras.computeIfAbsent(estadoAtual, k -> new HashMap<>()).put(simboloLido, regra);
+                    Regra regra = new Regra(posicao++, estadoAtual, simboloLido, novoSimbolo, direcao, estadoNovo);
+                    regras.computeIfAbsent(estadoAtual, k -> new HashMap<>()).computeIfAbsent(simboloLido, k -> new ArrayList<>())
+                 .add(regra);
                 }
             }
         } catch (IOException e) {
@@ -83,26 +85,47 @@ public class MaquinaTuring {
         return regras;
     }
 
-    public static Regra ProcurarRegra(Map<String, Map<String,Regra>> regras, String estadoAtual, char simboloLido) {
-        Map<String, Regra> mapaEstado = regras.get(estadoAtual);
+    public static Regra ProcurarRegra(Map<String, Map<String, List<Regra>>> regras, String estadoAtual, char simboloLido) {
+        Map<String, List<Regra>> mapaEstado = regras.get(estadoAtual);
+        Map<String, List<Regra>> generico = regras.get("*");
+        String simbolo = String.valueOf(simboloLido);
         if (mapaEstado != null) {
-            Regra regra = mapaEstado.get(String.valueOf(simboloLido));
+            Regra regra = menorPosicao(mapaEstado.get(simbolo));
             if (regra != null) return regra;
-
-            regra = mapaEstado.get("*");
+            
+            regra = menorPosicao(mapaEstado.get("*"));
+            if (regra != null) return regra;
+            
+            regra = menorPosicao(mapaEstado.get("_"));
             if (regra != null) return regra;
         }
-        mapaEstado = regras.get("*");
-        if (mapaEstado != null) {
-            Regra regra = mapaEstado.get(String.valueOf(simboloLido));
+        if (generico != null) {
+            Regra regra = menorPosicao(generico.get(simbolo));
             if (regra != null) return regra;
-            regra = mapaEstado.get("*");
+            
+            regra = menorPosicao(generico.get("_"));
             if (regra != null) return regra;
-        }
+            
+            regra = menorPosicao(generico.get("*"));
+            if (regra != null) return regra;
+        }   
+        
+        
         return null;
     }
 
-    public static String IniciarMaquina(Map<String, Map<String, Regra>> regras, Fita fita, String estadoAtual) {
+    public static Regra menorPosicao(List<Regra> lista) {
+        if (lista == null || lista.isEmpty()) return null;
+        Regra menor = lista.get(0);
+        for (Regra r : lista) {
+            if (r.posicao < menor.posicao) {
+                menor = r;
+            }
+        }
+        return menor;
+    }
+
+    public static String IniciarMaquina(Map<String, Map<String, List<Regra>>> regras, Fita fita, String estadoAtual) {
         while (true) {
             char simboloLido = fita.ler();
             Regra regra = ProcurarRegra(regras, estadoAtual, simboloLido);
@@ -114,7 +137,7 @@ public class MaquinaTuring {
             String novoSimbolo = regra.novoSimbolo;
             String direcao = regra.direcao;
             String estadoNovo = regra.estadoNovo;
-
+            
             if (!novoSimbolo.equals("*")) {
                 fita.escrever(novoSimbolo.charAt(0));
             }
@@ -130,12 +153,14 @@ public class MaquinaTuring {
 
 
 class Regra{
+    int posicao;
     String estadoAtual;
     String simboloLido;
     String novoSimbolo;
     String direcao;
     String estadoNovo;
-    public Regra(String estadoAtual,String simboloLido,String novoSimbolo,String direcao,String estadoNovo) {
+    public Regra(int posicao, String estadoAtual,String simboloLido,String novoSimbolo,String direcao,String estadoNovo) {
+        this.posicao = posicao;
         this.estadoAtual = estadoAtual;
         this.simboloLido = simboloLido;
         this.novoSimbolo = novoSimbolo;
@@ -144,7 +169,7 @@ class Regra{
     }
     @Override
     public String toString() {
-        return String.format("(%s, %s -> %s, %s, %s)", estadoAtual, simboloLido, novoSimbolo, direcao, estadoNovo);
+        return String.format("(%s,%s, %s -> %s, %s, %s)",direcao, estadoAtual, simboloLido, novoSimbolo, direcao, estadoNovo);
     }
 }
 class Fita {
@@ -182,7 +207,7 @@ class Fita {
                 fita.add(0, '_');
                 posicaoCabeca = 0;
             }
-        }
+        } 
         if (direcao.equals("*")) {
         }
     }
