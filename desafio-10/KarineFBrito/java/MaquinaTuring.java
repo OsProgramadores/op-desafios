@@ -35,14 +35,14 @@ public class MaquinaTuring {
                 }
 
                 String arquivoRegras = partes[0].trim();
-                String fitaEntrada = partes[1].trim();
+                String fitaEntrada = partes[1].replace(" ","_").trim();
 
                 File arquivoRegra = new File(pastaRegras, arquivoRegras);
                 Map<String, Map<String, List<Regra>>> regras = CarregaRegras(arquivoRegra.getAbsolutePath());
 
                 Fita fita = new Fita(fitaEntrada);
                 String saida = IniciarMaquina(regras, fita, "0");
-                System.out.println(arquivoRegras + "," + fitaEntrada + "," + saida);
+                System.out.println(arquivoRegras + "," + fitaEntrada.replace(" ","_").trim() + "," + saida.replace("_"," ").trim());
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -51,7 +51,7 @@ public class MaquinaTuring {
 
     public static Map<String, Map<String, List<Regra>>> CarregaRegras(String ArquivoRegras) {
         Map<String, Map<String, List<Regra>>> regras = new HashMap<>();
-        int posicao = 0; 
+        int posicao = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(ArquivoRegras))) {
             String linha;
             while ((linha = br.readLine()) != null) {
@@ -76,7 +76,7 @@ public class MaquinaTuring {
                     String estadoNovo = partes[4];
                     Regra regra = new Regra(posicao++, estadoAtual, simboloLido, novoSimbolo, direcao, estadoNovo);
                     regras.computeIfAbsent(estadoAtual, k -> new HashMap<>()).computeIfAbsent(simboloLido, k -> new ArrayList<>())
-                 .add(regra);
+                            .add(regra);
                 }
             }
         } catch (IOException e) {
@@ -89,28 +89,32 @@ public class MaquinaTuring {
         Map<String, List<Regra>> mapaEstado = regras.get(estadoAtual);
         Map<String, List<Regra>> generico = regras.get("*");
         String simbolo = String.valueOf(simboloLido);
-        if (mapaEstado != null) {
-            Regra regra = menorPosicao(mapaEstado.get(simbolo));
-            if (regra != null) return regra;
-            
-            regra = menorPosicao(mapaEstado.get("*"));
-            if (regra != null) return regra;
-            
-            regra = menorPosicao(mapaEstado.get("_"));
-            if (regra != null) return regra;
+        if (mapaEstado != null && mapaEstado.containsKey(simbolo)) {
+            return menorPosicao(mapaEstado.get(simbolo));
         }
-        if (generico != null) {
-            Regra regra = menorPosicao(generico.get(simbolo));
-            if (regra != null) return regra;
-            
-            regra = menorPosicao(generico.get("_"));
-            if (regra != null) return regra;
-            
-            regra = menorPosicao(generico.get("*"));
-            if (regra != null) return regra;
-        }   
-        
-        
+
+        if (mapaEstado != null && mapaEstado.containsKey("*") && generico!=null && generico.containsKey(simbolo)) {
+            Regra r1 = menorPosicao(mapaEstado.get("*"));
+            Regra r2 = menorPosicao(generico.get(simbolo));
+            if(r1!=null && r2!=null){
+                return(r1.posicao < r2.posicao) ? r1 : r2;
+            }else if(r1!=null){
+                return r1;
+            }else if(r2!=null){
+                return r2;
+            }
+        }
+
+        if (mapaEstado != null && mapaEstado.containsKey("*")) {
+            return menorPosicao(mapaEstado.get("*"));
+        }
+        if(generico != null && generico.containsKey(simbolo)){
+            return menorPosicao(generico.get(simbolo));
+        }
+        if(generico != null && generico.containsKey("*")){
+            return menorPosicao(generico.get("*"));
+        }
+
         return null;
     }
 
@@ -126,28 +130,25 @@ public class MaquinaTuring {
     }
 
     public static String IniciarMaquina(Map<String, Map<String, List<Regra>>> regras, Fita fita, String estadoAtual) {
-        while (true) {
+        do {
             char simboloLido = fita.ler();
             Regra regra = ProcurarRegra(regras, estadoAtual, simboloLido);
 
-            if (regra == null ) {
+            if (regra == null) {
                 return "ERR";
             }
 
             String novoSimbolo = regra.novoSimbolo;
             String direcao = regra.direcao;
             String estadoNovo = regra.estadoNovo;
-            
+
             if (!novoSimbolo.equals("*")) {
                 fita.escrever(novoSimbolo.charAt(0));
             }
             fita.mover(direcao);
             estadoAtual = estadoNovo;
-            if (estadoAtual.startsWith("halt")  || estadoAtual.equals("accept") || estadoAtual.equals("reject")) {
-                break;
-            }
-        }
-        return fita.toString();
+        } while (!estadoAtual.startsWith("halt"));
+        return fita.toString().replace("_"," ").trim();
     }
 }
 
@@ -207,7 +208,7 @@ class Fita {
                 fita.add(0, '_');
                 posicaoCabeca = 0;
             }
-        } 
+        }
         if (direcao.equals("*")) {
         }
     }
