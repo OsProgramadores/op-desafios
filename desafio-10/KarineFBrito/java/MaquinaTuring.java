@@ -42,7 +42,7 @@ public class MaquinaTuring {
 
                 Fita fita = new Fita(fitaEntrada);
                 String saida = executarMaquina(regras, fita, "0");
-                System.out.println(arquivoRegras + "," + fitaEntrada + "," +saida);
+                System.out.println(arquivoRegras + "," + fitaEntrada.replace("_", " ").trim() + "," +saida.replace("_"," ").trim());
             }
         }catch (Exception e) {
             e.printStackTrace();
@@ -142,7 +142,7 @@ public class MaquinaTuring {
             fita.mover(direcao);
             estadoAtual = estadoNovo;
         } while (!estadoAtual.startsWith("halt"));
-        return fita.toString().replace("_"," ").trim();
+        return fita.toString();
     }
 }
 
