@@ -13,7 +13,7 @@ public class MaquinaTuring {
             System.out.println("Nenhum caminho foi fornecido, execute o programa usando: ' java MaquinaTuring" + " <caminho-absoluto>'");
             return;
         }
-        File caminho = new File(args[0]);
+        File caminho = new  File(args[0]);
         if (!caminho.exists()) {
             System.out.println("Esse caminho não existe");
             return;
@@ -23,7 +23,7 @@ public class MaquinaTuring {
             String linha;
             while ((linha = br.readLine()) != null) {
                 linha = linha.trim();
-                if (linha.isEmpty() || linha.startsWith(";")) continue;
+                if (linha.isEmpty()) continue;
 
                 int posComentario = linha.indexOf(";");
                 if (posComentario != -1) linha = linha.substring(0, posComentario).trim();
@@ -35,21 +35,21 @@ public class MaquinaTuring {
                 }
 
                 String arquivoRegras = partes[0].trim();
-                String fitaEntrada = partes[1].replace(" ","_").trim();
+                String fitaEntrada = partes[1].replace(" ","_");
 
                 File arquivoRegra = new File(pastaRegras, arquivoRegras);
-                Map<String, Map<String, List<Regra>>> regras = CarregaRegras(arquivoRegra.getAbsolutePath());
+                Map<String, Map<String, List<Regra>>> regras = carregaRegras(arquivoRegra.getAbsolutePath());
 
                 Fita fita = new Fita(fitaEntrada);
-                String saida = IniciarMaquina(regras, fita, "0");
-                System.out.println(arquivoRegras + "," + fitaEntrada.replace(" ","_").trim() + "," + saida.replace("_"," ").trim());
+                String saida = executarMaquina(regras, fita, "0");
+                System.out.println(arquivoRegras + "," + fitaEntrada + "," +saida);
             }
         }catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static Map<String, Map<String, List<Regra>>> CarregaRegras(String ArquivoRegras) {
+    public static Map<String, Map<String, List<Regra>>> carregaRegras(String ArquivoRegras) {
         Map<String, Map<String, List<Regra>>> regras = new HashMap<>();
         int posicao = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(ArquivoRegras))) {
@@ -85,7 +85,7 @@ public class MaquinaTuring {
         return regras;
     }
 
-    public static Regra ProcurarRegra(Map<String, Map<String, List<Regra>>> regras, String estadoAtual, char simboloLido) {
+    public static Regra procurarRegra(Map<String, Map<String, List<Regra>>> regras, String estadoAtual, char simboloLido) {
         Map<String, List<Regra>> mapaEstado = regras.get(estadoAtual);
         Map<String, List<Regra>> generico = regras.get("*");
         String simbolo = String.valueOf(simboloLido);
@@ -96,15 +96,9 @@ public class MaquinaTuring {
         if (mapaEstado != null && mapaEstado.containsKey("*") && generico!=null && generico.containsKey(simbolo)) {
             Regra r1 = menorPosicao(mapaEstado.get("*"));
             Regra r2 = menorPosicao(generico.get(simbolo));
-            if(r1!=null && r2!=null){
-                return(r1.posicao < r2.posicao) ? r1 : r2;
-            }else if(r1!=null){
-                return r1;
-            }else if(r2!=null){
-                return r2;
-            }
-        }
+            return(r1.posicao < r2.posicao) ? r1 : r2;
 
+        }
         if (mapaEstado != null && mapaEstado.containsKey("*")) {
             return menorPosicao(mapaEstado.get("*"));
         }
@@ -129,10 +123,10 @@ public class MaquinaTuring {
         return menor;
     }
 
-    public static String IniciarMaquina(Map<String, Map<String, List<Regra>>> regras, Fita fita, String estadoAtual) {
+    public static String executarMaquina(Map<String, Map<String, List<Regra>>> regras, Fita fita, String estadoAtual) {
         do {
             char simboloLido = fita.ler();
-            Regra regra = ProcurarRegra(regras, estadoAtual, simboloLido);
+            Regra regra = procurarRegra(regras, estadoAtual, simboloLido);
 
             if (regra == null) {
                 return "ERR";
