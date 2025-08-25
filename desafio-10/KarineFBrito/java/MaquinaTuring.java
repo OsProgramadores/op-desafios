@@ -10,8 +10,8 @@ public class MaquinaTuring {
   public static void main(String[] args) throws Exception {
     if (args.length != 1) {
       System.out.println(
-              "Nenhum caminho foi fornecido, execute o programa usando: ' java MaquinaTuring"
-                      + " <caminho-absoluto>'");
+          "Nenhum caminho foi fornecido, execute o programa usando: ' java MaquinaTuring"
+              + " <caminho-absoluto>'");
       return;
     }
     File caminho = new File(args[0]);
@@ -38,22 +38,22 @@ public class MaquinaTuring {
 
         File arquivoRegra = new File(pastaRegras, arquivoRegras);
         Map<String, Map<String, List<Regra>>> regras =
-                carregaRegras(arquivoRegra.getAbsolutePath());
+            carregaRegras(arquivoRegra.getAbsolutePath());
 
         Fita fita = new Fita(fitaEntrada);
         String saida = executarMaquina(regras, fita, "0");
         System.out.println(
-                arquivoRegras
-                        + ","
-                        + fitaEntrada.replace("_", " ").trim()
-                        + ","
-                        + saida.replace("_", " ").trim());
+            arquivoRegras
+                + ","
+                + fitaEntrada.replace("_", " ").trim()
+                + ","
+                + saida.replace("_", " ").trim());
       }
     }
   }
 
   public static Map<String, Map<String, List<Regra>>> carregaRegras(String ArquivoRegras)
-          throws Exception {
+      throws Exception {
     Map<String, Map<String, List<Regra>>> regras = new HashMap<>();
     int posicao = 0;
     try (BufferedReader br = new BufferedReader(new FileReader(ArquivoRegras))) {
@@ -78,11 +78,11 @@ public class MaquinaTuring {
           String direcao = partes[3];
           String estadoNovo = partes[4];
           Regra regra =
-                  new Regra(posicao++, estadoAtual, simboloLido, novoSimbolo, direcao, estadoNovo);
+              new Regra(posicao++, estadoAtual, simboloLido, novoSimbolo, direcao, estadoNovo);
           Map<String, List<Regra>> mapaSimboloRegras =
-                  regras.computeIfAbsent(estadoAtual, k -> new HashMap<>());
+              regras.computeIfAbsent(estadoAtual, k -> new HashMap<>());
           List<Regra> listaRegras =
-                  mapaSimboloRegras.computeIfAbsent(simboloLido, k -> new ArrayList<>());
+              mapaSimboloRegras.computeIfAbsent(simboloLido, k -> new ArrayList<>());
           listaRegras.add(regra);
         }
       }
@@ -91,7 +91,7 @@ public class MaquinaTuring {
   }
 
   public static Regra procurarRegra(
-          Map<String, Map<String, List<Regra>>> regras, String estadoAtual, char simboloLido) {
+      Map<String, Map<String, List<Regra>>> regras, String estadoAtual, char simboloLido) {
     Map<String, List<Regra>> mapaEstado = regras.get(estadoAtual);
     String simbolo = String.valueOf(simboloLido);
     if (mapaEstado != null && mapaEstado.containsKey(simbolo)) {
@@ -99,9 +99,9 @@ public class MaquinaTuring {
     }
     Map<String, List<Regra>> generico = regras.get("*");
     if (mapaEstado != null
-            && mapaEstado.containsKey("*")
-            && generico != null
-            && generico.containsKey(simbolo)) {
+        && mapaEstado.containsKey("*")
+        && generico != null
+        && generico.containsKey(simbolo)) {
       Regra r1 = menorPosicao(mapaEstado.get("*"));
       Regra r2 = menorPosicao(generico.get(simbolo));
       return (r1.posicao < r2.posicao) ? r1 : r2;
@@ -133,7 +133,7 @@ public class MaquinaTuring {
   }
 
   public static String executarMaquina(
-          Map<String, Map<String, List<Regra>>> regras, Fita fita, String estadoAtual) {
+      Map<String, Map<String, List<Regra>>> regras, Fita fita, String estadoAtual) {
     do {
       char simboloLido = fita.ler();
       Regra regra = procurarRegra(regras, estadoAtual, simboloLido);
@@ -154,84 +154,4 @@ public class MaquinaTuring {
     } while (!estadoAtual.startsWith("halt"));
     return fita.toString();
   }
-}
-
-class Regra {
-    int posicao;
-    String estadoAtual;
-    String simboloLido;
-    String novoSimbolo;
-    String direcao;
-    String estadoNovo;
-
-    public Regra(
-            int posicao,
-            String estadoAtual,
-            String simboloLido,
-            String novoSimbolo,
-            String direcao,
-            String estadoNovo) {
-        this.posicao = posicao;
-        this.estadoAtual = estadoAtual;
-        this.simboloLido = simboloLido;
-        this.novoSimbolo = novoSimbolo;
-        this.direcao = direcao;
-        this.estadoNovo = estadoNovo;
-    }
-
-    @Override
-    public String toString() {
-        return String.format(
-                "(%s,%s, %s -> %s, %s, %s)",
-                posicao, estadoAtual, simboloLido, novoSimbolo, direcao, estadoNovo);
-    }
-}
-
-
-class Fita {
-    List<Character> fita;
-    int posicaoCabeca = 0;
-
-    public Fita(String entrada) {
-        fita = new ArrayList<>();
-        for (char c : entrada.toCharArray()) {
-            fita.add(c);
-        }
-    }
-
-    public char ler() {
-        return fita.get(posicaoCabeca);
-    }
-
-    public void escrever(char simbolo) {
-        if (posicaoCabeca >= fita.size()) {
-            fita.add(simbolo);
-        } else {
-            fita.set(posicaoCabeca, simbolo);
-        }
-    }
-
-    public void mover(String direcao) {
-        if (direcao.equals("r")) {
-            posicaoCabeca++;
-            if (posicaoCabeca >= fita.size()) {
-                fita.add('_');
-            }
-        } else if (direcao.equals("l")) {
-            posicaoCabeca--;
-            if (posicaoCabeca < 0) {
-                fita.add(0, '_');
-                posicaoCabeca = 0;
-            }
-        }
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        for (char c : fita) {
-            sb.append(c);
-        }
-        return sb.toString();
-    }
 }
