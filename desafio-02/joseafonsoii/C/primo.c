@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
 void imprimirPrimosAte10000() {
     int limite = 10000;
     int *eh_primo = (int*) malloc((limite + 1) * sizeof(int));
@@ -35,3 +34,4 @@ int main() {
     imprimirPrimosAte10000();
     return 0;
 }
+
