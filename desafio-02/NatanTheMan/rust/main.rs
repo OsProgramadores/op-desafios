@@ -14,7 +14,7 @@ fn is_prime(num: i32) -> bool {
 }
 
 fn main() {
-    for i in 2..101 {
+    for i in 2..10001 {
         if is_prime(i) {
             println!("{}", i);
         }
