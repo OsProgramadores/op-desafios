@@ -1,13 +1,8 @@
-use std::f32;
-
 fn is_prime(num: i32) -> bool {
-    let mut counter = 0;
-    for j in 2..((num as f32).sqrt() as i32) + 1 {
+    let limit = f64::sqrt(num as f64) as i32 + 1;
+    for j in 2..limit {
         if num % j == 0 {
-            counter += 1;
-            if counter >= 1 {
-                return false;
-            }
+            return false;
         }
     }
     return true;
