@@ -1,5 +1,5 @@
-fn is_prime(num: i32) -> bool {
-    let limit = f64::sqrt(num as f64) as i32 + 1;
+fn is_prime(num: u16) -> bool {
+    let limit = f64::sqrt(num as f64) as u16 + 1;
     for j in 2..limit {
         if num % j == 0 {
             return false;
