@@ -48,3 +48,10 @@ Rust 1.90
 # Autor
 
 [Natan Costa](https://github.com/NatanTheMan)
+
+# Aprenda mais sobre Rust
+
+[The Rust Programming Language](https://doc.rust-lang.org/book/) - livro para aprender Rust
+[Rust Playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2024) - editor online para Rust
+[Rust By Example](https://doc.rust-lang.org/rust-by-example/) - colecao de exemplos executaveis que ilustrao bibliotecas padroes e conceitos da linguagem
+[Documentacao para a bilbioteca padrao do Rust](https://doc.rust-lang.org/std/index.html)
