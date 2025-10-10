@@ -23,4 +23,3 @@ if __name__ == "__main__":
             primos.append(num)
             print(f"{num}", end=" ")
     print("")
-
