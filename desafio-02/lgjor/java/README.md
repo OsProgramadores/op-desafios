@@ -9,8 +9,6 @@ Listar todos os números primos entre 1 e 10000, na linguagem de sua preferênci
 - Linguagem: Java
 - Versão: 17
 
-Com certeza\! Vou formatar as instruções em Markdown de forma clara e adequada, incluindo os passos de compilação e execução.
-
 ## 🚀 Como Rodar o Desafio
 
 Siga os passos abaixo no seu terminal para compilar e executar o projeto:
