@@ -1,8 +1,8 @@
-# 🅿️ Desafio 02 - Numeros Primos
+# Desafio 02 - Numeros Primos
 
 O programa percorre todos os números de 1 a 10.000(dez mil) e os escreve na tela caso sejam números primos.
 
-## 🔍 Explicação da lógica
+## Explicação da lógica
 
 A função recebe um númoro inteiro positivio. Utilizei ``u16`` pois ele comporta valores até pouco mais de 60.000, mais do que necessário para armazenar o número máximo que é 10.000. A função verifica se o argumento passado é primo, caso seja retona ``true``.
 
@@ -29,22 +29,22 @@ let limit = f64::sqrt(num as f64) as u16 + 1;
 for j in 2..limit {...}
 ```
 
-## 🔨 Compilar
+## Compilar
 
 ```
 rustc main.rs
 ```
 
-## ▶️ Rodar
+## Rodar
 
 ```
 ./main
 ```
 
-## 🦀 Linguagem
+## Linguagem
 [![Linguagens](https://skillicons.dev/icons?i=rust)]() Rust 1.90
 
-## 📚 Aprenda mais sobre Rust
+## Aprenda mais sobre Rust
 
 [The Rust Programming Language](https://doc.rust-lang.org/book/) - livro para aprender Rust
 
@@ -53,7 +53,3 @@ rustc main.rs
 [Rust By Example](https://doc.rust-lang.org/rust-by-example/) - colecao de exemplos executaveis que ilustrao bibliotecas padroes e conceitos da linguagem
 
 [Documentacao para a bilbioteca padrao do Rust](https://doc.rust-lang.org/std/index.html)
-
----
-
-Made with 🤎 by [Natan Costa](https://github.com/NatanTheMan)
