@@ -4,7 +4,7 @@ O programa percorre todos os números de 1 a 10.000(dez mil) e os escreve na tel
 
 ## Explicação da lógica
 
-A função recebe um númoro inteiro positivio. Utilizei ``u16`` pois ele comporta valores até pouco mais de 60.000, mais do que necessário para armazenar o número máximo que é 10.000. A função verifica se o argumento passado é primo, caso seja retona ``true``.
+A função recebe um númoro inteiro positivo. Utilizei ``u16`` pois ele comporta valores até pouco mais de 60.000, mais do que necessário para armazenar o número máximo que é 10.000. A função verifica se o argumento passado é primo, caso seja retona ``true``.
 
 ```
 fn is_prime(num: u16) -> bool
