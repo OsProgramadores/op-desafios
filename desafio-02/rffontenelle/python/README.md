@@ -1,13 +1,27 @@
 # Desafio 02
 
-Este exercício faz parte dos desafios de OsProgramadores
+Copyright (C) Rafael Fontenelle
 
-## Enunciado:
+# SPDX-License-Identifier: GPL-3.0-or-later
+
+Este exercício faz parte dos desafios de OsProgramadores e tem
+o seguinte enunciado:
 
 > Escreva um programa para listar todos os números primos
 > entre 1 e 10000, na linguagem de sua preferência.
 
 link: https://osprogramadores.com/desafios/d02/
+
+## Executar:
+
+Para tenha instalado Python versão 3.x (confirmado funcionamento
+com 3.9 e com 3.14). Nenhuma dependência externa é necessária.
+
+Execute o script com:
+
+```shell
+./desafio-02.py
+```
 
 ## Solução implementada:
 

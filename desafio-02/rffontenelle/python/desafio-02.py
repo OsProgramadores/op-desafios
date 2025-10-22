@@ -1,6 +1,10 @@
 """
 Desafio 02 - https://osprogramadores.com/desafios/d02/
 Lista todos os números primos entre 1 e 10000.
+
+Copyright (C) Rafael Fontenelle
+
+# SPDX-License-Identifier: GPL-3.0-or-later
 """
 
 def eh_primo(numero: int, lista_de_primos: list[int]):
