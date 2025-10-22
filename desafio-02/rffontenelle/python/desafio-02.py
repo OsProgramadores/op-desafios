@@ -20,7 +20,6 @@ def eh_primo(numero: int, lista_de_primos: list[int]):
     return True
 
 if __name__ == "__main__":
-    print("Listando números primos:")
     primos = []
     for num in range(1,10000):
         if eh_primo(num, primos):
