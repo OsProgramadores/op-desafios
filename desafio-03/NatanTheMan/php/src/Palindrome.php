@@ -8,13 +8,18 @@ class Palindrome
 {
     public function __construct(string $start, string $end)
     {
-        if (!is_numeric($start) || !is_numeric($end)) {
+        $this->validate($start, $end);
+    }
+
+    private function validate(string $arg1, string $arg2)
+    {
+        if (!is_numeric($arg1) || !is_numeric($arg2)) {
             throw new InvalidArgumentException("Parâmetros devem ser números inteiros");
         }
-        if (intval($start) <= 0 || intval($end) <= 0) {
+        if (intval($arg1) <= 0 || intval($arg2) <= 0) {
             throw new InvalidArgumentException("Parâmetros devem ser maiores que 0");
         }
-        if (!is_int($start) || !is_int($start)) {
+        if (!is_int($arg1) || !is_int($arg2)) {
             throw new InvalidArgumentException("Parâmetros devem ser inteiros");
         }
     }
