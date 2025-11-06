@@ -1,28 +1,24 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Test;
 
 use App\Palindrome;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\Test;
 
 final class PalindromeTest extends TestCase
 {
-    #[Test]
-    public function assertArgsAreInts()
+    public function testArgsAreInts()
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parâmetros devem ser números inteiros");
         new Palindrome("bar", "foo");
     }
 
-    #[Test]
-    public function assertArgsAreBiggerThan0()
+    public function testArgsAreBiggerThan0()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Parâmetros devem ser maior que 0");
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parâmetros devem ser maiores que 0");
         new Palindrome("0", "-1");
     }
 }
