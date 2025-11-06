@@ -17,4 +17,12 @@ final class PalindromeTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         new Palindrome("bar", "foo");
     }
+
+    #[Test]
+    public function assertArgsAreBiggerThan0()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parâmetros devem ser maior que 0");
+        new Palindrome("0", "-1");
+    }
 }
