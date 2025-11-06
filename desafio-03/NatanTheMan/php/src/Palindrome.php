@@ -14,5 +14,8 @@ class Palindrome
         if (intval($start) <= 0 || intval($end) <= 0) {
             throw new InvalidArgumentException("Parâmetros devem ser maiores que 0");
         }
+        if (!is_int($start) || !is_int($start)) {
+            throw new InvalidArgumentException("Parâmetros devem ser inteiros");
+        }
     }
 }

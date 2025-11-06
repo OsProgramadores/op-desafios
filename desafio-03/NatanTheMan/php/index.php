@@ -1,13 +1,7 @@
 <?php
 
-use app\Palindrome;
+require "./vendor/autoload.php";
 
-try {
-    $x = new Palindrome($argv, $argc);
-    $palindromes = $x->execute();
-    foreach ($palindromes as $p) {
-        echo $p;
-    }
-} catch (Exception $e) {
-    echo $e->getMessage();
-}
+use App\Palindrome;
+
+new Palindrome("42.234", "2.1");

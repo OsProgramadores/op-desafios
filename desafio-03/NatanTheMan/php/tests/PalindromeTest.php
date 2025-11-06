@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 
 final class PalindromeTest extends TestCase
 {
-    public function testArgsAreInts()
+    public function testArgsArentInts()
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Parâmetros devem ser números inteiros");
@@ -20,5 +20,12 @@ final class PalindromeTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage("Parâmetros devem ser maiores que 0");
         new Palindrome("0", "-1");
+    }
+
+    public function testEnsureArgIsInt()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Parâmetros devem ser inteiros");
+        new Palindrome("14", "7.7");
     }
 }
