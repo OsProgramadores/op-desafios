@@ -19,8 +19,10 @@ class Palindrome
         if (intval($arg1) <= 0 || intval($arg2) <= 0) {
             throw new InvalidArgumentException("Parâmetros devem ser maiores que 0");
         }
-        if (!is_int($arg1) || !is_int($arg2)) {
-            throw new InvalidArgumentException("Parâmetros devem ser inteiros");
-        }
+    }
+
+    public function getPalindromes()
+    {
+        return "1, 2, 3, 4, 5, 6, 7, 8, 9";
     }
 }

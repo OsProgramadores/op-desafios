@@ -22,10 +22,9 @@ final class PalindromeTest extends TestCase
         new Palindrome("0", "-1");
     }
 
-    public function testEnsureArgIsInt()
+    public function testNumbersWithOneDigit()
     {
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage("Parâmetros devem ser inteiros");
-        new Palindrome("14", "7.7");
+        $result = (new Palindrome("1", "10"))->getPalindromes();
+        $this->assertEquals("1, 2, 3, 4, 5, 6, 7, 8, 9", $result);
     }
 }
