@@ -27,4 +27,14 @@ final class PalindromeTest extends TestCase
         $result = (new Palindrome("1", "10"))->getPalindromes();
         $this->assertEquals("1, 2, 3, 4, 5, 6, 7, 8, 9", $result);
     }
+
+    public function testInputsWereConvertedToInt()
+    {
+        $palindrome = new Palindrome("1.3", "8.9");
+        $start = $palindrome->start;
+        $end = $palindrome->end;
+
+        $this->assertEquals(1, $start);
+        $this->assertEquals(8, $end);
+    }
 }
