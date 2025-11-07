@@ -32,7 +32,7 @@ Como estou estudando orientação a objetos no momento, optei por implementar um
 
 Para que esse requisito seja atendido, antes de instanciar a classe, foi implantado um método estático de validação `lerInteiroPositivoMaiorQueOMinimo()` que aceita números inteiros positivos maior que o valor mínimo informado.
 
-Com esse método estático, no método main: 
+Com esse método estático, no método main:
 - Para o intervalo inicial foi lido um número inteiro positivo maior que 0;
 - Para o intervalo final foi lido um número inteiro positivo maior que o intervalo inicial;
 
@@ -44,13 +44,13 @@ Palindromos palindromos = new Palindromos(intervaloInicial, intervaloFinal);
 
 Ao instanciar um novo objeto do tipo palindromo, o construtor invoca o método encontrarPalindromos que retorna uma lista de números inteiros palindromos no intervalo especificado.
 
-Quando esse método recebe um número maior que 9, já que todos os números de 1 a 9 são palíndromos, esse método utiliza uma função `isPalindromo()` que verifica de forma matemática se o número é palindromo. 
+Quando esse método recebe um número maior que 9, já que todos os números de 1 a 9 são palíndromos, esse método utiliza uma função `isPalindromo()` que verifica de forma matemática se o número é palindromo.
 
 A verificação é feita armazenando o número original numa variável para comparação com o número Revertido. O `numeroAReverter` é revertido ao adicionar o seu último dígito à variável `numeroRevertido`. A cada número adicionado nessa variável `numeroRevertido`, um último número é retirado da variável `numeroAReverter`.
 
 Quando todos os dígitos do número original foram processados e removidos, a variável `numeroAReverter` se torna zero. Nesse momento, o laço `while` de repetição é quebrado.
 
-Quando a repetição é quebrada, a função booleana `isPalindromo()` retorna verdadeiro caso o `numeroRevertido` seja igual ao `numeroOriginal`. 
+Quando a repetição é quebrada, a função booleana `isPalindromo()` retorna verdadeiro caso o `numeroRevertido` seja igual ao `numeroOriginal`.
 
 Para que a impressão fosse feita, conforme os requisitos do exercício, foi sobre-escrito o método toString para retornar apenas os números da lista separados por vírgula em uma única string:
 
