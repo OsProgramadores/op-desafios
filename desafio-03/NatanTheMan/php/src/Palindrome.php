@@ -9,19 +9,20 @@ class Palindrome
     public readonly int $start;
     public readonly int $end;
 
-    public function __construct(string $start, string $end)
+    public function __construct(string $num1, string $num2)
     {
-        $this->validate($start, $end);
-        $this->start = intval($start);
-        $this->end = intval($end);
+        $this->validate($num1, $num2);
+
+        $this->start = min(intval($num1), intval($num2));
+        $this->end = max(intval($num1), intval($num2));
     }
 
-    private function validate(string $arg1, string $arg2)
+    private function validate(string $num1, string $num2)
     {
-        if (!is_numeric($arg1) || !is_numeric($arg2)) {
+        if (!is_numeric($num1) || !is_numeric($num2)) {
             throw new InvalidArgumentException("Parâmetros devem ser números inteiros");
         }
-        if (intval($arg1) <= 0 || intval($arg2) <= 0) {
+        if (intval($num1) <= 0 || intval($num2) <= 0) {
             throw new InvalidArgumentException("Parâmetros devem ser maiores que 0");
         }
     }

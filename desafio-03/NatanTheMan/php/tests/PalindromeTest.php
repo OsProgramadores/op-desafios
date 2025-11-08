@@ -37,4 +37,22 @@ final class PalindromeTest extends TestCase
         $this->assertEquals(1, $start);
         $this->assertEquals(8, $end);
     }
+
+    public function testSetCorrectlyTheSmallerAndBigger()
+    {
+        $p1 = new Palindrome("300", "100");
+
+        $this->assertEquals(100, $p1->start);
+        $this->assertEquals(300, $p1->end);
+
+        $p2 = new Palindrome("1000", "999");
+
+        $this->assertEquals(999, $p2->start);
+        $this->assertEquals(1000, $p2->end);
+
+        $p3 = new Palindrome("23", "32");
+
+        $this->assertEquals(23, $p3->start);
+        $this->assertEquals(32, $p3->end);
+    }
 }
