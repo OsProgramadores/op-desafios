@@ -1,7 +1,15 @@
 <?php
 
-require "./vendor/autoload.php";
+require __DIR__ . "/vendor/autoload.php";
 
 use App\Palindrome;
 
-new Palindrome("42.234", "2.1");
+
+try {
+    $palindrome = new Palindrome($argv[1], $argv[2]);
+    foreach ($palindrome->getPalindromes() as $item) {
+        echo $item, PHP_EOL;
+    }
+} catch (Exception $e) {
+    echo $e->getMessage();
+}
