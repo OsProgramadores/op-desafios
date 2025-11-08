@@ -25,7 +25,7 @@ final class PalindromeTest extends TestCase
     public function testNumbersWithOneDigit()
     {
         $result = (new Palindrome("1", "10"))->getPalindromes();
-        $this->assertEquals("1, 2, 3, 4, 5, 6, 7, 8, 9", $result);
+        $this->assertEquals(["1", "2", "3", "4", "5", "6", "7", "8", "9"], $result);
     }
 
     public function testInputsWereConvertedToInt()
