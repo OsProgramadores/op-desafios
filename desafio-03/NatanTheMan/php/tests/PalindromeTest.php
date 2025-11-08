@@ -73,4 +73,15 @@ final class PalindromeTest extends TestCase
 
         $this->assertEquals(["1", "2", "3", "4", "5", "6", "7", "8", "9", "11"], $result);
     }
+
+    public function testThrowIfOneArgWasNull()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Informe os parâmetros necessários");
+        new Palindrome("3000", null);
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage("Informe os parâmetros necessários");
+        new Palindrome(null, "1234");
+    }
 }

@@ -9,7 +9,7 @@ class Palindrome
     public readonly int $start;
     public readonly int $end;
 
-    public function __construct(string $num1, string $num2)
+    public function __construct($num1, $num2)
     {
         $this->validate($num1, $num2);
 
@@ -17,8 +17,11 @@ class Palindrome
         $this->end = max(intval($num1), intval($num2));
     }
 
-    private function validate(string $num1, string $num2)
+    private function validate($num1, $num2)
     {
+        if (is_null($num1) || is_null($num2)) {
+            throw new InvalidArgumentException("Informe os parâmetros necessários");
+        }
         if (!is_numeric($num1) || !is_numeric($num2)) {
             throw new InvalidArgumentException("Parâmetros devem ser números inteiros");
         }

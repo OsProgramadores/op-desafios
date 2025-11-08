@@ -6,10 +6,10 @@ use App\Palindrome;
 
 
 try {
-    $palindrome = new Palindrome($argv[1], $argv[2]);
+    $palindrome = new Palindrome($argv[1] ?? null, $argv[2] ?? null);
     foreach ($palindrome->getPalindromes() as $item) {
         echo $item, PHP_EOL;
     }
 } catch (Exception $e) {
-    echo $e->getMessage();
+    echo $e->getMessage(), PHP_EOL;
 }
