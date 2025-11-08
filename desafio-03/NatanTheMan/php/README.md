@@ -1,6 +1,7 @@
 # Palíndromos
 
 Um palíndromo é uma palavra ou expressão que pode ser lida da esquerda para a direita ou da direita para a esquerda mantendo o mesmo significado. Exemplo: "reviver", "ovo", "arara", "osso", etc.
+No caso deste desafio: "2", "7007", "111", "919", etc.
 
 ## Objetivo do Programa
 
