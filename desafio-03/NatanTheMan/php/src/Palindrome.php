@@ -29,6 +29,12 @@ class Palindrome
 
     public function getPalindromes(): array
     {
-        return ["1", "2", "3", "4", "5", "6", "7", "8", "9"];
+        $palindromes = [];
+        for ($i = $this->start; $i <= $this->end; $i++) {
+            if (strval($i) == strrev(strval($i))) {
+                array_push($palindromes, strval($i));
+            }
+        }
+        return $palindromes;
     }
 }

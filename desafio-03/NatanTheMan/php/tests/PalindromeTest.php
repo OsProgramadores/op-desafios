@@ -55,4 +55,22 @@ final class PalindromeTest extends TestCase
         $this->assertEquals(23, $p3->start);
         $this->assertEquals(32, $p3->end);
     }
+
+    public function testSomeInputs()
+    {
+        $palindrome = new Palindrome("3000", "3010");
+        $result = $palindrome->getPalindromes();
+
+        $this->assertEquals(["3003"], $result);
+
+        $palindrome = new Palindrome("101", "121");
+        $result = $palindrome->getPalindromes();
+
+        $this->assertEquals(["101", "111", "121"], $result);
+
+        $palindrome = new Palindrome("1", "20");
+        $result = $palindrome->getPalindromes();
+
+        $this->assertEquals(["1", "2", "3", "4", "5", "6", "7", "8", "9", "11"], $result);
+    }
 }
