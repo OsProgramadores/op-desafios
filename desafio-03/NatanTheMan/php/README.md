@@ -13,8 +13,10 @@ Ler dois números inteiros e retornar os palíndromos que existem no intervalos 
 php index.php <start> <end>
 ```
 
-`start` - inteiro positivo
+`start` - inteiro positivo\
 `end`   - inteiro positivo
+
+A ordem dos argumentos não importa, o programa saberá lidar com isso 
 
 Número máximo unsigned int de 64bits
 
