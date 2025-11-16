@@ -22,7 +22,7 @@ public class Palindromos {
    * @param intervaloInicial
    * @param intervaloFinal
    */
-  public void isValidInput(int intervaloInicial, int intervaloFinal) {
+  public static void isValidInput(int intervaloInicial, int intervaloFinal) {
     if (intervaloInicial <= 0 || intervaloFinal <= 0) {
       throw new IllegalArgumentException(
           "Os valores iniciais e finais devem ser um número inteiro positivo (maior que 0).");
@@ -38,7 +38,7 @@ public class Palindromos {
     }
   }
 
-  private boolean isPalindromo(int numeroAReverter) {
+  public static boolean isPalindromo(int numeroAReverter) {
     int original = numeroAReverter;
     int numeroRevertido = 0;
     while (numeroAReverter != 0) {
@@ -49,9 +49,9 @@ public class Palindromos {
     return original == numeroRevertido;
   }
 
-  List<Integer> encontrarPalindromos(int intervaloInicial, int intervaloFinal) {
-    isValidInput(intervaloInicial, intervaloFinal);
-    palindromos = new ArrayList<>();
+  public static List<Integer> encontrarPalindromos(int intervaloInicial, int intervaloFinal) {
+
+    ArrayList palindromos = new ArrayList<>();
     for (int i = intervaloInicial; i <= intervaloFinal; i++) {
       if (i < 10) {
         palindromos.add(i);
@@ -97,6 +97,11 @@ public class Palindromos {
         }
         System.out.print("Segundo número: ");
         intervaloFinal = scanner.nextInt();
+
+        isValidInput(
+            intervaloInicial,
+            intervaloFinal); // Verifica se a entrada é válida, inteiro positivo, sendo que inicial
+                             // menor que final
 
         entradaValida = true; // Sai do loop se a leitura for bem-sucedida
 
