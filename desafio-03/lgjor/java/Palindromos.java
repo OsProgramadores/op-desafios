@@ -95,7 +95,7 @@ public class Palindromos {
     }
 
     while (!entradaValida) {
-      System.out.println("Entrada inválida. Informe inteiros válidos: ");
+      // System.out.println("Entrada inválida. Informe inteiros válidos: ");
       try {
         if (intervaloInicial == 0) {
           System.out.print("Primeiro número: ");
@@ -106,13 +106,12 @@ public class Palindromos {
 
         isValidInput(
             intervaloInicial,
-            intervaloFinal); // Verifica se a entrada é válida, inteiro positivo, sendo que inicial
-        // menor que final
+            intervaloFinal); // Verifica se entrada é válida, inteiro positivo, inicial<final
 
         entradaValida = true; // Sai do loop se a leitura for bem-sucedida
 
       } catch (InputMismatchException e) {
-        System.out.println("Entrada inválida. Por favor, digite apenas números inteiros.");
+        // System.out.println("Entrada inválida. Por favor, digite apenas números inteiros.");
         scanner.next(); // Limpa o buffer do Scanner para evitar loop infinito
       }
     }
