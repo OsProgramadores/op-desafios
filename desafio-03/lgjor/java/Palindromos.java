@@ -1,3 +1,6 @@
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
@@ -50,7 +53,6 @@ public class Palindromos {
   }
 
   public static List<Integer> encontrarPalindromos(int intervaloInicial, int intervaloFinal) {
-
     ArrayList palindromos = new ArrayList<>();
     for (int i = intervaloInicial; i <= intervaloFinal; i++) {
       if (i < 10) {
@@ -59,16 +61,20 @@ public class Palindromos {
         palindromos.add(i);
       }
     }
-
     return palindromos;
   }
 
-  @Override
-  public java.lang.String toString() {
-    String resultadoFormatado =
-        String.join(", ", palindromos.stream().map(Object::toString).toList());
-    return resultadoFormatado;
+  public void imprimirPalindromos() {
+    try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(System.out))) {
+      for (int palindromo : palindromos) {
+        writer.write(String.valueOf(palindromo));
+        writer.newLine();
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("Erro ao tentar escrever os palíndromos no console.", e);
+    }
   }
+  ;
 
   public static void main(String[] args) {
     int intervaloInicial = 0;
@@ -101,7 +107,7 @@ public class Palindromos {
         isValidInput(
             intervaloInicial,
             intervaloFinal); // Verifica se a entrada é válida, inteiro positivo, sendo que inicial
-                             // menor que final
+        // menor que final
 
         entradaValida = true; // Sai do loop se a leitura for bem-sucedida
 
@@ -113,6 +119,7 @@ public class Palindromos {
     scanner.close(); // Fecha o scanner após receber uma entrada válida
 
     Palindromos palindromos = new Palindromos(intervaloInicial, intervaloFinal);
-    System.out.println(palindromos);
+    // System.out.println(palindromos);
+    palindromos.imprimirPalindromos();
   }
 }
