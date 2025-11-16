@@ -10,7 +10,7 @@ Observe que o número inicial e final devem ser incluídos nos resultados, caso 
 
 Exemplo 1: Dado o número inicial 1 e número final 20, o resultado seria: 1, 2, 3, 4, 5, 6, 7, 8, 9, 11.
 
-Exemplo 2: Dado o numero inicial 3000 e número final 3010, o resultado seria: 3003.
+Exemplo 2: Dado o número inicial 3000 e número final 3010, o resultado seria: 3003.
 
 Exemplo 3: Dado o número inicial 101 e número final 121, o resultado seria: 101, 111, 121.
 
@@ -28,7 +28,9 @@ Bônus: Se o desafio parece fácil demais, implemente um novo tipo de dados para
 
 ## Lógica utilizada para a solução do problema
 
-Como estou estudando orientação a objetos no momento, optei por implementar uma classe Palindromo e seu construtor que aceita apenas números inteiros positivos iguais ou maiores que um. Sendo que o intervalo inicial deve ser maior que um e o intervalo final deve ser maior que o incial.
+Como estou estudando orientação a objetos no momento, optei por implementar uma classe Palindromo e seu construtor que aceita apenas números inteiros positivos iguais ou maiores que um. Sendo que o intervalo inicial deve ser maior que um e o intervalo final deve ser maior que o inicial.
+
+A minha lógica foi a seguinte: Criei um objeto palíndromos que armazena uma lista de palíndromos entre um dado intervalo inicial e final de números inteiros. Pensei o seguinte, qual a condição de existência desse objeto? A condição de existência é que exista um intervalo inicial e final válido e que existam palíndromos nesse intervalo. Caso a condição não fosse atendida, não faria sentido criar esse objeto palíndromos. Por esse motivo achei razoável colocar a lógica no construtor.
 
 Para que esse requisito seja atendido, antes de instanciar a classe, foi implantado um método estático de validação `lerInteiroPositivoMaiorQueOMinimo()` que aceita números inteiros positivos maior que o valor mínimo informado.
 
@@ -80,10 +82,10 @@ cd desafio-03/lgjor/Java
 
 ### 2\. Execute o Programa
 
-Utilize o comando `java` seguido do nome da classe principal:
+Utilize o comando `java` seguido do nome da classe principal e dois números inteiros válidos, sendo que o segundo deve ser maior que o primeiro, por exemplo:
 
 ```bash
-java Palindromos.java
+java Palindromos.java 1 100
 ```
 
 ### Licença de uso
