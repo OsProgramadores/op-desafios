@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 
 public class Palindromos {
 
@@ -72,15 +74,38 @@ public class Palindromos {
     int intervaloInicial = 0;
     int intervaloFinal = 0;
 
-    if (args != null && args.length >= 1) {
+    Scanner scanner = new Scanner(System.in);
+
+    boolean entradaValida = false;
+
+    if (args.length >= 1) {
       try {
         intervaloInicial = Integer.parseInt(args[0]);
         intervaloFinal = Integer.parseInt(args[1]);
-      } catch (NumberFormatException e) {
+        entradaValida = true;
+      } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
         System.err.println("Argumentos devem ser números inteiros válidos.");
-        System.err.println("Detalhe: " + e.getMessage());
       }
     }
+
+    while (!entradaValida) {
+      System.out.println("Entrada inválida. Informe inteiros válidos: ");
+      try {
+        if (intervaloInicial == 0) {
+          System.out.print("Primeiro número: ");
+          intervaloInicial = scanner.nextInt();
+        }
+        System.out.print("Segundo número: ");
+        intervaloFinal = scanner.nextInt();
+
+        entradaValida = true; // Sai do loop se a leitura for bem-sucedida
+
+      } catch (InputMismatchException e) {
+        System.out.println("Entrada inválida. Por favor, digite apenas números inteiros.");
+        scanner.next(); // Limpa o buffer do Scanner para evitar loop infinito
+      }
+    }
+    scanner.close(); // Fecha o scanner após receber uma entrada válida
 
     Palindromos palindromos = new Palindromos(intervaloInicial, intervaloFinal);
     System.out.println(palindromos);
