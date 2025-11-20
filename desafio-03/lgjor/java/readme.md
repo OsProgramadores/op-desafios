@@ -30,7 +30,7 @@ Bônus: Se o desafio parece fácil demais, implemente um novo tipo de dados para
 
 ## Lógica utilizada para a solução do problema
 
-Foi implementada a classe Palindromos com os campos: Intervalo inicial(inteiro), intervalo final(inteiro) e Lista de Palindromos (inteiros). 
+Foi implementada a classe Palindromos com os campos: Intervalo inicial(inteiro), intervalo final(inteiro) e Lista de Palindromos (inteiros).
 
 A validação é feita antes de instanciar o objeto e assegura que:
 - Deve possuir 2 argumentos.
@@ -58,7 +58,7 @@ Quando todos os dígitos do número original foram processados e removidos, a va
 
 Quando a repetição é quebrada, a função booleana `isPalindromo()` retorna verdadeiro caso o `numeroRevertido` seja igual ao `numeroOriginal`.
 
-Após encontrados os palíndromos, a impressão dos elementos palíndromos encontrados é feita pelo método: 
+Após encontrados os palíndromos, a impressão dos elementos palíndromos encontrados é feita pelo método:
 
 ```java
 palindromos.imprimirPalindromos();
