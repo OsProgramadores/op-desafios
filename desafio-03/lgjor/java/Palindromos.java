@@ -4,7 +4,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
 
 public class Palindromos {
 
@@ -15,7 +14,7 @@ public class Palindromos {
   public Palindromos(int intervaloInicial, int intervaloFinal) {
     this.intervaloInicial = intervaloInicial;
     this.intervaloFinal = intervaloFinal;
-    this.palindromos = encontrarPalindromos(intervaloInicial, intervaloFinal);
+    this.palindromos = new ArrayList<>();
   }
 
   /**
@@ -28,7 +27,7 @@ public class Palindromos {
   public static void isValidInput(int intervaloInicial, int intervaloFinal) {
     if (intervaloInicial <= 0 || intervaloFinal <= 0) {
       throw new IllegalArgumentException(
-          "Os valores iniciais e finais devem ser um número inteiro positivo (maior que 0).");
+          "Os valores iniciais e finais devem ser números inteiros positivos (maior que 0).");
     }
 
     if (intervaloInicial > intervaloFinal) {
@@ -52,16 +51,14 @@ public class Palindromos {
     return original == numeroRevertido;
   }
 
-  public static List<Integer> encontrarPalindromos(int intervaloInicial, int intervaloFinal) {
-    ArrayList palindromos = new ArrayList<>();
+  public void encontrarPalindromos(int intervaloInicial, int intervaloFinal) {
     for (int i = intervaloInicial; i <= intervaloFinal; i++) {
       if (i < 10) {
-        palindromos.add(i);
+        this.palindromos.add(i);
       } else if (isPalindromo(i)) {
-        palindromos.add(i);
+        this.palindromos.add(i);
       }
     }
-    return palindromos;
   }
 
   public void imprimirPalindromos() {
@@ -80,45 +77,26 @@ public class Palindromos {
     int intervaloInicial = 0;
     int intervaloFinal = 0;
 
-    Scanner scanner = new Scanner(System.in);
-
-    boolean entradaValida = false;
-
-    if (args.length >= 1) {
-      try {
-        intervaloInicial = Integer.parseInt(args[0]);
-        intervaloFinal = Integer.parseInt(args[1]);
-        entradaValida = true;
-      } catch (NumberFormatException | ArrayIndexOutOfBoundsException e) {
-        System.err.println("Argumentos devem ser números inteiros válidos.");
+    // Valida se é uma entrada válida
+    try {
+      // Deve possuir 2 argumentos
+      if (args == null || args.length < 2) {
+        throw new InputMismatchException();
       }
+      // Devem ser inteiros válidos
+      intervaloInicial = Integer.parseInt(args[0]);
+      intervaloFinal = Integer.parseInt(args[1]);
+      // Intervalo final deve ser maior que o inicial
+      isValidInput(intervaloInicial, intervaloFinal);
+    } catch (NumberFormatException | ArrayIndexOutOfBoundsException | InputMismatchException e) {
+      System.err.println(
+          "Ao executar o programa, você deve informar dois números inteiros válidos");
+      System.exit(1);
     }
 
-    while (!entradaValida) {
-      // System.out.println("Entrada inválida. Informe inteiros válidos: ");
-      try {
-        if (intervaloInicial == 0) {
-          System.out.print("Primeiro número: ");
-          intervaloInicial = scanner.nextInt();
-        }
-        System.out.print("Segundo número: ");
-        intervaloFinal = scanner.nextInt();
-
-        isValidInput(
-            intervaloInicial,
-            intervaloFinal); // Verifica se entrada é válida, inteiro positivo, inicial<final
-
-        entradaValida = true; // Sai do loop se a leitura for bem-sucedida
-
-      } catch (InputMismatchException e) {
-        // System.out.println("Entrada inválida. Por favor, digite apenas números inteiros.");
-        scanner.next(); // Limpa o buffer do Scanner para evitar loop infinito
-      }
-    }
-    scanner.close(); // Fecha o scanner após receber uma entrada válida
-
+    // Se a entrada for válida, instancia o objeto palindromos com uma lista vazia de palindromos
     Palindromos palindromos = new Palindromos(intervaloInicial, intervaloFinal);
-    // System.out.println(palindromos);
+    palindromos.encontrarPalindromos(intervaloInicial, intervaloFinal);
     palindromos.imprimirPalindromos();
   }
 }
