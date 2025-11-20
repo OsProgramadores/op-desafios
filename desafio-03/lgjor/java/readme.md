@@ -8,13 +8,15 @@ Neste desafio, a idéia é imprimir todos os números palindrômicos entre dois 
 
 Observe que o número inicial e final devem ser incluídos nos resultados, caso também sejam palíndromos.
 
-Exemplo 1: Dado o número inicial 1 e número final 20, o resultado seria: 1, 2, 3, 4, 5, 6, 7, 8, 9, 11.
+### Exemplos
 
-Exemplo 2: Dado o número inicial 3000 e número final 3010, o resultado seria: 3003.
+1. Dado o número inicial 1 e número final 20, o resultado seria: 1, 2, 3, 4, 5, 6, 7, 8, 9, 11.
 
-Exemplo 3: Dado o número inicial 101 e número final 121, o resultado seria: 101, 111, 121.
+2. Dado o número inicial 3000 e número final 3010, o resultado seria: 3003.
 
-Para o desafio, assuma:
+3.  Dado o número inicial 101 e número final 121, o resultado seria: 101, 111, 121.
+
+### Para o desafio, assuma:
 
 Apenas inteiros positivos podem ser usados como limites.
 Números de um algarismo são palíndromos por definição.
@@ -28,23 +30,25 @@ Bônus: Se o desafio parece fácil demais, implemente um novo tipo de dados para
 
 ## Lógica utilizada para a solução do problema
 
-Como estou estudando orientação a objetos no momento, optei por implementar uma classe Palindromo e seu construtor que aceita apenas números inteiros positivos iguais ou maiores que um. Sendo que o intervalo inicial deve ser maior que um e o intervalo final deve ser maior que o inicial.
+Foi implementada a classe Palindromos com os campos: Intervalo inicial(inteiro), intervalo final(inteiro) e Lista de Palindromos (inteiros). 
 
-A minha lógica foi a seguinte: Criei um objeto palíndromos que armazena uma lista de palíndromos entre um dado intervalo inicial e final de números inteiros. Pensei o seguinte, qual a condição de existência desse objeto? A condição de existência é que exista um intervalo inicial e final válido e que existam palíndromos nesse intervalo. Caso a condição não fosse atendida, não faria sentido criar esse objeto palíndromos. Por esse motivo achei razoável colocar a lógica no construtor.
+A validação é feita antes de instanciar o objeto e assegura que:
+- Deve possuir 2 argumentos.
+- Devem ser inteiros válidos.
+- Devem ser maior ou igual a 1.
+- O intervalo final deve ser maior que o inicial
 
-Para que esse requisito seja atendido, antes de instanciar a classe, foi implantado um método estático de validação `lerInteiroPositivoMaiorQueOMinimo()` que aceita números inteiros positivos maior que o valor mínimo informado.
-
-Com esse método estático, no método main:
-- Para o intervalo inicial foi lido um número inteiro positivo maior que 0;
-- Para o intervalo final foi lido um número inteiro positivo maior que o intervalo inicial;
-
-Com os requisitos estavam atendidos. Foi instanciado um novo objeto Palindromos:
+Após passar por essa validação, é instanciado o objeto Palindromos com um intervalo inicial (válido), intervalo final (válido) e uma lista de palindromos vazia.
 
 ```java
 Palindromos palindromos = new Palindromos(intervaloInicial, intervaloFinal);
 ```
 
-Ao instanciar um novo objeto do tipo palindromo, o construtor invoca o método encontrarPalindromos que retorna uma lista de números inteiros palindromos no intervalo especificado.
+Após instanciar o objeto, é chamado o método encontrarPalindromos para localizar os palindromos existentes entre o intervalo inicial e final e preencher a lista de palindromos, incialmente vazia.
+
+```java
+palindromos.encontrarPalindromos(intervaloInicial, intervaloFinal);
+```
 
 Quando esse método recebe um número maior que 9, já que todos os números de 1 a 9 são palíndromos, esse método utiliza uma função `isPalindromo()` que verifica de forma matemática se o número é palindromo.
 
@@ -54,19 +58,13 @@ Quando todos os dígitos do número original foram processados e removidos, a va
 
 Quando a repetição é quebrada, a função booleana `isPalindromo()` retorna verdadeiro caso o `numeroRevertido` seja igual ao `numeroOriginal`.
 
-Para que a impressão fosse feita, conforme os requisitos do exercício, foi sobre-escrito o método toString para retornar apenas os números da lista separados por vírgula em uma única string:
+Após encontrados os palíndromos, a impressão dos elementos palíndromos encontrados é feita pelo método: 
 
 ```java
-@java.lang.Override
-    public java.lang.String toString() {
-
-        String resultadoFormatado = String.join(", ",
-                palindromos.stream().map(Object::toString).toList()
-        );
-
-        return resultadoFormatado;
-    }
+palindromos.imprimirPalindromos();
 ```
+
+Esse método percorre a lista de elementos palíndromos do Objeto Palindromos e imprime um elemento por vez utilizando o BufferedWriter, após imprimir cada elemento, salta para a próxima linha.
 
 ## Como Rodar o Desafio
 
