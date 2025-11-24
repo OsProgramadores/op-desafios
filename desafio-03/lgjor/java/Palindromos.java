@@ -80,7 +80,7 @@ public class Palindromos {
     // Valida se é uma entrada válida
     try {
       // Deve possuir 2 argumentos
-      if (args == null || args.length < 2) {
+      if (args == null || args.length != 2) {
         throw new InputMismatchException();
       }
       // Devem ser inteiros válidos
@@ -88,7 +88,7 @@ public class Palindromos {
       intervaloFinal = Integer.parseInt(args[1]);
       // Intervalo final deve ser maior que o inicial
       isValidInput(intervaloInicial, intervaloFinal);
-    } catch (NumberFormatException | ArrayIndexOutOfBoundsException | InputMismatchException e) {
+    } catch (NumberFormatException | InputMismatchException e) {
       System.err.println(
           "Ao executar o programa, você deve informar dois números inteiros válidos");
       System.exit(1);
