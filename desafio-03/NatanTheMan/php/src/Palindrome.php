@@ -37,7 +37,9 @@ class Palindrome
     {
         $palindromes = [];
         for ($i = $this->start; $i <= $this->end; $i++) {
-            if (strlen($i) == 1 || strval($i) == strrev(strval($i))) {
+            if ($i < 10) {
+                array_push($palindromes, $i);
+            } elseif (strval($i) == strrev(strval($i))) {
                 array_push($palindromes, $i);
             }
         }
