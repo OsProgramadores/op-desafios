@@ -6,6 +6,9 @@ require __DIR__ . "/vendor/autoload.php";
 use App\Palindrome;
 
 try {
+    if ($argc != 3) {
+        throw new Exception("O programa aceita apenas 2 argumentos");
+    }
     $palindrome = new Palindrome($argv[1] ?? null, $argv[2] ?? null);
     foreach ($palindrome->getPalindromes() as $item) {
         echo $item, PHP_EOL;
