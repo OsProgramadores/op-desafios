@@ -83,7 +83,7 @@ public class primoPi {
     if (s.isEmpty()){
       return false;
     }
-    
+
     try {
       int num = Integer.parseInt(s);
       if (num > MAX_PRIME) {
