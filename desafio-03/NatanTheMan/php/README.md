@@ -11,6 +11,10 @@ Ler dois números inteiros e retornar os palíndromos que existem no intervalos 
 
 O programa foi escrito em PHP, versão 8.4.13. Para instrucoes de como instalar o PHP em seu OS consulte: [PHP: Downloads & Installation Instructions](https://www.php.net/downloads.php)
 
+Tambem precisaremos instalar o `composer`.[Aqui](https://getcomposer.org/download/) voce encontrara instrucoes para realizar a instalacao.
+
+Em seguida rode `composer install`
+
 PHPUnit versao 10.5.58. Instale-o com:
 ```
 wget -O phpunit.phar https://phar.phpunit.de/phpunit-10.phar
