@@ -118,12 +118,12 @@ public class primoPi {
           if (novoComprimento > comprimentoMax[i]) {
                 comprimentoMax[i] = novoComprimento;
                 indiceAnterior[i] = j;
-            }
+          }
 
             if (comprimentoMax[i] > maiorComprimento) {
                 maiorComprimento = comprimentoMax[i];
                 fimDaSequencia = i;
-            }
+          }
         }
       }
     }
