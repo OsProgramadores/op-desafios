@@ -1,13 +1,12 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.RandomAccessFile;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.io.BufferedReader;
-import java.io.FileReader;
 
 public class primoPi {
 
@@ -80,7 +79,7 @@ public class primoPi {
   }
 
   private static boolean ehPrimo(String s) {
-    if (s.isEmpty()){
+    if (s.isEmpty()) {
       return false;
     }
 
@@ -97,7 +96,7 @@ public class primoPi {
 
   private static String encontrarSequenciaMaisLonga() {
     int N = piDecimais.length();
-    if (N == 0){
+    if (N == 0) {
       return "";
     }
 
@@ -116,13 +115,13 @@ public class primoPi {
           int novoComprimento = comprimentoMax[j] + (i - j);
 
           if (novoComprimento > comprimentoMax[i]) {
-                comprimentoMax[i] = novoComprimento;
-                indiceAnterior[i] = j;
+            comprimentoMax[i] = novoComprimento;
+            indiceAnterior[i] = j;
           }
 
-            if (comprimentoMax[i] > maiorComprimento) {
-                maiorComprimento = comprimentoMax[i];
-                fimDaSequencia = i;
+          if (comprimentoMax[i] > maiorComprimento) {
+            maiorComprimento = comprimentoMax[i];
+            fimDaSequencia = i;
           }
         }
       }
@@ -132,8 +131,8 @@ public class primoPi {
   }
 
   private static String reconstruirSequencia(int[] indiceAnterior, int fimDaSequencia) {
-    if (fimDaSequencia == 0){
-       return "";
+    if (fimDaSequencia == 0) {
+      return "";
     }
     StringBuilder sequenciaCompleta = new StringBuilder();
     int atual = fimDaSequencia;
