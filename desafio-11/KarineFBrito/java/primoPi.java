@@ -80,7 +80,7 @@ public class primoPi {
   }
 
   private static boolean ehPrimo(String s) {
-    if (s.isEmpty()){ 
+    if (s.isEmpty()){
       return false;
     }
     
