@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class primoPi {
 
@@ -27,7 +29,7 @@ public class primoPi {
       System.out.println("Arquivo não encontrado.");
       return;
     }
-    try (RandomAccessFile aq = new RandomAccessFile(caminho, "r")) {
+    try (BufferedReader aq = new BufferedReader(new FileReader(caminho))) {
       String linha;
       while ((linha = aq.readLine()) != null) {
         if (linha.isEmpty()) {
@@ -56,7 +58,9 @@ public class primoPi {
 
   private static void preCalcularPrimos(int limite) { // metodo do Eratóstenes
     conjuntoPrimos = new HashSet<>();
-    if (limite < 2) return;
+    if (limite < 2) {
+      return;
+    }
 
     boolean[] ehComposto = new boolean[limite + 1];
 
@@ -76,7 +80,10 @@ public class primoPi {
   }
 
   private static boolean ehPrimo(String s) {
-    if (s.isEmpty()) return false;
+    if (s.isEmpty()){ 
+      return false;
+    }
+    
     try {
       int num = Integer.parseInt(s);
       if (num > MAX_PRIME) {
@@ -90,7 +97,9 @@ public class primoPi {
 
   private static String encontrarSequenciaMaisLonga() {
     int N = piDecimais.length();
-    if (N == 0) return "";
+    if (N == 0){
+      return "";
+    }
 
     int[] comprimentoMax = new int[N + 1];
     int[] indiceAnterior = new int[N + 1];
@@ -107,14 +116,14 @@ public class primoPi {
           int novoComprimento = comprimentoMax[j] + (i - j);
 
           if (novoComprimento > comprimentoMax[i]) {
-            comprimentoMax[i] = novoComprimento;
-            indiceAnterior[i] = j;
+                comprimentoMax[i] = novoComprimento;
+                indiceAnterior[i] = j;
+            }
 
             if (comprimentoMax[i] > maiorComprimento) {
-              maiorComprimento = comprimentoMax[i];
-              fimDaSequencia = i;
+                maiorComprimento = comprimentoMax[i];
+                fimDaSequencia = i;
             }
-          }
         }
       }
     }
@@ -123,8 +132,9 @@ public class primoPi {
   }
 
   private static String reconstruirSequencia(int[] indiceAnterior, int fimDaSequencia) {
-    if (fimDaSequencia == 0) return "";
-
+    if (fimDaSequencia == 0){
+       return "";
+    }
     StringBuilder sequenciaCompleta = new StringBuilder();
     int atual = fimDaSequencia;
 
