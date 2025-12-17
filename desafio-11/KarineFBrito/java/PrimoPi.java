@@ -2,13 +2,16 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class primoPi {
+public class PrimoPi {
 
   private static final int MAX_PRIME = 9973;
   private static Set<Integer> conjuntoPrimos;
@@ -28,16 +31,14 @@ public class primoPi {
       System.out.println("Arquivo não encontrado.");
       return;
     }
-    try (BufferedReader aq = new BufferedReader(new FileReader(caminho))) {
-      String linha;
-      while ((linha = aq.readLine()) != null) {
-        if (linha.isEmpty()) {
-          continue;
-        }
-        processarLinha(linha);
-      }
+    try {
+      
+      Path arquivoPath = caminho.toPath();
+      String linhaUnica = Files.readString(arquivoPath);
+      processarLinha(linhaUnica);
+    
     } catch (IOException e) {
-      e.printStackTrace();
+        System.err.println("Erro ao ler o arquivo: " + e.getMessage());
     }
     preCalcularPrimos(MAX_PRIME);
 
@@ -47,11 +48,10 @@ public class primoPi {
   }
 
   private static void processarLinha(String linha) {
-    Pattern p = Pattern.compile("\\d+");
-    Matcher m = p.matcher(linha);
-
-    while (m.find()) {
-      piDecimais += m.group();
+    int indicePonto = linha.indexOf('.');
+    if (indicePonto != -1 && indicePonto < linha.length() - 1) {
+        String decimais = linha.substring(indicePonto + 1);
+        piDecimais += decimais;
     }
   }
 
@@ -111,24 +111,38 @@ public class primoPi {
       for (int j = Math.max(0, i - 4); j < i; j++) {
         String sub = piDecimais.substring(j, i);
 
-        if (ehPrimo(sub)) {
-          int novoComprimento = comprimentoMax[j] + (i - j);
-
-          if (novoComprimento > comprimentoMax[i]) {
-            comprimentoMax[i] = novoComprimento;
-            indiceAnterior[i] = j;
-          }
-
-          if (comprimentoMax[i] > maiorComprimento) {
-            maiorComprimento = comprimentoMax[i];
-            fimDaSequencia = i;
-          }
+        if (!subStringValida(sub) || !ehPrimo(sub)){ 
+          continue;
         }
-      }
+ 
+        int novoComprimento = comprimentoMax[j] + (i - j);
+
+        if (novoComprimento > comprimentoMax[i]) {
+          comprimentoMax[i] = novoComprimento;
+          indiceAnterior[i] = j;
+        }
+        if (comprimentoMax[i] > maiorComprimento) {
+          maiorComprimento = comprimentoMax[i];
+          fimDaSequencia = i;
+        }
+      }      
     }
 
     return reconstruirSequencia(indiceAnterior, fimDaSequencia);
   }
+
+  private static boolean subStringValida(String sub) {
+    if (sub.length() != 4) return true;
+
+    try {
+        int num = Integer.parseInt(sub);
+        return num <= MAX_PRIME;
+    } catch (NumberFormatException e) {
+        return false;
+    }
+}
+
+
 
   private static String reconstruirSequencia(int[] indiceAnterior, int fimDaSequencia) {
     if (fimDaSequencia == 0) {
