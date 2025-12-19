@@ -2,7 +2,7 @@
 
 - O código recebe um arquivo por linha de comando e verifica se foi passado um caminho válido e se o arquivo existe.
 
-- O método processarLinha utiliza uma Expressão Regular para extrair e concatenar todos os dígitos numéricos do arquivo na string estática global piDecimais, ignorando pontuações, espaços e caracteres não numéricos.
+- O método processarLinha  localiza o primeiro ponto e extrai todos os dígitos numéricos do arquivo na string estática global piDecimais.
 
 - O método preCalcularPrimos executa o Crivo de Eratóstenes, um algoritmo antigo para encontrar todos os números primos até um determinado limite. Os números primos são guardados em uma estrutura de dados especial (HashSet) que permite ao programa verificar se um número é primo.
 
