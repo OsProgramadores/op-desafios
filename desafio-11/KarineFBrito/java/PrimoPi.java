@@ -1,0 +1,160 @@
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
+public class PrimoPi {
+
+  private static final int MAX_PRIME = 9973;
+  private static Set<Integer> conjuntoPrimos;
+  private static String piDecimais = "";
+
+  public static void main(String[] args) {
+
+    if (args.length != 1) {
+      System.out.println(
+          "Nenhum caminho foi fornecido,  execute o programa usando 'java Fracoes"
+              + " <caminho-absoluto>'");
+      return;
+    }
+
+    File caminho = new File(args[0]);
+    if (!caminho.exists()) {
+      System.out.println("Arquivo não encontrado.");
+      return;
+    }
+    try {
+
+      Path arquivoPath = caminho.toPath();
+      String linhaUnica = Files.readString(arquivoPath);
+      processarLinha(linhaUnica);
+
+    } catch (IOException e) {
+      System.err.println("Erro ao ler o arquivo: " + e.getMessage());
+    }
+    preCalcularPrimos(MAX_PRIME);
+
+    String sequenciaMaisLonga = encontrarSequenciaMaisLonga();
+
+    System.out.println(sequenciaMaisLonga);
+  }
+
+  private static void processarLinha(String linha) {
+    int indicePonto = linha.indexOf('.');
+    if (indicePonto != -1 && indicePonto < linha.length() - 1) {
+      String decimais = linha.substring(indicePonto + 1);
+      piDecimais += decimais;
+    }
+  }
+
+  private static void preCalcularPrimos(int limite) { // metodo do Eratóstenes
+    conjuntoPrimos = new HashSet<>();
+    if (limite < 2) {
+      return;
+    }
+
+    boolean[] ehComposto = new boolean[limite + 1];
+
+    for (int p = 2; p * p <= limite; p++) {
+      if (!ehComposto[p]) {
+        for (int i = p * p; i <= limite; i += p) {
+          ehComposto[i] = true;
+        }
+      }
+    }
+
+    for (int p = 2; p <= limite; p++) {
+      if (!ehComposto[p]) {
+        conjuntoPrimos.add(p);
+      }
+    }
+  }
+
+  private static boolean ehPrimo(String s) {
+    if (s.isEmpty()) {
+      return false;
+    }
+
+    try {
+      int num = Integer.parseInt(s);
+
+      return conjuntoPrimos.contains(num);
+    } catch (NumberFormatException e) {
+      return false;
+    }
+  }
+
+  private static String encontrarSequenciaMaisLonga() {
+    int N = piDecimais.length();
+    if (N == 0) {
+      return "";
+    }
+
+    int[] comprimentoMax = new int[N + 1];
+    int[] indiceAnterior = new int[N + 1];
+    Arrays.fill(indiceAnterior, -1);
+
+    int maiorComprimento = 0;
+    int fimDaSequencia = 0;
+
+    for (int i = 1; i <= N; i++) {
+      for (int j = Math.max(0, i - 4); j < i; j++) {
+        String sub = piDecimais.substring(j, i);
+
+        if (!subStringValida(sub) || !ehPrimo(sub)) {
+          continue;
+        }
+
+        int novoComprimento = comprimentoMax[j] + (i - j);
+
+        if (novoComprimento > comprimentoMax[i]) {
+          comprimentoMax[i] = novoComprimento;
+          indiceAnterior[i] = j;
+        }
+        if (comprimentoMax[i] > maiorComprimento) {
+          maiorComprimento = comprimentoMax[i];
+          fimDaSequencia = i;
+        }
+      }
+    }
+
+    return reconstruirSequencia(indiceAnterior, fimDaSequencia);
+  }
+
+  private static boolean subStringValida(String sub) {
+    if (sub.length() > 4) {
+      return false;
+    }
+
+    try {
+      int num = Integer.parseInt(sub);
+      return num <= MAX_PRIME;
+    } catch (NumberFormatException e) {
+      return false;
+    }
+  }
+
+  private static String reconstruirSequencia(int[] indiceAnterior, int fimDaSequencia) {
+    if (fimDaSequencia == 0) {
+      return "";
+    }
+    StringBuilder sequenciaCompleta = new StringBuilder();
+    int atual = fimDaSequencia;
+
+    while (atual > 0 && indiceAnterior[atual] != -1) {
+      int inicio = indiceAnterior[atual];
+      int fim = atual;
+
+      String primo = piDecimais.substring(inicio, fim);
+
+      sequenciaCompleta.insert(0, primo);
+
+      atual = inicio;
+    }
+
+    return sequenciaCompleta.toString();
+  }
+}
