@@ -1,15 +1,10 @@
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PrimoPi {
 
@@ -32,13 +27,13 @@ public class PrimoPi {
       return;
     }
     try {
-      
+
       Path arquivoPath = caminho.toPath();
       String linhaUnica = Files.readString(arquivoPath);
       processarLinha(linhaUnica);
-    
+
     } catch (IOException e) {
-        System.err.println("Erro ao ler o arquivo: " + e.getMessage());
+      System.err.println("Erro ao ler o arquivo: " + e.getMessage());
     }
     preCalcularPrimos(MAX_PRIME);
 
@@ -50,8 +45,8 @@ public class PrimoPi {
   private static void processarLinha(String linha) {
     int indicePonto = linha.indexOf('.');
     if (indicePonto != -1 && indicePonto < linha.length() - 1) {
-        String decimais = linha.substring(indicePonto + 1);
-        piDecimais += decimais;
+      String decimais = linha.substring(indicePonto + 1);
+      piDecimais += decimais;
     }
   }
 
@@ -85,9 +80,7 @@ public class PrimoPi {
 
     try {
       int num = Integer.parseInt(s);
-      if (num > MAX_PRIME) {
-        return false;
-      }
+
       return conjuntoPrimos.contains(num);
     } catch (NumberFormatException e) {
       return false;
@@ -111,10 +104,10 @@ public class PrimoPi {
       for (int j = Math.max(0, i - 4); j < i; j++) {
         String sub = piDecimais.substring(j, i);
 
-        if (!subStringValida(sub) || !ehPrimo(sub)){ 
+        if (!subStringValida(sub) || !ehPrimo(sub)) {
           continue;
         }
- 
+
         int novoComprimento = comprimentoMax[j] + (i - j);
 
         if (novoComprimento > comprimentoMax[i]) {
@@ -125,24 +118,24 @@ public class PrimoPi {
           maiorComprimento = comprimentoMax[i];
           fimDaSequencia = i;
         }
-      }      
+      }
     }
 
     return reconstruirSequencia(indiceAnterior, fimDaSequencia);
   }
 
   private static boolean subStringValida(String sub) {
-    if (sub.length() != 4) return true;
+    if (sub.length() > 4) {
+      return false;
+    }
 
     try {
-        int num = Integer.parseInt(sub);
-        return num <= MAX_PRIME;
+      int num = Integer.parseInt(sub);
+      return num <= MAX_PRIME;
     } catch (NumberFormatException e) {
-        return false;
+      return false;
     }
-}
-
-
+  }
 
   private static String reconstruirSequencia(int[] indiceAnterior, int fimDaSequencia) {
     if (fimDaSequencia == 0) {
