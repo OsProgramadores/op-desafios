@@ -20,6 +20,12 @@ A ordem dos argumentos não importa, o programa saberá lidar com isso
 
 Número máximo unsigned int de 64bits
 
----
+## Testes
+
+Rode os testes usando o comando:
+```
+composer test
+```
+--
 
 O programa foi escrito em PHP, versão 8.4.13.
