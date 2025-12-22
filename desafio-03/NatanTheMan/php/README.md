@@ -26,6 +26,6 @@ Rode os testes usando o comando:
 ```
 composer test
 ```
---
+---
 
 O programa foi escrito em PHP, versão 8.4.13.
