@@ -19,11 +19,11 @@ public class Potencia {
     }
     try (Scanner sc = new Scanner(caminho)) {
       while (sc.hasNext()) {
-        String linha = sc.next();
-        if (linha.trim().isEmpty()) {
+        String linha = sc.next().trim();
+        if (linha.isEmpty()) {
           continue;
         }
-        BigInteger n = new BigInteger(linha.trim());
+        BigInteger n = new BigInteger(linha);
         boolean ehPotencia =
             n.signum() > 0 && n.and(n.subtract(BigInteger.ONE)).equals(BigInteger.ZERO);
         if (ehPotencia) {
@@ -34,7 +34,7 @@ public class Potencia {
         }
       }
     } catch (IOException e) {
-      System.err.println("Erro ao ler o arquivo: " + e.getMessage());
+
     }
   }
 }
