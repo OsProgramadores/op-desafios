@@ -9,7 +9,7 @@ final readonly class Primos
         if ($this->de > $this->ate) {
             throw new InvalidArgumentException('O valor inicial deve ser menor que o valor final');
         }
-        
+
         if ($this->de < 0 || $this->ate < 0) {
             throw new InvalidArgumentException('Informe apenas números positivos');
         }
@@ -34,7 +34,7 @@ final readonly class Primos
                     break;
                 }
             }
-            
+
             if ($primo) {
                 $primos[] = $i;
             }
