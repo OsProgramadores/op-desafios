@@ -13,11 +13,9 @@ final readonly class Primos
         if ($this->de < 0 || $this->ate < 0) {
             throw new InvalidArgumentException('Informe apenas números positivos');
         }
-
-        $this->process();
     }
 
-    private function process(): void
+    public function process(): void
     {
         $primos = [];
 
@@ -28,7 +26,7 @@ final readonly class Primos
 
             $primo = true;
 
-            for ($divisor = 2; $divisor < $i; $divisor++) {
+            for ($divisor = 2; $divisor <= sqrt($i); $divisor++) {
                 if ($i % $divisor === 0) {
                     $primo = false;
                     break;

@@ -22,7 +22,7 @@ Se não tiver o PHP instalado, use serviços online como o [OnlinePHP](https://o
 
 ```php
 try {
-    new Primos(1, 10000);
+    (new Primos(1, 10000))->process();
 } catch (InvalidArgumentException $e) {
     echo $e->getMessage();
 }
