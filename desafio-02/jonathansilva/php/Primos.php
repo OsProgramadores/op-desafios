@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 final readonly class Primos
 {
-    public function __construct(private int $de, private int $ate)
+    public function __construct(private int $limiteInicial, private int $limiteFinal)
     {
-        if ($this->de > $this->ate) {
+        if ($this->limiteInicial > $this->limiteFinal) {
             throw new InvalidArgumentException('O valor inicial deve ser menor que o valor final');
         }
 
-        if ($this->de < 0 || $this->ate < 0) {
+        if ($this->limiteInicial < 0 || $this->limiteFinal < 0) {
             throw new InvalidArgumentException('Informe apenas números positivos');
         }
     }
@@ -19,7 +19,7 @@ final readonly class Primos
     {
         $primos = [];
 
-        for ($i = $this->de; $i <= $this->ate; $i++) {
+        for ($i = $this->limiteInicial; $i <= $this->limiteFinal; $i++) {
             if ($i < 2) {
                 continue;
             }
