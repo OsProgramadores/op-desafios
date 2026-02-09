@@ -1,10 +1,14 @@
 ## Desafio 02
 
-> Primos
+**Descrição**
+
+Lista todos os números primos entre 1 e 10.000
 
 **Requisitos**
 
-- PHP >= 8.2
+PHP >= 8.2
+
+**Como executar**
 
 Abra o terminal, navegue até a pasta onde se encontra o código fonte e execute o comando abaixo
 
@@ -14,7 +18,7 @@ php index.php
 
 ---
 
-Se não tiver o PHP instalado, use serviços online como o [OnlinePHP](https://onlinephp.io)
+Obs: Se não tiver o PHP instalado, use serviços online como o [OnlinePHP](https://onlinephp.io)
 
 1 - Copie todo o conteúdo da classe Primos e cole em `PHP Sandbox`
 
@@ -34,6 +38,8 @@ try {
 4 - Clique em `Execute Code`
 
 ---
+
+**Otimização**
 
 Para que a execução fique mais eficiente, utilizei um "limitador" no loop onde verifica se o divisor é menor que o número. O loop vai percorrer até que o divisor seja **menor ou igual à raiz quadrada** do número
 
