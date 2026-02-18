@@ -23,14 +23,14 @@ O vídeo apresenta uma abordagem simples e intuitiva para verificar se um númer
 
 ### Estrutura do Código
 O programa é composto por duas funções principais:
-- `verificarPrimo()`: Função que determina se um número específico é primo
-- `listarPrimos()`: Função que itera de 1 a 1000 e exibe todos os números primos encontrados
+- `VerificandoEprimo(int n)`: Função que determina se um número específico é primo
+- `ListarPrimos(int inicio, int fim)`: Função que itera de 1 a 1000 e exibe todos os números primos encontrados
 
 ## Como Compilar e Executar
 
 ### Pré-requisitos
 Para compilar e executar este projeto em C++, você precisará ter instalado:
-- Um compilador C++ (recomendados: g++, clang++, ou MSVC)
+- Um compilador C++ (recomendados: g++ (GCC) 5.2.0, clang++, ou MSVC)
 - Terminal ou prompt de comando
 
 ### Passos para Compilação
@@ -38,7 +38,7 @@ Para compilar e executar este projeto em C++, você precisará ter instalado:
 #### No Linux/Mac (com g++):
 ```bash
 # Compilar o programa
-g++ -o primos main.cpp -std=c++11
+g++ -o cpp main.cpp -std=c++11
 
 # Executar
-./primos
+./cpp
