@@ -33,9 +33,10 @@ function verifyPrime(N) {
 function findPrimes(value) {
     if (notOnList(value)) { // passou pelo teste do descarte, agora a parte principal
         if (verifyPrime(value)) {
-            console.log(value); // retorna numeros primos
+            return true; // retorna numeros primos
         }
+        return false;
     }
 }
-
-num.forEach(findPrimes);
+const resultado = num.filter(findPrimes)
+console.log(resultado);
