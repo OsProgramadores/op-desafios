@@ -30,10 +30,10 @@ set -o nounset
 readonly OBSOLETE_REGEXP="^(desafio-04|desafio-05)$"
 
 # Users matches by this regular expression can submit to deprecated directories.
-readonly OVERRIDE_USERS='^(marcopaganini|mpinheir|qrwteyrutiyoup|BernardinoCampos|dependabot\[bot\])$'
+readonly OVERRIDE_USERS='^(marcopaganini|mpinheir|qrwteyrutiyoup|dependabot\[bot\])$'
 
 # Regular expression catching valid languages.
-readonly VALID_LANG_REGEXP="^(c|cpp|csharp|java|javascript|go|php|python)$"
+readonly VALID_LANG_REGEXP="^(c|cpp|csharp|java|javascript|go|php|python|rust)$"
 
 # Changes points to the file containing the list of changes files for this PR.
 # This file contains output equivalent to running  find . -type f | sed 's#^\./##'
