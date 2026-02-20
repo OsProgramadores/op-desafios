@@ -1,5 +1,5 @@
 #include "iostream"
-int VerificandoEprimo(int n) {
+bool VerificandoEprimo(int n) {
     if (n <= 1) {
         return 0;
     }
@@ -7,18 +7,18 @@ int VerificandoEprimo(int n) {
         return 1;
     }
     if (n % 2 == 0 || n % 3 == 0) {
-        return 0;
+        return false;
     }
     for (int i = 5; i * i <= n; i += 2) {
         if (n % i == 0) {
-            return 0;
+            return false;
         }
     }
-     return 1;
+     return true;
 }
 void ListarPrimos(int inicio, int fim) {
     for (int i = inicio; i <= fim; i++) {
-        if (VerificandoEprimo(i) == 1) {
+        if (VerificandoEprimo(i) == true) {
             std::cout << i << std::endl;
         }
     }
