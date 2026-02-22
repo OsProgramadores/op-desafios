@@ -1,42 +1,25 @@
-const notIsPrime = []; // multiplos de primos nao podem ser primos
-const num = []; // inicializacao do array de 1 - 10k
-
-for (let i = 1; i <= 10000; i++) {
-    num.push(i);
-}
-
-function notOnList(number) {
-    if (notIsPrime.includes(number)) {
+function verifyPrime(N) { // retorna true para numeros primos
+    // trata alguns casos especiais
+    if (N === 1) return false;
+    if (N <= 3) return true;
+    if (N % 2 === 0 || N % 3 === 0) { // pula multiplos de 2 e 3
         return false;
-    } else {
-        return true;
     }
-}
-
-function descarteMultiplos(N) {
-    while (N < 10000) {
-        N *= 2;
-        notIsPrime.push(N);
-    }
-}
-
-function verifyPrime(N) {
-    for (let i = 2; i < N; i++) {
+    //verifica numeros ate a raiz quadrada do numero N
+    for (let i = 2; i * i <= N; i++) {
         if (N % i === 0) {
-            descarteMultiplos(N);
             return false;
         }
     }
     return true;
 }
 
-function findPrimes(value) {
-    if (notOnList(value)) { // passou pelo teste do descarte, agora a parte principal
-        if (verifyPrime(value)) {
-            return true; // retorna numeros primos
-        }
-        return false;
-    }
+const MAX_VALUE = 10000;
+const num = [];
+for (let i = 1; i <= MAX_VALUE; i++) {
+    num.push(i);
 }
-const resultado = num.filter(findPrimes)
-console.log(resultado);
+const resultado = num.filter(verifyPrime); //funcao que filtra numeros primos
+for (let i = 0; i <= resultado.length - 1; i++) {
+    console.log(resultado[i]); //exibi os numeros encontrados
+};
