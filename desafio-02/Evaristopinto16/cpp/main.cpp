@@ -18,7 +18,7 @@ bool VerificandoEprimo(int n) {
 }
 void ListarPrimos(int inicio, int fim) {
     for (int i = inicio; i <= fim; i++) {
-        if (VerificandoEprimo(i) == true) {
+        if (VerificandoEprimo(i)) {
             std::cout << i << std::endl;
         }
     }
