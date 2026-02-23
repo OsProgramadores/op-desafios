@@ -20,6 +20,12 @@ final readonly class Palindromos
         $palindromos = [];
 
         for ($i = $this->limiteInicial; $i <= $this->limiteFinal; $i++) {
+            if ($i < 10) {
+        		$palindromos[] = $i;
+
+        		continue;
+        	}
+
             $numeroComoString = strval($i);
             $numeroRevertido = strrev($numeroComoString);
 
