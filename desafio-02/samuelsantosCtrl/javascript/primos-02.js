@@ -6,8 +6,9 @@ function verifyPrime(N) { // retorna true para numeros primos
         return false;
     }
     //verifica numeros ate a raiz quadrada do numero N
-    for (let i = 2; i * i <= N; i++) {
-        if (N % i === 0) {
+    for (let i = 5; i * i <= N; i += 6) {
+        // novo teste na forma se 6*k ± 1
+        if (N % i === 0 || N % (i + 2) === 0) {
             return false;
         }
     }
@@ -15,11 +16,10 @@ function verifyPrime(N) { // retorna true para numeros primos
 }
 
 const MAX_VALUE = 10000;
-const num = [];
+const resultado = [];
 for (let i = 1; i <= MAX_VALUE; i++) {
-    num.push(i);
+    if (verifyPrime(i) === true) {
+        resultado.push(i);
+    }
 }
-const resultado = num.filter(verifyPrime); //funcao que filtra numeros primos
-for (let i = 0; i <= resultado.length - 1; i++) {
-    console.log(resultado[i]); //exibi os numeros encontrados
-};
+resultado.forEach((element) => console.log(element));
