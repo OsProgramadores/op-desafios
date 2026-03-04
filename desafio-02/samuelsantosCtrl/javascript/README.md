@@ -7,7 +7,7 @@ Primeiro procurei entender como os Primos se comportam. Primos são números que
 
 No começo do código eu início um Array `num[]` e o preencho usando um `for`, que em cada petição usa o próprio valor do índice `i` para fazer a adição dos números no Array, indo de 1 - 10k
 
-#### update:
+#### Update:
 
 Decidi mudar o código porque eu tentei fazer uma otimização prematura e que não ajudava em muita coisa(deixava até pior inclusive). Então eu removi a função `descartarMultiplos()` e refatorei o código.  Fiz melhorias que fazem o script calcular números primos até `500.000` em tempo aceitável.
 
@@ -64,3 +64,22 @@ Note que começa com 5, mas isso não é um problema pois:
 
 6 * 1 - 1 = 5
 6 * 1 + 1 = 7  (começamos no 5, por isso + 2)
+
+
+### Requisitos
+
+> Node.js (versão 18 ou superior recomendada)
+
+### Execução:
+
+1. Entre na pasta do arquivo:
+
+```bash
+cd ./op-desafios/desafio-02/samuelsantosCtrl/javascript/
+```
+
+2. Execute o arquivo:
+
+```bash
+node primos-02.js
+```
