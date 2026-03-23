@@ -1,6 +1,6 @@
 ## ENCONTRAR NÚMEROS PRIMOS DE 1 A 10000
 
-for num in range (2, 10000):
+for num in range (2, 10001):
     num_primos = True
     
     for divisor in range (2, num):
