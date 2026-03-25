@@ -1,0 +1,70 @@
+<script>
+    function numerosPrimos(num) {
+
+    let arr = [];
+
+    if (num < 2) { return arr }
+
+    if( num == 2 || num >= 15 ){
+        arr.push(2)
+    }
+
+    for (let i = 3; i <= num; i+=2) {
+
+        let isPrime = true;
+        for (let x = 3; x < i; x+=2) {
+            if(i%x == 0){
+                isPrime = false;
+                break;
+            }
+        }
+
+        if(isPrime){
+            arr.push(i)
+        }
+
+    }
+
+    return arr;
+}
+
+function teste() {
+
+//Testando se retorno é um array
+let testeZero = 0
+let resultadoZero = numerosPrimos(testeZero)
+console.log(`Testando com o valor ${testeZero}`)
+
+if (Array.isArray(resultadoZero)) {
+    console.log(`Retorno é um array e retornou ${resultadoZero}`)
+} else {
+    console.log(`Retorno não é do tipo array. É do tipo ${typeof resultadoZero}`)
+}
+
+
+let teste2 = 2
+let resultado2 = numerosPrimos(teste2)
+let valorEsperado2 = 2
+console.log(`Testando com o valor ${teste2}`)
+
+if (resultado2 == valorEsperado2) {
+    console.log(`Retornou o valor esperado, pois retornou: ${resultado2}`)
+} else {
+    console.log(`Não retornou o valor esperado, pois retornou: ${resultado2}`)
+}
+
+let teste15 = 15
+let resultado15 = numerosPrimos(teste15)
+let valorEsperado15 = [2, 3, 5, 7, 11, 13]
+console.log(`Testando com o valor ${teste15}`)
+
+if (resultado15.length === valorEsperado15.length) {
+    console.log(`Retornou o valor esperado, pois retornou: ${resultado15}`)
+} else {
+    console.log(`Não retornou o valor esperado, pois retornou: ${resultado15}`)
+}
+
+}
+
+teste()
+</script>

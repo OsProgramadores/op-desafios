@@ -1,0 +1,49 @@
+#!/usr/bin/a68g
+##########################################################
+# https://jmvdveer.home.xs4all.nl/en.algol-68-genie.html #
+#                                                        #
+# Instalação em distribuições Linux baseadas em Debian:  #
+# $sudo apt-get install algol68g                         #
+#                                                        #
+# Para executar este programa:                           #
+# $a68g prime.a68                                        #
+#                                                        #
+# João J.M. Gonçalves - Janeiro 2021                     #
+##########################################################
+
+PROC check = (INT n) BOOL:
+    BEGIN
+        BOOL is prime := TRUE;
+        IF n>23 THEN
+            IF (n MOD 2) * (n MOD 3) /= 0 THEN
+                INT i := 5;
+                WHILE i * i <= n AND is prime
+                DO
+                  IF (n MOD i) * (n MOD (i + 2)) = 0 THEN is prime := FALSE
+                  FI;
+                  i +:= 6
+                OD
+            ELSE is prime := FALSE
+            FI
+        FI;
+        is prime
+    END;
+
+INT n, i, prime;
+INT nl := 2;
+print(("Números primos em ALGOL68",newline,2,3));
+FOR n FROM 1 TO 1667
+DO
+    FOR i FROM -1 BY 2 TO 1
+    DO
+        prime := 6 * n + i;
+        IF check(prime) THEN
+            print(prime);
+            nl +:= 1;
+            IF (nl) MOD 6 = 0 THEN print(newline)
+            FI
+        FI
+    OD
+OD;
+
+print((newline, newline, nl, " números primos encontrados"))

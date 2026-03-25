@@ -1,0 +1,2 @@
+primos: primos.cpp
+	g++ -o -Wall primos.cpp primos

@@ -1,0 +1,11 @@
+[package]
+name = "desafio_09"
+version = "0.1.0"
+authors = ["Leo Silva Souza <leovano@protonmail.com>"]
+edition = "2018"
+
+[dependencies]
+num-bigint = "0.1.44"
+num-integer = "0.1.39"
+num-traits = "0.2.6"
+

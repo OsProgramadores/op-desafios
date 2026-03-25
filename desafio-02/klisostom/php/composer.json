@@ -1,0 +1,23 @@
+{
+    "name": "klisostom/php",
+    "autoload": {
+        "psr-4": {
+            "Klisostom\\Php\\": "src/",
+            "Klisostom\\Php\\Tests\\": "tests/"
+        }
+    },
+    "authors": [
+        {
+            "name": "klisostom",
+            "email": "klis@pm.me"
+        }
+    ],
+    "require-dev": {
+        "pestphp/pest": "^1.21"
+    },
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    }
+}

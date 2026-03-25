@@ -1,0 +1,1 @@
+#### Está escrito em PHP usando classe. Para testar, chamar a função `listarEntreDoisNumeros´.

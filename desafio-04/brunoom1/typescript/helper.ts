@@ -1,0 +1,1 @@
+export const sToVec = (s:string) => s.split("\n").map(line => line.split(" ").map(v => parseInt(v)));

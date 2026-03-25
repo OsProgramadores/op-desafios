@@ -1,0 +1,9 @@
+# Linguagem Potigol 0.9.15 (potigol.github.io)
+
+var numeros = 2 :: para i de 3 até 100000 passo 2 gere i fim
+
+enquanto numeros.tamanho > 0 faça
+  primo = numeros.cabeça
+  escreva primo
+  numeros := numeros.selecione(a => a mod primo <> 0)
+fim

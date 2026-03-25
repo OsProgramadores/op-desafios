@@ -1,0 +1,24 @@
+[package]
+name = "desafio_05"
+version = "0.1.0"
+authors = ["Leo Silva Souza <leovano@protonmail.com>"]
+
+[dependencies]
+cfg-if = "*"
+crossbeam-channel = "*"
+jemallocator = "*"
+scoped_threadpool = "*"
+
+[profile.test]
+opt-level = 1
+overflow-checks = false
+
+[profile.dev]
+opt-level = 3
+overflow-checks = false
+
+[profile.release]
+lto = true
+codegen-units = 1
+incremental = false  # solve build regression
+

@@ -1,0 +1,15 @@
+# Linguagem Potigol - potigol.github.io
+
+peças = ["Peão", "Bispo", "Cavalo", "Torre", "Rainha", "Rei"]
+
+tabuleiro = leia_textos(8)       # leia 8 linhas de texto
+              .junte("")         # junte as linhas em um unico texto
+              .lista             # transforme o texto em uma lista de caracteres
+              .mapeie(_ - '0')   # transforme cada elemento em um inteiro
+
+para i de 1 até 6 faça           # para cada tipo de peça ...
+  num = tabuleiro                #   pegue o tabuleiro
+          .selecione(_ == i)     #   e selecione as peças do tipo
+          .tamanho               #   devolva a quantidade de peças selecionadas
+  escreva "{peças[i]}: {num} peça(s)"
+fim

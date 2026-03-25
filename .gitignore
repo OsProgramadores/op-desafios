@@ -1,0 +1,11 @@
+*.class
+.vscode
+.idea
+*.swp
+.DS_Store
+*.jar
+node_modules
+*.json
+*.pyc
+[Bb]in/
+[Oo]bj/

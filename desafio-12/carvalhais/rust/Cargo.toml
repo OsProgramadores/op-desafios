@@ -1,0 +1,12 @@
+[package]
+name = "pwr"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+num-bigint = "0.4"
+clap = { version = "3.0", features = ["derive"] }
+
+[[bin]]
+name = "pwr"
+path = "src/main.rs"

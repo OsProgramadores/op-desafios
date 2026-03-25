@@ -1,0 +1,14 @@
+# Linguagem Potigol 0.9.15  (potigol.github.io)
+
+a, b = leia_texto
+a_r, b_r = a.real, b.real
+
+f(s: Texto) = s.pegue((s.tamanho + 1) div 2).inteiro div s.pegue(1).inteiro
+x, y = f(a), f(b) * 10
+
+para i de x até y faça
+  s = i.texto + i.texto.inverta.descarte(1)
+  se a_r <= s.real e s.real <= b_r então escreva s fim
+  r = i.texto + i.texto.inverta
+  se a_r <= r.real e r.real <= b_r então escreva r fim
+fim

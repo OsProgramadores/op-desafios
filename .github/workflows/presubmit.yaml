@@ -1,0 +1,80 @@
+name: Presubmit tests
+on: [pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 'stable'
+
+      - name: Install Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+
+      - name: Install Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Compute changed files
+        run: |
+          URL="https://api.github.com/repos/${GITHUB_REPOSITORY}/pulls/${{ github.event.pull_request.number }}/files"
+          curl -s -X GET -G $URL | jq -r '.[] | select(.status != "removed") | .filename' > $HOME/changed_files.txt
+
+      - name: Install & build dependencies
+        run: |
+          # Binary will be $(go env GOPATH)/bin/golangci-lint
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.50.1
+          pip install pylint==2.16.2
+          npm install --save-dev eslint-config-standard-with-typescript@23.0.0
+
+      - name: Check directory structure
+        run: |
+          ./ci/dircheck.sh
+
+      - name: Check binary files
+        run: |
+          ./ci/bincheck.sh
+
+      - name: Check files with invalid UTF-8 content
+        run: |
+          ./ci/utfcheck.sh
+
+      - name: Check files containing lines with trailing spaces or tabs
+        run: |
+          ./ci/trailing-spaces-check.sh
+
+      - name: Check Python code
+        run: |
+          ./ci/pycheck.sh
+
+      - name: Check Go code
+        run: |
+          ./ci/gocheck.sh
+
+      - name: Check Java code
+        run: |
+          ./ci/javacheck.sh
+
+      - name: Check Javascript code
+        run: |
+          ./ci/javascriptcheck.sh
+
+      - name: Check Validator code
+        run: |
+          ./ci/validator.sh
+
