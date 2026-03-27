@@ -1,6 +1,6 @@
 ## Lógica do código
 
-- O código recebe uma casa inicial (ex: "a1") via argumento de linha de comando e verifica se ela foi fornecida. 
+- O código recebe uma casa inicial (ex: "a1") via argumento de linha de comando e verifica se ela foi fornecida.
 
 - Um tabuleiro de 8 x 8  é inicializado com o valor -1, indicando que nenhuma casa foi visitada ainda.
 
