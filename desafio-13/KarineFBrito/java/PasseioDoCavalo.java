@@ -1,4 +1,5 @@
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
 
 public class PasseioDoCavalo {
 
@@ -59,7 +60,9 @@ public class PasseioDoCavalo {
         }
       }
 
-      if (proximaLinha == -1) break;
+      if (proximaLinha == -1){
+        break;
+      }
 
       linhaAtual = proximaLinha;
       colunaAtual = proximaColuna;

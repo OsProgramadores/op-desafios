@@ -38,3 +38,8 @@
   ```
   java  PasseioDoCavalo <posicao-inicial>
   ```
+
+## Referências
+
+- Heurística de Warnsdorff - Wikipedia: https://en.wikipedia.org/wiki/Knight%27s_tour#Warnsdorff's_rule
+- Algoritmo de Warnsdorff - GeeksforGeeks: https://www.geeksforgeeks.org/warnsdorffs-algorithm-knights-tour-problem/
