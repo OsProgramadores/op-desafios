@@ -7,16 +7,44 @@ public class ListaPalindromos {
     int numeroFinal;
 
     try (Scanner scanner = new Scanner(System.in)) {
-      System.out.print("Digite o número inicial e o final: ");
-      numeroInicial = scanner.nextInt();
-      numeroFinal = scanner.nextInt();
+      while (true) {
+
+        System.out.print("Digite o número inicial e o final: ");
+
+        try {
+          numeroInicial = scanner.nextInt();
+          numeroFinal = scanner.nextInt();
+
+          if (numeroInicial < 0 || numeroFinal < 0) {
+            System.out.println("Digite apenas números naturais");
+            continue;
+          }
+
+          if (numeroInicial > numeroFinal) {
+            System.out.println("O número inicial deve ser igual ou menor que o número final");
+            continue;
+          }
+
+          break;
+
+        } catch (java.util.InputMismatchException e) {
+          System.out.println("Digite apenas números naturais");
+          scanner.nextLine();
+        }
+      }
     }
 
     for (int i = numeroInicial; i <= numeroFinal; i++) {
-      String numeroOriginal = String.valueOf(i);
-      String numeroInvertido = new StringBuilder(numeroOriginal).reverse().toString();
+      int soma = 0;
+      int j = i;
 
-      if (numeroOriginal.equals(numeroInvertido)) {
+      while (j > 0) {
+        int ultimoAlgarismo = j % 10;
+        soma = (soma * 10) + ultimoAlgarismo;
+        j = j / 10;
+      }
+
+      if (soma == i) {
         System.out.println(i);
       }
     }
