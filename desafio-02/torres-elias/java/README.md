@@ -12,7 +12,7 @@ Se um número é composto, ele pode ser escrito como:
 
 $$n = a \cdot b$$
 
-A raiz quadrada $\sqrt{n}$ funciona como um limiar. 
+A raiz quadrada $\sqrt{n}$ funciona como um limiar.
 Se você multiplicar:
 
 $$\sqrt{n} \cdot \sqrt{n} = n$$
