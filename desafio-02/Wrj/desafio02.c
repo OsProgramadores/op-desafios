@@ -1,19 +1,41 @@
 #include <stdio.h>
 
 int main() {
-    for (int i = 2; i <= 10000; i++) {
-        int cont = 1;
 
-        for (int j = 2; j <= i; j++) {
-            if ((i % j) == 0) {
-                cont++;
+    int num_primos[10001];
+
+     num_primos[0] = 0;
+     num_primos[1] = 0;
+    //assume todos os numeros como primo
+    for(int i = 2; i<=10000;i++){
+        num_primos[i] = 1;
+
+    }
+    //verifica se os numeros a partir do 2 sao primos
+    for (int i = 2; i <= 10000; i++) {
+        int prox_numero;
+
+        if(num_primos[i] == 1){
+
+            for (prox_numero=i*i; prox_numero <= 10000; prox_numero++) {
+                if(prox_numero%i==0){
+                num_primos[prox_numero] = 0;
+
+
+                }
+
             }
-            if (cont > 2) {
-                break;
-            }
-        }
-        if (cont == 2) {
-            printf("%d\n", i);
         }
     }
+    //imprime todos os numeros primos
+    for(int i = 0; i<=10000;i++){
+
+        if(num_primos[i] == 1){
+            printf("%d\n", i );
+        }
+    }
+
+    return 0;
+
+
 }
