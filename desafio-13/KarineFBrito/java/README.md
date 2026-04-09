@@ -4,10 +4,12 @@
 
 - Um tabuleiro de 8 x 8  é inicializado com o valor -1, indicando que nenhuma casa foi visitada ainda.
 
-- O programa utiliza o Algoritimo de Warnsdorff para encontrar o caminho do cavalo. Onde, a cada passo, o cavalo deve se mover para a casa que possui o menor número de movimentos subsequentes possíveis.
+- O programa utiliza o Algoritimo de Warnsdorff para encontrar o caminho do cavalo. Onde, a cada passo, o cavalo deve se mover para a casa que possui o menor número de movimentos subsequentes possíveis. Se ele entrar em um beco sem saída antes de completar todas as casas, ele volta no tempo, desmarca a casa e tenta a próxima opção até completar o tabuleiro.
+
 - O cavalo começa na posição fornecida e marca essa casa com o número 0 (primeiro passo).
 
 - Para cada um dos 63 movimentos restantes, o programa avalia as 8 direções possíveis de um cavalo (movimentos em "L").
+
 
 - A função validando garante que o cavalo não saia dos limites do tabuleiro e não retorne a uma casa já visitada.
 

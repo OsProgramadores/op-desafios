@@ -38,7 +38,15 @@ public class PasseioDoCavalo {
     int numeroDaLinhaNoXadrez = Character.getNumericValue(numeroDaLinhaChar);
     int linhaInicial = tamanhoTabuleiro - numeroDaLinhaNoXadrez;
 
-    resolverWarnsdorff(linhaInicial, colunaInicial, tabuleiro);
+    List<String> caminho = new ArrayList<>();
+
+    if (!resolverWarnsdorff(linhaInicial, colunaInicial, 0, tabuleiro, caminho)) {
+      System.out.println(
+          "Caminho incompleto! O cavalo ficou preso apos " + caminho.size() + " casas:");
+      for (String casa : caminho) {
+        System.out.println(casa);
+      }
+    }
   }
 
   private static int[][] inicializarTabuleiro() {
@@ -51,50 +59,58 @@ public class PasseioDoCavalo {
     return novoTabuleiro;
   }
 
-  public static void resolverWarnsdorff(int linha, int coluna, int[][] tabuleiro) {
-    int linhaAtual = linha;
-    int colunaAtual = coluna;
-    tabuleiro[linhaAtual][colunaAtual] = 0;
+  public static boolean resolverWarnsdorff(
+      int linha, int coluna, int passo, int[][] tabuleiro, List<String> caminho) {
+    tabuleiro[linha][coluna] = passo;
+    caminho.add(converterParaAlgebrica(linha, coluna));
 
-    List<String> caminho = new ArrayList<>();
-    caminho.add(converterParaAlgebrica(linhaAtual, colunaAtual));
+    if (passo == totalCasas - 1) {
+      for (String casa : caminho) {
+        System.out.println(casa);
+      }
+      return true;
+    }
 
-    for (int passo = 1; passo < totalCasas; passo++) {
-      int proximaLinha = casaVazia;
-      int proximaColuna = casaVazia;
-      int menorGrau = grauMax;
+    int[][] opcoes = new int[8][3];
+    int qtdOpcoes = 0;
 
-      for (int i = 0; i < tamanhoTabuleiro; i++) {
-        int nextLinha = linhaAtual + movimentosLinha[i];
-        int nextColuna = colunaAtual + movimentosColuna[i];
+    for (int i = 0; i < 8; i++) {
+      int nextLinha = linha + movimentosLinha[i];
+      int nextColuna = coluna + movimentosColuna[i];
 
-        if (movimentoValido(nextLinha, nextColuna, tabuleiro)) {
-          int grau = contarSaidasVazias(nextLinha, nextColuna, tabuleiro);
-          if (grau < menorGrau) {
-            menorGrau = grau;
-            proximaLinha = nextLinha;
-            proximaColuna = nextColuna;
-          }
+      if (movimentoValido(nextLinha, nextColuna, tabuleiro)) {
+        opcoes[qtdOpcoes][0] = nextLinha;
+        opcoes[qtdOpcoes][1] = nextColuna;
+        opcoes[qtdOpcoes][2] = contarSaidasVazias(nextLinha, nextColuna, tabuleiro);
+        qtdOpcoes++;
+      }
+    }
+
+    ordenarOpcoes(opcoes, qtdOpcoes);
+
+    for (int i = 0; i < qtdOpcoes; i++) {
+      int proximaL = opcoes[i][0];
+      int proximaC = opcoes[i][1];
+
+      if (resolverWarnsdorff(proximaL, proximaC, passo + 1, tabuleiro, caminho)) {
+        return true;
+      }
+    }
+
+    tabuleiro[linha][coluna] = casaVazia;
+    caminho.remove(caminho.size() - 1);
+    return false;
+  }
+
+  private static void ordenarOpcoes(int[][] opcoes, int qtd) {
+    for (int i = 0; i < qtd - 1; i++) {
+      for (int j = 0; j < qtd - i - 1; j++) {
+        if (opcoes[j][2] > opcoes[j + 1][2]) {
+          int[] temp = opcoes[j];
+          opcoes[j] = opcoes[j + 1];
+          opcoes[j + 1] = temp;
         }
       }
-
-      if (proximaLinha == casaVazia) {
-        break;
-      }
-
-      linhaAtual = proximaLinha;
-      colunaAtual = proximaColuna;
-      tabuleiro[linhaAtual][colunaAtual] = passo;
-      caminho.add(converterParaAlgebrica(linhaAtual, colunaAtual));
-    }
-
-    if (caminho.size() < totalCasas) {
-      System.out.println(
-          "Caminho incompleto! O cavalo ficou preso apos " + caminho.size() + " casas:");
-    }
-
-    for (String casa : caminho) {
-      System.out.println(casa);
     }
   }
 
