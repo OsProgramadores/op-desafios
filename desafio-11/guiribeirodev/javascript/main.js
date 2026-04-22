@@ -13,13 +13,12 @@ function extractDigitsOfPi() {
     return readFileSync(filePath, "utf-8").slice(2);
 }
 
-function getPrimeSet(minPrime, maxPrime) {
-    const primeSet = new Set();
-
+function getPrimeArray(minPrime, maxPrime) {
     const isPrime = new Array(maxPrime + 1).fill(true);
+
     isPrime[0] = isPrime[1] = false; // 0 and 1 are not prime numbers
 
-    for (let number = 2; number * number <= maxPrime; number++) {
+    for (let number = minPrime; number * number <= maxPrime; number++) {
         if (!isPrime[number]) {
             continue;
         }
@@ -29,23 +28,20 @@ function getPrimeSet(minPrime, maxPrime) {
         }
     }
 
-    for (let number = minPrime; number <= maxPrime; number++) {
-        if (isPrime[number]) {
-            primeSet.add(number);
-        }
-    }
-
-    return primeSet;
+    return isPrime;
 }
 
-function findLongestPrimeSequenceInPi(digitsOfPi, primeSet) {
-    const digitCount = digitsOfPi.length;
+function findLongestPrimeSequenceInPi(digitsOfPi, isPrimeArray, minPrime, maxPrime) {
+    const digitCount = String(digitsOfPi).length;
+    const minSliceLength = String(minPrime).length;
+    const maxSliceLength = String(maxPrime).length;
+
     const bestLengthFromIndex = new Array(digitCount + 1).fill(0);
 
     function getBestLengthForIndex(currentIndex) {
         let bestLength = 0;
 
-        for (let sliceLength = 1; sliceLength <= 4; sliceLength++) {
+        for (let sliceLength = minSliceLength; sliceLength <= maxSliceLength; sliceLength++) {
             const endIndex = currentIndex + sliceLength;
 
             if (endIndex > digitCount) {
@@ -54,7 +50,7 @@ function findLongestPrimeSequenceInPi(digitsOfPi, primeSet) {
 
             const digitNumber = Number(digitsOfPi.slice(currentIndex, endIndex));
 
-            if (primeSet.has(digitNumber)) {
+            if (isPrimeArray[digitNumber]) {
                 const candidateLength = sliceLength + bestLengthFromIndex[endIndex];
 
                 if (candidateLength > bestLength) {
@@ -91,11 +87,16 @@ function findLongestPrimeSequenceInPi(digitsOfPi, primeSet) {
 function main() {
     const digitsOfPi = extractDigitsOfPi();
 
-    const minimumPrime = 2;
-    const maximumPrime = 9973;
-    const primeSet = getPrimeSet(minimumPrime, maximumPrime);
+    const MIN_PRIME = 2;
+    const MAX_PRIME = 9973;
+    const isPrimeArray = getPrimeArray(MIN_PRIME, MAX_PRIME);
 
-    const longestSequence = findLongestPrimeSequenceInPi(digitsOfPi, primeSet);
+    const longestSequence = findLongestPrimeSequenceInPi(
+        digitsOfPi,
+        isPrimeArray,
+        MIN_PRIME,
+        MAX_PRIME
+    );
 
     console.log(longestSequence);
 }
