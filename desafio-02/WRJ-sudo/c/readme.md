@@ -1,12 +1,16 @@
-# 🧮 Algoritmo de Números Primos
+# Algoritmo de Números Primos
 
-## 📌 Descrição
+## Descrição
 Este algoritmo é capaz de encontrar todos os números primos até 10.000.
 
-## ⚙️ Método Utilizado
+## Requisitos
+-Possuir o GCC ou outro compilador para linguagem C instalado no sistema operacional.
+Para a execução do código é preciso acessar o terminal e digitar o comando `gcc nomedoprograma.c -o nomeparaobject'`
+
+## Método Utilizado
 O programa utiliza o algoritmo **Crivo de Eratóstenes**, que permite obter os números primos de forma eficiente.
 
-## 🧠 Lógica do Algoritmo
+## Lógica do Algoritmo
 - É utilizado um vetor onde:
   - O **índice representa o número analisado**.
   - O **valor armazenado indica se o número é primo ou não**:
