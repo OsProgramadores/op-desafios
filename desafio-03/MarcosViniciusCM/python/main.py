@@ -1,13 +1,17 @@
 def num_palindromico(n, m):
     palindromos = []
     for num in range(n, m + 1):
-        str_num = str(num)
-        if str_num == str_num[::-1]:
+        if 0 <= num <= 9:
             palindromos.append(num)
+        else:
+            str_num = str(num)
+            if str_num == str_num[::-1]:
+                palindromos.append(num)
     return palindromos
 
-#ex:
+# ex:
 n = 101
 m = 121
 resultado = num_palindromico(n, m)
-print(f"Os números palindrômicos entre {n} e {m} são: {resultado}")
+for num in resultado:
+    print(num)
