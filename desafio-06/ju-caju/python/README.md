@@ -1,0 +1,1 @@
+# Solução para o desafio 06 em Python
