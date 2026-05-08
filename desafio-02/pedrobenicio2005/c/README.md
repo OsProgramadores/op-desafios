@@ -1,0 +1,1 @@
+Algoritmo para listagem de números primos até 10.000.
