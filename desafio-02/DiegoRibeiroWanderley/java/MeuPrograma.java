@@ -1,3 +1,6 @@
+import java.util.List;
+import java.util.ArrayList;
+
 public class MeuPrograma {
   public static void main(String[] args) {
     List<Integer> primos = new ArrayList<>();

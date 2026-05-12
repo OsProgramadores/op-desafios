@@ -17,7 +17,7 @@ O processo funciona eliminando os números múltiplos de um número primo encont
 
 # Tecnologias utilizadas
 
-Linguagem: Java
+Linguagem: Java 8+
 
 # Execução
 
