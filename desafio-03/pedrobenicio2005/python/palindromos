@@ -1,0 +1,32 @@
+def inverter_numero(numero):
+    texto = str(numero)
+    texto_invertido = ""
+    for indice in range(len(texto) - 1, -1, -1):
+        caractere = texto[indice]
+        texto_invertido = texto_invertido + caractere
+    numero_invertido = int(texto_invertido)
+    return numero_invertido
+
+def eh_palindromo(numero):
+    invertido = inverter_numero(numero)
+    if numero == invertido:
+        return True
+    else:
+        return False
+
+inicial = int(input("digite o numero inicial: "))
+final = int(input("digite o numero final: "))
+
+palindromos_encontrados = []
+
+if inicial < 0 or final < 0:
+    print("Use apenas números positivos")
+else:
+    if inicial > final:
+        print("O número inicial precisa ser menor que o final")
+    else:
+        for numero in range(inicial, final + 1):
+            if eh_palindromo(numero):
+                palindromos_encontrados.append(numero)
+        
+        print(palindromos_encontrados)
