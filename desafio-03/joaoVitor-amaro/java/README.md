@@ -10,8 +10,8 @@ esse número palidrômico.
 ## executar
 
 ```bash
-javac Palindromo.java
-java Palindromo
+javac java.Palindromo.java
+java java.Palindromo
 ```
 
 Foi utilizado o Java 21.
