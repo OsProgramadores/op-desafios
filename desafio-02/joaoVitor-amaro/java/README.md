@@ -8,8 +8,8 @@ A verificação é feita utilizando divisões sucessivas entre `2` e o número i
 ## executar
 
 ```bash
-javac Primos.java
-java Primos
+javac java.Primos.java
+java java.Primos
 ```
 
 Foi utilizado o Java 21.

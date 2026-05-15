@@ -1,3 +1,5 @@
+package java;
+
 public class Primos {
     public static boolean isPrimo(int num) {
         if(num < 2) {
