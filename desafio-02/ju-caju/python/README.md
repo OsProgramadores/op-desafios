@@ -1,16 +1,39 @@
-# Desafio 02
+# Desafio 02 - Numeros primos
 
-## Informações sobre a implementação
+Solucao do desafio 02 do grupo [OsProgramadores](https://osprogramadores.com/desafios/).
 
-Esta solução percorre os números de 0 até 10000.
+## Autora
 
-Para cada número, ela verifica se ele é primo testando divisões por valores menores que ele, até encontrar um divisor ou confirmar que o número é primo.
+Juliana - [ju-caju](https://github.com/ju-caju)
 
-Ao final, o programa imprime todos os números primos encontrados nesse intervalo.
+## Sobre o desafio
 
-## Como rodar o exercício
+O objetivo deste desafio e listar todos os numeros primos entre 1 e 10000.
 
-Entre na pasta da solução:
+Um numero primo e um numero natural maior que 1 que possui apenas dois divisores:
+1 e ele mesmo.
+
+## Como a solucao funciona
+
+A implementacao usa o Crivo de Eratostenes, um algoritmo eficiente para encontrar
+numeros primos ate um limite definido.
+
+O programa cria uma lista marcando todos os numeros como possiveis primos. Em
+seguida, percorre os numeros a partir de 2 e elimina os seus multiplos, pois
+eles nao podem ser primos. A marcacao dos multiplos comeca em `numero * numero`,
+porque os multiplos menores ja foram tratados por numeros anteriores.
+
+Ao final, o programa imprime todos os numeros que continuaram marcados como
+primos.
+
+## Requisitos
+
+- Python 3.x
+- Nenhuma biblioteca externa e necessaria
+
+## Como executar
+
+Entre na pasta da solucao:
 
 ```bash
 cd desafio-02/ju-caju/python
@@ -22,17 +45,26 @@ Execute o programa:
 python3 resposta.py
 ```
 
-## Como instalar o Python
+## Saida esperada
 
-Se o Python 3 já estiver instalado, você pode confirmar com:
+O programa imprime um numero primo por linha, comecando em `2` e seguindo ate o
+maior numero primo menor ou igual a `10000`.
 
-```bash
-python3 --version
+Exemplo do inicio da saida:
+
+```text
+2
+3
+5
+7
+11
+13
 ```
 
-Se não estiver instalado, no Ubuntu ou Debian rode:
+## Estrutura dos arquivos
 
-```bash
-sudo apt update
-sudo apt install python3
+```text
+desafio-02/ju-caju/python/
+├── README.md
+└── resposta.py
 ```

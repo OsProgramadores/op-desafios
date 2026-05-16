@@ -1,15 +1,18 @@
-for x in range(0, 10001):
-    y = x - 1
-    primo = True
+LIMITE = 10000
 
-    if x < 2:
-        primo = False
 
-    while y > 1:
-        if x % y == 0:
-            primo = False
-            break
-        y = y - 1
+def crivo_de_eratostenes(limite):
+    primos = [True] * (limite + 1)
+    primos[0] = False
+    primos[1] = False
 
-    if primo:
-        print(x)
+    for numero in range(2, int(limite ** 0.5) + 1):
+        if primos[numero]:
+            for multiplo in range(numero * numero, limite + 1, numero):
+                primos[multiplo] = False
+
+    return [numero for numero, primo in enumerate(primos) if primo]
+
+
+for primo in crivo_de_eratostenes(LIMITE):
+    print(primo)
