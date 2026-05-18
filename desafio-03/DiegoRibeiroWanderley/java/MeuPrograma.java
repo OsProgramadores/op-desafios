@@ -6,15 +6,17 @@ public class MeuPrograma {
 
     for (int i = numeroComeco; i <= numeroFim; i++) {
 
-      String ns = String.valueOf(i);
-      StringBuilder sn = new StringBuilder();
+      int numeroInvertido = 0;
+      int numeroTemporario = i;
 
-      for (int j = ns.length() - 1; j >= 0; j--) {
-        sn.append(ns.charAt(j));
+      while (numeroTemporario > 0) {
+        int ultimoDigito = numeroTemporario % 10;
+        numeroInvertido = (numeroInvertido * 10) + ultimoDigito;
+        numeroTemporario /= 10;
       }
 
-      if (ns.contentEquals(sn)) {
-        System.out.println(ns);
+      if (i == numeroInvertido) {
+        System.out.println(i);
       }
     }
   }
