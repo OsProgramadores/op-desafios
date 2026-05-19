@@ -1,13 +1,15 @@
-for num in range(1, 10001):
+limite = 10000
 
-    quantidade_divisores = 0
+numeros_primos = [True] * (limite + 1)
 
-    for num_da_divisao in range(1, num + 1):
+numeros_primos[0] = False
+numeros_primos[1] = False
 
-        if num % num_da_divisao == 0:
-            quantidade_divisores = quantidade_divisores + 1
+for numero in range(2, limite + 1):
+    if numeros_primos[numero] == True:
+        for multiplo in range(numero * 2, limite + 1, numero):
+            numeros_primos[multiplo] = False
 
-    if quantidade_divisores == 2:
-        print(num)
-    
-        
+for numero in range(2, limite + 1):
+    if numeros_primos[numero] == True:
+        print(numero)
