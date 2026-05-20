@@ -1,7 +1,9 @@
 #include <stdio.h>
 
 int main() {
-    int i, j, primo;
+    int i = 0;
+    int j = 0;
+    int primo = 0;
     
     printf("Numeros primos entre 1 e 10000:\n");
     printf("2\n"); // 2 é o único primo par
