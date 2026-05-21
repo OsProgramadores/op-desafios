@@ -1,12 +1,40 @@
 # Números Primos até 10000
 
-Este programa exibe todos os números primos entre 2 e 10000 utilizando o algoritmo Crivo de Eratóstenes.
+## Apresentação
+
+Projeto desenvolvido em Python utilizando o algoritmo Crivo de Eratóstenes para encontrar números primos entre 2 e 10000.
+
+## Objetivo
+
+Treinar lógica de programação e otimização de algoritmos.
+
+## Tecnologias utilizadas
+
+- Python
 
 ## Como funciona
 
 1. Cria uma lista onde todos os números começam marcados como `True`.
-2. Os números `0` e `1` são marcados como `False`, pois não são primos.
-3. Percorre os números de `2` até `10000`.
-4. Se o número atual ainda estiver marcado como `True`, ele é considerado primo.
-5. Todos os múltiplos desse número são marcados como `False`.
-6. Ao final, são exibidos apenas os números que permaneceram marcados como `True`.
+2. Os números `0` e `1` são marcados como `False`.
+3. O programa percorre os números de `2` até `10000`.
+4. Quando encontra um número primo, marca seus múltiplos como `False`.
+5. Ao final, exibe apenas os números primos.
+
+## Algoritmo utilizado
+
+O projeto utiliza o algoritmo **Crivo de Eratóstenes**, conhecido por sua eficiência na busca de números primos.
+
+## Exemplo de saída
+
+```bash
+2
+3
+5
+7
+11
+13
+17
+19
+23
+29
+```
