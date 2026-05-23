@@ -1,1 +1,0 @@
-Palindromo by Daniel Samper

@@ -1,1 +1,0 @@
-# Desafio 2 em Go

@@ -1,4 +1,0 @@
-vendor/
-.vscode/
-/tests/ExampleTest.php
-.phpunit.result.cache
