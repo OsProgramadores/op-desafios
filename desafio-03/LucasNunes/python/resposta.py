@@ -4,5 +4,4 @@ for numero in range(100,10001):
 
     if numero == numero[::-1]:
 
-        print(numero)
- 
+        print(numero) 
