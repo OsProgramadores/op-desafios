@@ -10,9 +10,9 @@ primos menores que um valor n, apresentando uma complexidade de tempo O(nloglogn
 
 O processo funciona eliminando os números múltiplos de um número primo encontrado.
 
-1. É criado uma lista de 2 até n
-2. Começando pelo primeiro número primo (n = 2) e marca os seus múltiplos, neste programa a marcação é feita substituindo o número por -1
-3. Vai para o próximo número da lista que não seja -1 e repete o processo
+1. É criado uma lista de boolean de tamanho n + 1, no qual n é o número limite do range estabelecido, nesse caso 10000
+2. Começando pelo índice 2, já que 2 é o primeiro número primo, marca os seus índices múltiplos, neste programa a marcação é feita negando o elemento do índice
+3. Vai para o próximo elemento da lista que seja `True` e repete o processo
 4. O algoritimo para quando p² > n, onde p é o número atual do laço
 
 # Tecnologias utilizadas
