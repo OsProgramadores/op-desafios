@@ -1,6 +1,6 @@
 # Palíndromos de números naturais
 
-O seguinte programa é um algoritmo capaz de identificar os palíndromos em um 
+O seguinte programa é um algoritmo capaz de identificar os palíndromos em um
 intervalo fornecido pelo usuário.
 
 Palíndromos são palavras, nesse caso números, que tem a mesma forma se invertidos,
@@ -40,7 +40,7 @@ $ java MeuPrograma.java numero_1 numero_2
 
 Ao executar o programa você verá uma lista dos números palíndromos no intervalo escolhido
 
-Ex.: Se o intervalo for de 1000 a 1200 
+Ex.: Se o intervalo for de 1000 a 1200
 ```java
 1001
 1111
