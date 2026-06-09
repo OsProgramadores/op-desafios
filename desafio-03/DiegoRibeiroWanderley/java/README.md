@@ -15,9 +15,9 @@ A verificação ocorre da seguinte forma:
 
 1. Começa um for com `int i = numeroComeco` até que `i >= numeroFim`
 2. Para cada iteração cria uma variavel `numeroInvertido`, começando em 0 e `numeroTemporario` que recebe `i`
-3. Entra no while e só sai de o `numeroTemporario` for menor ou igual a 0;
-4. Dentro do while cria uma variável `ultimoDigito`, que recebe o ultimo digito de `numeroTemporario` com ajuda da operação módulo
-5. Adiciona em `numeroInvertido` o produto dele mesmo com 10 somado com o último dígito
+3. Entra no while e só sai dele se o `numeroTemporario` for menor ou igual a 0;
+4. Dentro do while cria uma variável `ultimoDigito`, que recebe o ultimo digito de `numeroTemporario` com ajuda da operação de módulo
+5. Adiciona em `numeroInvertido` o produto dele mesmo com 10, somado com o último dígito
 6. Divide `numeroTemporario` por 10 a fim de retirar seu último algarismo
 7. Repete o loop se a condição for verdadeira
 8. Ao fim, compara se `i == numeroInvertido`
