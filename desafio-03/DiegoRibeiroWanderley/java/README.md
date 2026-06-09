@@ -1,7 +1,7 @@
 # Palíndromos de números naturais
 
 O seguinte programa é um algoritmo capaz de identificar os palíndromos em um
-intervalo fornecido pelo usuário.
+intervalo fornecido pelo usuário. Ele recebe como parâmetro dois números `long`, no intervalo de `0` até `9.223.372.036.854.775.807`
 
 Palíndromos são palavras, nesse caso números, que tem a mesma forma se invertidos,
 nesse caso 101 é palíndromo, já que seu inverso é 101.

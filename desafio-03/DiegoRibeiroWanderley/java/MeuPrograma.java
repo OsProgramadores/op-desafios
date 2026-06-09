@@ -6,21 +6,34 @@ public class MeuPrograma {
       System.exit(1);
     }
 
-    int numeroComeco = Integer.parseInt(args[0]);
-    int numeroFim = Integer.parseInt(args[1]);
+    long numeroComeco = 0L;
+    long numeroFim = 0L;
+
+    try {
+      numeroComeco = Long.parseLong(args[0]);
+      numeroFim = Long.parseLong(args[1]);
+    } catch (NumberFormatException e) {
+      System.out.println("ERRO: Ambos os argumentos devem ser números");
+      System.exit(1);
+    }
 
     if (numeroComeco < 0 || numeroFim < 0) {
       System.out.println("ERRO: Ambos os limites devem ser positivos");
       System.exit(1);
     }
 
-    for (int i = numeroComeco; i <= numeroFim; i++) {
+    if (numeroComeco > numeroFim) {
+      System.out.println("ERRO: O intervalo estabelecido está incorreto");
+      System.exit(1);
+    }
 
-      int numeroInvertido = 0;
-      int numeroTemporario = i;
+    for (long i = numeroComeco; i <= numeroFim; i++) {
+
+      long numeroInvertido = 0L;
+      long numeroTemporario = i;
 
       while (numeroTemporario > 0) {
-        int ultimoDigito = numeroTemporario % 10;
+        long ultimoDigito = numeroTemporario % 10;
         numeroInvertido = (numeroInvertido * 10) + ultimoDigito;
         numeroTemporario /= 10;
       }
