@@ -1,13 +1,12 @@
 # Anagramas
 
-Esse programa recebe do usuário uma palavra qualquer e, dentre uma lista de
-palavras, faz todos os anagramas possíveis da palavra fornecida
+Esse programa recebe do usuário uma palavra ou frase qualquer e, dentre uma lista de
+palavras, faz todos os anagramas possíveis da palavra ou frase fornecida.
 
 Anagrama é um rearranjo de palavras, tal palavra é anagrama de outra se possuir
 as mesmas letras, porém em ordem diferentes.
 
-Importante ressaltar que esse algoritmo não considera espaços como impedimento
-para formar anagramas
+Importante ressaltar que esse algoritmo não considera espaços e uma anagrama não pode ser formado por palavras iguais.
 
 # Como funciona
 
@@ -30,7 +29,7 @@ Para rodar o programa, basta seguir os seguintes passos
 
 1. Esteja no diretório onde a classe se encontra
 2. É importante que o arquivo com as palavras esteja no mesmo diretório, se chame `words.txt` e que possua uma palavra por linha
-4. Rode no terminal:
+3. Rode no terminal:
 ```bash
 $ java MeuPrograma.java palavra
 ```
@@ -43,12 +42,6 @@ Ex.:
 $ java MeuPrograma.java anagrama
 ```
 ```java
-A A AM RANG
-A A ARM NAG
-A A MA RANG
-A A MAN RAG
-A A MAR NAG
-A A NAG RAM
 A AM AN RAG
 A AMRA NAG
 A AN MA RAG

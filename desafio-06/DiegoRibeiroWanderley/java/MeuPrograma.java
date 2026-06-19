@@ -8,17 +8,26 @@ import java.util.List;
 public class MeuPrograma {
     public static void main(String[] args) {
 
-        if (args.length == 0) return;
+        if (args.length == 0) {
+            System.out.println("ERRO: O programa precisa de pelo menos um parâmetro.");
+            System.exit(1);
+        }
 
-        String palavra = args[0].toUpperCase().replace(" ", "");
-        if (!palavra.matches("[A-Z]+")) {
+        StringBuilder palavra = new StringBuilder();
+        for (String p : args) {
+            palavra.append(p);
+        }
+        String palavraString = palavra.toString().toUpperCase().replace(" ", "");
+
+        if (!palavraString.matches("[A-Z]+")) {
             System.out.println("ERRO: Caracteres inválidos.");
             System.exit(1);
         }
 
-        int[] freqPalavra = gerarFrequencia(palavra);
+        int[] freqPalavra = gerarFrequencia(palavraString);
         List<String> dicionarioFiltrado = gerarDicionario("words.txt", freqPalavra);
-        procurarAnagramas(freqPalavra, dicionarioFiltrado, 0, new ArrayList<>(), palavra.length());
+        procurarAnagramas(
+                freqPalavra, dicionarioFiltrado, 0, new ArrayList<>(), palavraString.length());
     }
 
     public static int[] gerarFrequencia(String palavra) {
@@ -83,7 +92,7 @@ public class MeuPrograma {
             String palavra = dicionario.get(i);
             int[] freqP = gerarFrequencia(palavra);
 
-            if (cabeNoEstoque(freqPalavra, freqP)) {
+            if (cabeNoEstoque(freqPalavra, freqP) && !atual.contains(palavra)) {
                 for (int j = 0; j < 26; j++) freqPalavra[j] -= freqP[j];
                 atual.add(palavra);
 
