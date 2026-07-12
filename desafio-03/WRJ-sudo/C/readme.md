@@ -24,4 +24,5 @@ Para a execução do código é preciso acessar o terminal e digitar o comando `
 - Comparação dos vetores:
   - Para comparação do vetores é feito um casting para uma comparação direta de números inteiros.
   - Apos a conversão o programa compara os dois valores e exibe o resultado para o usuário.
-    
+  
+  
