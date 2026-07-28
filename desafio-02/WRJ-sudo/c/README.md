@@ -10,7 +10,7 @@ O programa utiliza o algoritmo **Crivo de Eratóstenes**, que permite obter os n
 - É utilizado um vetor onde:
   - O **índice representa o número analisado**.
   - O **valor armazenado indica se o número é primo ou não**:
-  - `1` → primo  
+  - `1` → primo
   - `0` → não primo
 - Inicialmente:
   - Todos os números são considerados primos.
