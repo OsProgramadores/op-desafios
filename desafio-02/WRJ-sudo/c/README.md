@@ -1,12 +1,15 @@
 # Algoritmo de Números PrimosExpand commentComment on line R1Resolved
 
 ## Descrição
+
 Este algoritmo é capaz de encontrar todos os números primos até 10.000.
 
 ## Método Utilizado
+
 O programa utiliza o algoritmo **Crivo de Eratóstenes**, que permite obter os números primos de forma eficiente.
 
 ## Lógica do Algoritmo
+
 - É utilizado um vetor onde:
   - O **índice representa o número analisado**.
   - O **valor armazenado indica se o número é primo ou não**:
