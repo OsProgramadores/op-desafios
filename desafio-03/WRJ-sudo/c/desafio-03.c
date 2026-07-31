@@ -8,7 +8,7 @@ int main() {
     long long int contador;
     char str_lida[TAMANHO] = {0};
     char str_a_acomparar[TAMANHO];
-    int pos_escape;
+    int aux;
 
     // pega os valores da entrada
     scanf("%lld", &num_inicial);
@@ -20,7 +20,7 @@ int main() {
 
         //pega o numero atual em contador e coloca na string
         sprintf(str_lida, "%lld", contador);
-        pos_escape = 0;
+        aux = 0;
 
         if (contador <= 9) {
             printf("%lld\n", contador);
@@ -37,9 +37,9 @@ int main() {
                 } else {
                     str_a_acomparar[aux] = str_lida[i];
                 }
-                pos_escape++;
+                aux++;
                 // colocando um fim de curso na string atual
-                str_a_acomparar[pos_escape] = '\0';
+                str_a_acomparar[aux] = '\0';
             }
         }
 
