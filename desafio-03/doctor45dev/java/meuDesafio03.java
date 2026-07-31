@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class MeuDesafio03 {
+public class meuDesafio03 {
 
   public static boolean ehPalindromo(long numero) {
     String texto = Long.toUnsignedString(numero);
