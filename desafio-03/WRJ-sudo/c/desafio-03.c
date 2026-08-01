@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define TAMANHO 20 //tamanho máximo de caracteres mais o '\0'
 
@@ -74,6 +75,7 @@ int programa(){
         } else {
             int i = 0;
             // pegando o tamanho da string
+            i = strlen(str_lida);
             for (i; str_lida[i] != '\0'; i++) {
             }
             // criando a string invertida e colocando em outro array;
