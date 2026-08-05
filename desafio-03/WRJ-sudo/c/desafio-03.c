@@ -39,7 +39,7 @@ int programa(){
     long long int contador;
     char str_lida[TAMANHO] = {0};
     char str_a_acomparar[TAMANHO];
-    int aux;
+
 
     while(temp_exe){
 
@@ -68,18 +68,14 @@ int programa(){
 
         //pega o numero atual em contador e coloca na string
         sprintf(str_lida, "%lld", contador);
-        aux = 0;
+        int aux = 0;
 
-        if (contador <= 9) {
-            printf("%lld\n", contador);
-        } else {
-            int i = 0;
+            int tam_input = 0;
             // pegando o tamanho da string
-            i = strlen(str_lida);
-            for (i; str_lida[i] != '\0'; i++) {
-            }
+            tam_input = strlen(str_lida);
+
             // criando a string invertida e colocando em outro array;
-            for (i; i >= 0; i--) {
+            for (int i = tam_input ; i >= 0; i--) {
                 if (str_lida[i] == '\0') {
                     //pula o comando de escape para nao comprometer a execução
                     continue;
@@ -88,9 +84,9 @@ int programa(){
                 }
                 aux++;
                 // colocando um fim de curso na string atual
-                str_a_acomparar[aux] = '\0';
+                str_a_acomparar[tam_input] = '\0';
             }
-        }
+
 
         //casting para inteiro long long
         long long a = atoll(str_lida);
