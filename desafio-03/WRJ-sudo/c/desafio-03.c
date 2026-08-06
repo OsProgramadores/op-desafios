@@ -10,6 +10,7 @@ long long int final;
 int programa();
 int primeiro_num();
 int segundo_num();
+void limpar_Buffer();
 
 int main() {
 
@@ -21,6 +22,7 @@ int main() {
         printf("Para encerrar o programa: Digite 0\n");
         printf("\n");
         scanf("%d",&excecao);
+        limpar_Buffer();
 
             switch(excecao){
             case 0: return 0;
@@ -101,9 +103,35 @@ int programa(){
 int primeiro_num(){
 
     long long numero;
+    char entrada[TAMANHO];
     printf("Digite um numero inicial para a busca: ");
 
-    if (scanf("%lld", &numero) == 1) {
+    fgets(entrada,TAMANHO,stdin);
+
+
+
+    if (sscanf(entrada,"%lld",&numero)) {
+        for(int i=0; entrada[i] != '\0'; i++){
+            switch(entrada[i]){
+                case 48: continue;
+                case 49: continue;
+                case 50: continue;
+                case 51: continue;
+                case 52: continue;
+                case 53: continue;
+                case 54: continue;
+                case 55: continue;
+                case 56: continue;
+                case 57: continue;
+                case '\n': continue;
+                default:
+                printf("Entrada invalida!\n");
+                return 0;
+            }
+
+        }
+        numero = atoll(entrada);
+
         inicial = numero;
         return 1;
     }else {
@@ -116,10 +144,36 @@ int primeiro_num(){
 int segundo_num(){
 
     long long numero;
+    char entrada[TAMANHO];
 
     printf("Digite um numero para o limite da busca: ");
 
-    if (scanf("%lld", &numero) == 1) {
+
+    fgets(entrada,TAMANHO,stdin);
+
+    if (sscanf(entrada,"%lld", &numero)) {
+        for(int i=0; entrada[i] != '\0'; i++){
+            switch(entrada[i]){
+                case 48: continue;
+                case 49: continue;
+                case 50: continue;
+                case 51: continue;
+                case 52: continue;
+                case 53: continue;
+                case 54: continue;
+                case 55: continue;
+                case 56: continue;
+                case 57: continue;
+                case '\n': continue;
+                default:
+                printf("Entrada invalida!\n");
+                return 0;
+            }
+
+        }
+
+        numero = atoll(entrada);
+
         final = numero;
         return 1;
     }else {
@@ -127,4 +181,13 @@ int segundo_num(){
         return 0;
     }
 
+}
+
+void limpar_Buffer(){
+
+    int ch;
+
+    do {
+        ch = fgetc(stdin);
+    }while(ch != EOF && ch != '\n');
 }
