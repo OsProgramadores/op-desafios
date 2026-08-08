@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define TAMANHO 20 //tamanho máximo de caracteres mais o '\0'
+#define TAMANHO 21 //tamanho máximo de caracteres mais o'\n' e '\0'
 
 long long int inicial;
 long long int final;
@@ -28,7 +28,9 @@ int main() {
             case 0: return 0;
             case 1: programa();
                     break;
-            default: return 0;
+            default:
+                printf("Opcao invalida.\n ");
+                return 0;
 
             }
 
@@ -107,6 +109,11 @@ int primeiro_num(){
     printf("Digite um numero inicial para a busca: ");
 
     fgets(entrada,TAMANHO,stdin);
+    if (strchr(entrada, '\n') == NULL) {
+        limpar_Buffer();
+        printf("Entrada invalida: numero muito grande!\n");
+        return 0;
+    }
 
 
 
@@ -148,8 +155,13 @@ int segundo_num(){
 
     printf("Digite um numero para o limite da busca: ");
 
-
     fgets(entrada,TAMANHO,stdin);
+
+    if (strchr(entrada, '\n') == NULL) {
+        limpar_Buffer();
+        printf("Entrada invalida: numero muito grande!\n");
+        return 0;
+    }
 
     if (sscanf(entrada,"%lld", &numero)) {
         for(int i=0; entrada[i] != '\0'; i++){
