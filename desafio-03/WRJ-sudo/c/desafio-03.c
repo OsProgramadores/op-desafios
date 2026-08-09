@@ -7,10 +7,10 @@
 long long int inicial;
 long long int final;
 
-int programa();
-int primeiro_num();
-int segundo_num();
+void buscar_palindromo();
 void limpar_Buffer();
+int validador_num();
+int get_valor();
 
 int main() {
 
@@ -26,7 +26,7 @@ int main() {
 
             switch(excecao){
             case 0: return 0;
-            case 1: programa();
+            case 1: buscar_palindromo();
                     break;
             default:
                 printf("Opcao invalida.\n ");
@@ -38,7 +38,7 @@ int main() {
 
 }
 
-int programa(){
+void buscar_palindromo(){
     int  temp_exe=1;
     long long int contador;
     char str_lida[TAMANHO] = {0};
@@ -47,21 +47,16 @@ int programa(){
 
     while(temp_exe){
 
-        if(primeiro_num()){
+        if(validador_num()){
             temp_exe = 0;
-        }else{
-            return 0;
         }
-
     }
     const long long int num_inicial = inicial ;
     temp_exe = 1;
     while(temp_exe){
 
-        if(segundo_num()){
+        if(validador_num()){
             temp_exe = 0;
-        }else{
-            return 0;
         }
 
     }
@@ -102,20 +97,46 @@ int programa(){
     }
 }
 
-int primeiro_num(){
+void limpar_Buffer(){
+
+    int ch;
+
+    do {
+        ch = fgetc(stdin);
+    }while(ch != EOF && ch != '\n');
+}
+
+int validador_num(){
+
+    static int passada=1;
+    int resposta;
+
+    if(passada){
+        printf("Digite um numero inicial para a busca: ");
+        resposta = get_valor(passada);
+        ++passada;
+        return resposta;
+
+    }else{
+        printf("Digite um numero para o limite da busca: ");
+        resposta = get_valor(passada);
+        return resposta;
+    }
+
+}
+
+int get_valor(int x){
 
     long long numero;
     char entrada[TAMANHO];
-    printf("Digite um numero inicial para a busca: ");
 
     fgets(entrada,TAMANHO,stdin);
+
     if (strchr(entrada, '\n') == NULL) {
-        limpar_Buffer();
-        printf("Entrada invalida: numero muito grande!\n");
-        return 0;
+            limpar_Buffer();
+            printf("Entrada invalida: numero muito grande!\n");
+            return 0;
     }
-
-
 
     if (sscanf(entrada,"%lld",&numero)) {
         for(int i=0; entrada[i] != '\0'; i++){
@@ -139,67 +160,17 @@ int primeiro_num(){
         }
         numero = atoll(entrada);
 
-        inicial = numero;
-        return 1;
-    }else {
-        printf("Entrada invalida!\n");
-        return 0;
-    }
-
-}
-
-int segundo_num(){
-
-    long long numero;
-    char entrada[TAMANHO];
-
-    printf("Digite um numero para o limite da busca: ");
-
-    fgets(entrada,TAMANHO,stdin);
-
-    if (strchr(entrada, '\n') == NULL) {
-        limpar_Buffer();
-        printf("Entrada invalida: numero muito grande!\n");
-        return 0;
-    }
-
-    if (sscanf(entrada,"%lld", &numero)) {
-        for(int i=0; entrada[i] != '\0'; i++){
-            switch(entrada[i]){
-                case 48: continue;
-                case 49: continue;
-                case 50: continue;
-                case 51: continue;
-                case 52: continue;
-                case 53: continue;
-                case 54: continue;
-                case 55: continue;
-                case 56: continue;
-                case 57: continue;
-                case '\n': continue;
-                default:
-                printf("Entrada invalida!\n");
-                return 0;
-            }
-
+        if(x==1){
+            inicial = numero;
+        }else{
+            final =numero;
         }
 
-        numero = atoll(entrada);
-
-        final = numero;
         return 1;
     }else {
         printf("Entrada invalida!\n");
         return 0;
     }
 
-}
 
-void limpar_Buffer(){
-
-    int ch;
-
-    do {
-        ch = fgetc(stdin);
-    }while(ch != EOF && ch != '\n');
 }
