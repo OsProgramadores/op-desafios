@@ -61,9 +61,8 @@ void buscar_palindromo(){
 
     }
     const long long int limite = final;
-    contador = num_inicial;
 
-    for (contador; contador <= limite; contador++) {
+    for (long long contador = num_inicial; contador <= limite; contador++) {
 
         //pega o numero atual em contador e coloca na string
         sprintf(str_lida, "%lld", contador);
