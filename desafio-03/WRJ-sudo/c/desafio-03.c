@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <errno.h>
+#include <limits.h>
 
 #define TAMANHO 21 //tamanho máximo de caracteres mais o'\n' e '\0'
 
@@ -73,13 +75,9 @@ void buscar_palindromo(){
             tam_input = strlen(str_lida);
 
             // criando a string invertida e colocando em outro array;
-            for (int i = tam_input ; i >= 0; i--) {
-                if (str_lida[i] == '\0') {
-                    //pula o comando de escape para nao comprometer a execução
-                    continue;
-                } else {
-                    str_a_acomparar[aux] = str_lida[i];
-                }
+            for (int i = tam_input -1 ; i >= 0; i--) {
+
+                str_a_acomparar[aux] = str_lida[i];
                 aux++;
                 // colocando um fim de curso na string atual
                 str_a_acomparar[tam_input] = '\0';
@@ -93,7 +91,13 @@ void buscar_palindromo(){
         if (a == b) {
             printf("%s\n", str_lida);
         }
+        // para o loop para caso de overflow
+         if(contador == limite){
+            break;
+        }
     }
+
+
 }
 
 void limpar_Buffer(){
@@ -128,6 +132,7 @@ int get_valor(int x){
 
     long long numero;
     char entrada[TAMANHO];
+    char *fim;
 
     fgets(entrada,TAMANHO,stdin);
 
@@ -138,6 +143,14 @@ int get_valor(int x){
     }
 
     if (sscanf(entrada,"%lld",&numero)) {
+        errno = 0;
+        numero = strtoll(entrada, &fim,10);
+        if(errno == ERANGE){
+         // verifica se entrada está dentro do limite long long int
+            printf("Entrada invalida!\n");
+            return 0;
+
+        }
         for(int i=0; entrada[i] != '\0'; i++){
             switch(entrada[i]){
                 case 48: continue;
