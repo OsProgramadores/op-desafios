@@ -49,7 +49,7 @@ void buscar_palindromo(){
 
     while(temp_exe){
 
-        if(validador_num()){
+        if(validador_num(1)){
             temp_exe = 0;
         }
     }
@@ -57,7 +57,7 @@ void buscar_palindromo(){
     temp_exe = 1;
     while(temp_exe){
 
-        if(validador_num()){
+        if(validador_num(2)){
             temp_exe = 0;
         }
 
@@ -109,15 +109,14 @@ void limpar_Buffer(){
     }while(ch != EOF && ch != '\n');
 }
 
-int validador_num(){
+int validador_num(int x){
 
-    static int passada=1;
+    int passada = x;
     int resposta;
 
-    if(passada){
+    if(passada==1){
         printf("Digite um numero inicial para a busca: ");
         resposta = get_valor(passada);
-        ++passada;
         return resposta;
 
     }else{
