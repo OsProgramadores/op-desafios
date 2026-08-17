@@ -11,7 +11,6 @@ char *strInicial;
 char *strFinal;
 
 int buscar_palindromo();
-void limpar_Buffer();
 int validador_num();
 int get_valor();
 void imprimir(char *str);
@@ -19,37 +18,22 @@ void imprimir(char *str);
 int main(int argc, char *argv[])
 {
 
-    int executa;
-
-    printf("Para continuar com a execucao do programa Digite 1\n");
-    printf("\n");
-    printf("Para encerrar o programa: Digite 0\n");
-    printf("\n");
-    scanf("%d", &executa);
-
-    switch (executa)
+    if (argc < 3)
     {
-    case 0:
-        return 0;
-    case 1:
-        if (strlen(argv[1]) >= TAMANHO || strlen(argv[2]) >= TAMANHO)
-        {
-            printf("Entrada invalida! Numero muito grande.\n");
-            return 0;
-        }
-        else
-        {
-            strInicial = argv[1];
-            strFinal = argv[2];
-            return buscar_palindromo();
-        }
-        break;
-    default:
-        printf("Opcao invalida.\n ");
+        printf("E preciso passar os dois valores\n");
         return 0;
     }
-
-    return 0;
+    else if (strlen(argv[1]) >= TAMANHO || strlen(argv[2]) >= TAMANHO)
+    {
+        printf("Entrada invalida! Numero muito grande.\n");
+        return 0;
+    }
+    else
+    {
+        strInicial = argv[1];
+        strFinal = argv[2];
+        return buscar_palindromo();
+    }
 }
 
 int buscar_palindromo()
