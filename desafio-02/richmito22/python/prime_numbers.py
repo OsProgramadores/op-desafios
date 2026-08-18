@@ -12,4 +12,3 @@ for i in range(2,10001):    #Percorre números de 2 até 10.000(Número 1 não �
 
     if total_divisores == 0:    #Condição para saber se o contador está zerado.
         print(i)    #Mostrar númmeros do primeiro for, caso sejam primos.
-        
