@@ -11,4 +11,4 @@ Ele testa possíveis divisores somente até a raiz quadrada de cada número.
 ## Como executar
 
 ```bash
-python primos.py
+python prime_numbers.py
