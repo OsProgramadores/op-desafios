@@ -54,6 +54,13 @@ int buscar_palindromo()
         return 0;
     }
 
+    if (inicial > final)
+    {
+
+        printf("O primeiro numero precisa ser menor que o segundo \n");
+        return 0;
+    }
+
     const long long int limite = final;
 
     for (long long contador = num_inicial; contador <= limite; contador++)
