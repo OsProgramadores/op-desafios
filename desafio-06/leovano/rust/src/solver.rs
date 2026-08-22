@@ -25,8 +25,6 @@ pub enum SolverError {
     Io(#[from] io::Error),
 }
 
-const ALLOW_WORD_REUSE: bool = false;
-
 impl Solver {
     pub fn new<R: BufRead>(reader: R, phrase: &str) -> Result<Self, SolverError> {
         let (alphabet, target_freq) = Alphabet::from_phrase(phrase)?;
@@ -97,14 +95,8 @@ impl Solver {
             if remaining.contains(&group.frequency) {
                 path.push(group);
 
-                let next_slice = if ALLOW_WORD_REUSE {
-                    &groups[i..]
-                } else {
-                    &groups[i + 1..]
-                };
-
                 *remaining -= &group.frequency;
-                self.solve_recursive(next_slice, remaining, path, on_match)?;
+                self.solve_recursive(&groups[i..], remaining, path, on_match)?;
                 *remaining += &group.frequency;
 
                 path.pop();
@@ -133,7 +125,7 @@ impl Solver {
         }
 
         let start_idx = if depth > 0 && std::ptr::eq(path[depth], path[depth - 1]) {
-            min_word_idx
+            min_word_idx + 1
         } else {
             0
         };
