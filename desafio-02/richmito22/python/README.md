@@ -6,7 +6,7 @@ Programa em Python que lista todos os números primos entre 1 e 10000.
 
 O programa verifica os números de 2 a 10000 e identifica quais são primos.
 
-Ele testa possíveis divisores somente até a raiz quadrada de cada número. Apesar de exisitr algoritmo mais eficiente, essa foi a forma mais próxima do  meu conhecimento prévio de programação.
+Se um número não é primo, ele tem pelo menos um divisor menor ou igual à raiz quadrada. Se você não encontrar divisor até a raiz, não encontrará nenhum além dela. Apesar de exisitr algoritmo mais eficiente, essa foi a forma mais próxima do  meu conhecimento prévio de programação.
 
 ## Versão
 
