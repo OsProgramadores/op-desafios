@@ -15,12 +15,16 @@ char *strInicial;
 char *strFinal;
 
 int buscar_palindromo();
-int validador_num();
 int get_valor(char *string);
 
 int main(int argc, char *argv[])
 {
-    if (argc < 3)
+    if (argc != 3)
+    {
+        printf("E preciso passar os dois valores\n");
+        return 1;
+    }
+    if (argv[1][0] == '\0' || argv[2][0] == '\0')
     {
         printf("E preciso passar os dois valores\n");
         return 1;
