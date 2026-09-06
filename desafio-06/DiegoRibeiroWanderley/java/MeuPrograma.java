@@ -1,3 +1,5 @@
+package desafio6;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -6,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class MeuPrograma {
-
   public static void main(String[] args) {
 
     if (args.length == 0) {
@@ -26,9 +27,19 @@ public class MeuPrograma {
     }
 
     int[] freqPalavra = gerarFrequencia(palavraString);
-    List<String> dicionarioFiltrado = gerarDicionario("words.txt", freqPalavra);
+    List<PalavraFreq> dicionarioFiltrado = gerarDicionario("words.txt", freqPalavra);
     procurarAnagramas(
         freqPalavra, dicionarioFiltrado, 0, new ArrayList<>(), palavraString.length());
+  }
+
+  private static class PalavraFreq {
+    final String palavra;
+    final int[] freq;
+
+    PalavraFreq(String palavra, int[] freq) {
+      this.palavra = palavra;
+      this.freq = freq;
+    }
   }
 
   public static int[] gerarFrequencia(String palavra) {
@@ -44,16 +55,18 @@ public class MeuPrograma {
     return freqPalavra;
   }
 
-  public static List<String> gerarDicionario(String caminho, int[] freqPalavra) {
-    List<String> dicionario = new ArrayList<>();
+  public static List<PalavraFreq> gerarDicionario(String caminho, int[] freqPalavra) {
+    List<PalavraFreq> dicionario = new ArrayList<>();
 
     try (BufferedReader br = new BufferedReader(new FileReader(caminho))) {
       String linha = br.readLine();
 
       while (linha != null) {
-        int[] freqLinha = gerarFrequencia(linha);
-        boolean cabeNoEstoque = cabeNoEstoque(freqPalavra, freqLinha);
-        if (cabeNoEstoque) dicionario.add(linha);
+        if (!linha.isEmpty()) {
+          int[] freqLinha = gerarFrequencia(linha);
+          boolean cabeNoEstoque = cabeNoEstoque(freqPalavra, freqLinha);
+          if (cabeNoEstoque) dicionario.add(new PalavraFreq(linha, freqLinha));
+        }
 
         linha = br.readLine();
       }
@@ -68,7 +81,7 @@ public class MeuPrograma {
 
   public static boolean cabeNoEstoque(int[] freqPalavra, int[] freqLinha) {
     for (int i = 0; i < 26; i++) {
-      if (freqPalavra[i] - freqLinha[i] < 0) {
+      if (freqPalavra[i] < freqLinha[i]) {
         return false;
       }
     }
@@ -78,7 +91,7 @@ public class MeuPrograma {
 
   public static void procurarAnagramas(
       int[] freqPalavra,
-      List<String> dicionario,
+      List<PalavraFreq> dicionario,
       int comeco,
       List<String> atual,
       int letrasRestantes) {
@@ -90,11 +103,14 @@ public class MeuPrograma {
     }
 
     for (int i = comeco; i < dicionario.size(); i++) {
-      String palavra = dicionario.get(i);
-      int[] freqP = gerarFrequencia(palavra);
+      PalavraFreq item = dicionario.get(i);
+      String palavra = item.palavra;
+      int[] freqP = item.freq;
 
       if (cabeNoEstoque(freqPalavra, freqP) && !atual.contains(palavra)) {
-        for (int j = 0; j < 26; j++) freqPalavra[j] -= freqP[j];
+        for (int j = 0; j < 26; j++) {
+          freqPalavra[j] -= freqP[j];
+        }
         atual.add(palavra);
 
         procurarAnagramas(freqPalavra, dicionario, i, atual, letrasRestantes - palavra.length());
