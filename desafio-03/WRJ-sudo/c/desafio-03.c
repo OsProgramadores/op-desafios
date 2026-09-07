@@ -21,12 +21,12 @@ int main(int argc, char *argv[])
 {
     if (argc != 3)
     {
-        printf("E preciso passar os dois valores\n");
+        printf("Execute o comando passando apenas dois argumentos: ./desafio3 <numInicial> <numFinal>\n");
         return 1;
     }
     if (argv[1][0] == '\0' || argv[2][0] == '\0')
     {
-        printf("E preciso passar os dois valores\n");
+        printf("Os argumentos passados devem ser strings nao vazias\n");
         return 1;
     }
 
