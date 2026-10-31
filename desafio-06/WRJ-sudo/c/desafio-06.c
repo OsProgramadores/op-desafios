@@ -5,15 +5,16 @@
 
 #define WORDLEGTH 16
 
-void converter_para_maiusculo(char string[]);
-void ordenar_string(char x[]);
-int comparar_string(char string1[], char string2[]);
+void converter_para_maiusculo(char *string);
+void ordenar_string(char *x);
+int comparar_string(char *string1, char *string2);
+char *remover_espaco(char *argv);
 
 int tamanho_string;
 
 int main(int argc, char *argv[])
 {
-    char string[WORDLEGTH];
+    char *string;
     char anagrama[WORDLEGTH];
     char anagramaOrdenado[WORDLEGTH];
     char *strEntrada;
@@ -25,7 +26,7 @@ int main(int argc, char *argv[])
         printf("Execute o comando passando apenas um argumentos: ./desafio4 <palavra>\n");
         return 1;
     }
-    if (argv[1][0] == '\0' || ' ')
+    if (argv[1][0] == '\0' || argv[1][0] == ' ')
     {
         printf("O argumento passado deve ser string nao vazia\n");
         return 1;
@@ -35,22 +36,7 @@ int main(int argc, char *argv[])
         printf("Entrada invalida! Palavra muito grande.\n");
         return 1;
     }
-    int j = 0;
-    for (int i = 0; argv[1][i] != '\0'; i++)
-    {
-
-        if (isspace((unsigned char)argv[1][i]))
-        {
-            continue;
-            j++;
-        }
-        else
-        {
-            string[j] = argv[1][i];
-            j++;
-        }
-    }
-    string[j] = '\0';
+    string = remover_espaco(argv[1]);
 
     for (int i = 0; string[i] != '\0'; i++)
     {
@@ -81,28 +67,33 @@ int main(int argc, char *argv[])
 
         anagrama[strcspn(anagrama, "\n")] = '\0';
 
-        if (strlen(strEntrada) != strlen(anagrama))
+        char *temp_str = remover_espaco(anagrama);
+        if (temp_str == NULL)
         {
             continue;
         }
 
-        strcpy(anagramaOrdenado, anagrama);
+        if (strlen(strEntrada) != strlen(temp_str))
+        {
+
+            free(temp_str);
+            continue;
+        }
+
+        strcpy(anagramaOrdenado, temp_str);
         ordenar_string(anagramaOrdenado);
         if (comparar_string(strEntrada, anagramaOrdenado) == 0)
         {
 
             printf("%s\n", anagrama);
         }
-        else
-        {
-            continue;
-        }
+        free(temp_str);
     }
     fclose(file);
     return 0;
 }
 
-void converter_para_maiusculo(char string[])
+void converter_para_maiusculo(char *string)
 {
 
     for (int i = 0; string[i] != '\0'; i++)
@@ -111,7 +102,7 @@ void converter_para_maiusculo(char string[])
     }
 }
 
-void ordenar_string(char x[])
+void ordenar_string(char *x)
 {
 
     int hold;
@@ -146,7 +137,7 @@ void ordenar_string(char x[])
     }
 }
 
-int comparar_string(char string1[], char string2[])
+int comparar_string(char *string1, char *string2)
 {
 
     for (int i = 0; i < tamanho_string; i++)
@@ -158,4 +149,33 @@ int comparar_string(char string1[], char string2[])
         }
     }
     return 0;
+}
+
+char *remover_espaco(char *argv)
+{
+    int tamanho = strlen(argv);
+
+    char *string_sem_espaco = malloc(tamanho + 1);
+
+    if (string_sem_espaco == NULL)
+    {
+        return NULL;
+    }
+
+    int j = 0;
+
+    for (int i = 0; argv[i] != '\0'; i++)
+    {
+        if (isspace((unsigned char)argv[i]))
+        {
+            continue;
+        }
+
+        string_sem_espaco[j] = argv[i];
+        j++;
+    }
+
+    string_sem_espaco[j] = '\0';
+
+    return string_sem_espaco;
 }
