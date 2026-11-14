@@ -9,10 +9,10 @@ jobs:
         with:
           go-version: 'stable'
 
-      - name: Install Python
+      - name: Install Python 3.13
         uses: actions/setup-python@v5
         with:
-          python-version: '3.x'
+          python-version: '3.13'
 
       - name: Install Java 21
         uses: actions/setup-java@v4
@@ -39,7 +39,7 @@ jobs:
         run: |
           # Binary will be $(go env GOPATH)/bin/golangci-lint
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.50.1
-          pip install pylint==2.16.2
+          pip install pylint==3.3.8
           npm install --save-dev eslint-config-standard-with-typescript@23.0.0
 
       - name: Check directory structure
