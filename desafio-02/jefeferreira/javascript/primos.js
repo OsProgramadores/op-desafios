@@ -1,12 +1,8 @@
 function crivo(limite) {
-    const primos = [];
     const numNaoPrimos = new Array(limite + 1).fill(false);
-
-    for (let numero = 2; numero <= limite; numero++) {
+    // marcamos os múltiplos, só até a raiz quadrada do limite
+    for (let numero = 2; numero * numero <= limite; numero++) {
         if (!numNaoPrimos[numero]) {
-            primos.push(numero);
-
-            // Marca os múltiplos desse primo como não primos
             for (
                 let multiplo = numero * numero;
                 multiplo <= limite;
@@ -16,8 +12,16 @@ function crivo(limite) {
             }
         }
     }
+
+    // adicionamos todos os primos encontrados ao array
+    const primos = [];
+    for (let numero = 2; numero <= limite; numero++) {
+        if (!numNaoPrimos[numero]) {
+            primos.push(numero);
+        }
+    }
     return primos;
 }
 
-const primos = crivo(10000);
+const primos = crivo(1000);
 console.log(primos.join(", "));
